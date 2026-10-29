@@ -1,0 +1,18 @@
+@using EnadeAds.Study
+
+@if (Status is { } status)
+{
+    <span class="rm-mark" aria-hidden="true">@Symbol(status)</span><span class="visually-hidden">@status.Name(): </span>
+}
+
+@code {
+    [Parameter]
+    public NodeStatus? Status { get; set; }
+
+    private static string Symbol(NodeStatus status) => status switch
+    {
+        NodeStatus.Done => "✓",
+        NodeStatus.InProgress => "◐",
+        _ => "↷",
+    };
+}

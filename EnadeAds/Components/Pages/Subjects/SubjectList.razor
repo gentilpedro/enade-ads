@@ -1,0 +1,47 @@
+@page "/materias"
+
+@using EnadeAds.Study
+
+@inject SubjectCatalog Catalog
+
+<PageTitle>Matérias</PageTitle>
+
+<h1>Matérias</h1>
+
+<p class="text-body-secondary">
+    Os objetos de conhecimento da Portaria Inep nº 169/2026 (Art. 6º) e a Formação Geral, agrupados por bloco.
+    Para ver a ordem de estudo, abra o <a href="roadmap">roadmap</a>.
+</p>
+
+@if (subjects is not null)
+{
+    @foreach (var block in subjects.GroupBy(s => s.Block))
+    {
+        <section class="mb-4">
+            <h2 class="h4">@block.Key.Name()</h2>
+            <div class="row row-cols-1 row-cols-md-2 g-3">
+                @foreach (var subject in block)
+                {
+                    <div class="col">
+                        <a class="card h-100 text-decoration-none" href="materias/@subject.Slug">
+                            <div class="card-body">
+                                <h3 class="h6 card-title">@subject.Title</h3>
+                                <p class="card-text text-body-secondary small mb-1">@subject.Summary</p>
+                                <p class="card-text small mb-0">@subject.Topics.Count assuntos</p>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        </section>
+    }
+}
+
+@code {
+    private IReadOnlyList<RoadmapNode>? subjects;
+
+    protected override async Task OnInitializedAsync()
+    {
+        subjects = await Catalog.ListAsync();
+    }
+}

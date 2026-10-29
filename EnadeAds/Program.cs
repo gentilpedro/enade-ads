@@ -2,6 +2,7 @@ using EnadeAds.Accounts;
 using EnadeAds.Components;
 using EnadeAds.Components.Account;
 using EnadeAds.Data;
+using EnadeAds.Study;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -64,6 +65,10 @@ try
     // Revalida a sessão a cada minuto: mudança de perfil (aprovar ou revogar professor) vale rápido.
     builder.Services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromMinutes(1));
     builder.Services.AddScoped<TeacherApprovals>();
+    builder.Services.AddScoped<RoadmapService>();
+    builder.Services.AddScoped<SubjectCatalog>();
+    builder.Services.AddSingleton(TimeProvider.System);
+    builder.Services.Configure<ExamOptions>(builder.Configuration.GetSection(ExamOptions.SectionName));
 
     builder.Services.Configure<AdminOptions>(builder.Configuration.GetSection(AdminOptions.SectionName));
     builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection(SmtpOptions.SectionName));
