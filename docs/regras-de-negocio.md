@@ -55,3 +55,13 @@ Alunos também têm e-mail institucional, muitas vezes no mesmo domínio dos pro
 - Ao responder, o aluno vê se acertou, qual é a correta e o comentário de **todas** as alternativas.
 - Cada resposta fica registrada como uma tentativa. O aluno pode responder de novo quantas vezes quiser; a lista de questões mostra o resultado da tentativa mais recente.
 - Toda questão informa a fonte: prova e ano do Inep, ou autoria própria.
+
+### Publicação de questões
+
+- **Professor** e **Admin** criam questões. Professor edita e arquiva só as que ele criou; Admin edita e arquiva qualquer uma.
+- Toda questão tem matéria, enunciado, fonte, 5 alternativas com texto e comentário, e exatamente uma correta. A validação acontece no servidor.
+- Antes de publicar, dá para pré-visualizar a questão como o aluno vai ver.
+- **Arquivar** tira a questão das listas e da página pública. As respostas que os alunos já deram continuam no histórico deles.
+- Editar uma questão não muda o resultado das respostas antigas: cada tentativa guarda se acertou no momento em que respondeu.
+- O enunciado aceita só uma marcação mínima (parágrafos, negrito, código e imagens por https). Nenhum HTML digitado chega à página.
+- Se o professor apagar a conta, as questões que ele publicou continuam na plataforma, sem autor.

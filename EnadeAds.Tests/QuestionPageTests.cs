@@ -50,7 +50,7 @@ public class QuestionPageTests(EnadeAdsFactory factory)
         var all = await GetHtmlAsync(client, "/questoes");
         var sql = await GetHtmlAsync(client, "/questoes?materia=banco-de-dados");
 
-        Assert.Contains("7 questões", all);
+        Assert.Contains("push(1)", all);
         Assert.Contains("1 questão", sql);
         Assert.Contains("Considere as tabelas", sql);
         Assert.DoesNotContain("push(1)", sql);

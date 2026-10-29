@@ -1,0 +1,288 @@
+@page "/questoes/nova"
+@page "/questoes/{Id:int}/editar"
+
+@using Microsoft.AspNetCore.Authorization
+@using EnadeAds.Accounts
+@using EnadeAds.Data
+@using EnadeAds.Questions
+@using EnadeAds.Study
+@using Microsoft.AspNetCore.Identity
+
+@attribute [Authorize(Roles = Roles.Editors)]
+
+@inject QuestionBank Bank
+@inject QuestionEditor QuestionEditor
+@inject SubjectCatalog Catalog
+@inject UserManager<ApplicationUser> Users
+@inject NavigationManager Navigation
+
+<PageTitle>@(IsNew ? "Nova questão" : $"Editar questão {Id}")</PageTitle>
+
+<nav aria-label="Trilha">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="questoes">Questões</a></li>
+        @if (!IsNew)
+        {
+            <li class="breadcrumb-item"><a href="questoes/@Id">Questão @Id</a></li>
+        }
+        <li class="breadcrumb-item active" aria-current="page">@(IsNew ? "Nova questão" : "Editar")</li>
+    </ol>
+</nav>
+
+<h1 class="h3">@(IsNew ? "Nova questão" : $"Editar questão {Id}")</h1>
+
+@if (archived)
+{
+    <div class="alert alert-warning" role="status">Esta questão está arquivada e não aparece para os alunos.</div>
+}
+
+@if (errors.Count > 0)
+{
+    <div class="alert alert-danger" role="alert">
+        <p class="mb-1"><strong>Corrija antes de publicar:</strong></p>
+        <ul class="mb-0">
+            @foreach (var error in errors)
+            {
+                <li>@error</li>
+            }
+        </ul>
+    </div>
+}
+
+@if (subjects is not null)
+{
+    <EditForm Model="Input" method="post" FormName="question-form" OnSubmit="SubmitAsync">
+        <div class="row g-3 mb-3">
+            <div class="col-md-6">
+                <label for="Input.SubjectId" class="form-label">Matéria</label>
+                <InputSelect @bind-Value="Input.SubjectId" id="Input.SubjectId" class="form-select">
+                    <option value="0">Escolha a matéria</option>
+                    @foreach (var subject in subjects)
+                    {
+                        <option value="@subject.Id">@subject.Title</option>
+                    }
+                </InputSelect>
+            </div>
+            <div class="col-md-6">
+                <label for="Input.Source" class="form-label">Fonte</label>
+                <InputText @bind-Value="Input.Source" id="Input.Source" class="form-control" maxlength="@QuestionEditor.SourceMaxLength"
+                           placeholder="ENADE 2021 – questão 12, ou Autoria própria" aria-describedby="source-help" />
+                <div id="source-help" class="form-text">De onde vem a questão. Não publique material de terceiros sem permissão.</div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="Input.Statement" class="form-label">Enunciado</label>
+            <InputTextArea @bind-Value="Input.Statement" id="Input.Statement" class="form-control font-monospace" rows="10"
+                           maxlength="@QuestionEditor.StatementMaxLength" aria-describedby="statement-help" />
+            <div id="statement-help" class="form-text">
+                Linha em branco separa parágrafos. <code>**negrito**</code>, <code>`código`</code>,
+                bloco entre linhas <code>```</code> para código, SQL ou tabelas, e <code>![descrição](https://…)</code> para imagens.
+            </div>
+        </div>
+
+        <fieldset class="mb-3">
+            <legend class="h6">Alternativas</legend>
+            <InputRadioGroup @bind-Value="Input.CorrectLetter" Name="Input.CorrectLetter">
+                @for (var index = 0; index < QuestionDraft.OptionCount; index++)
+                {
+                    var i = index;
+                    var letter = ((char)('A' + i)).ToString();
+                    <div class="card mb-2">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong>@letter)</strong>
+                                <div class="form-check">
+                                    <InputRadio Value="letter" id="@($"correta-{letter}")" class="form-check-input" />
+                                    <label class="form-check-label" for="@($"correta-{letter}")">Correta</label>
+                                </div>
+                            </div>
+                            <label for="@($"Input.Options.{i}.Text")" class="form-label small">Texto</label>
+                            <InputTextArea @bind-Value="Input.Options[i].Text" id="@($"Input.Options.{i}.Text")" class="form-control mb-2" rows="2"
+                                           maxlength="@QuestionEditor.OptionMaxLength" />
+                            <label for="@($"Input.Options.{i}.Explanation")" class="form-label small">Comentário (por que está certa ou errada)</label>
+                            <InputTextArea @bind-Value="Input.Options[i].Explanation" id="@($"Input.Options.{i}.Explanation")" class="form-control" rows="2"
+                                           maxlength="@QuestionEditor.OptionMaxLength" />
+                        </div>
+                    </div>
+                }
+            </InputRadioGroup>
+        </fieldset>
+
+        <div class="d-flex flex-wrap gap-2">
+            <button type="submit" name="Command" value="@PreviewCommand" class="btn btn-outline-primary">Pré-visualizar</button>
+            <button type="submit" name="Command" value="@PublishCommand" class="btn btn-primary">@(IsNew ? "Publicar" : "Salvar alterações")</button>
+        </div>
+    </EditForm>
+
+    @if (preview)
+    {
+        <section class="mt-4" aria-labelledby="preview-title">
+            <h2 id="preview-title" class="h5">Pré-visualização</h2>
+            <div class="card">
+                <div class="card-body">
+                    <div class="question-statement mb-3">@((MarkupString)StatementFormatter.ToHtml(Input.Statement))</div>
+                    <ol class="list-unstyled mb-0">
+                        @for (var index = 0; index < Input.Options.Count; index++)
+                        {
+                            var letter = ((char)('A' + index)).ToString();
+                            var option = Input.Options[index];
+                            <li class="mb-2">
+                                <strong>@letter)</strong> @option.Text
+                                @if (letter == Input.CorrectLetter)
+                                {
+                                    <span class="badge text-bg-success ms-1">Correta</span>
+                                }
+                                <div class="small text-body-secondary">@option.Explanation</div>
+                            </li>
+                        }
+                    </ol>
+                </div>
+            </div>
+        </section>
+    }
+
+    @if (!IsNew && !archived)
+    {
+        <section class="mt-5" aria-labelledby="archive-title">
+            <h2 id="archive-title" class="h6 text-danger">Arquivar questão</h2>
+            <p class="small text-body-secondary">A questão some das listas e da página pública. As respostas que os alunos já deram continuam no histórico deles.</p>
+            <form method="post" @formname="archive-form" @onsubmit="ArchiveAsync">
+                <AntiforgeryToken />
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" name="ConfirmArchive" value="true" id="ConfirmArchive" required />
+                    <label class="form-check-label" for="ConfirmArchive">Confirmo que quero arquivar esta questão</label>
+                </div>
+                <button type="submit" class="btn btn-outline-danger">Arquivar</button>
+            </form>
+        </section>
+    }
+}
+
+@code {
+    private const string PreviewCommand = "pre-visualizar";
+    private const string PublishCommand = "publicar";
+
+    private IReadOnlyList<RoadmapNode>? subjects;
+    private Editor? editor;
+    private List<string> errors = [];
+    private bool preview;
+    private bool archived;
+
+    [Parameter]
+    public int? Id { get; set; }
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromForm(FormName = "question-form")]
+    private QuestionFormModel Input { get; set; } = default!;
+
+    [SupplyParameterFromForm(FormName = "question-form")]
+    private string? Command { get; set; }
+
+    [SupplyParameterFromForm(FormName = "archive-form")]
+    private bool ConfirmArchive { get; set; }
+
+    private bool IsNew => Id is null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        editor = EditorFactory.From(HttpContext.User, Users.GetUserId(HttpContext.User));
+        subjects = await Catalog.ListAsync();
+
+        if (IsNew)
+        {
+            Input ??= new QuestionFormModel();
+            return;
+        }
+
+        var question = await Bank.FindIncludingArchivedAsync(Id!.Value);
+        if (question is null)
+        {
+            Navigation.NotFound();
+            return;
+        }
+
+        // Professor só edita as próprias questões; admin edita qualquer uma.
+        if (editor is null || !editor.CanEdit(question))
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
+            Navigation.NavigateTo("Account/AccessDenied");
+            return;
+        }
+
+        archived = question.ArchivedAt is not null;
+        Input ??= QuestionFormModel.From(QuestionDraft.From(question));
+    }
+
+    private async Task SubmitAsync()
+    {
+        if (editor is null)
+        {
+            return;
+        }
+
+        if (Command == PreviewCommand)
+        {
+            preview = true;
+            return;
+        }
+
+        var draft = Input.ToDraft();
+        var result = IsNew ? await QuestionEditor.CreateAsync(editor, draft) : await QuestionEditor.UpdateAsync(editor, Id!.Value, draft);
+        if (!result.Succeeded)
+        {
+            errors = result.Errors.ToList();
+            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            return;
+        }
+
+        Navigation.NavigateTo($"questoes/{result.QuestionId}");
+    }
+
+    private async Task ArchiveAsync()
+    {
+        if (editor is null || Id is null || !ConfirmArchive)
+        {
+            errors = ["Marque a confirmação para arquivar."];
+            return;
+        }
+
+        var result = await QuestionEditor.ArchiveAsync(editor, Id.Value);
+        if (!result.Succeeded)
+        {
+            errors = result.Errors.ToList();
+            return;
+        }
+
+        Navigation.NavigateTo("questoes");
+    }
+
+    private sealed class QuestionFormModel
+    {
+        public int SubjectId { get; set; }
+        public string Statement { get; set; } = "";
+        public string Source { get; set; } = "";
+        public string CorrectLetter { get; set; } = "";
+        public List<OptionDraft> Options { get; set; } = new QuestionDraft().Options;
+
+        public static QuestionFormModel From(QuestionDraft draft) => new()
+        {
+            SubjectId = draft.SubjectId,
+            Statement = draft.Statement,
+            Source = draft.Source,
+            CorrectLetter = draft.CorrectLetter.ToString(),
+            Options = draft.Options,
+        };
+
+        public QuestionDraft ToDraft() => new()
+        {
+            SubjectId = SubjectId,
+            Statement = Statement,
+            Source = Source,
+            CorrectLetter = CorrectLetter is { Length: 1 } ? CorrectLetter[0] : '\0',
+            Options = Options,
+        };
+    }
+}

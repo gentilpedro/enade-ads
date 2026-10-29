@@ -24,7 +24,7 @@ public sealed class QuestionBank(ApplicationDbContext db, TimeProvider clock)
 
     public async Task<QuestionPage> ListAsync(string? subjectSlug, int page, string? userId, CancellationToken cancellationToken = default)
     {
-        var query = db.Questions.AsNoTracking().Include(q => q.Subject).AsQueryable();
+        var query = db.Questions.AsNoTracking().Include(q => q.Subject).Where(q => q.ArchivedAt == null);
         if (!string.IsNullOrEmpty(subjectSlug))
         {
             query = query.Where(q => q.Subject!.Slug == subjectSlug);
@@ -48,14 +48,22 @@ public sealed class QuestionBank(ApplicationDbContext db, TimeProvider clock)
         return new QuestionPage(items, page, totalPages, total);
     }
 
-    public Task<Question?> FindAsync(int id, CancellationToken cancellationToken = default) =>
+    /// <summary>Questão publicada (não arquivada).</summary>
+    public async Task<Question?> FindAsync(int id, CancellationToken cancellationToken = default)
+    {
+        var question = await FindIncludingArchivedAsync(id, cancellationToken);
+        return question is { ArchivedAt: null } ? question : null;
+    }
+
+    /// <summary>Inclui arquivadas: usado só na edição, por quem pode editar.</summary>
+    public Task<Question?> FindIncludingArchivedAsync(int id, CancellationToken cancellationToken = default) =>
         db.Questions.AsNoTracking()
             .Include(q => q.Subject)
             .Include(q => q.Options.OrderBy(o => o.Letter))
             .FirstOrDefaultAsync(q => q.Id == id, cancellationToken);
 
     public Task<int> CountBySubjectAsync(int subjectId, CancellationToken cancellationToken = default) =>
-        db.Questions.CountAsync(q => q.SubjectId == subjectId, cancellationToken);
+        db.Questions.CountAsync(q => q.SubjectId == subjectId && q.ArchivedAt == null, cancellationToken);
 
     public Task<QuestionAttempt?> LatestAttemptAsync(string userId, int questionId, CancellationToken cancellationToken = default) =>
         db.QuestionAttempts.AsNoTracking()

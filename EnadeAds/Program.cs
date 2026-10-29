@@ -69,6 +69,7 @@ try
     builder.Services.AddScoped<RoadmapService>();
     builder.Services.AddScoped<SubjectCatalog>();
     builder.Services.AddScoped<QuestionBank>();
+    builder.Services.AddScoped<QuestionEditor>();
     builder.Services.AddSingleton(TimeProvider.System);
     builder.Services.Configure<ExamOptions>(builder.Configuration.GetSection(ExamOptions.SectionName));
 
