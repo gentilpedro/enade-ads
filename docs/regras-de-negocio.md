@@ -1,0 +1,43 @@
+# Regras de negócio
+
+Este documento reúne as decisões de produto da plataforma. Toda mudança de regra passa por aqui no mesmo PR que muda o código.
+
+## Perfis
+
+| Perfil | Quem é | O que pode fazer |
+|---|---|---|
+| Visitante | Quem não entrou na conta | Ver o roadmap, as matérias, as questões (sem gabarito), os desafios e os avisos |
+| Aluno | Toda conta cadastrada | Tudo do visitante, mais responder questões, ver o gabarito e salvar o progresso |
+| ProfessorPendente | Pediu acesso de professor e aguarda aprovação | O mesmo que o aluno |
+| Professor | Aprovado por um administrador | Tudo do aluno, mais publicar e editar questões, desafios semanais e avisos |
+| Admin | E-mail listado na configuração `Admin:Emails` | Tudo do professor, mais aprovar ou recusar professores |
+
+Uma conta pode ter mais de um perfil ao mesmo tempo. Por exemplo, um professor aprovado também é aluno.
+
+## Cadastro
+
+- Toda conta nova recebe o perfil **Aluno**.
+- O formulário tem a caixa **"Sou professor"**. Ao marcá-la, aparece um texto explicando que o acesso depende de aprovação.
+- **"Sou professor" marcado e e-mail institucional:** a conta recebe **Aluno + ProfessorPendente**.
+- **"Sou professor" marcado e e-mail não institucional:** o cadastro é recusado e nenhuma conta é criada.
+- **"Sou professor" desmarcado:** a conta é só de **Aluno**, mesmo com e-mail institucional.
+- O e-mail é institucional quando tem `edu` como parte do domínio, depois do nome da instituição: `nome@faculdade.edu.br` e `nome@mit.edu` são; `nome@educacao.com.br` não é.
+- A conta só entra depois de confirmar o e-mail pelo link enviado. É isso que prova que o professor é dono do endereço `.edu`.
+- E-mails listados em `Admin:Emails` recebem também o perfil **Admin** ao se cadastrar.
+
+### Por que o professor fica pendente
+
+Alunos também têm e-mail institucional, muitas vezes no mesmo domínio dos professores. Sem aprovação, qualquer aluno marcaria a caixa e passaria a publicar questões e ver gabaritos como professor.
+
+## Aprovação de professores
+
+- Só **Admin** vê a lista de pedidos pendentes.
+- **Aprovar:** a conta perde ProfessorPendente e ganha **Professor**.
+- **Recusar:** a conta perde ProfessorPendente e continua como **Aluno**.
+- Depois da decisão, a sessão da pessoa é renovada em até 1 minuto e ela precisa entrar de novo para o novo perfil valer.
+
+## Acesso ao conteúdo
+
+- **Conteúdo é aberto:** roadmap, matérias, enunciados das questões, desafios e avisos podem ser vistos sem login.
+- **Responder exige login:** marcar uma alternativa, enviar uma resposta discursiva e ver o gabarito ou o comentário exigem uma conta.
+- O progresso (sessões do roadmap concluídas, questões respondidas e acertos) é salvo na conta de cada aluno e só ele vê o próprio progresso.
