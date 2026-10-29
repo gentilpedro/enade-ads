@@ -1,8 +1,7 @@
-using Microsoft.AspNetCore.Mvc.Testing;
-
 namespace EnadeAds.Tests;
 
-public class HomePageTests(WebApplicationFactory<Program> factory) : IClassFixture<WebApplicationFactory<Program>>
+[Collection(AppCollection.Name)]
+public class HomePageTests(EnadeAdsFactory factory)
 {
     [Fact]
     public async Task Home_ReturnsSuccess()

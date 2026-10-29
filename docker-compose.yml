@@ -1,0 +1,15 @@
+# Banco PostgreSQL só para desenvolvimento local: docker compose up -d
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: enade_ads
+      POSTGRES_USER: enade
+      POSTGRES_PASSWORD: enade_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - enade-ads-pgdata:/var/lib/postgresql/data
+
+volumes:
+  enade-ads-pgdata:
