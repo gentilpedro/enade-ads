@@ -61,6 +61,10 @@ try
         .AddSignInManager()
         .AddDefaultTokenProviders();
 
+    // Revalida a sessão a cada minuto: mudança de perfil (aprovar ou revogar professor) vale rápido.
+    builder.Services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromMinutes(1));
+    builder.Services.AddScoped<TeacherApprovals>();
+
     builder.Services.Configure<AdminOptions>(builder.Configuration.GetSection(AdminOptions.SectionName));
     builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection(SmtpOptions.SectionName));
 

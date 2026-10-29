@@ -1,0 +1,118 @@
+@page "/admin/professores-pendentes"
+
+@using Microsoft.AspNetCore.Authorization
+@using EnadeAds.Accounts
+
+@attribute [Authorize(Roles = Roles.Admin)]
+
+@inject TeacherApprovals Approvals
+
+<PageTitle>Professores pendentes</PageTitle>
+
+<h1>Professores pendentes</h1>
+
+<p>Pedidos de quem marcou "Sou professor" no cadastro. Depois da decisão, a pessoa precisa entrar de novo para o novo perfil valer.</p>
+
+@if (statusMessage is not null)
+{
+    <div class="alert @(statusIsError ? "alert-danger" : "alert-success")" role="status">@statusMessage</div>
+}
+
+@if (pending is null)
+{
+    <p>Carregando…</p>
+}
+else if (pending.Count == 0)
+{
+    <p>Nenhum pedido pendente.</p>
+}
+else
+{
+    @* Um formulário só: cada botão envia "acao:id" no campo Command. *@
+    <form method="post" @formname="teacher-decision" @onsubmit="DecideAsync">
+        <AntiforgeryToken />
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">E-mail confirmado</th>
+                        <th scope="col"><span class="visually-hidden">Ações</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var teacher in pending)
+                    {
+                        <tr>
+                            <td>@teacher.FullName</td>
+                            <td>@teacher.Email</td>
+                            <td>@(teacher.EmailConfirmed ? "Sim" : "Não")</td>
+                            <td class="text-end text-nowrap">
+                                <button type="submit" name="Command" value="@($"{ApproveCommand}:{teacher.UserId}")" class="btn btn-sm btn-success">
+                                    Aprovar <span class="visually-hidden">@teacher.FullName</span>
+                                </button>
+                                <button type="submit" name="Command" value="@($"{RejectCommand}:{teacher.UserId}")" class="btn btn-sm btn-outline-danger">
+                                    Recusar <span class="visually-hidden">@teacher.FullName</span>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </form>
+}
+
+@code {
+    private const string ApproveCommand = "aprovar";
+    private const string RejectCommand = "recusar";
+
+    private IReadOnlyList<PendingTeacher>? pending;
+    private string? statusMessage;
+    private bool statusIsError;
+
+    [SupplyParameterFromForm(FormName = "teacher-decision")]
+    private string? Command { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        pending = await Approvals.ListPendingAsync();
+    }
+
+    private async Task DecideAsync()
+    {
+        var parts = (Command ?? "").Split(':', 2);
+        if (parts.Length != 2 || (parts[0] != ApproveCommand && parts[0] != RejectCommand))
+        {
+            ShowError("Ação inválida.");
+            return;
+        }
+
+        var approve = parts[0] == ApproveCommand;
+        var name = pending?.FirstOrDefault(teacher => teacher.UserId == parts[1])?.FullName ?? "A conta";
+        var result = approve ? await Approvals.ApproveAsync(parts[1]) : await Approvals.RejectAsync(parts[1]);
+
+        switch (result)
+        {
+            case TeacherDecisionResult.Done:
+                statusIsError = false;
+                statusMessage = approve ? $"{name} agora é professor." : $"Pedido de {name} recusado. A conta continua como aluno.";
+                break;
+            case TeacherDecisionResult.NotPending:
+                ShowError("Esse pedido já foi decidido.");
+                break;
+            default:
+                ShowError("Conta não encontrada.");
+                break;
+        }
+
+        pending = await Approvals.ListPendingAsync();
+    }
+
+    private void ShowError(string message)
+    {
+        statusIsError = true;
+        statusMessage = message;
+    }
+}

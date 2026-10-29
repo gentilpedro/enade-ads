@@ -13,6 +13,8 @@ Plataforma aberta para estudantes de **Tecnologia em Análise e Desenvolvimento 
   - **Aluno:** todo cadastro entra como aluno.
   - **Professor:** quem marca "Sou professor" e usa e-mail institucional (domínio com `.edu`) fica como *professor pendente* e usa a conta como aluno até um administrador aprovar.
 
+As regras de perfis e de acesso estão em [docs/regras-de-negocio.md](docs/regras-de-negocio.md).
+
 ## Stack
 
 - Blazor Web App .NET 10 (render mode `InteractiveAuto`), a partir do template [`GentilPedro.Templates.Blazor10`](https://github.com/gentilpedro/template-dotnet-blazor10)
