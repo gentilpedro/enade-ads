@@ -1,5 +1,4 @@
 using System.Net;
-using System.Text.RegularExpressions;
 using EnadeAds.Accounts;
 using EnadeAds.Data;
 using Microsoft.AspNetCore.Identity;
@@ -9,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace EnadeAds.Tests;
 
 [Collection(AppCollection.Name)]
-public partial class RegisterPageTests(EnadeAdsFactory factory)
+public class RegisterPageTests(EnadeAdsFactory factory)
 {
     private readonly HttpClient client = factory.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
 
@@ -78,24 +77,19 @@ public partial class RegisterPageTests(EnadeAdsFactory factory)
 
     private async Task<HttpResponseMessage> RegisterAsync(string email, bool wantsTeacher)
     {
-        var page = await client.GetStringAsync("/Account/Register");
-        var token = AntiforgeryToken().Match(page).Groups[1].Value;
-
-        var form = new Dictionary<string, string>
+        var fields = new Dictionary<string, string>
         {
-            ["_handler"] = "register",
-            ["__RequestVerificationToken"] = token,
             ["Input.FullName"] = "Pessoa Teste",
             ["Input.Email"] = email,
-            ["Input.Password"] = "Senha@Forte123",
-            ["Input.ConfirmPassword"] = "Senha@Forte123",
+            ["Input.Password"] = TestAccounts.Password,
+            ["Input.ConfirmPassword"] = TestAccounts.Password,
         };
         if (wantsTeacher)
         {
-            form["Input.WantsTeacherAccess"] = "true";
+            fields["Input.WantsTeacherAccess"] = "true";
         }
 
-        return await client.PostAsync("/Account/Register", new FormUrlEncodedContent(form));
+        return await TestAccounts.SubmitFormAsync(client, "/Account/Register", "register", fields);
     }
 
     private async Task<ApplicationUser?> FindUserAsync(string email)
@@ -105,14 +99,5 @@ public partial class RegisterPageTests(EnadeAdsFactory factory)
         return await users.FindByEmailAsync(email);
     }
 
-    private async Task<IList<string>> RolesOfAsync(string email)
-    {
-        using var scope = factory.Services.CreateScope();
-        var users = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-        var user = await users.FindByEmailAsync(email) ?? throw new InvalidOperationException($"Conta {email} não foi criada.");
-        return await users.GetRolesAsync(user);
-    }
-
-    [GeneratedRegex("name=\"__RequestVerificationToken\" value=\"([^\"]+)\"")]
-    private static partial Regex AntiforgeryToken();
+    private Task<IList<string>> RolesOfAsync(string email) => TestAccounts.RolesOfAsync(factory, email);
 }
