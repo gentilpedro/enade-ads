@@ -1,0 +1,189 @@
+@page "/Account/Register"
+
+@using System.ComponentModel.DataAnnotations
+@using System.Text
+@using System.Text.Encodings.Web
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.WebUtilities
+@using Microsoft.Extensions.Options
+@using EnadeAds.Accounts
+@using EnadeAds.Data
+
+@inject UserManager<ApplicationUser> UserManager
+@inject IUserStore<ApplicationUser> UserStore
+@inject SignInManager<ApplicationUser> SignInManager
+@inject IEmailSender<ApplicationUser> EmailSender
+@inject IOptions<AdminOptions> AdminOptions
+@inject ILogger<Register> Logger
+@inject NavigationManager NavigationManager
+@inject IdentityRedirectManager RedirectManager
+
+<PageTitle>Criar conta</PageTitle>
+
+<h1>Criar conta</h1>
+
+<div class="row">
+    <div class="col-lg-6">
+        <StatusMessage Message="@Message" />
+        <EditForm Model="Input" method="post" OnValidSubmit="RegisterUser" FormName="register">
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert" />
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="Input.FullName" id="Input.FullName" class="form-control" autocomplete="name" aria-required="true" placeholder="Seu nome" />
+                <label for="Input.FullName">Nome completo</label>
+                <ValidationMessage For="() => Input.FullName" class="text-danger" />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText @bind-Value="Input.Email" id="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="nome@exemplo.com" />
+                <label for="Input.Email">E-mail</label>
+                <ValidationMessage For="() => Input.Email" class="text-danger" />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText type="password" @bind-Value="Input.Password" id="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="senha" />
+                <label for="Input.Password">Senha</label>
+                <ValidationMessage For="() => Input.Password" class="text-danger" />
+            </div>
+            <div class="form-floating mb-3">
+                <InputText type="password" @bind-Value="Input.ConfirmPassword" id="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="senha" />
+                <label for="Input.ConfirmPassword">Confirme a senha</label>
+                <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
+            </div>
+            <div class="form-check mb-3">
+                <InputCheckbox @bind-Value="Input.WantsTeacherAccess" id="Input.WantsTeacherAccess" class="form-check-input teacher-check" aria-describedby="teacher-hint" />
+                <label class="form-check-label" for="Input.WantsTeacherAccess">Sou professor</label>
+                <div id="teacher-hint" class="teacher-hint form-text">
+                    Use seu e-mail institucional (domínio com <strong>.edu</strong>, por exemplo <em>nome@faculdade.edu.br</em>).
+                    Seu acesso de professor fica <strong>pendente</strong> até um administrador aprovar.
+                    Enquanto isso, você usa a plataforma como aluno.
+                </div>
+            </div>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Criar conta</button>
+        </EditForm>
+        <p class="mt-3">Já tem conta? <a href="Account/Login">Entrar</a></p>
+    </div>
+</div>
+
+@code {
+    private IEnumerable<IdentityError>? identityErrors;
+
+    [SupplyParameterFromForm]
+    private InputModel Input { get; set; } = default!;
+
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
+
+    private string? Message => identityErrors is null ? null : $"Erro: {string.Join(" ", identityErrors.Select(error => error.Description))}";
+
+    protected override void OnInitialized()
+    {
+        Input ??= new();
+    }
+
+    public async Task RegisterUser(EditContext editContext)
+    {
+        IReadOnlyList<string> roles;
+        try
+        {
+            roles = InitialRoles.For(Input.Email, Input.WantsTeacherAccess, AdminOptions.Value.Emails);
+        }
+        catch (ArgumentException)
+        {
+            identityErrors = [new IdentityError { Description = InitialRoles.TeacherRequiresInstitutionalEmail }];
+            return;
+        }
+
+        var user = CreateUser();
+        user.FullName = Input.FullName.Trim();
+
+        await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+        var emailStore = GetEmailStore();
+        await emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+        var result = await UserManager.CreateAsync(user, Input.Password);
+
+        if (!result.Succeeded)
+        {
+            identityErrors = result.Errors;
+            return;
+        }
+
+        var rolesResult = await UserManager.AddToRolesAsync(user, roles);
+        if (!rolesResult.Succeeded)
+        {
+            // Conta sem perfil não deve existir: desfaz o cadastro.
+            await UserManager.DeleteAsync(user);
+            identityErrors = rolesResult.Errors;
+            return;
+        }
+
+        Logger.LogInformation("Nova conta criada com os perfis {Roles}.", string.Join(", ", roles));
+
+        var userId = await UserManager.GetUserIdAsync(user);
+        var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+        code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+        var callbackUrl = NavigationManager.GetUriWithQueryParameters(
+            NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
+            new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
+
+        await EmailSender.SendConfirmationLinkAsync(user, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
+
+        if (UserManager.Options.SignIn.RequireConfirmedAccount)
+        {
+            RedirectManager.RedirectTo(
+                "Account/RegisterConfirmation",
+                new() { ["email"] = Input.Email, ["returnUrl"] = ReturnUrl });
+        }
+        else
+        {
+            await SignInManager.SignInAsync(user, isPersistent: false);
+            RedirectManager.RedirectTo(ReturnUrl);
+        }
+    }
+
+    private ApplicationUser CreateUser()
+    {
+        try
+        {
+            return Activator.CreateInstance<ApplicationUser>();
+        }
+        catch
+        {
+            throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
+                $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor.");
+        }
+    }
+
+    private IUserEmailStore<ApplicationUser> GetEmailStore()
+    {
+        if (!UserManager.SupportsUserEmail)
+        {
+            throw new NotSupportedException("The default UI requires a user store with email support.");
+        }
+        return (IUserEmailStore<ApplicationUser>)UserStore;
+    }
+
+    private sealed class InputModel
+    {
+        [Required(ErrorMessage = "Informe seu nome.")]
+        [StringLength(120, ErrorMessage = "O nome pode ter no máximo {1} caracteres.")]
+        [Display(Name = "Nome completo")]
+        public string FullName { get; set; } = "";
+
+        [Required(ErrorMessage = "Informe seu e-mail.")]
+        [EmailAddress(ErrorMessage = "E-mail inválido.")]
+        [Display(Name = "E-mail")]
+        public string Email { get; set; } = "";
+
+        [Required(ErrorMessage = "Informe uma senha.")]
+        [StringLength(100, ErrorMessage = "A senha precisa ter entre {2} e {1} caracteres.", MinimumLength = 8)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Senha")]
+        public string Password { get; set; } = "";
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirme a senha")]
+        [Compare("Password", ErrorMessage = "As senhas não conferem.")]
+        public string ConfirmPassword { get; set; } = "";
+
+        public bool WantsTeacherAccess { get; set; }
+    }
+}

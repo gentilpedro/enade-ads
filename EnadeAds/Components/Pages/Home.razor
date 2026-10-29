@@ -1,7 +1,24 @@
-﻿@page "/"
+@page "/"
 
-<PageTitle>Home</PageTitle>
+@using EnadeAds.Accounts
 
-<h1>Hello, world!</h1>
+<PageTitle>ENADE ADS</PageTitle>
 
-Welcome to your new app.
+<h1>ENADE ADS</h1>
+
+<p>Plataforma aberta para estudantes de Análise e Desenvolvimento de Sistemas se prepararem para o ENADE.</p>
+
+<AuthorizeView Roles="@Roles.PendingTeacher">
+    <div class="alert alert-info" role="status">
+        Seu acesso de professor está <strong>pendente</strong>. Enquanto um administrador não aprova, você usa a plataforma como aluno.
+    </div>
+</AuthorizeView>
+
+<AuthorizeView>
+    <Authorized>
+        <p>Olá, @context.User.Identity?.Name!</p>
+    </Authorized>
+    <NotAuthorized>
+        <p><a href="Account/Register">Crie sua conta</a> ou <a href="Account/Login">entre</a> para salvar seu progresso.</p>
+    </NotAuthorized>
+</AuthorizeView>

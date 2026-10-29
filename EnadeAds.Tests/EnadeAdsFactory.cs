@@ -1,0 +1,46 @@
+using EnadeAds.Data;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+
+namespace EnadeAds.Tests;
+
+/// <summary>Sobe a aplicação com SQLite em memória no lugar do PostgreSQL.</summary>
+public sealed class EnadeAdsFactory : WebApplicationFactory<Program>
+{
+    public const string AdminEmail = "admin@exemplo.edu.br";
+
+    private readonly SqliteConnection connection = new("DataSource=:memory:");
+
+    public EnadeAdsFactory()
+    {
+        connection.Open();
+    }
+
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        builder.UseEnvironment("Development");
+        builder.UseSetting("ConnectionStrings:DefaultConnection", "Host=nao-usado");
+        builder.UseSetting("Admin:Emails:0", AdminEmail);
+
+        builder.ConfigureServices(services =>
+        {
+            services.RemoveAll<DbContextOptions<ApplicationDbContext>>();
+            services.RemoveAll<IDbContextOptionsConfiguration<ApplicationDbContext>>();
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connection));
+        });
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        if (disposing)
+        {
+            connection.Dispose();
+        }
+    }
+}
