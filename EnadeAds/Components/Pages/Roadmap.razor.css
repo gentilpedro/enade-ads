@@ -1,0 +1,400 @@
+/* Roadmap no formato do roadmap.sh: espinha central, matérias em amarelo, assuntos em bege ramificando
+   para os dois lados e checkpoints entre os blocos. As caixas mantêm as cores nos dois temas; o resto
+   segue os tokens do Bootstrap (claro/escuro). */
+.rm-page {
+    --rm-subject: #fdff00;
+    --rm-topic: #ffe599;
+    --rm-node-ink: #111111;
+    --rm-node-border: #111111;
+    --rm-spine: #2b78e4;
+    --rm-checkpoint: #4136d4;
+    --rm-checkpoint-ink: #ffffff;
+    --rm-done: #b6e3b6;
+    --rm-in-progress: #cfe2ff;
+    --rm-skipped: #d9d9d9;
+    --rm-muted: var(--bs-secondary-color);
+    --rm-surface: var(--bs-body-bg);
+    --rm-overlay: rgba(17, 17, 17, 0.45);
+
+    padding-block: 1rem 3rem;
+}
+
+:root[data-bs-theme="dark"] .rm-page {
+    --rm-spine: #6ea8fe;
+    --rm-checkpoint: #8b84ff;
+    --rm-checkpoint-ink: #111111;
+    --rm-overlay: rgba(0, 0, 0, 0.6);
+}
+
+.rm-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+}
+
+.rm-title {
+    min-width: 0;
+    max-width: 65ch;
+}
+
+.rm-title h1 {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    margin-bottom: 0.25rem;
+}
+
+.rm-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--rm-muted);
+    margin-bottom: 0.25rem;
+}
+
+.rm-lede {
+    color: var(--rm-muted);
+}
+
+.rm-countdown {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1.1;
+}
+
+.rm-countdown strong {
+    font-size: 2.75rem;
+    font-weight: 800;
+    color: var(--rm-spine);
+    font-variant-numeric: tabular-nums;
+}
+
+.rm-countdown span {
+    color: var(--rm-muted);
+    font-size: 0.875rem;
+}
+
+.rm-progress {
+    margin-block: 1.25rem 0.5rem;
+}
+
+.rm-progress-bar {
+    background-color: var(--rm-spine);
+}
+
+.rm-progress-text {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--rm-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.rm-guest {
+    margin-block: 1.25rem 0.5rem;
+}
+
+.rm-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    list-style: none;
+    padding: 0;
+    margin-block: 1rem 2rem;
+    font-size: 0.85rem;
+    color: var(--rm-muted);
+}
+
+.rm-swatch {
+    display: inline-block;
+    width: 0.9rem;
+    height: 0.9rem;
+    border: 1.5px solid var(--rm-node-border);
+    border-radius: 3px;
+    vertical-align: -2px;
+    margin-right: 0.35rem;
+}
+
+.rm-swatch-subject { background: var(--rm-subject); }
+.rm-swatch-topic { background: var(--rm-topic); }
+.rm-swatch-checkpoint { background: var(--rm-checkpoint); border-color: var(--rm-checkpoint); }
+
+/* Diagrama */
+.rm-diagram {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 1100px;
+    margin-inline: auto;
+}
+
+/* A espinha central passa por trás das matérias. */
+.rm-diagram::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    left: 50%;
+    width: 4px;
+    margin-left: -2px;
+    background: var(--rm-spine);
+    border-radius: 2px;
+}
+
+.rm-block {
+    position: relative;
+    align-self: center;
+    margin: 1rem 0 0;
+    padding: 0.25rem 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--rm-spine);
+    background: var(--rm-surface);
+    border: 2px solid var(--rm-spine);
+    border-radius: 999px;
+}
+
+.rm-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr minmax(13rem, 17rem) 1fr;
+    align-items: center;
+    gap: 2.5rem;
+}
+
+.rm-side {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    min-width: 0;
+}
+
+.rm-left {
+    align-items: flex-end;
+    padding-right: 1rem;
+    border-right: 2px dashed var(--rm-spine);
+}
+
+.rm-right {
+    align-items: flex-start;
+    padding-left: 1rem;
+    border-left: 2px dashed var(--rm-spine);
+}
+
+/* Ligação tracejada entre a coluna de assuntos e a matéria. */
+.rm-left:not(:empty)::after,
+.rm-right:not(:empty)::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 2.5rem;
+    border-top: 2px dashed var(--rm-spine);
+}
+
+.rm-left::after { right: -2.5rem; }
+.rm-right::after { left: -2.5rem; }
+
+.rm-node {
+    position: relative;
+    display: block;
+    max-width: 100%;
+    padding: 0.45rem 0.75rem;
+    color: var(--rm-node-ink);
+    text-decoration: none;
+    border: 2px solid var(--rm-node-border);
+    border-radius: 6px;
+    line-height: 1.25;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.rm-node:hover {
+    color: var(--rm-node-ink);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 0 var(--rm-node-border);
+}
+
+.rm-node:focus-visible {
+    outline: 3px solid var(--rm-spine);
+    outline-offset: 3px;
+}
+
+.rm-subject {
+    z-index: 1;
+    padding: 0.75rem 1rem;
+    font-weight: 700;
+    text-align: center;
+    background: var(--rm-subject);
+}
+
+.rm-topic {
+    font-size: 0.9rem;
+    background: var(--rm-topic);
+}
+
+.rm-checkpoint-row {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.rm-checkpoint {
+    z-index: 1;
+    max-width: 24rem;
+    padding: 0.55rem 1.1rem;
+    font-weight: 600;
+    text-align: center;
+    color: var(--rm-checkpoint-ink);
+    background: var(--rm-checkpoint);
+    border-color: var(--rm-checkpoint);
+    border-radius: 999px;
+}
+
+.rm-checkpoint:hover {
+    color: var(--rm-checkpoint-ink);
+}
+
+/* Status: cor + símbolo + texto oculto, para não depender só da cor. */
+.rm-node.rm-done {
+    background: var(--rm-done);
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+}
+
+.rm-node.rm-in-progress {
+    background: var(--rm-in-progress);
+}
+
+.rm-node.rm-skipped {
+    background: var(--rm-skipped);
+    text-decoration: line-through;
+    opacity: 0.75;
+}
+
+.rm-node ::deep .rm-mark,
+.rm-legend .rm-mark {
+    display: inline-block;
+    margin-right: 0.35rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.rm-finish {
+    position: relative;
+    align-self: center;
+    margin: 0.5rem 0 0;
+    padding: 0.5rem 1rem;
+    font-weight: 700;
+    background: var(--rm-surface);
+    border: 2px solid var(--rm-spine);
+    border-radius: 6px;
+}
+
+/* Painel lateral */
+.rm-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1040;
+    background: var(--rm-overlay);
+}
+
+.rm-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1050;
+    width: min(28rem, 100%);
+    overflow-y: auto;
+    padding: calc(1.25rem + env(safe-area-inset-top, 0px)) 1.5rem calc(1.5rem + env(safe-area-inset-bottom, 0px));
+    background: var(--rm-surface);
+    box-shadow: -8px 0 24px rgba(0, 0, 0, 0.2);
+}
+
+.rm-drawer-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.rm-drawer h2 {
+    font-weight: 800;
+    text-wrap: balance;
+}
+
+.rm-drawer-list {
+    padding-left: 1.1rem;
+}
+
+.rm-badge {
+    color: var(--rm-node-ink);
+    border: 1.5px solid var(--rm-node-border);
+}
+
+.rm-badge.rm-done { background: var(--rm-done); }
+.rm-badge.rm-in-progress { background: var(--rm-in-progress); }
+.rm-badge.rm-skipped { background: var(--rm-skipped); }
+
+/* Celular: a espinha some e os assuntos ficam embaixo da matéria. */
+@media (max-width: 767.98px) {
+    .rm-diagram::before {
+        left: 0.9rem;
+    }
+
+    .rm-row {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        padding-left: 2rem;
+    }
+
+    .rm-subject {
+        order: -1;
+        text-align: left;
+    }
+
+    .rm-left,
+    .rm-right {
+        align-items: stretch;
+        padding: 0 0 0 0.75rem;
+        border-right: 0;
+        border-left: 2px dashed var(--rm-spine);
+    }
+
+    .rm-left::after,
+    .rm-right::after {
+        display: none;
+    }
+
+    .rm-left:empty,
+    .rm-right:empty {
+        display: none;
+    }
+
+    .rm-block,
+    .rm-checkpoint-row,
+    .rm-finish {
+        align-self: flex-start;
+        margin-left: 2rem;
+    }
+
+    .rm-checkpoint-row {
+        justify-content: flex-start;
+    }
+
+    .rm-countdown {
+        align-items: flex-start;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rm-node {
+        transition: none;
+    }
+}

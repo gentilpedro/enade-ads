@@ -34,9 +34,13 @@ public static partial class TestAccounts
     }
 
     /// <summary>Envia um formulário SSR do Blazor com o token antiforgery da própria página.</summary>
-    public static async Task<HttpResponseMessage> SubmitFormAsync(HttpClient client, string url, string formName, Dictionary<string, string> fields)
+    public static async Task<HttpResponseMessage> SubmitFormAsync(HttpClient client, string url, string formName, Dictionary<string, string> fields) =>
+        await PostFormAsync(client, url, await client.GetStringAsync(url), formName, fields);
+
+    /// <summary>Envia o formulário usando o token antiforgery encontrado em <paramref name="tokenPage"/>.</summary>
+    public static async Task<HttpResponseMessage> PostFormAsync(HttpClient client, string url, string tokenPage, string formName, Dictionary<string, string> fields)
     {
-        var page = await client.GetStringAsync(url);
+        var page = tokenPage;
         var form = new Dictionary<string, string>(fields)
         {
             ["_handler"] = formName,

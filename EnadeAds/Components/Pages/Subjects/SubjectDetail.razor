@@ -1,0 +1,48 @@
+@page "/materias/{Slug}"
+
+@using EnadeAds.Study
+
+@inject SubjectCatalog Catalog
+@inject NavigationManager Navigation
+
+@if (subject is not null)
+{
+    <PageTitle>@subject.Title</PageTitle>
+
+    <nav aria-label="Trilha">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="materias">Matérias</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@subject.Title</li>
+        </ol>
+    </nav>
+
+    <p class="text-body-secondary small text-uppercase fw-semibold mb-1">@subject.Block.Name()</p>
+    <h1>@subject.Title</h1>
+    <p class="lead">@subject.Summary</p>
+    <p><a href="roadmap?topico=@subject.Slug#no-@subject.Slug">Ver no roadmap</a></p>
+
+    <h2 class="h4 mt-4">Assuntos</h2>
+    <dl>
+        @foreach (var topic in subject.Topics)
+        {
+            <dt><a href="roadmap?topico=@topic.Slug#no-@topic.Slug">@topic.Title</a></dt>
+            <dd class="mb-3">@topic.Summary</dd>
+        }
+    </dl>
+}
+
+@code {
+    private RoadmapNode? subject;
+
+    [Parameter]
+    public string Slug { get; set; } = "";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        subject = await Catalog.FindAsync(Slug);
+        if (subject is null)
+        {
+            Navigation.NotFound();
+        }
+    }
+}

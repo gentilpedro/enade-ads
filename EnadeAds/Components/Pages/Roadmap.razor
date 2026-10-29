@@ -1,0 +1,254 @@
+@page "/roadmap"
+
+@using EnadeAds.Data
+@using EnadeAds.Study
+@using Microsoft.AspNetCore.Identity
+
+@inject RoadmapService RoadmapData
+@inject UserManager<ApplicationUser> Users
+
+<PageTitle>Roadmap ENADE ADS</PageTitle>
+
+<div class="rm-page">
+    <header class="rm-header">
+        <div class="rm-title">
+            <p class="rm-eyebrow">Tecnologia em Análise e Desenvolvimento de Sistemas</p>
+            <h1>Roadmap ENADE ADS</h1>
+            <p class="rm-lede">
+                Os conteúdos da Portaria Inep nº 169/2026 na ordem sugerida de estudo.
+                Clique em qualquer caixa para ver o que estudar.
+            </p>
+        </div>
+
+        @if (view is not null)
+        {
+            <div class="rm-countdown" aria-label="Contagem regressiva">
+                <strong>@view.DaysUntilExam</strong>
+                <span>@(view.DaysUntilExam == 1 ? "dia" : "dias") até @view.ExamDate.ToString("dd/MM/yyyy")</span>
+            </div>
+        }
+    </header>
+
+    @if (view is not null)
+    {
+        @if (userId is not null)
+        {
+            <div class="rm-progress">
+                <div class="progress" role="progressbar" aria-label="Progresso no roadmap"
+                     aria-valuenow="@view.Counts.Percent" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar rm-progress-bar" style="width: @(view.Counts.Percent)%"></div>
+                </div>
+                <p class="rm-progress-text">
+                    <strong>@view.Counts.Percent% concluído</strong>
+                    · @view.Counts.Done de @view.Counts.Total concluídos
+                    · @view.Counts.InProgress estudando
+                    · @view.Counts.Skipped pulados
+                </p>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info rm-guest" role="status">
+                <a href="@LoginUrl(null)">Entre</a> ou <a href="Account/Register">crie sua conta</a> para marcar o que já estudou e acompanhar seu progresso.
+            </div>
+        }
+
+        <ul class="rm-legend" aria-label="Legenda">
+            <li><span class="rm-swatch rm-swatch-subject"></span> Matéria</li>
+            <li><span class="rm-swatch rm-swatch-topic"></span> Assunto</li>
+            <li><span class="rm-swatch rm-swatch-checkpoint"></span> Checkpoint</li>
+            <li><span class="rm-mark" aria-hidden="true">✓</span> Concluído</li>
+            <li><span class="rm-mark" aria-hidden="true">◐</span> Estudando</li>
+            <li><span class="rm-mark" aria-hidden="true">↷</span> Pulei</li>
+        </ul>
+
+        <div class="rm-diagram">
+            @{ StudyBlock? currentBlock = null; }
+            @foreach (var item in view.Spine)
+            {
+                if (item.Node.Block != currentBlock)
+                {
+                    currentBlock = item.Node.Block;
+                    <h2 class="rm-block">@item.Node.Block.Name()</h2>
+                }
+
+                if (item.Node.Kind == NodeKind.Checkpoint)
+                {
+                    <div class="rm-checkpoint-row">
+                        <a id="@Anchor(item.Node)" href="@NodeUrl(item.Node)" class="rm-node rm-checkpoint @StatusClass(item.Status)">
+                            <StatusMark Status="item.Status" />@item.Node.Title
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    var half = (item.Topics.Count + 1) / 2;
+                    <section class="rm-row" aria-label="@item.Node.Title">
+                        <div class="rm-side rm-left">
+                            @foreach (var topic in item.Topics.Take(half))
+                            {
+                                <a id="@Anchor(topic.Node)" href="@NodeUrl(topic.Node)" class="rm-node rm-topic @StatusClass(topic.Status)">
+                                    <StatusMark Status="topic.Status" />@topic.Node.Title
+                                </a>
+                            }
+                        </div>
+                        <a id="@Anchor(item.Node)" href="@NodeUrl(item.Node)" class="rm-node rm-subject @StatusClass(item.Status)">
+                            <StatusMark Status="item.Status" />@item.Node.Title
+                        </a>
+                        <div class="rm-side rm-right">
+                            @foreach (var topic in item.Topics.Skip(half))
+                            {
+                                <a id="@Anchor(topic.Node)" href="@NodeUrl(topic.Node)" class="rm-node rm-topic @StatusClass(topic.Status)">
+                                    <StatusMark Status="topic.Status" />@topic.Node.Title
+                                </a>
+                            }
+                        </div>
+                    </section>
+                }
+            }
+            <p class="rm-finish">🎓 Dia da prova</p>
+        </div>
+
+        @if (selected is not null)
+        {
+            var node = selected.Node;
+            var subject = node.ParentId is null ? selected : view.Spine.First(s => s.Node.Id == node.ParentId);
+
+            <a class="rm-overlay" href="@CloseUrl(node)" aria-label="Fechar painel"></a>
+            <aside class="rm-drawer" role="dialog" aria-modal="true" aria-labelledby="rm-drawer-title">
+                <div class="rm-drawer-top">
+                    <span class="rm-eyebrow">@KindName(node) · @node.Block.Name()</span>
+                    <a class="btn-close" href="@CloseUrl(node)" aria-label="Fechar"></a>
+                </div>
+
+                <h2 id="rm-drawer-title">@node.Title</h2>
+
+                @if (selected.Status is { } status)
+                {
+                    <p><span class="badge rm-badge @StatusClass(status)">@status.Name()</span></p>
+                }
+
+                <p>@node.Summary</p>
+
+                @if (node.Kind == NodeKind.Subject)
+                {
+                    <h3 class="h6">Assuntos</h3>
+                    <ul class="rm-drawer-list">
+                        @foreach (var topic in selected.Topics)
+                        {
+                            <li><a href="@NodeUrl(topic.Node)">@topic.Node.Title</a>@(topic.Status is { } s ? $" · {s.Name()}" : "")</li>
+                        }
+                    </ul>
+                }
+                else if (node.Kind == NodeKind.Topic)
+                {
+                    <p>Faz parte de <a href="@NodeUrl(subject.Node)">@subject.Node.Title</a>.</p>
+                }
+
+                @if (node.Kind != NodeKind.Checkpoint)
+                {
+                    <p><a href="materias/@subject.Node.Slug">Ver a página da matéria</a></p>
+                }
+
+                <hr />
+
+                @if (userId is not null)
+                {
+                    <form method="post" action="@NodeUrl(node)" @formname="node-status" @onsubmit="SetStatusAsync" class="rm-status-form">
+                        <AntiforgeryToken />
+                        <p class="h6">Meu status</p>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button type="submit" name="StatusCommand" value="@NodeStatus.Done" class="btn btn-sm btn-success">✓ Concluído</button>
+                            <button type="submit" name="StatusCommand" value="@NodeStatus.InProgress" class="btn btn-sm btn-primary">◐ Estudando</button>
+                            <button type="submit" name="StatusCommand" value="@NodeStatus.Skipped" class="btn btn-sm btn-secondary">↷ Pulei</button>
+                            @if (selected.Status is not null)
+                            {
+                                <button type="submit" name="StatusCommand" value="@ClearCommand" class="btn btn-sm btn-outline-secondary">Limpar</button>
+                            }
+                        </div>
+                    </form>
+                }
+                else
+                {
+                    <p><a href="@LoginUrl(node)">Entre</a> para marcar este tópico como concluído.</p>
+                }
+            </aside>
+        }
+    }
+</div>
+
+@code {
+    private const string ClearCommand = "Limpar";
+
+    private RoadmapView? view;
+    private RoadmapItem? selected;
+    private string? userId;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromQuery(Name = "topico")]
+    private string? Topic { get; set; }
+
+    [SupplyParameterFromForm(FormName = "node-status")]
+    private string? StatusCommand { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        userId = Users.GetUserId(HttpContext.User);
+        await LoadAsync();
+    }
+
+    private async Task SetStatusAsync()
+    {
+        // O formulário só aparece para quem está logado, mas o POST pode ser forjado: confere de novo.
+        if (userId is null || Topic is null)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return;
+        }
+
+        NodeStatus? status = StatusCommand == ClearCommand
+            ? null
+            : Enum.TryParse<NodeStatus>(StatusCommand, out var parsed) && Enum.IsDefined(parsed) ? parsed : null;
+
+        if (status is null && StatusCommand != ClearCommand)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            return;
+        }
+
+        await RoadmapData.SetStatusAsync(userId, Topic, status);
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        view = await RoadmapData.GetAsync(userId);
+        selected = view.Find(Topic);
+    }
+
+    private static string Anchor(RoadmapNode node) => $"no-{node.Slug}";
+
+    private static string NodeUrl(RoadmapNode node) => $"roadmap?topico={Uri.EscapeDataString(node.Slug)}#{Anchor(node)}";
+
+    private static string CloseUrl(RoadmapNode node) => $"roadmap#{Anchor(node)}";
+
+    private static string LoginUrl(RoadmapNode? node) =>
+        $"Account/Login?ReturnUrl={Uri.EscapeDataString(node is null ? "/roadmap" : $"/roadmap?topico={node.Slug}")}";
+
+    private static string StatusClass(NodeStatus? status) => status switch
+    {
+        NodeStatus.Done => "rm-done",
+        NodeStatus.InProgress => "rm-in-progress",
+        NodeStatus.Skipped => "rm-skipped",
+        _ => "",
+    };
+
+    private static string KindName(RoadmapNode node) => node.Kind switch
+    {
+        NodeKind.Subject => "Matéria",
+        NodeKind.Topic => "Assunto",
+        _ => "Checkpoint",
+    };
+}
