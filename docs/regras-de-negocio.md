@@ -41,3 +41,17 @@ Alunos também têm e-mail institucional, muitas vezes no mesmo domínio dos pro
 - **Conteúdo é aberto:** roadmap, matérias, enunciados das questões, desafios e avisos podem ser vistos sem login.
 - **Responder exige login:** marcar uma alternativa, enviar uma resposta discursiva e ver o gabarito ou o comentário exigem uma conta.
 - O progresso (sessões do roadmap concluídas, questões respondidas e acertos) é salvo na conta de cada aluno e só ele vê o próprio progresso.
+
+## Roadmap
+
+- O roadmap mostra as 20 matérias da portaria e a Formação Geral, com seus assuntos e um checkpoint ao fim de cada bloco.
+- Cada aluno marca matérias e assuntos como **Concluído**, **Estudando** ou **Pulei**, e pode limpar o status.
+- A porcentagem conta só matérias e assuntos concluídos; checkpoints são marcos e não entram na conta.
+- A contagem regressiva usa a data da prova configurada (`Enade:ExamDate`) e o fuso de São Paulo.
+
+## Questões
+
+- Visitante vê o enunciado e as alternativas, mas nunca a alternativa correta nem os comentários: eles não vão para a página.
+- Ao responder, o aluno vê se acertou, qual é a correta e o comentário de **todas** as alternativas.
+- Cada resposta fica registrada como uma tentativa. O aluno pode responder de novo quantas vezes quiser; a lista de questões mostra o resultado da tentativa mais recente.
+- Toda questão informa a fonte: prova e ano do Inep, ou autoria própria.

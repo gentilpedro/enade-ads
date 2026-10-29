@@ -91,6 +91,487 @@ namespace EnadeAds.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("EnadeAds.Questions.Question", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AuthorId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Statement")
+                        .IsRequired()
+                        .HasMaxLength(8000)
+                        .HasColumnType("character varying(8000)");
+
+                    b.Property<int>("SubjectId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("SubjectId");
+
+                    b.ToTable("Questions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 10, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Source = "Autoria própria – ENADE ADS",
+                            Statement = "Uma pilha começa vazia e recebe, nesta ordem, as operações:\n\npush(1), push(2), pop(), push(3), push(4), pop(), push(5)\n\nQual é o conteúdo da pilha ao final, da base para o topo?",
+                            SubjectId = 400
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 10, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Source = "Autoria própria – ENADE ADS",
+                            Statement = "O número 45, em decimal, corresponde a quais valores em binário e em hexadecimal, respectivamente?",
+                            SubjectId = 200
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 10, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Source = "Autoria própria – ENADE ADS",
+                            Statement = "Um computador tem o endereço IPv4 192.168.10.70 com máscara /26. Qual é o endereço da sub-rede, o endereço de broadcast e a quantidade de hosts utilizáveis nessa sub-rede?",
+                            SubjectId = 800
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 10, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Source = "Autoria própria – ENADE ADS",
+                            Statement = "Considere as tabelas:\n\nCurso                 Aluno\nid | nome             id | nome  | curso_id\n---+------            ---+-------+---------\n 1 | ADS               1 | Ana   | 1\n 2 | Redes             2 | Bruno | 1\n 3 | Jogos             3 | Carla | 2\n                       4 | Davi  | NULL\n\nE a consulta:\n\nSELECT c.nome, COUNT(a.id)\nFROM Curso c\nLEFT JOIN Aluno a ON a.curso_id = c.id\nGROUP BY c.nome\nORDER BY c.nome;\n\nQual é o resultado?",
+                            SubjectId = 600
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 10, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Source = "Autoria própria – ENADE ADS",
+                            Statement = "Na especificação de um sistema acadêmico, qual dos itens abaixo é um requisito NÃO funcional?",
+                            SubjectId = 1200
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 10, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Source = "Autoria própria – ENADE ADS",
+                            Statement = "Um formulário aceita idades de 18 a 60 anos, inclusive. Pela técnica de análise de valor-limite, qual conjunto de valores de teste cobre os limites da regra?",
+                            SubjectId = 1500
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 10, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Source = "Autoria própria – ENADE ADS",
+                            Statement = "Considere o código Java:\n\nclass Animal { String som() { return \"...\"; } }\nclass Cachorro extends Animal { String som() { return \"Au\"; } }\nclass Gato extends Animal { String som() { return \"Miau\"; } }\n\nAnimal[] lista = { new Cachorro(), new Gato(), new Animal() };\nfor (Animal a : lista) {\n    System.out.print(a.som() + \" \");\n}\n\nO que é impresso?",
+                            SubjectId = 500
+                        });
+                });
+
+            modelBuilder.Entity("EnadeAds.Questions.QuestionAttempt", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTimeOffset>("AnsweredAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("OptionId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OptionId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("UserId", "QuestionId");
+
+                    b.ToTable("QuestionAttempts");
+                });
+
+            modelBuilder.Entity("EnadeAds.Questions.QuestionOption", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Explanation")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.Property<bool>("IsCorrect")
+                        .HasColumnType("boolean");
+
+                    b.Property<char>("Letter")
+                        .HasColumnType("character(1)");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId", "Letter")
+                        .IsUnique();
+
+                    b.ToTable("QuestionOptions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 11,
+                            Explanation = "Correta. Depois de push(1) e push(2), o pop() remove o 2. Entram 3 e 4, o pop() remove o 4 (topo), e por fim entra o 5.",
+                            IsCorrect = true,
+                            Letter = 'A',
+                            QuestionId = 1,
+                            Text = "1, 3, 5"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Explanation = "O primeiro pop() remove o elemento do topo, que é o 2. Ele não fica na pilha.",
+                            IsCorrect = false,
+                            Letter = 'B',
+                            QuestionId = 1,
+                            Text = "1, 2, 5"
+                        },
+                        new
+                        {
+                            Id = 13,
+                            Explanation = "Os elementos estão certos, mas na ordem do topo para a base. A pergunta pede da base para o topo.",
+                            IsCorrect = false,
+                            Letter = 'C',
+                            QuestionId = 1,
+                            Text = "5, 3, 1"
+                        },
+                        new
+                        {
+                            Id = 14,
+                            Explanation = "Esse seria o resultado de uma fila (FIFO), em que cada remoção tira o elemento mais antigo (1 e depois 2). Na pilha (LIFO), sai sempre o topo.",
+                            IsCorrect = false,
+                            Letter = 'D',
+                            QuestionId = 1,
+                            Text = "3, 4, 5"
+                        },
+                        new
+                        {
+                            Id = 15,
+                            Explanation = "O segundo pop() acontece depois do push(4), então remove o 4.",
+                            IsCorrect = false,
+                            Letter = 'E',
+                            QuestionId = 1,
+                            Text = "1, 3, 4, 5"
+                        },
+                        new
+                        {
+                            Id = 21,
+                            Explanation = "Correta. 45 = 32 + 8 + 4 + 1 = 101101 em binário. Agrupando de 4 em 4 bits da direita: 0010 1101 = 2D.",
+                            IsCorrect = true,
+                            Letter = 'A',
+                            QuestionId = 2,
+                            Text = "101101 e 2D"
+                        },
+                        new
+                        {
+                            Id = 22,
+                            Explanation = "101011 vale 43 (32 + 8 + 2 + 1), não 45.",
+                            IsCorrect = false,
+                            Letter = 'B',
+                            QuestionId = 2,
+                            Text = "101011 e 2B"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Explanation = "110101 vale 53. O 35 hexadecimal também vale 53: é a leitura de 53, não de 45.",
+                            IsCorrect = false,
+                            Letter = 'C',
+                            QuestionId = 2,
+                            Text = "110101 e 35"
+                        },
+                        new
+                        {
+                            Id = 24,
+                            Explanation = "O binário está certo, mas 1101 vale 13, que é D em hexadecimal. E corresponde a 14.",
+                            IsCorrect = false,
+                            Letter = 'D',
+                            QuestionId = 2,
+                            Text = "101101 e 2E"
+                        },
+                        new
+                        {
+                            Id = 25,
+                            Explanation = "100101 vale 37. O 25 hexadecimal também vale 37.",
+                            IsCorrect = false,
+                            Letter = 'E',
+                            QuestionId = 2,
+                            Text = "100101 e 25"
+                        },
+                        new
+                        {
+                            Id = 31,
+                            Explanation = "Correta. /26 = 255.255.255.192, blocos de 64 no último octeto (0, 64, 128, 192). 70 está no bloco 64–127. Hosts: 2^6 − 2 = 62.",
+                            IsCorrect = true,
+                            Letter = 'A',
+                            QuestionId = 3,
+                            Text = "Rede 192.168.10.64, broadcast 192.168.10.127, 62 hosts"
+                        },
+                        new
+                        {
+                            Id = 32,
+                            Explanation = "Esse é o primeiro bloco /26. O endereço 70 está no segundo bloco, de 64 a 127.",
+                            IsCorrect = false,
+                            Letter = 'B',
+                            QuestionId = 3,
+                            Text = "Rede 192.168.10.0, broadcast 192.168.10.63, 62 hosts"
+                        },
+                        new
+                        {
+                            Id = 33,
+                            Explanation = "O bloco tem 64 endereços, mas o de rede e o de broadcast não podem ser usados por hosts: sobram 62.",
+                            IsCorrect = false,
+                            Letter = 'C',
+                            QuestionId = 3,
+                            Text = "Rede 192.168.10.64, broadcast 192.168.10.127, 64 hosts"
+                        },
+                        new
+                        {
+                            Id = 34,
+                            Explanation = "192.168.10.128 já é o endereço de rede do bloco seguinte. O broadcast é o último endereço do bloco: 127.",
+                            IsCorrect = false,
+                            Letter = 'D',
+                            QuestionId = 3,
+                            Text = "Rede 192.168.10.64, broadcast 192.168.10.128, 62 hosts"
+                        },
+                        new
+                        {
+                            Id = 35,
+                            Explanation = "O endereço de rede é sempre o início do bloco (múltiplo de 64 com /26), não o endereço do host.",
+                            IsCorrect = false,
+                            Letter = 'E',
+                            QuestionId = 3,
+                            Text = "Rede 192.168.10.70, broadcast 192.168.10.127, 57 hosts"
+                        },
+                        new
+                        {
+                            Id = 41,
+                            Explanation = "Correta. O LEFT JOIN mantém todos os cursos, inclusive Jogos sem alunos. COUNT(a.id) ignora NULL, então Jogos conta 0. Davi não tem curso e não aparece, porque a tabela da esquerda é Curso.",
+                            IsCorrect = true,
+                            Letter = 'A',
+                            QuestionId = 4,
+                            Text = "ADS 2; Jogos 0; Redes 1"
+                        },
+                        new
+                        {
+                            Id = 42,
+                            Explanation = "Esse seria o resultado com INNER JOIN, que descarta cursos sem alunos. O LEFT JOIN mantém Jogos.",
+                            IsCorrect = false,
+                            Letter = 'B',
+                            QuestionId = 4,
+                            Text = "ADS 2; Redes 1"
+                        },
+                        new
+                        {
+                            Id = 43,
+                            Explanation = "Seria o resultado com COUNT(*), que conta a linha de Jogos mesmo com os campos de Aluno nulos. COUNT(a.id) ignora os nulos.",
+                            IsCorrect = false,
+                            Letter = 'C',
+                            QuestionId = 4,
+                            Text = "ADS 2; Jogos 1; Redes 1"
+                        },
+                        new
+                        {
+                            Id = 44,
+                            Explanation = "Davi apareceria com um RIGHT JOIN (ou com Aluno à esquerda). Aqui a tabela da esquerda é Curso.",
+                            IsCorrect = false,
+                            Letter = 'D',
+                            QuestionId = 4,
+                            Text = "ADS 2; Redes 1; NULL 1"
+                        },
+                        new
+                        {
+                            Id = 45,
+                            Explanation = "Só Ana e Bruno têm curso_id = 1. Davi tem curso_id nulo e não entra em nenhum curso.",
+                            IsCorrect = false,
+                            Letter = 'E',
+                            QuestionId = 4,
+                            Text = "ADS 3; Jogos 0; Redes 1"
+                        },
+                        new
+                        {
+                            Id = 51,
+                            Explanation = "Descreve uma função que o sistema oferece ao usuário: é requisito funcional.",
+                            IsCorrect = false,
+                            Letter = 'A',
+                            QuestionId = 5,
+                            Text = "O sistema deve permitir que o professor lance as notas dos alunos."
+                        },
+                        new
+                        {
+                            Id = 52,
+                            Explanation = "Também é uma função do sistema (emitir boletim). O formato PDF faz parte do que a função entrega.",
+                            IsCorrect = false,
+                            Letter = 'B',
+                            QuestionId = 5,
+                            Text = "O sistema deve emitir o boletim do aluno em PDF."
+                        },
+                        new
+                        {
+                            Id = 53,
+                            Explanation = "Correta. Define uma qualidade (desempenho) de como o sistema deve se comportar, e não uma função nova: é requisito não funcional.",
+                            IsCorrect = true,
+                            Letter = 'C',
+                            QuestionId = 5,
+                            Text = "O sistema deve responder às consultas de notas em até 2 segundos em 95% das requisições."
+                        },
+                        new
+                        {
+                            Id = 54,
+                            Explanation = "Descreve um comportamento do sistema em resposta a um evento: é requisito funcional.",
+                            IsCorrect = false,
+                            Letter = 'D',
+                            QuestionId = 5,
+                            Text = "O sistema deve enviar um e-mail de confirmação após a matrícula."
+                        },
+                        new
+                        {
+                            Id = 55,
+                            Explanation = "É uma função disponível ao aluno: requisito funcional.",
+                            IsCorrect = false,
+                            Letter = 'E',
+                            QuestionId = 5,
+                            Text = "O sistema deve permitir que o aluno cancele uma disciplina."
+                        },
+                        new
+                        {
+                            Id = 61,
+                            Explanation = "Correta. Testa cada limite (18 e 60) e o valor imediatamente fora de cada um (17 e 61), onde os erros de < e <= costumam aparecer.",
+                            IsCorrect = true,
+                            Letter = 'A',
+                            QuestionId = 6,
+                            Text = "17, 18, 60 e 61"
+                        },
+                        new
+                        {
+                            Id = 62,
+                            Explanation = "Testa os limites e um valor do meio, mas não testa nenhum valor inválido logo fora dos limites.",
+                            IsCorrect = false,
+                            Letter = 'B',
+                            QuestionId = 6,
+                            Text = "18, 39 e 60"
+                        },
+                        new
+                        {
+                            Id = 63,
+                            Explanation = "0 e 100 são inválidos, mas estão longe dos limites. Um erro como usar > 60 em vez de >= 61 passaria despercebido.",
+                            IsCorrect = false,
+                            Letter = 'C',
+                            QuestionId = 6,
+                            Text = "0, 18, 60 e 100"
+                        },
+                        new
+                        {
+                            Id = 64,
+                            Explanation = "Só testa os valores inválidos. Um erro que recuse o próprio 18 ou 60 não seria encontrado.",
+                            IsCorrect = false,
+                            Letter = 'D',
+                            QuestionId = 6,
+                            Text = "17 e 61"
+                        },
+                        new
+                        {
+                            Id = 65,
+                            Explanation = "Só testa os valores válidos dos limites. Não confirma que 17 e 61 são recusados.",
+                            IsCorrect = false,
+                            Letter = 'E',
+                            QuestionId = 6,
+                            Text = "18 e 60"
+                        },
+                        new
+                        {
+                            Id = 71,
+                            Explanation = "Correta. É polimorfismo por sobrescrita: o método chamado depende do tipo real do objeto em tempo de execução, não do tipo da variável (Animal).",
+                            IsCorrect = true,
+                            Letter = 'A',
+                            QuestionId = 7,
+                            Text = "Au Miau ..."
+                        },
+                        new
+                        {
+                            Id = 72,
+                            Explanation = "Seria verdade se o método fosse escolhido pelo tipo da variável. Em Java, métodos de instância usam ligação dinâmica.",
+                            IsCorrect = false,
+                            Letter = 'B',
+                            QuestionId = 7,
+                            Text = "... ... ..."
+                        },
+                        new
+                        {
+                            Id = 73,
+                            Explanation = "Cada objeto da lista é de uma classe diferente e chama a própria versão de som().",
+                            IsCorrect = false,
+                            Letter = 'C',
+                            QuestionId = 7,
+                            Text = "Au Au Au"
+                        },
+                        new
+                        {
+                            Id = 74,
+                            Explanation = "Uma subclasse pode ser atribuída a uma variável da superclasse: Cachorro é um Animal.",
+                            IsCorrect = false,
+                            Letter = 'D',
+                            QuestionId = 7,
+                            Text = "Erro de compilação, porque Cachorro e Gato não podem ser guardados num vetor de Animal."
+                        },
+                        new
+                        {
+                            Id = 75,
+                            Explanation = "Animal é concreta e pode ser instanciada normalmente; o terceiro elemento imprime \"...\".",
+                            IsCorrect = false,
+                            Letter = 'E',
+                            QuestionId = 7,
+                            Text = "Erro de execução, porque Animal não é uma classe abstrata."
+                        });
+                });
+
             modelBuilder.Entity("EnadeAds.Study.RoadmapNode", b =>
                 {
                     b.Property<int>("Id")
@@ -1714,6 +2195,52 @@ namespace EnadeAds.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("EnadeAds.Questions.Question", b =>
+                {
+                    b.HasOne("EnadeAds.Data.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("EnadeAds.Study.RoadmapNode", "Subject")
+                        .WithMany()
+                        .HasForeignKey("SubjectId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Subject");
+                });
+
+            modelBuilder.Entity("EnadeAds.Questions.QuestionAttempt", b =>
+                {
+                    b.HasOne("EnadeAds.Questions.QuestionOption", null)
+                        .WithMany()
+                        .HasForeignKey("OptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EnadeAds.Questions.Question", null)
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EnadeAds.Data.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EnadeAds.Questions.QuestionOption", b =>
+                {
+                    b.HasOne("EnadeAds.Questions.Question", null)
+                        .WithMany("Options")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("EnadeAds.Study.RoadmapNode", b =>
                 {
                     b.HasOne("EnadeAds.Study.RoadmapNode", "Parent")
@@ -1839,6 +2366,11 @@ namespace EnadeAds.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("EnadeAds.Questions.Question", b =>
+                {
+                    b.Navigation("Options");
                 });
 
             modelBuilder.Entity("EnadeAds.Study.RoadmapNode", b =>

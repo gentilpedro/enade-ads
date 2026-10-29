@@ -1,0 +1,16 @@
+@using EnadeAds.Questions
+
+@switch (Outcome)
+{
+    case AttemptOutcome.Correct:
+        <span class="badge text-bg-success">✓ Acertou</span>
+        break;
+    case AttemptOutcome.Wrong:
+        <span class="badge text-bg-danger">✗ Errou</span>
+        break;
+}
+
+@code {
+    [Parameter]
+    public AttemptOutcome Outcome { get; set; }
+}

@@ -70,3 +70,12 @@ h1:focus {
 .teacher-check:checked ~ .teacher-hint {
     display: block;
 }
+
+/* Enunciado de questão: código, SQL e tabelas mantêm o alinhamento e rolam na horizontal se não couberem. */
+.question-statement pre {
+    padding: 0.75rem 1rem;
+    overflow-x: auto;
+    background: var(--bs-tertiary-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 0.375rem;
+}
