@@ -1,0 +1,180 @@
+@page "/questoes/{Id:int}"
+
+@using EnadeAds.Data
+@using EnadeAds.Questions
+@using Microsoft.AspNetCore.Identity
+
+@inject QuestionBank Bank
+@inject UserManager<ApplicationUser> Users
+@inject NavigationManager Navigation
+
+@if (question is not null)
+{
+    var subject = question.Subject!;
+
+    <PageTitle>Questão @question.Id · @subject.Title</PageTitle>
+
+    <nav aria-label="Trilha">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="questoes">Questões</a></li>
+            <li class="breadcrumb-item"><a href="questoes?materia=@subject.Slug">@subject.Title</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Questão @question.Id</li>
+        </ol>
+    </nav>
+
+    <h1 class="h3">Questão @question.Id</h1>
+    <p class="small text-body-secondary">@subject.Title · @question.Source</p>
+
+    <div class="question-statement mb-4">
+        @foreach (var block in StatementFormatter.Split(question.Statement))
+        {
+            if (block.IsCode)
+            {
+                <pre><code>@block.Text</code></pre>
+            }
+            else
+            {
+                <p>@block.Text</p>
+            }
+        }
+    </div>
+
+    @if (latest is not null && !Retry)
+    {
+        var chosen = question.Options.First(o => o.Id == latest.OptionId);
+
+        <div class="alert @(latest.IsCorrect ? "alert-success" : "alert-danger")" role="status">
+            @if (latest.IsCorrect)
+            {
+                <strong>✓ Você acertou.</strong> <span>A resposta é a alternativa @chosen.Letter.</span>
+            }
+            else
+            {
+                var correct = question.Options.First(o => o.IsCorrect);
+                <strong>✗ Você marcou @chosen.Letter.</strong> <span>A resposta correta é a alternativa @correct.Letter.</span>
+            }
+        </div>
+
+        <ol class="list-unstyled d-flex flex-column gap-2">
+            @foreach (var option in question.Options)
+            {
+                <li class="card @OptionClass(option, chosen)">
+                    <div class="card-body">
+                        <p class="mb-1">
+                            <strong>@option.Letter)</strong> @option.Text
+                            @if (option.IsCorrect)
+                            {
+                                <span class="badge text-bg-success ms-1">Correta</span>
+                            }
+                            @if (option.Id == chosen.Id && !option.IsCorrect)
+                            {
+                                <span class="badge text-bg-danger ms-1">Sua resposta</span>
+                            }
+                        </p>
+                        <p class="small text-body-secondary mb-0">@option.Explanation</p>
+                    </div>
+                </li>
+            }
+        </ol>
+
+        <div class="d-flex flex-wrap gap-2 mt-3">
+            <a class="btn btn-outline-primary" href="questoes/@question.Id?refazer=1">Responder de novo</a>
+            <a class="btn btn-link" href="questoes?materia=@subject.Slug">Mais questões de @subject.Title</a>
+        </div>
+    }
+    else if (userId is not null)
+    {
+        <form method="post" action="questoes/@question.Id" @formname="answer" @onsubmit="AnswerAsync">
+            <AntiforgeryToken />
+            <fieldset>
+                <legend class="h6">Escolha uma alternativa</legend>
+                @if (invalidChoice)
+                {
+                    <p class="text-danger" role="alert">Escolha uma das alternativas antes de responder.</p>
+                }
+                @foreach (var option in question.Options)
+                {
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="Letter" id="opcao-@option.Letter" value="@option.Letter" required />
+                        <label class="form-check-label" for="opcao-@option.Letter"><strong>@option.Letter)</strong> @option.Text</label>
+                    </div>
+                }
+            </fieldset>
+            <button type="submit" class="btn btn-primary mt-2">Responder</button>
+        </form>
+    }
+    else
+    {
+        <ol class="list-unstyled d-flex flex-column gap-2 mb-3">
+            @foreach (var option in question.Options)
+            {
+                <li><strong>@option.Letter)</strong> @option.Text</li>
+            }
+        </ol>
+        <div class="alert alert-info" role="status">
+            <a href="@LoginUrl">Entre</a> ou <a href="Account/Register">crie sua conta</a> para responder e ver o gabarito comentado.
+        </div>
+    }
+}
+
+@code {
+    private Question? question;
+    private QuestionAttempt? latest;
+    private string? userId;
+    private bool invalidChoice;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromQuery(Name = "refazer")]
+    private int? RetryFlag { get; set; }
+
+    [SupplyParameterFromForm(FormName = "answer")]
+    private string? Letter { get; set; }
+
+    private bool Retry => RetryFlag == 1;
+
+    private string LoginUrl => $"Account/Login?ReturnUrl={Uri.EscapeDataString($"/questoes/{Id}")}";
+
+    protected override async Task OnInitializedAsync()
+    {
+        question = await Bank.FindAsync(Id);
+        if (question is null)
+        {
+            Navigation.NotFound();
+            return;
+        }
+
+        userId = Users.GetUserId(HttpContext.User);
+        if (userId is not null)
+        {
+            latest = await Bank.LatestAttemptAsync(userId, Id);
+        }
+    }
+
+    private async Task AnswerAsync()
+    {
+        // Regra de negócio: responder exige login. O formulário não aparece para visitante, mas o POST pode ser forjado.
+        if (userId is null || question is null)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return;
+        }
+
+        var answer = Letter is { Length: 1 } ? await Bank.AnswerAsync(userId, question.Id, Letter[0]) : null;
+        if (answer is null)
+        {
+            invalidChoice = true;
+            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            return;
+        }
+
+        latest = answer.Attempt;
+    }
+
+    private static string OptionClass(QuestionOption option, QuestionOption chosen) =>
+        option.IsCorrect ? "border-success" : option.Id == chosen.Id ? "border-danger" : "";
+}

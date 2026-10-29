@@ -2,6 +2,7 @@ using EnadeAds.Accounts;
 using EnadeAds.Components;
 using EnadeAds.Components.Account;
 using EnadeAds.Data;
+using EnadeAds.Questions;
 using EnadeAds.Study;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -67,6 +68,7 @@ try
     builder.Services.AddScoped<TeacherApprovals>();
     builder.Services.AddScoped<RoadmapService>();
     builder.Services.AddScoped<SubjectCatalog>();
+    builder.Services.AddScoped<QuestionBank>();
     builder.Services.AddSingleton(TimeProvider.System);
     builder.Services.Configure<ExamOptions>(builder.Configuration.GetSection(ExamOptions.SectionName));
 

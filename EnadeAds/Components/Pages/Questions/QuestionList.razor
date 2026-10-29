@@ -1,0 +1,102 @@
+@page "/questoes"
+
+@using EnadeAds.Data
+@using EnadeAds.Questions
+@using EnadeAds.Study
+@using Microsoft.AspNetCore.Identity
+
+@inject QuestionBank Bank
+@inject SubjectCatalog Catalog
+@inject UserManager<ApplicationUser> Users
+
+<PageTitle>Questões</PageTitle>
+
+<h1>Questões</h1>
+
+<p class="text-body-secondary">
+    Questões no formato do ENADE com gabarito comentado.
+    <AuthorizeView>
+        <NotAuthorized>Qualquer pessoa vê os enunciados; para responder e ver o gabarito, <a href="Account/Login?ReturnUrl=%2Fquestoes">entre</a>.</NotAuthorized>
+    </AuthorizeView>
+</p>
+
+@if (subjects is not null && result is not null)
+{
+    <form method="get" action="questoes" class="row g-2 align-items-end mb-4">
+        <div class="col-sm-8 col-md-6">
+            <label for="materia" class="form-label">Matéria</label>
+            <select id="materia" name="materia" class="form-select">
+                <option value="">Todas as matérias</option>
+                @foreach (var subject in subjects)
+                {
+                    <option value="@subject.Slug" selected="@(subject.Slug == Materia)">@subject.Title</option>
+                }
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-outline-primary">Filtrar</button>
+        </div>
+    </form>
+
+    <p class="small text-body-secondary">@result.TotalCount @(result.TotalCount == 1 ? "questão" : "questões")</p>
+
+    @if (result.Items.Count == 0)
+    {
+        <p>Nenhuma questão nesta matéria ainda.</p>
+    }
+    else
+    {
+        <ol class="list-unstyled d-flex flex-column gap-3">
+            @foreach (var question in result.Items)
+            {
+                <li class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
+                            <span class="small text-body-secondary">@question.SubjectTitle · @question.Source</span>
+                            <OutcomeBadge Outcome="question.Outcome" />
+                        </div>
+                        <p class="mb-2">@question.Excerpt</p>
+                        <a href="questoes/@question.Id" class="stretched-link">Abrir a questão @question.Id</a>
+                    </div>
+                </li>
+            }
+        </ol>
+
+        @if (result.TotalPages > 1)
+        {
+            <nav aria-label="Páginas de questões">
+                <ul class="pagination">
+                    @for (var number = 1; number <= result.TotalPages; number++)
+                    {
+                        <li class="page-item @(number == result.Page ? "active" : "")">
+                            <a class="page-link" href="@PageUrl(number)" aria-current="@(number == result.Page ? "page" : null)">@number</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    }
+}
+
+@code {
+    private IReadOnlyList<RoadmapNode>? subjects;
+    private QuestionPage? result;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromQuery(Name = "materia")]
+    private string? Materia { get; set; }
+
+    [SupplyParameterFromQuery(Name = "pagina")]
+    private int? Pagina { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        subjects = await Catalog.ListAsync();
+        result = await Bank.ListAsync(Materia, Pagina ?? 1, Users.GetUserId(HttpContext.User));
+    }
+
+    private string PageUrl(int number) =>
+        string.IsNullOrEmpty(Materia) ? $"questoes?pagina={number}" : $"questoes?materia={Uri.EscapeDataString(Materia)}&pagina={number}";
+}
