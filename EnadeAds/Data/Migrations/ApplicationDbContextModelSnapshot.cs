@@ -273,6 +273,81 @@ namespace EnadeAds.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("EnadeAds.MockExams.MockExam", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("CorrectCount")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("DeadlineAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ObjectiveCount")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Size")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("StartedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset?>("SubmittedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("SubmittedByTimeout")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasDatabaseName("IX_MockExams_OpenPerUser")
+                        .HasFilter("\"SubmittedAt\" IS NULL");
+
+                    b.HasIndex("UserId", "Id");
+
+                    b.ToTable("MockExams");
+                });
+
+            modelBuilder.Entity("EnadeAds.MockExams.MockExamQuestion", b =>
+                {
+                    b.Property<int>("MockExamId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("DiscursiveText")
+                        .HasMaxLength(5000)
+                        .HasColumnType("character varying(5000)");
+
+                    b.Property<bool>("IsGeneralEducation")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("SelectedOptionId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("MockExamId", "QuestionId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("SelectedOptionId");
+
+                    b.ToTable("MockExamQuestions");
+                });
+
             modelBuilder.Entity("EnadeAds.Questions.DiscursiveAnswer", b =>
                 {
                     b.Property<long>("Id")
@@ -2508,6 +2583,37 @@ namespace EnadeAds.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("EnadeAds.MockExams.MockExam", b =>
+                {
+                    b.HasOne("EnadeAds.Data.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EnadeAds.MockExams.MockExamQuestion", b =>
+                {
+                    b.HasOne("EnadeAds.MockExams.MockExam", null)
+                        .WithMany("Questions")
+                        .HasForeignKey("MockExamId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EnadeAds.Questions.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EnadeAds.Questions.QuestionOption", null)
+                        .WithMany()
+                        .HasForeignKey("SelectedOptionId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Question");
+                });
+
             modelBuilder.Entity("EnadeAds.Questions.DiscursiveAnswer", b =>
                 {
                     b.HasOne("EnadeAds.Questions.Question", null)
@@ -2702,6 +2808,11 @@ namespace EnadeAds.Data.Migrations
                 });
 
             modelBuilder.Entity("EnadeAds.Challenges.Challenge", b =>
+                {
+                    b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("EnadeAds.MockExams.MockExam", b =>
                 {
                     b.Navigation("Questions");
                 });

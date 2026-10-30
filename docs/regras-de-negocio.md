@@ -49,6 +49,18 @@ Alunos também têm e-mail institucional, muitas vezes no mesmo domínio dos pro
 - A porcentagem conta só matérias e assuntos concluídos; checkpoints são marcos e não entram na conta.
 - A contagem regressiva usa a data da prova configurada (`Enade:ExamDate`) e o fuso de São Paulo.
 
+## Simulados
+
+- O aluno logado monta um simulado com questões do banco em três tamanhos, todos com a proporção da prova (Portaria Inep nº 169/2026): **Curto** (3 de formação geral + 7 específicas + 1 discursiva), **Médio** (7 + 15 + 1) e **Completo** (15 + 30 + 1).
+- O tempo é proporcional ao da prova: 4 horas para 46 questões (o curto fica com cerca de 57 minutos). Mínimo de 10 minutos.
+- Se o banco ainda não tem questões suficientes, o simulado usa as que existem (completando formação geral com específicas e vice-versa) e avisa antes de começar quantas questões e quanto tempo terá.
+- O **prazo é gravado no servidor** quando o simulado começa. Recarregar a página ou trocar de aparelho não reinicia o relógio.
+- O aluno pode salvar as respostas no meio do caminho e entregar quando quiser. Quando o tempo acaba, o simulado é **entregue automaticamente** com o que estava salvo. Há 1 minuto de tolerância para o envio feito no último segundo.
+- Só existe **um simulado em andamento por aluno**. Ele precisa entregar (ou esperar o tempo acabar) para começar outro.
+- O **gabarito comentado e o padrão de resposta só aparecem depois da entrega**. Questão em branco conta como errada.
+- Depois da entrega, as respostas objetivas entram no painel de desempenho e no caderno de erros, e a discursiva vira uma resposta salva da questão.
+- O simulado é do aluno: ninguém mais vê o que ele respondeu.
+
 ## Painel de desempenho
 
 - A página **Meu desempenho** é só do próprio aluno; ninguém mais vê os números dele.

@@ -92,3 +92,9 @@ h1:focus {
 .question-form:has(#kind-discursive:checked) .objective-fields {
     display: none;
 }
+
+/* Simulado: o aviso de horário fica visível enquanto o aluno rola as questões. */
+.mock-exam-clock {
+    top: env(safe-area-inset-top, 0px);
+    z-index: 1020;
+}

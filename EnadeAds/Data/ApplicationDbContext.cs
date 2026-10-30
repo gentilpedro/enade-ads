@@ -1,5 +1,6 @@
 using EnadeAds.Blog;
 using EnadeAds.Challenges;
+using EnadeAds.MockExams;
 using EnadeAds.Questions;
 using EnadeAds.Study;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -21,6 +22,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ChallengeSubmission> ChallengeSubmissions => Set<ChallengeSubmission>();
     public DbSet<Post> Posts => Set<Post>();
     public DbSet<PostComment> PostComments => Set<PostComment>();
+    public DbSet<MockExam> MockExams => Set<MockExam>();
+    public DbSet<MockExamQuestion> MockExamQuestions => Set<MockExamQuestion>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -125,6 +128,25 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             comment.HasIndex(c => c.PostId);
             comment.HasOne<Post>().WithMany().HasForeignKey(c => c.PostId).OnDelete(DeleteBehavior.Cascade);
             comment.HasOne<ApplicationUser>().WithMany().HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<MockExam>(exam =>
+        {
+            exam.Ignore(m => m.IsOpen);
+            exam.HasOne<ApplicationUser>().WithMany().HasForeignKey(m => m.UserId).OnDelete(DeleteBehavior.Cascade);
+            exam.HasMany(m => m.Questions).WithOne().HasForeignKey(q => q.MockExamId).OnDelete(DeleteBehavior.Cascade);
+
+            // Um simulado em andamento por aluno, garantido pelo banco (o filtro funciona no PostgreSQL e no SQLite).
+            exam.HasIndex(m => m.UserId).IsUnique().HasFilter("\"SubmittedAt\" IS NULL").HasDatabaseName("IX_MockExams_OpenPerUser");
+            exam.HasIndex(m => new { m.UserId, m.Id });
+        });
+
+        builder.Entity<MockExamQuestion>(question =>
+        {
+            question.HasKey(q => new { q.MockExamId, q.QuestionId });
+            question.Property(q => q.DiscursiveText).HasMaxLength(MockExamService.DiscursiveMaxLength);
+            question.HasOne(q => q.Question).WithMany().HasForeignKey(q => q.QuestionId).OnDelete(DeleteBehavior.Restrict);
+            question.HasOne<Questions.QuestionOption>().WithMany().HasForeignKey(q => q.SelectedOptionId).OnDelete(DeleteBehavior.SetNull);
         });
 
         // O SQLite (usado nos testes) não ordena nem compara DateTimeOffset; guarda como número só nele.

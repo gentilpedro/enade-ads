@@ -1,0 +1,229 @@
+@page "/simulados/{Id:int}"
+
+@using Microsoft.AspNetCore.Authorization
+@using EnadeAds.Data
+@using EnadeAds.MockExams
+@using EnadeAds.Questions
+@using EnadeAds.Study
+@using Microsoft.AspNetCore.Identity
+
+@attribute [Authorize]
+
+@inject MockExamService MockExams
+@inject LocalCalendar Calendar
+@inject TimeProvider Clock
+@inject UserManager<ApplicationUser> Users
+@inject NavigationManager Navigation
+
+@if (exam is not null)
+{
+    <PageTitle>Simulado @MockExamFormat.Of(exam.Size).Name</PageTitle>
+
+    <nav aria-label="Trilha">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="simulados">Simulados</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Simulado de @Calendar.ToLocal(exam.StartedAt).ToString("dd/MM/yyyy")</li>
+        </ol>
+    </nav>
+
+    <h1 class="h3">Simulado @MockExamFormat.Of(exam.Size).Name.ToLowerInvariant()</h1>
+
+    @if (message is not null)
+    {
+        <div class="alert @(messageIsError ? "alert-danger" : "alert-success")" role="status">@message</div>
+    }
+
+    @if (exam.IsOpen)
+    {
+        var remaining = exam.DeadlineAt - Clock.GetUtcNow();
+        <div class="alert alert-warning sticky-top mock-exam-clock" role="status">
+            Termina às <strong>@Calendar.ToLocal(exam.DeadlineAt).ToString("HH:mm")</strong> (horário de Brasília)
+            · faltam cerca de <strong>@Math.Max(0, (int)Math.Ceiling(remaining.TotalMinutes)) min</strong>.
+            Salve de vez em quando: quando o tempo acabar, vale o que estiver salvo.
+        </div>
+
+        <form method="post" action="simulados/@exam.Id" @formname="mock-exam" @onsubmit="SaveAsync">
+            <AntiforgeryToken />
+            @foreach (var item in exam.Questions)
+            {
+                var question = item.Question!;
+                <fieldset class="card mb-3">
+                    <div class="card-body">
+                        <legend class="h6">
+                            Questão @item.Order
+                            <span class="small text-body-secondary fw-normal">· @(item.IsGeneralEducation ? "Formação geral" : question.Kind == QuestionKind.Discursive ? "Discursiva" : "Componente específico")</span>
+                        </legend>
+                        <div class="question-statement">@((MarkupString)StatementFormatter.ToHtml(question.Statement))</div>
+                        @if (question.Kind == QuestionKind.Discursive)
+                        {
+                            <label for="t-@question.Id" class="form-label small">Sua resposta (cerca de @(question.SuggestedLines ?? 15) linhas)</label>
+                            <textarea id="t-@question.Id" name="t-@question.Id" class="form-control" rows="@(question.SuggestedLines ?? 15)"
+                                      maxlength="@MockExamService.DiscursiveMaxLength">@item.DiscursiveText</textarea>
+                        }
+                        else
+                        {
+                            @foreach (var option in question.Options)
+                            {
+                                var inputId = $"q{question.Id}-{option.Letter}";
+                                <div class="form-check mb-1">
+                                    <input class="form-check-input" type="radio" name="q-@question.Id" id="@inputId" value="@option.Letter"
+                                           checked="@(item.SelectedOptionId == option.Id)" />
+                                    <label class="form-check-label" for="@inputId"><strong>@option.Letter)</strong> @option.Text</label>
+                                </div>
+                            }
+                        }
+                    </div>
+                </fieldset>
+            }
+
+            <div class="card mb-4">
+                <div class="card-body d-flex flex-wrap align-items-center gap-3">
+                    <button type="submit" name="Command" value="@SaveCommand" class="btn btn-outline-primary">Salvar respostas</button>
+                    <div class="form-check mb-0">
+                        <input class="form-check-input" type="checkbox" name="ConfirmSubmit" value="true" id="ConfirmSubmit" />
+                        <label class="form-check-label" for="ConfirmSubmit">Terminei e quero entregar</label>
+                    </div>
+                    <button type="submit" name="Command" value="@SubmitCommand" class="btn btn-primary">Entregar simulado</button>
+                </div>
+            </div>
+        </form>
+    }
+    else
+    {
+        <div class="alert alert-info" role="status">
+            <strong>Você acertou @exam.CorrectCount de @exam.ObjectiveCount questões objetivas.</strong>
+            @if (exam.SubmittedByTimeout)
+            {
+                <span>O tempo acabou e o simulado foi entregue com as respostas salvas.</span>
+            }
+            Questões em branco contam como erradas. As erradas foram para o seu <a href="meu-desempenho">caderno de erros</a>.
+        </div>
+
+        @foreach (var item in exam.Questions)
+        {
+            var question = item.Question!;
+            <article class="card mb-3">
+                <div class="card-body">
+                    <h2 class="h6">Questão @item.Order <span class="small text-body-secondary fw-normal">· @question.Subject?.Title</span></h2>
+                    <div class="question-statement">@((MarkupString)StatementFormatter.ToHtml(question.Statement))</div>
+                    @if (question.Kind == QuestionKind.Discursive)
+                    {
+                        <div class="row g-3">
+                            <div class="col-lg-6">
+                                <h3 class="h6">Sua resposta</h3>
+                                <div class="card"><div class="card-body discursive-text">@(item.DiscursiveText ?? "(em branco)")</div></div>
+                            </div>
+                            <div class="col-lg-6">
+                                <h3 class="h6">Padrão de resposta</h3>
+                                <div class="card border-success"><div class="card-body question-statement">@((MarkupString)StatementFormatter.ToHtml(question.ExpectedAnswer ?? ""))</div></div>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        @if (item.SelectedOptionId is null)
+                        {
+                            <p class="small text-danger mb-2">Em branco.</p>
+                        }
+                        <ol class="list-unstyled d-flex flex-column gap-2 mb-0">
+                            @foreach (var option in question.Options)
+                            {
+                                <li class="border rounded p-2 @(option.IsCorrect ? "border-success" : option.Id == item.SelectedOptionId ? "border-danger" : "")">
+                                    <strong>@option.Letter)</strong> @option.Text
+                                    @if (option.IsCorrect)
+                                    {
+                                        <span class="badge text-bg-success ms-1">Correta</span>
+                                    }
+                                    @if (option.Id == item.SelectedOptionId && !option.IsCorrect)
+                                    {
+                                        <span class="badge text-bg-danger ms-1">Sua resposta</span>
+                                    }
+                                    <div class="small text-body-secondary">@option.Explanation</div>
+                                </li>
+                            }
+                        </ol>
+                    }
+                </div>
+            </article>
+        }
+
+        <a class="btn btn-primary" href="simulados">Fazer outro simulado</a>
+    }
+}
+
+@code {
+    private const string SaveCommand = "salvar";
+    private const string SubmitCommand = "entregar";
+
+    private MockExam? exam;
+    private string? userId;
+    private string? message;
+    private bool messageIsError;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        userId = Users.GetUserId(HttpContext.User);
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        // O simulado de outra pessoa simplesmente não existe para quem não é o dono.
+        exam = userId is null ? null : await MockExams.FindAsync(userId, Id);
+        if (exam is null)
+        {
+            Navigation.NotFound();
+        }
+    }
+
+    private async Task SaveAsync()
+    {
+        if (userId is null || exam is null)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return;
+        }
+
+        var form = HttpContext.Request.Form;
+        var letters = new Dictionary<int, char>();
+        var texts = new Dictionary<int, string>();
+        foreach (var item in exam.Questions)
+        {
+            if (form.TryGetValue($"q-{item.QuestionId}", out var letter) && letter.ToString() is { Length: 1 } value)
+            {
+                letters[item.QuestionId] = value[0];
+            }
+
+            if (form.TryGetValue($"t-{item.QuestionId}", out var text))
+            {
+                texts[item.QuestionId] = text.ToString();
+            }
+        }
+
+        var wantsToSubmit = form["Command"] == SubmitCommand;
+        var confirmed = form["ConfirmSubmit"] == "true";
+        var outcome = await MockExams.SaveAsync(userId, Id, letters, texts, submit: wantsToSubmit && confirmed);
+
+        (message, messageIsError) = outcome switch
+        {
+            SaveOutcome.Saved when wantsToSubmit => ("Respostas salvas. Para entregar, marque \"Terminei e quero entregar\".", true),
+            SaveOutcome.Saved => ("Respostas salvas.", false),
+            SaveOutcome.Submitted => ("Simulado entregue.", false),
+            SaveOutcome.AlreadyClosed => ("Este simulado já foi entregue.", true),
+            _ => ("Simulado não encontrado.", true),
+        };
+
+        if (messageIsError && outcome != SaveOutcome.Saved)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+        }
+
+        await LoadAsync();
+    }
+}
