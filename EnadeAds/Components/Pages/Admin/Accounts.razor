@@ -1,0 +1,196 @@
+@page "/admin/contas"
+
+@using Microsoft.AspNetCore.Authorization
+@using EnadeAds.Accounts
+@using EnadeAds.Data
+@using Microsoft.AspNetCore.Identity
+
+@attribute [Authorize(Roles = Roles.Admin)]
+
+@inject AccountAdmin Admin
+@inject UserManager<ApplicationUser> Users
+
+<PageTitle>Contas</PageTitle>
+
+<h1 class="h3">Contas</h1>
+<p class="text-body-secondary">
+    Mudanças de perfil e bloqueios valem em até 1 minuto: a pessoa precisa entrar de novo.
+    Pedidos de professor ficam em <a href="admin/professores-pendentes">Professores pendentes</a>.
+</p>
+
+@if (result is not null)
+{
+    <div class="alert @(result.Succeeded ? "alert-success" : "alert-danger")" role="status">@result.Message</div>
+}
+
+<form method="get" action="admin/contas" class="row g-2 align-items-end mb-3">
+    <div class="col-sm-6 col-md-5">
+        <label for="busca" class="form-label">Nome ou e-mail</label>
+        <input id="busca" name="busca" class="form-control" value="@Search" />
+    </div>
+    <div class="col-sm-4 col-md-3">
+        <label for="perfil" class="form-label">Perfil</label>
+        <select id="perfil" name="perfil" class="form-select">
+            @foreach (var (value, label) in FilterOptions)
+            {
+                <option value="@value" selected="@(value == Filter)">@label</option>
+            }
+        </select>
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-outline-primary">Buscar</button>
+    </div>
+</form>
+
+@if (accounts is not null)
+{
+    <p class="small text-body-secondary">@accounts.TotalCount @(accounts.TotalCount == 1 ? "conta" : "contas")</p>
+
+    <form method="post" action="@CurrentUrl" @formname="account-action" @onsubmit="ApplyAsync">
+        <AntiforgeryToken />
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">Perfis</th>
+                        <th scope="col">Situação</th>
+                        <th scope="col"><span class="visually-hidden">Ações</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var account in accounts.Items)
+                    {
+                        var self = account.Id == adminId;
+                        <tr>
+                            <td>@account.FullName @if (self) { <span class="badge text-bg-secondary">você</span> }</td>
+                            <td class="small">@account.Email @if (!account.EmailConfirmed) { <span class="badge text-bg-warning">não confirmado</span> }</td>
+                            <td class="small">@string.Join(", ", account.Roles)</td>
+                            <td>
+                                @if (account.IsBlocked)
+                                {
+                                    <span class="badge text-bg-danger">Bloqueada</span>
+                                }
+                                else
+                                {
+                                    <span class="badge text-bg-success">Ativa</span>
+                                }
+                            </td>
+                            <td class="text-end">
+                                @if (!self)
+                                {
+                                    <div class="d-flex flex-wrap justify-content-end gap-1">
+                                        @if (account.Roles.Contains(Roles.Teacher))
+                                        {
+                                            <ActionButton Action="AccountAction.RevokeTeacher" UserId="@account.Id" Label="Revogar professor" Name="@account.FullName" />
+                                        }
+                                        @if (account.Roles.Contains(Roles.Admin))
+                                        {
+                                            <ActionButton Action="AccountAction.RemoveAdmin" UserId="@account.Id" Label="Remover admin" Name="@account.FullName" />
+                                        }
+                                        @if (account.IsBlocked)
+                                        {
+                                            <ActionButton Action="AccountAction.Unblock" UserId="@account.Id" Label="Desbloquear" Name="@account.FullName" />
+                                        }
+                                        else
+                                        {
+                                            <ActionButton Action="AccountAction.Block" UserId="@account.Id" Label="Bloquear" Name="@account.FullName" Danger="true" />
+                                        }
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </form>
+
+    @if (accounts.TotalPages > 1)
+    {
+        <nav aria-label="Páginas de contas">
+            <ul class="pagination">
+                @for (var number = 1; number <= accounts.TotalPages; number++)
+                {
+                    <li class="page-item @(number == accounts.Page ? "active" : "")">
+                        <a class="page-link" href="@PageUrl(number)" aria-current="@(number == accounts.Page ? "page" : null)">@number</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+}
+
+@code {
+    private static readonly (string Value, string Label)[] FilterOptions =
+    [
+        ("", "Todos"),
+        ("alunos", "Só alunos"),
+        ("pendentes", "Professores pendentes"),
+        ("professores", "Professores"),
+        ("admins", "Administradores"),
+        ("bloqueadas", "Bloqueadas"),
+    ];
+
+    private AccountPage? accounts;
+    private EditResultMessage? result;
+    private string? adminId;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromQuery(Name = "busca")]
+    private string? Search { get; set; }
+
+    [SupplyParameterFromQuery(Name = "perfil")]
+    private string? Filter { get; set; }
+
+    [SupplyParameterFromQuery(Name = "pagina")]
+    private int? Pagina { get; set; }
+
+    private string CurrentUrl => $"admin/contas?busca={Uri.EscapeDataString(Search ?? "")}&perfil={Uri.EscapeDataString(Filter ?? "")}&pagina={Pagina ?? 1}";
+
+    protected override async Task OnInitializedAsync()
+    {
+        adminId = Users.GetUserId(HttpContext.User);
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        var filter = Filter switch
+        {
+            "alunos" => AccountFilter.Students,
+            "pendentes" => AccountFilter.PendingTeachers,
+            "professores" => AccountFilter.Teachers,
+            "admins" => AccountFilter.Admins,
+            "bloqueadas" => AccountFilter.Blocked,
+            _ => AccountFilter.All,
+        };
+        accounts = await Admin.SearchAsync(Search, filter, Pagina ?? 1);
+    }
+
+    private async Task ApplyAsync()
+    {
+        // O botão envia "Acao:id"; o serviço recusa ação na própria conta e confere a conta alvo.
+        var parts = HttpContext.Request.Form["Command"].ToString().Split(':', 2);
+        if (parts.Length != 2 || !Enum.TryParse<AccountAction>(parts[0], out var action) || !Enum.IsDefined(action))
+        {
+            result = EditResultMessage.Fail("Ação inválida.");
+            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            return;
+        }
+
+        result = await Admin.ApplyAsync(adminId!, parts[1], action);
+        if (!result.Succeeded)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+        }
+
+        await LoadAsync();
+    }
+
+    private string PageUrl(int number) =>
+        $"admin/contas?busca={Uri.EscapeDataString(Search ?? "")}&perfil={Uri.EscapeDataString(Filter ?? "")}&pagina={number}";
+}

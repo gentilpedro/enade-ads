@@ -36,6 +36,14 @@ Alunos também têm e-mail institucional, muitas vezes no mesmo domínio dos pro
 - **Recusar:** a conta perde ProfessorPendente e continua como **Aluno**.
 - Depois da decisão, a sessão da pessoa é renovada em até 1 minuto e ela precisa entrar de novo para o novo perfil valer.
 
+## Gestão de contas
+
+- Só **Admin** abre a tela *Contas*: busca por nome ou e-mail e filtro por perfil (alunos, professores pendentes, professores, administradores, bloqueadas).
+- O admin pode **revogar o perfil de Professor** (a pessoa continua Aluno), **remover o perfil de Admin** de outra pessoa e **bloquear ou desbloquear** uma conta. Conta bloqueada não consegue entrar.
+- Toda mudança vale em até 1 minuto: a sessão da pessoa é renovada e ela precisa entrar de novo.
+- Um admin **não altera a própria conta** por essa tela, para não se trancar fora nem deixar a plataforma sem admin por engano.
+- Novos admins continuam vindo só da configuração `Admin:Emails`.
+
 ## Acesso ao conteúdo
 
 - **Conteúdo é aberto:** roadmap, matérias, enunciados das questões, desafios e avisos podem ser vistos sem login.

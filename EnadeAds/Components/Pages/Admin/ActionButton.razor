@@ -1,0 +1,22 @@
+@using EnadeAds.Accounts
+
+<button type="submit" name="Command" value="@($"{Action}:{UserId}")" class="btn btn-sm @(Danger ? "btn-outline-danger" : "btn-outline-secondary")">
+    @Label <span class="visually-hidden">@Name</span>
+</button>
+
+@code {
+    [Parameter, EditorRequired]
+    public AccountAction Action { get; set; }
+
+    [Parameter, EditorRequired]
+    public string UserId { get; set; } = "";
+
+    [Parameter, EditorRequired]
+    public string Label { get; set; } = "";
+
+    [Parameter]
+    public string Name { get; set; } = "";
+
+    [Parameter]
+    public bool Danger { get; set; }
+}
