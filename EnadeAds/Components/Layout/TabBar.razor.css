@@ -41,7 +41,7 @@
     }
 
     .tab-bar ::deep a.active {
-        border-top-color: var(--you);
+        border-top-color: var(--text);
         color: var(--text);
     }
 

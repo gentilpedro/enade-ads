@@ -5,7 +5,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EnadeAds.Study;
 
-public sealed record WeekChallenge(int Id, string Title, ChallengeStatus Status, bool Done);
+/// <summary><see cref="Block"/> só vem preenchido quando todas as questões do desafio são do mesmo bloco do roadmap.</summary>
+public sealed record WeekChallenge(int Id, string Title, ChallengeStatus Status, bool Done, StudyBlock? Block);
 
 public sealed record WeekSlot(int Number, DateOnly Start, DateOnly End, bool IsCurrent, bool HasExam, IReadOnlyList<WeekChallenge> Challenges);
 
@@ -39,12 +40,18 @@ public sealed class SemesterPlan(ApplicationDbContext db, ExamSettings exam, Loc
             .OrderBy(c => c.StartsOn).ThenBy(c => c.Id)
             .ToListAsync(cancellationToken);
         var ids = challenges.Select(c => c.Id).ToList();
+        var blocks = (await db.ChallengeQuestions.Where(cq => ids.Contains(cq.ChallengeId))
+                .Join(db.Questions, cq => cq.QuestionId, q => q.Id, (cq, q) => new { cq.ChallengeId, q.SubjectId })
+                .Join(db.RoadmapNodes, x => x.SubjectId, n => n.Id, (x, n) => new { x.ChallengeId, n.Block })
+                .ToListAsync(cancellationToken))
+            .GroupBy(x => x.ChallengeId)
+            .ToDictionary(g => g.Key, g => g.Select(x => x.Block).Distinct().ToList() is [var only] ? only : (StudyBlock?)null);
         var done = userId is null
             ? []
             : (await db.ChallengeSubmissions.Where(s => s.UserId == userId && ids.Contains(s.ChallengeId)).Select(s => s.ChallengeId).ToListAsync(cancellationToken)).ToHashSet();
 
         var visible = challenges
-            .Select(c => new { c.StartsOn, Item = new WeekChallenge(c.Id, c.Title, c.StatusOn(today), done.Contains(c.Id)) })
+            .Select(c => new { c.StartsOn, Item = new WeekChallenge(c.Id, c.Title, c.StatusOn(today), done.Contains(c.Id), blocks.GetValueOrDefault(c.Id)) })
             // Desafio agendado só aparece para quem pode editar, como na página de desafios.
             .Where(c => canSeeUpcoming || c.Item.Status != ChallengeStatus.Upcoming)
             .ToList();

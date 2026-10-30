@@ -57,6 +57,7 @@
             {
                 <li class="question-row @question.Block.ColorClass()">
                     <div class="question-row-meta">
+                        <span class="label-narrow tabular text-body">@(question.Code ?? $"nº {question.Id}")</span>
                         <span class="subject-tag">@question.SubjectTitle</span>
                         @if (question.Kind == QuestionKind.Discursive)
                         {
@@ -66,7 +67,7 @@
                         <OutcomeBadge Outcome="question.Outcome" />
                     </div>
                     <p class="question-row-text">@question.Excerpt</p>
-                    <a href="questoes/@question.Id" class="question-row-link">Abrir a questão @question.Id</a>
+                    <a href="questoes/@question.Id" class="question-row-link">Abrir a questão @(question.Code ?? $"nº {question.Id}")</a>
                 </li>
             }
         </ol>

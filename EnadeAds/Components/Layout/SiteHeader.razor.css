@@ -27,7 +27,7 @@
 }
 
 .brand span[aria-hidden] {
-    color: var(--you-on-ink);
+    color: var(--ink-muted);
     padding: 0 0.1em;
 }
 
@@ -56,7 +56,7 @@
 
 .primary-nav ::deep a.active {
     color: #fff;
-    border-bottom-color: var(--you-on-ink);
+    border-bottom-color: #fff;
 }
 
 .primary-nav ::deep a:focus-visible,

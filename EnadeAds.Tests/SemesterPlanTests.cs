@@ -38,3 +38,22 @@ public class SemesterPlanTests
         Assert.Single(weeks);
     }
 }
+
+public class QuestionCodeTests
+{
+    [Theory]
+    [InlineData("enade-2017-ads-q10", "2017·Q10")]
+    [InlineData("enade-2021-ads-d03", "2021·D3")]
+    [InlineData("outra-coisa", null)]
+    [InlineData(null, null)]
+    public void Code_ComesFromTheInepKey(string? key, string? expected)
+    {
+        Assert.Equal(expected, EnadeAds.Questions.QuestionCode.From(key));
+    }
+
+    [Fact]
+    public void Label_FallsBackToThePlatformNumber()
+    {
+        Assert.Equal("nº 2", EnadeAds.Questions.QuestionCode.Label(2, null));
+    }
+}

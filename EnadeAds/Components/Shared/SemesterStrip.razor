@@ -63,8 +63,13 @@
     [Parameter]
     public bool SignedIn { get; set; }
 
-    private string SlotClass(WeekChallenge challenge) =>
-        challenge.Done ? "is-done" : challenge.Status == ChallengeStatus.Ended ? "is-missed" : "is-pending";
+    private string SlotClass(WeekChallenge challenge)
+    {
+        var state = challenge.Done ? "is-done" : challenge.Status == ChallengeStatus.Ended ? "is-missed" : "is-pending";
+
+        // Perdido fica cinza; os outros levam a cor do bloco da matéria, e a borda diz o estado.
+        return challenge.Block is { } block && state != "is-missed" ? $"{state} {block.ColorClass()}" : state;
+    }
 
     private string SlotState(WeekChallenge challenge) => challenge switch
     {

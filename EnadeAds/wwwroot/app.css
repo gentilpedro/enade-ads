@@ -259,8 +259,19 @@ a:not(.btn):hover {
     --bs-nav-link-hover-color: var(--text);
 }
 
+/* :not(.btn) vence a regra global de link: aba inativa fica neutra, não azul de link. */
+.nav-underline .nav-link:not(.btn) {
+    color: var(--muted);
+    text-decoration: none;
+}
+
+.nav-underline .nav-link:not(.btn):hover,
+.nav-underline .nav-link.active:not(.btn) {
+    color: var(--text);
+}
+
 .nav-underline .nav-link.active {
-    border-bottom-color: var(--you);
+    border-bottom-color: var(--text);
 }
 
 /* Módulo: fio grosso em cima e aba de título estreita, no lugar de cartão flutuante. */
@@ -391,6 +402,22 @@ h1:focus {
     display: block;
     max-width: 100%;
     margin-top: 0.25rem;
+}
+
+.icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.icon .icon-fill {
+    fill: currentColor;
+    stroke: none;
 }
 
 /* Avisos informativos no azul da marca em vez do ciano padrão do Bootstrap (gritante no tema escuro). */
@@ -526,10 +553,21 @@ a.slot:hover {
     color: var(--muted);
 }
 
+.slot[class*="block-"] {
+    border-color: var(--block);
+    background-color: var(--block-tint);
+}
+
+.slot[class*="block-"] small {
+    color: var(--block);
+}
+
 .slot.is-done {
     border-style: solid;
-    border-color: var(--block-soft);
-    background-color: var(--block-soft-tint);
+}
+
+.slot.is-done:not([class*="block-"]) {
+    border-color: var(--text);
 }
 
 .slot.is-missed {
@@ -915,7 +953,7 @@ a.tag-discussion:not(.btn) {
 }
 
 .vote-down[aria-pressed="true"] {
-    color: var(--block-data);
+    color: var(--text);
 }
 
 .vote-score {
