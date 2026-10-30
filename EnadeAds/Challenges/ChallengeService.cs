@@ -34,7 +34,7 @@ public sealed class ChallengeDraft
     public List<int> QuestionIds { get; set; } = [];
 }
 
-public sealed class ChallengeService(ApplicationDbContext db, LocalCalendar calendar, TimeProvider clock, ILogger<ChallengeService> logger)
+public sealed class ChallengeService(ApplicationDbContext db, Reviews.ReviewQueue reviews, LocalCalendar calendar, TimeProvider clock, ILogger<ChallengeService> logger)
 {
     public const int TitleMaxLength = 150;
     public const int DescriptionMaxLength = 2000;
@@ -194,6 +194,11 @@ public sealed class ChallengeService(ApplicationDbContext db, LocalCalendar cale
             return new EditResult(null, errors);
         }
 
+        if (editor.NeedsReview)
+        {
+            return await reviews.SubmitAsync(editor, Reviews.ReviewKind.ChallengeCreate, null, draft, draft.Title, cancellationToken);
+        }
+
         var challenge = new Challenge
         {
             TrackId = db.CurrentTrackId,
@@ -239,6 +244,11 @@ public sealed class ChallengeService(ApplicationDbContext db, LocalCalendar cale
             return new EditResult(challengeId, errors);
         }
 
+        if (editor.NeedsReview)
+        {
+            return await reviews.SubmitAsync(editor, Reviews.ReviewKind.ChallengeUpdate, challengeId, draft, draft.Title, cancellationToken);
+        }
+
         challenge.Title = draft.Title.Trim();
         challenge.Description = draft.Description.Trim();
         challenge.StartsOn = draft.StartsOn;
@@ -266,6 +276,11 @@ public sealed class ChallengeService(ApplicationDbContext db, LocalCalendar cale
         if (!CanEdit(editor, challenge))
         {
             return EditResult.Fail("Só o autor do desafio ou um administrador pode encerrá-lo.");
+        }
+
+        if (editor.NeedsReview)
+        {
+            return await reviews.SubmitAsync(editor, Reviews.ReviewKind.ChallengeClose, challengeId, null, challenge.Title, cancellationToken);
         }
 
         challenge.ClosedAt ??= clock.GetUtcNow();

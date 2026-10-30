@@ -292,7 +292,7 @@
             return;
         }
 
-        Navigation.NavigateTo($"questoes/{result.Id}");
+        Navigation.NavigateTo(result.IsQueued ? EnadeAds.Reviews.ReviewQueue.SentUrl(result) : $"questoes/{result.Id}");
     }
 
     private async Task ArchiveAsync()
@@ -310,7 +310,7 @@
             return;
         }
 
-        Navigation.NavigateTo("questoes");
+        Navigation.NavigateTo(result.IsQueued ? EnadeAds.Reviews.ReviewQueue.SentUrl(result) : "questoes");
     }
 
     private sealed class QuestionFormModel

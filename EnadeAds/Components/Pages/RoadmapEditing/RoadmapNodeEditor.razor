@@ -190,7 +190,7 @@
         }
 
         var result = await RoadmapEditor.RemoveAsync(editor!, node!.Id);
-        if (!result.Succeeded)
+        if (!result.Succeeded || result.IsQueued)
         {
             Show(result, "");
             return;
@@ -202,7 +202,9 @@
     private void Show(EditResult result, string success)
     {
         messageIsError = !result.Succeeded;
-        message = result.Succeeded ? success : string.Join(" ", result.Errors);
+        message = !result.Succeeded ? string.Join(" ", result.Errors)
+            : result.IsQueued ? EnadeAds.Reviews.ReviewQueue.QueuedMessage
+            : success;
         if (messageIsError)
         {
             HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;

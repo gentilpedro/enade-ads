@@ -2,6 +2,7 @@ using EnadeAds.Blog;
 using EnadeAds.Challenges;
 using EnadeAds.MockExams;
 using EnadeAds.Questions;
+using EnadeAds.Reviews;
 using EnadeAds.Study;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<MockExam> MockExams => Set<MockExam>();
     public DbSet<SiteSetting> SiteSettings => Set<SiteSetting>();
     public DbSet<MockExamQuestion> MockExamQuestions => Set<MockExamQuestion>();
+    public DbSet<ContentReview> ContentReviews => Set<ContentReview>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -234,6 +236,19 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 property.SetValueConverter(new DateTimeOffsetToBinaryConverter());
             }
         }
+
+        builder.Entity<ContentReview>(review =>
+        {
+            // Sem filtro de trilha: quem revisa vê as propostas de todas as trilhas, cada uma com a sua.
+            review.Property(r => r.Summary).HasMaxLength(ContentReview.SummaryMaxLength);
+            review.Property(r => r.Note).HasMaxLength(ContentReview.NoteMaxLength);
+            review.HasIndex(r => new { r.Status, r.CreatedAt });
+            review.HasIndex(r => r.AuthorId);
+            review.HasOne<Track>().WithMany().HasForeignKey(r => r.TrackId).OnDelete(DeleteBehavior.Restrict);
+            // Excluir a conta apaga as propostas dela; quem revisou só perde o vínculo.
+            review.HasOne<ApplicationUser>().WithMany().HasForeignKey(r => r.AuthorId).OnDelete(DeleteBehavior.Cascade);
+            review.HasOne<ApplicationUser>().WithMany().HasForeignKey(r => r.ReviewerId).OnDelete(DeleteBehavior.SetNull);
+        });
 
         builder.Entity<DiscursiveAnswer>(answer =>
         {

@@ -140,7 +140,7 @@ public class DiscursiveQuestionTests(EnadeAdsFactory factory)
         });
 
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
-        var id = int.Parse(response.Headers.Location!.ToString().Split('/')[^1]);
+        var id = (await TestReviews.ApproveFromRedirectAsync(factory, response))!.Value;
 
         using var scope = factory.Services.CreateScope();
         var question = await scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Questions
@@ -158,7 +158,7 @@ public class DiscursiveQuestionTests(EnadeAdsFactory factory)
         using (var scope = factory.Services.CreateScope())
         {
             var created = await scope.ServiceProvider.GetRequiredService<QuestionEditor>()
-                .CreateAsync(new Editor(teacher.Id, IsAdmin: false, IsTeacher: true), Discursive(expectedAnswer: "Padrão antigo"));
+                .CreateAsync(new Editor(teacher.Id, IsAdmin: false, IsTeacher: true, Reviewed: true), Discursive(expectedAnswer: "Padrão antigo"));
             id = created.Id!.Value;
         }
 
@@ -181,6 +181,7 @@ public class DiscursiveQuestionTests(EnadeAdsFactory factory)
         Assert.DoesNotContain("Alternativas", page);
         Assert.Contains("Padrão de resposta", page);
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        await TestReviews.ApproveFromRedirectAsync(factory, response);
         using var check = factory.Services.CreateScope();
         var question = await check.ServiceProvider.GetRequiredService<ApplicationDbContext>().Questions.SingleAsync(q => q.Id == id);
         Assert.Equal("Padrão revisado", question.ExpectedAnswer);
@@ -191,7 +192,7 @@ public class DiscursiveQuestionTests(EnadeAdsFactory factory)
     public async Task Editor_RequiresExpectedAnswerAndKeepsKind()
     {
         var teacher = await TestAccounts.CreateConfirmedAsync(factory, "discursiva.regra@faculdade.edu.br", Roles.Student, Roles.Teacher);
-        var editor = new Editor(teacher.Id, IsAdmin: false, IsTeacher: true);
+        var editor = new Editor(teacher.Id, IsAdmin: false, IsTeacher: true, Reviewed: true);
 
         using var scope = factory.Services.CreateScope();
         var questions = scope.ServiceProvider.GetRequiredService<QuestionEditor>();

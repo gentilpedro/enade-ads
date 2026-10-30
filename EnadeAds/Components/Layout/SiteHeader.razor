@@ -64,6 +64,7 @@
                             <a href="meu-desempenho">Meu desempenho</a>
                             <a href="Account/Manage">Minha conta</a>
                             <AuthorizeView Roles="@Roles.Editors" Context="editor">
+                                <a href="revisoes">Revisões</a>
                                 <a href="moderacao">Moderação</a>
                             </AuthorizeView>
                             <AuthorizeView Roles="@Roles.Admin" Context="admin">

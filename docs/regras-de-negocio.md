@@ -21,10 +21,21 @@ O Rumo atende várias provas. Cada prova numa edição é uma **trilha**: hoje, 
 | Visitante | Quem não entrou na conta | Ver o roadmap, as matérias, as questões (sem gabarito), os desafios e os avisos |
 | Aluno | Toda conta cadastrada | Tudo do visitante, mais responder questões, ver o gabarito e salvar o progresso |
 | ProfessorPendente | Pediu acesso de professor e aguarda aprovação | O mesmo que o aluno |
-| Professor | Aprovado por um administrador | Tudo do aluno, mais publicar e editar questões, desafios semanais e avisos |
+| Professor | Aprovado por um administrador | Tudo do aluno, mais propor questões, desafios e mudanças no roadmap (que outro professor ou um admin revisa), publicar avisos e revisar propostas de colegas |
 | Admin | E-mail listado na configuração `Admin:Emails` | Tudo do professor, mais aprovar ou recusar professores |
 
 Uma conta pode ter mais de um perfil ao mesmo tempo. Por exemplo, um professor aprovado também é aluno.
+
+## Revisão das edições de professores
+
+Toda alteração de professor em **questões** (criar, editar, arquivar), **roadmap** (editar, criar assunto ou checkpoint, reordenar, remover) e **desafios** (criar, editar, encerrar) vai para a fila de *Revisões* e só vale depois de aprovada.
+
+- **Quem aprova:** outro professor ou um admin. Quem enviou nunca aprova a própria proposta, mas pode retirá-la.
+- **Admin** publica direto, sem fila.
+- **Na aprovação**, a alteração é aplicada como foi proposta, em nome do autor, na trilha em que foi proposta e com as mesmas validações da tela. Se o item mudou desde a proposta e ela não vale mais (por exemplo, um desafio cuja data de início já passou), a proposta fica como *aprovada, mas não aplicada*, com o motivo.
+- **Recusa** pode vir com um motivo, que o autor vê em *Minhas propostas*.
+- **Fora da fila:** posts da comunidade e moderação, que precisam valer na hora.
+- Excluir a conta apaga as propostas dela.
 
 ## Cadastro
 

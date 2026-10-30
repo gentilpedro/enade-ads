@@ -1027,3 +1027,48 @@ a.tag-discussion:not(.btn) {
     font-size: 0.875rem;
     font-weight: 600;
 }
+
+/* Revisões: propostas em linhas, como o feed. O conteúdo proposto fica recuado por um fio. */
+.review-intro {
+    max-width: 66ch;
+}
+
+.review-rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.review-row {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--rule);
+}
+
+.review-row.is-new {
+    border-left: 3px solid var(--you);
+    padding-left: 0.75rem;
+}
+
+.review-meta {
+    margin-bottom: 0.375rem;
+    font-size: 0.875rem;
+    color: var(--muted);
+}
+
+.review-proposed {
+    max-width: 66ch;
+    padding-left: 0.875rem;
+    border-left: 2px solid var(--rule-strong);
+}
+
+.review-options {
+    padding-left: 1.25rem;
+}
+
+.review-options li {
+    margin-bottom: 0.375rem;
+}
+
+.review-status-approved { color: var(--block-soft); }
+.review-status-rejected,
+.review-status-failed { color: var(--text); }

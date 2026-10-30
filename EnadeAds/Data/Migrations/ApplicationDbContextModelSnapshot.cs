@@ -1012,6 +1012,68 @@ namespace EnadeAds.Data.Migrations
                         });
                 });
 
+            modelBuilder.Entity("EnadeAds.Reviews.ContentReview", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Kind")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Note")
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("Payload")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("ResultId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset?>("ReviewedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ReviewerId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Summary")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.Property<int?>("TargetId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TrackId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("ReviewerId");
+
+                    b.HasIndex("TrackId");
+
+                    b.HasIndex("Status", "CreatedAt");
+
+                    b.ToTable("ContentReviews");
+                });
+
             modelBuilder.Entity("EnadeAds.Study.RoadmapNode", b =>
                 {
                     b.Property<int>("Id")
@@ -4167,6 +4229,26 @@ namespace EnadeAds.Data.Migrations
                         .WithMany("Options")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EnadeAds.Reviews.ContentReview", b =>
+                {
+                    b.HasOne("EnadeAds.Data.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EnadeAds.Data.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("ReviewerId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("EnadeAds.Study.Track", null)
+                        .WithMany()
+                        .HasForeignKey("TrackId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 

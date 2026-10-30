@@ -183,7 +183,7 @@
             return;
         }
 
-        Navigation.NavigateTo($"desafios/{result.Id}");
+        Navigation.NavigateTo(result.IsQueued ? EnadeAds.Reviews.ReviewQueue.SentUrl(result) : $"desafios/{result.Id}");
     }
 
     private static string Excerpt(string statement)

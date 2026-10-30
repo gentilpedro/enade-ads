@@ -136,8 +136,8 @@ public class ChallengeTests(EnadeAdsFactory factory)
 
         using var scope = factory.Services.CreateScope();
         var challenges = scope.ServiceProvider.GetRequiredService<ChallengeService>();
-        var other = await challenges.CloseAsync(new Editor("outro-professor", IsAdmin: false, IsTeacher: true), id);
-        var owner = await challenges.CloseAsync(new Editor(author.Id, IsAdmin: false, IsTeacher: true), id);
+        var other = await challenges.CloseAsync(new Editor("outro-professor", IsAdmin: false, IsTeacher: true, Reviewed: true), id);
+        var owner = await challenges.CloseAsync(new Editor(author.Id, IsAdmin: false, IsTeacher: true, Reviewed: true), id);
 
         Assert.False(other.Succeeded);
         Assert.True(owner.Succeeded);
@@ -196,7 +196,7 @@ public class ChallengeTests(EnadeAdsFactory factory)
         });
 
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
-        var id = int.Parse(response.Headers.Location!.ToString().Split('/')[^1]);
+        var id = (await TestReviews.ApproveFromRedirectAsync(factory, response))!.Value;
         using var scope = factory.Services.CreateScope();
         var challenge = await scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Challenges
             .Include(c => c.Questions).SingleAsync(c => c.Id == id);
@@ -209,7 +209,7 @@ public class ChallengeTests(EnadeAdsFactory factory)
         using var scope = factory.Services.CreateScope();
         var challenges = scope.ServiceProvider.GetRequiredService<ChallengeService>();
         var today = challenges.Today();
-        var editor = new Editor(authorId ?? (await TeacherAsync($"autor.{Guid.NewGuid():N}@faculdade.edu.br")).User.Id, IsAdmin: false, IsTeacher: true);
+        var editor = new Editor(authorId ?? (await TeacherAsync($"autor.{Guid.NewGuid():N}@faculdade.edu.br")).User.Id, IsAdmin: false, IsTeacher: true, Reviewed: true);
         var result = await challenges.CreateAsync(editor, Draft(title, today.AddDays(startOffset), today.AddDays(endOffset), SeedQuestions));
         Assert.True(result.Succeeded, string.Join(" ", result.Errors));
         return result.Id!.Value;
@@ -233,7 +233,7 @@ public class ChallengeTests(EnadeAdsFactory factory)
     private async Task<(ApplicationUser User, Editor Editor)> TeacherAsync(string email)
     {
         var user = await TestAccounts.CreateConfirmedAsync(factory, email, Roles.Student, Roles.Teacher);
-        return (user, new Editor(user.Id, IsAdmin: false, IsTeacher: true));
+        return (user, new Editor(user.Id, IsAdmin: false, IsTeacher: true, Reviewed: true));
     }
 
     private async Task<HttpClient> StudentClientAsync(string email)
