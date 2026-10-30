@@ -22,6 +22,88 @@ namespace EnadeAds.Data.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("EnadeAds.Challenges.Challenge", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AuthorId")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset?>("ClosedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)");
+
+                    b.Property<DateOnly>("EndsOn")
+                        .HasColumnType("date");
+
+                    b.Property<DateOnly>("StartsOn")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("character varying(150)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("Challenges");
+                });
+
+            modelBuilder.Entity("EnadeAds.Challenges.ChallengeQuestion", b =>
+                {
+                    b.Property<int>("ChallengeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
+
+                    b.HasKey("ChallengeId", "QuestionId");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("ChallengeQuestions");
+                });
+
+            modelBuilder.Entity("EnadeAds.Challenges.ChallengeSubmission", b =>
+                {
+                    b.Property<int>("ChallengeId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<int>("CorrectCount")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("QuestionCount")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTimeOffset>("SubmittedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("ChallengeId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ChallengeSubmissions");
+                });
+
             modelBuilder.Entity("EnadeAds.Data.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -259,6 +341,9 @@ namespace EnadeAds.Data.Migrations
                     b.Property<DateTimeOffset>("AnsweredAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<int?>("ChallengeId")
+                        .HasColumnType("integer");
+
                     b.Property<bool>("IsCorrect")
                         .HasColumnType("boolean");
 
@@ -273,6 +358,8 @@ namespace EnadeAds.Data.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ChallengeId");
 
                     b.HasIndex("OptionId");
 
@@ -2258,6 +2345,46 @@ namespace EnadeAds.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("EnadeAds.Challenges.Challenge", b =>
+                {
+                    b.HasOne("EnadeAds.Data.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("EnadeAds.Challenges.ChallengeQuestion", b =>
+                {
+                    b.HasOne("EnadeAds.Challenges.Challenge", null)
+                        .WithMany("Questions")
+                        .HasForeignKey("ChallengeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EnadeAds.Questions.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("EnadeAds.Challenges.ChallengeSubmission", b =>
+                {
+                    b.HasOne("EnadeAds.Challenges.Challenge", null)
+                        .WithMany()
+                        .HasForeignKey("ChallengeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EnadeAds.Data.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("EnadeAds.Questions.DiscursiveAnswer", b =>
                 {
                     b.HasOne("EnadeAds.Questions.Question", null)
@@ -2291,6 +2418,11 @@ namespace EnadeAds.Data.Migrations
 
             modelBuilder.Entity("EnadeAds.Questions.QuestionAttempt", b =>
                 {
+                    b.HasOne("EnadeAds.Challenges.Challenge", null)
+                        .WithMany()
+                        .HasForeignKey("ChallengeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("EnadeAds.Questions.QuestionOption", null)
                         .WithMany()
                         .HasForeignKey("OptionId")
@@ -2444,6 +2576,11 @@ namespace EnadeAds.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("EnadeAds.Challenges.Challenge", b =>
+                {
+                    b.Navigation("Questions");
                 });
 
             modelBuilder.Entity("EnadeAds.Questions.Question", b =>

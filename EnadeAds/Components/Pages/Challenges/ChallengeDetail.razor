@@ -1,0 +1,292 @@
+@page "/desafios/{Id:int}"
+
+@using EnadeAds.Challenges
+@using EnadeAds.Data
+@using EnadeAds.Questions
+@using Microsoft.AspNetCore.Identity
+
+@inject ChallengeService Challenges
+@inject UserManager<ApplicationUser> Users
+@inject NavigationManager Navigation
+
+@if (challenge is not null)
+{
+    <PageTitle>@challenge.Title</PageTitle>
+
+    <nav aria-label="Trilha">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="desafios">Desafios</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@challenge.Title</li>
+        </ol>
+    </nav>
+
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+        <h1 class="h3">@challenge.Title <ChallengeStatusBadge Status="status" /></h1>
+        @if (canEdit)
+        {
+            <a class="btn btn-sm btn-outline-secondary" href="desafios/@challenge.Id/editar">Editar desafio</a>
+        }
+    </div>
+    <p class="small text-body-secondary">
+        De @challenge.StartsOn.ToString("dd/MM/yyyy") a @challenge.EndsOn.ToString("dd/MM/yyyy")
+        · @challenge.Questions.Count @(challenge.Questions.Count == 1 ? "questão" : "questões")
+    </p>
+    @if (!string.IsNullOrWhiteSpace(challenge.Description))
+    {
+        <p class="discursive-text">@challenge.Description</p>
+    }
+
+    @if (errorMessage is not null)
+    {
+        <div class="alert alert-danger" role="alert">@errorMessage</div>
+    }
+
+    @switch (status)
+    {
+        case ChallengeStatus.Upcoming:
+            <div class="alert alert-warning" role="status">
+                Este desafio começa em @challenge.StartsOn.ToString("dd/MM/yyyy"). Só professores veem esta página antes disso.
+            </div>
+            <QuestionsReadOnly Challenge="challenge" />
+            break;
+
+        case ChallengeStatus.Ended:
+            <section class="mb-4" aria-labelledby="scoreboard-title">
+                <h2 id="scoreboard-title" class="h5">Desempenho da turma</h2>
+                @if (submission is not null)
+                {
+                    <p><strong>Você acertou @submission.CorrectCount de @submission.QuestionCount.</strong></p>
+                }
+                <p>@scoreboard!.Participants @(scoreboard.Participants == 1 ? "aluno participou" : "alunos participaram").</p>
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle">
+                        <thead>
+                            <tr><th scope="col">Questão</th><th scope="col">Respostas</th><th scope="col">Acertos</th></tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var score in scoreboard.Questions)
+                            {
+                                <tr>
+                                    <td>@score.Order</td>
+                                    <td>@score.Answers</td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="progress flex-grow-1" role="progressbar" aria-label="Acertos da questão @score.Order"
+                                                 aria-valuenow="@score.Percent" aria-valuemin="0" aria-valuemax="100" style="max-width: 12rem">
+                                                <div class="progress-bar bg-success" style="width: @(score.Percent)%"></div>
+                                            </div>
+                                            <span class="font-monospace">@score.Percent%</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <h2 class="h5">Gabarito comentado</h2>
+            @foreach (var item in challenge.Questions)
+            {
+                var question = item.Question!;
+                chosen.TryGetValue(question.Id, out var chosenOptionId);
+                <article class="card mb-3">
+                    <div class="card-body">
+                        <h3 class="h6">Questão @item.Order <span class="small text-body-secondary fw-normal">· @question.Subject?.Title</span></h3>
+                        <div class="question-statement">@((MarkupString)StatementFormatter.ToHtml(question.Statement))</div>
+                        <ol class="list-unstyled d-flex flex-column gap-2 mb-0">
+                            @foreach (var option in question.Options)
+                            {
+                                <li class="border rounded p-2 @(option.IsCorrect ? "border-success" : option.Id == chosenOptionId ? "border-danger" : "")">
+                                    <strong>@option.Letter)</strong> @option.Text
+                                    @if (option.IsCorrect)
+                                    {
+                                        <span class="badge text-bg-success ms-1">Correta</span>
+                                    }
+                                    @if (option.Id == chosenOptionId && !option.IsCorrect)
+                                    {
+                                        <span class="badge text-bg-danger ms-1">Sua resposta</span>
+                                    }
+                                    <div class="small text-body-secondary">@option.Explanation</div>
+                                </li>
+                            }
+                        </ol>
+                    </div>
+                </article>
+            }
+            break;
+
+        default:
+            if (submission is not null)
+            {
+                <div class="alert alert-success" role="status">
+                    <strong>Respostas enviadas. Você acertou @submission.CorrectCount de @submission.QuestionCount.</strong>
+                    O gabarito comentado e o desempenho da turma saem quando o desafio encerrar, em @challenge.EndsOn.ToString("dd/MM/yyyy").
+                </div>
+                <QuestionsReadOnly Challenge="challenge" Chosen="chosen" />
+            }
+            else if (userId is not null)
+            {
+                <form method="post" action="desafios/@challenge.Id" @formname="challenge-answers" @onsubmit="SubmitAsync">
+                    <AntiforgeryToken />
+                    <p class="small text-body-secondary">Responda todas as questões. Você envia uma vez só.</p>
+                    @foreach (var item in challenge.Questions)
+                    {
+                        var question = item.Question!;
+                        <fieldset class="card mb-3">
+                            <div class="card-body">
+                                <legend class="h6">Questão @item.Order</legend>
+                                <div class="question-statement">@((MarkupString)StatementFormatter.ToHtml(question.Statement))</div>
+                                @foreach (var option in question.Options)
+                                {
+                                    var inputId = $"q{question.Id}-{option.Letter}";
+                                    <div class="form-check mb-1">
+                                        <input class="form-check-input" type="radio" name="@($"q-{question.Id}")" id="@inputId" value="@option.Letter" required />
+                                        <label class="form-check-label" for="@inputId"><strong>@option.Letter)</strong> @option.Text</label>
+                                    </div>
+                                }
+                            </div>
+                        </fieldset>
+                    }
+                    <button type="submit" class="btn btn-primary">Enviar respostas</button>
+                </form>
+            }
+            else
+            {
+                <div class="alert alert-info" role="status">
+                    <a href="@LoginUrl">Entre</a> ou <a href="Account/Register">crie sua conta</a> para participar do desafio.
+                </div>
+                <QuestionsReadOnly Challenge="challenge" />
+            }
+            break;
+    }
+
+    @if (canEdit && status == ChallengeStatus.Active)
+    {
+        <section class="mt-5" aria-labelledby="close-title">
+            <h2 id="close-title" class="h6 text-danger">Encerrar agora</h2>
+            <p class="small text-body-secondary">Fecha o desafio antes do prazo e libera o gabarito e o desempenho da turma.</p>
+            <form method="post" action="desafios/@challenge.Id" @formname="close-challenge" @onsubmit="CloseAsync">
+                <AntiforgeryToken />
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" name="ConfirmClose" value="true" id="ConfirmClose" required />
+                    <label class="form-check-label" for="ConfirmClose">Confirmo que quero encerrar o desafio agora</label>
+                </div>
+                <button type="submit" class="btn btn-outline-danger">Encerrar</button>
+            </form>
+        </section>
+    }
+}
+
+@code {
+    private Challenge? challenge;
+    private ChallengeStatus status;
+    private ChallengeSubmission? submission;
+    private Scoreboard? scoreboard;
+    private IReadOnlyDictionary<int, int> chosen = new Dictionary<int, int>();
+    private string? userId;
+    private bool canEdit;
+    private string? errorMessage;
+
+    [Parameter]
+    public int Id { get; set; }
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromForm(FormName = "close-challenge")]
+    private bool ConfirmClose { get; set; }
+
+    private string LoginUrl => $"Account/Login?ReturnUrl={Uri.EscapeDataString($"/desafios/{Id}")}";
+
+    protected override async Task OnInitializedAsync()
+    {
+        challenge = await Challenges.FindAsync(Id);
+        userId = Users.GetUserId(HttpContext.User);
+        var editor = EditorFactory.From(HttpContext.User, userId);
+        canEdit = challenge is not null && editor is not null && ChallengeService.CanEdit(editor, challenge);
+
+        // Desafio agendado não existe para quem não pode editar: o aluno não vê as questões antes da hora.
+        if (challenge is null || (challenge.StatusOn(Challenges.Today()) == ChallengeStatus.Upcoming && !canEdit))
+        {
+            challenge = null;
+            Navigation.NotFound();
+            return;
+        }
+
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        status = challenge!.StatusOn(Challenges.Today());
+        if (userId is not null)
+        {
+            submission = await Challenges.SubmissionAsync(userId, Id);
+            chosen = await Challenges.ChosenOptionsAsync(userId, Id);
+        }
+
+        if (status == ChallengeStatus.Ended)
+        {
+            scoreboard = await Challenges.ScoreboardAsync(Id);
+        }
+    }
+
+    private async Task SubmitAsync()
+    {
+        // Participar exige login; o formulário não aparece para visitante, mas o POST pode ser forjado.
+        if (userId is null)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return;
+        }
+
+        var answers = new Dictionary<int, char>();
+        foreach (var item in challenge!.Questions)
+        {
+            if (HttpContext.Request.Form.TryGetValue($"q-{item.QuestionId}", out var value) && value.ToString() is { Length: 1 } letter)
+            {
+                answers[item.QuestionId] = letter[0];
+            }
+        }
+
+        var result = await Challenges.SubmitAsync(userId, Id, answers);
+        errorMessage = result.Outcome switch
+        {
+            SubmitOutcome.Saved => null,
+            SubmitOutcome.Incomplete => "Responda todas as questões antes de enviar.",
+            SubmitOutcome.AlreadySubmitted => "Você já enviou suas respostas para este desafio.",
+            SubmitOutcome.NotActive => "Este desafio não está aberto para respostas.",
+            _ => "Desafio não encontrado.",
+        };
+
+        if (errorMessage is not null)
+        {
+            HttpContext.Response.StatusCode = result.Outcome == SubmitOutcome.AlreadySubmitted ? StatusCodes.Status409Conflict : StatusCodes.Status400BadRequest;
+        }
+
+        await LoadAsync();
+    }
+
+    private async Task CloseAsync()
+    {
+        var editor = EditorFactory.From(HttpContext.User, userId);
+        if (editor is null || !ConfirmClose)
+        {
+            errorMessage = "Marque a confirmação para encerrar.";
+            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            return;
+        }
+
+        var result = await Challenges.CloseAsync(editor, Id);
+        if (!result.Succeeded)
+        {
+            errorMessage = result.Errors[0];
+            HttpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
+            return;
+        }
+
+        challenge = await Challenges.FindAsync(Id);
+        await LoadAsync();
+    }
+}

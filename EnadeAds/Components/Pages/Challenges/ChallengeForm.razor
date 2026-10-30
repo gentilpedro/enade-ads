@@ -1,0 +1,202 @@
+@page "/desafios/novo"
+@page "/desafios/{Id:int}/editar"
+
+@using Microsoft.AspNetCore.Authorization
+@using EnadeAds.Accounts
+@using EnadeAds.Challenges
+@using EnadeAds.Data
+@using EnadeAds.Questions
+@using Microsoft.AspNetCore.Identity
+
+@attribute [Authorize(Roles = Roles.Editors)]
+
+@inject ChallengeService Challenges
+@inject UserManager<ApplicationUser> Users
+@inject NavigationManager Navigation
+
+<PageTitle>@(IsNew ? "Novo desafio" : "Editar desafio")</PageTitle>
+
+<nav aria-label="Trilha">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="desafios">Desafios</a></li>
+        @if (!IsNew)
+        {
+            <li class="breadcrumb-item"><a href="desafios/@Id">Desafio</a></li>
+        }
+        <li class="breadcrumb-item active" aria-current="page">@(IsNew ? "Novo desafio" : "Editar")</li>
+    </ol>
+</nav>
+
+<h1 class="h3">@(IsNew ? "Novo desafio" : "Editar desafio")</h1>
+
+@if (errors.Count > 0)
+{
+    <div class="alert alert-danger" role="alert">
+        <p class="mb-1"><strong>Corrija antes de salvar:</strong></p>
+        <ul class="mb-0">
+            @foreach (var error in errors)
+            {
+                <li>@error</li>
+            }
+        </ul>
+    </div>
+}
+
+@if (available is not null)
+{
+    <EditForm Model="Input" method="post" FormName="challenge-form" OnSubmit="SaveAsync">
+        <div class="mb-3">
+            <label for="Input.Title" class="form-label">Título</label>
+            <InputText @bind-Value="Input.Title" id="Input.Title" class="form-control" maxlength="@ChallengeService.TitleMaxLength"
+                       placeholder="Desafio 1: estruturas de dados e SQL" />
+        </div>
+        <div class="mb-3">
+            <label for="Input.Description" class="form-label">Descrição <span class="text-body-secondary small">(opcional)</span></label>
+            <InputTextArea @bind-Value="Input.Description" id="Input.Description" class="form-control" rows="3"
+                           maxlength="@ChallengeService.DescriptionMaxLength" />
+        </div>
+        <div class="row g-3 mb-3">
+            <div class="col-sm-6 col-md-4">
+                <label for="Input.StartsOn" class="form-label">Primeiro dia</label>
+                <InputDate @bind-Value="Input.StartsOn" id="Input.StartsOn" class="form-control" />
+            </div>
+            <div class="col-sm-6 col-md-4">
+                <label for="Input.EndsOn" class="form-label">Último dia</label>
+                <InputDate @bind-Value="Input.EndsOn" id="Input.EndsOn" class="form-control" />
+            </div>
+        </div>
+
+        <fieldset class="mb-3">
+            <legend class="h6">Questões <span class="small text-body-secondary fw-normal">(objetivas, até @ChallengeService.MaxQuestions)</span></legend>
+            @if (locked)
+            {
+                <p class="small text-warning-emphasis">Alunos já enviaram respostas: as questões não podem mais mudar.</p>
+            }
+            @foreach (var group in available.GroupBy(q => q.Subject!.Title))
+            {
+                <p class="small fw-semibold mb-1 mt-2">@group.Key</p>
+                @foreach (var question in group)
+                {
+                    var inputId = $"questao-{question.Id}";
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="QuestionIds" value="@question.Id" id="@inputId"
+                               checked="@selectedIds.Contains(question.Id)" disabled="@locked" />
+                        <label class="form-check-label small" for="@inputId">#@question.Id · @Excerpt(question.Statement)</label>
+                    </div>
+                }
+            }
+            @if (locked)
+            {
+                @foreach (var id in selectedIds)
+                {
+                    <input type="hidden" name="QuestionIds" value="@id" />
+                }
+            }
+        </fieldset>
+
+        <button type="submit" class="btn btn-primary">@(IsNew ? "Publicar desafio" : "Salvar alterações")</button>
+    </EditForm>
+}
+
+@code {
+    private IReadOnlyList<Question>? available;
+    private List<int> selectedIds = [];
+    private List<string> errors = [];
+    private Editor? editor;
+    private bool locked;
+
+    [Parameter]
+    public int? Id { get; set; }
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromForm(FormName = "challenge-form")]
+    private ChallengeFormModel Input { get; set; } = default!;
+
+    private bool IsNew => Id is null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        editor = EditorFactory.From(HttpContext.User, Users.GetUserId(HttpContext.User));
+        available = await Challenges.AvailableQuestionsAsync();
+
+        if (IsNew)
+        {
+            var today = Challenges.Today();
+            Input ??= new ChallengeFormModel { StartsOn = today, EndsOn = today.AddDays(6) };
+            return;
+        }
+
+        var challenge = await Challenges.FindAsync(Id!.Value);
+        if (challenge is null)
+        {
+            Navigation.NotFound();
+            return;
+        }
+
+        if (editor is null || !ChallengeService.CanEdit(editor, challenge))
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
+            Navigation.NavigateTo("Account/AccessDenied");
+            return;
+        }
+
+        locked = (await Challenges.ScoreboardAsync(challenge.Id)).Participants > 0;
+        selectedIds = challenge.Questions.OrderBy(q => q.Order).Select(q => q.QuestionId).ToList();
+        Input ??= new ChallengeFormModel
+        {
+            Title = challenge.Title,
+            Description = challenge.Description,
+            StartsOn = challenge.StartsOn,
+            EndsOn = challenge.EndsOn,
+        };
+    }
+
+    private async Task SaveAsync()
+    {
+        if (editor is null)
+        {
+            return;
+        }
+
+        // Checkboxes com o mesmo nome chegam como uma lista no formulário.
+        selectedIds = HttpContext.Request.Form["QuestionIds"]
+            .Select(value => int.TryParse(value, out var id) ? id : 0)
+            .Where(id => id > 0)
+            .ToList();
+
+        var draft = new ChallengeDraft
+        {
+            Title = Input.Title,
+            Description = Input.Description,
+            StartsOn = Input.StartsOn,
+            EndsOn = Input.EndsOn,
+            QuestionIds = selectedIds,
+        };
+
+        var result = IsNew ? await Challenges.CreateAsync(editor, draft) : await Challenges.UpdateAsync(editor, Id!.Value, draft);
+        if (!result.Succeeded)
+        {
+            errors = result.Errors.ToList();
+            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            return;
+        }
+
+        Navigation.NavigateTo($"desafios/{result.Id}");
+    }
+
+    private static string Excerpt(string statement)
+    {
+        var flat = string.Join(' ', statement.Split((char[])['\n', '\r', ' '], StringSplitOptions.RemoveEmptyEntries));
+        return flat.Length <= 90 ? flat : $"{flat[..90].TrimEnd()}…";
+    }
+
+    private sealed class ChallengeFormModel
+    {
+        public string Title { get; set; } = "";
+        public string Description { get; set; } = "";
+        public DateOnly StartsOn { get; set; }
+        public DateOnly EndsOn { get; set; }
+    }
+}

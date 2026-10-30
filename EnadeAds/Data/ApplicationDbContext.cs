@@ -1,3 +1,4 @@
+using EnadeAds.Challenges;
 using EnadeAds.Questions;
 using EnadeAds.Study;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -13,6 +14,9 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<QuestionOption> QuestionOptions => Set<QuestionOption>();
     public DbSet<QuestionAttempt> QuestionAttempts => Set<QuestionAttempt>();
     public DbSet<DiscursiveAnswer> DiscursiveAnswers => Set<DiscursiveAnswer>();
+    public DbSet<Challenge> Challenges => Set<Challenge>();
+    public DbSet<ChallengeQuestion> ChallengeQuestions => Set<ChallengeQuestion>();
+    public DbSet<ChallengeSubmission> ChallengeSubmissions => Set<ChallengeSubmission>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -72,6 +76,30 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             attempt.HasOne<ApplicationUser>().WithMany().HasForeignKey(a => a.UserId).OnDelete(DeleteBehavior.Cascade);
             attempt.HasOne<Question>().WithMany().HasForeignKey(a => a.QuestionId).OnDelete(DeleteBehavior.Cascade);
             attempt.HasOne<QuestionOption>().WithMany().HasForeignKey(a => a.OptionId).OnDelete(DeleteBehavior.Cascade);
+            attempt.HasOne<Challenge>().WithMany().HasForeignKey(a => a.ChallengeId).OnDelete(DeleteBehavior.Cascade);
+            attempt.HasIndex(a => a.ChallengeId);
+        });
+
+        builder.Entity<Challenge>(challenge =>
+        {
+            challenge.Property(c => c.Title).HasMaxLength(ChallengeService.TitleMaxLength);
+            challenge.Property(c => c.Description).HasMaxLength(ChallengeService.DescriptionMaxLength);
+            challenge.HasOne<ApplicationUser>().WithMany().HasForeignKey(c => c.AuthorId).OnDelete(DeleteBehavior.SetNull);
+            challenge.HasMany(c => c.Questions).WithOne().HasForeignKey(q => q.ChallengeId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<ChallengeQuestion>(question =>
+        {
+            question.HasKey(q => new { q.ChallengeId, q.QuestionId });
+            question.HasOne(q => q.Question).WithMany().HasForeignKey(q => q.QuestionId).OnDelete(DeleteBehavior.Restrict);
+        });
+
+        builder.Entity<ChallengeSubmission>(submission =>
+        {
+            // Um envio por aluno em cada desafio.
+            submission.HasKey(s => new { s.ChallengeId, s.UserId });
+            submission.HasOne<Challenge>().WithMany().HasForeignKey(s => s.ChallengeId).OnDelete(DeleteBehavior.Cascade);
+            submission.HasOne<ApplicationUser>().WithMany().HasForeignKey(s => s.UserId).OnDelete(DeleteBehavior.Cascade);
         });
 
         builder.Entity<DiscursiveAnswer>(answer =>

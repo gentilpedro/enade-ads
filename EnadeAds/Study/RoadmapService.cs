@@ -17,7 +17,7 @@ public sealed record RoadmapView(IReadOnlyList<RoadmapItem> Spine, RoadmapCounts
         slug is null ? null : Spine.SelectMany(item => item.Topics.Prepend(item)).FirstOrDefault(item => item.Node.Slug == slug);
 }
 
-public sealed class RoadmapService(ApplicationDbContext db, IOptions<ExamOptions> exam, TimeProvider clock)
+public sealed class RoadmapService(ApplicationDbContext db, IOptions<ExamOptions> exam, LocalCalendar calendar, TimeProvider clock)
 {
     public async Task<RoadmapView> GetAsync(string? userId, CancellationToken cancellationToken = default)
     {
@@ -81,10 +81,5 @@ public sealed class RoadmapService(ApplicationDbContext db, IOptions<ExamOptions
         return true;
     }
 
-    private int DaysUntilExam()
-    {
-        var zone = TimeZoneInfo.FindSystemTimeZoneById(exam.Value.TimeZone);
-        var today = DateOnly.FromDateTime(TimeZoneInfo.ConvertTime(clock.GetUtcNow(), zone).DateTime);
-        return Math.Max(0, exam.Value.ExamDate.DayNumber - today.DayNumber);
-    }
+    private int DaysUntilExam() => Math.Max(0, exam.Value.ExamDate.DayNumber - calendar.Today().DayNumber);
 }

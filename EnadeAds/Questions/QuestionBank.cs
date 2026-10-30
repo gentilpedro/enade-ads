@@ -71,7 +71,8 @@ public sealed class QuestionBank(ApplicationDbContext db, TimeProvider clock)
 
     public Task<QuestionAttempt?> LatestAttemptAsync(string userId, int questionId, CancellationToken cancellationToken = default) =>
         db.QuestionAttempts.AsNoTracking()
-            .Where(a => a.UserId == userId && a.QuestionId == questionId)
+            // Respostas dadas num desafio ficam no desafio: não liberam o gabarito na página da questão.
+            .Where(a => a.UserId == userId && a.QuestionId == questionId && a.ChallengeId == null)
             // O id cresce a cada resposta: a maior é a mais recente (e funciona em qualquer banco).
             .OrderByDescending(a => a.Id)
             .FirstOrDefaultAsync(cancellationToken);
@@ -137,7 +138,7 @@ public sealed class QuestionBank(ApplicationDbContext db, TimeProvider clock)
         }
 
         var attempts = await db.QuestionAttempts.AsNoTracking()
-            .Where(a => a.UserId == userId && questionIds.Contains(a.QuestionId))
+            .Where(a => a.UserId == userId && questionIds.Contains(a.QuestionId) && a.ChallengeId == null)
             .Select(a => new { a.QuestionId, a.IsCorrect, a.Id })
             .ToListAsync(cancellationToken);
 

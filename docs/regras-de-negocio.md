@@ -49,6 +49,17 @@ Alunos também têm e-mail institucional, muitas vezes no mesmo domínio dos pro
 - A porcentagem conta só matérias e assuntos concluídos; checkpoints são marcos e não entram na conta.
 - A contagem regressiva usa a data da prova configurada (`Enade:ExamDate`) e o fuso de São Paulo.
 
+## Desafios semanais
+
+- **Professor** e **Admin** criam desafios: título, descrição, primeiro e último dia, e de 1 a 30 questões **objetivas** publicadas do banco.
+- O desafio fica **agendado** antes do primeiro dia (só quem edita vê), **aberto** do primeiro ao último dia (no fuso de São Paulo) e **encerrado** depois, ou antes se o professor encerrar.
+- Visitante vê as questões de um desafio aberto, sem gabarito. Para participar é preciso entrar.
+- Cada aluno envia **uma vez** por desafio e precisa responder todas as questões. Logo depois vê a própria nota (quantas acertou), mas **não o gabarito**.
+- Quando o desafio encerra, todos veem o gabarito comentado e o desempenho da turma: quantos participaram e a taxa de acerto de cada questão. Não há ranking com nomes.
+- As questões de um desafio não mudam depois que algum aluno enviou respostas. Título, descrição e datas ainda podem ser ajustados.
+- As respostas dadas no desafio contam só no desafio: não aparecem como tentativa na página da questão nem liberam o gabarito lá.
+- **Limite conhecido:** as questões do desafio são do banco público. Quem procurar a mesma questão no banco consegue responder lá e ver o gabarito antes do desafio encerrar.
+
 ## Questões
 
 - Visitante vê o enunciado e as alternativas, mas nunca a alternativa correta nem os comentários: eles não vão para a página.

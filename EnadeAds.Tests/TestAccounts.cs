@@ -38,14 +38,17 @@ public static partial class TestAccounts
         await PostFormAsync(client, url, await client.GetStringAsync(url), formName, fields);
 
     /// <summary>Envia o formulário usando o token antiforgery encontrado em <paramref name="tokenPage"/>.</summary>
-    public static async Task<HttpResponseMessage> PostFormAsync(HttpClient client, string url, string tokenPage, string formName, Dictionary<string, string> fields)
+    public static Task<HttpResponseMessage> PostFormAsync(HttpClient client, string url, string tokenPage, string formName, Dictionary<string, string> fields) =>
+        PostFormAsync(client, url, tokenPage, formName, fields.AsEnumerable());
+
+    /// <summary>Aceita campos repetidos (como checkboxes com o mesmo nome), que um dicionário não representa.</summary>
+    public static async Task<HttpResponseMessage> PostFormAsync(HttpClient client, string url, string tokenPage, string formName, IEnumerable<KeyValuePair<string, string>> fields)
     {
-        var page = tokenPage;
-        var form = new Dictionary<string, string>(fields)
-        {
-            ["_handler"] = formName,
-            ["__RequestVerificationToken"] = WebUtility.HtmlDecode(AntiforgeryToken().Match(page).Groups[1].Value),
-        };
+        var form = fields.Concat(
+        [
+            new("_handler", formName),
+            new("__RequestVerificationToken", WebUtility.HtmlDecode(AntiforgeryToken().Match(tokenPage).Groups[1].Value)),
+        ]);
 
         return await client.PostAsync(url, new FormUrlEncodedContent(form));
     }

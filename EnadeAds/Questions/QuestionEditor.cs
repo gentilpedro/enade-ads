@@ -47,7 +47,7 @@ public sealed record Editor(string UserId, bool IsAdmin, bool IsTeacher)
     public bool CanEdit(Question question) => IsAdmin || (IsTeacher && question.AuthorId == UserId);
 }
 
-public sealed record EditResult(int? QuestionId, IReadOnlyList<string> Errors)
+public sealed record EditResult(int? Id, IReadOnlyList<string> Errors)
 {
     public bool Succeeded => Errors.Count == 0;
 

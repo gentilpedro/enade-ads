@@ -187,7 +187,7 @@ public class QuestionFormTests(EnadeAdsFactory factory)
         using var scope = factory.Services.CreateScope();
         var editor = scope.ServiceProvider.GetRequiredService<QuestionEditor>();
         var result = await editor.CreateAsync(new Editor(authorId, IsAdmin: false, IsTeacher: true), Draft("Questão do autor", 'A'));
-        return result.QuestionId!.Value;
+        return result.Id!.Value;
     }
 
     private async Task<Question> FindAsync(int id)

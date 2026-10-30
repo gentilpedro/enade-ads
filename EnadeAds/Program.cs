@@ -1,4 +1,5 @@
 using EnadeAds.Accounts;
+using EnadeAds.Challenges;
 using EnadeAds.Components;
 using EnadeAds.Components.Account;
 using EnadeAds.Data;
@@ -70,6 +71,8 @@ try
     builder.Services.AddScoped<SubjectCatalog>();
     builder.Services.AddScoped<QuestionBank>();
     builder.Services.AddScoped<QuestionEditor>();
+    builder.Services.AddScoped<ChallengeService>();
+    builder.Services.AddSingleton<LocalCalendar>();
     builder.Services.AddSingleton(TimeProvider.System);
     builder.Services.Configure<ExamOptions>(builder.Configuration.GetSection(ExamOptions.SectionName));
 
