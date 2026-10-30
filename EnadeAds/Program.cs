@@ -140,8 +140,9 @@ try
     }
     else
     {
-        // Sem SMTP fora de desenvolvimento, o link na tela permitiria confirmar qualquer e-mail .edu.
-        throw new InvalidOperationException("Configure a seção 'Smtp' (Host e FromAddress) para enviar os e-mails de confirmação.");
+        // Sem SMTP fora de desenvolvimento o site sobe, mas nenhum e-mail sai e o link não aparece na tela:
+        // mostrá-lo permitiria confirmar qualquer e-mail .edu. Contas novas esperam o SMTP.
+        builder.Services.AddSingleton<IEmailSender<ApplicationUser>, UnconfiguredEmailSender>();
     }
 
     var app = builder.Build();

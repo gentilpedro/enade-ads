@@ -10,7 +10,7 @@
 
 ## Segredos (GitHub → Settings → Secrets and variables → Actions)
 
-`SMTP__HOST`, `SMTP__USERNAME`, `SMTP__PASSWORD`, `SMTP__FROMADDRESS`, `ADMIN__EMAILS__0`, `PRIVACY__CONTROLLERNAME`, `PRIVACY__CONTACTEMAIL`. Todos são obrigatórios: sem SMTP o app não sobe em produção.
+`SMTP__HOST`, `SMTP__USERNAME`, `SMTP__PASSWORD`, `SMTP__FROMADDRESS`, `ADMIN__EMAILS__0`, `PRIVACY__CONTROLLERNAME`, `PRIVACY__CONTACTEMAIL`. Segredo não cadastrado fica de fora do `secrets.env`. Sem os `SMTP__*` o app sobe, mas não envia e-mail, então ninguém confirma conta nova até eles existirem; depois de cadastrar, rode o deploy de novo (nova tag ou *Re-run* do último).
 `VPS_HOST`, `VPS_SSH_KEY` e `VPS_KNOWN_HOSTS` são gravados pelo `chave_deploy.sh rumo` da skill deploy-vps.
 
 ## Operação

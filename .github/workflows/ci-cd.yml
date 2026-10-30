@@ -124,8 +124,7 @@ jobs:
           printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
 
       # Mesmos nomes do SECRETS em deploy/vps/deploy.conf. Valores de uma linha só, sem aspas simples.
-      # Sem SMTP o app nem sobe em produção (o link de confirmação na tela deixaria confirmar qualquer
-      # e-mail), então todos são obrigatórios.
+      # Segredo ainda não cadastrado fica de fora: sem SMTP o app sobe, mas não envia e-mail.
       - name: Enviar os segredos
         env:
           SMTP__HOST: ${{ secrets.SMTP__HOST }}
@@ -137,7 +136,7 @@ jobs:
           PRIVACY__CONTACTEMAIL: ${{ secrets.PRIVACY__CONTACTEMAIL }}
         run: |
           for nome in SMTP__HOST SMTP__USERNAME SMTP__PASSWORD SMTP__FROMADDRESS Admin__Emails__0 PRIVACY__CONTROLLERNAME PRIVACY__CONTACTEMAIL; do
-            [ -n "${!nome}" ] || { echo "::error::secret $nome não cadastrado no repositório"; exit 1; }
+            [ -n "${!nome}" ] || { echo "::warning::secret $nome não cadastrado no repositório" >&2; continue; }
             printf '%s=%s\n' "$nome" "${!nome}"
           done | ssh -o BatchMode=yes "deploy@${{ secrets.VPS_HOST }}" set-secrets
 
