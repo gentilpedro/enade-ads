@@ -1,5 +1,6 @@
 @page "/questoes"
 
+@using EnadeAds.Accounts
 @using EnadeAds.Data
 @using EnadeAds.Questions
 @using EnadeAds.Study
@@ -11,7 +12,12 @@
 
 <PageTitle>Questões</PageTitle>
 
-<h1>Questões</h1>
+<div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+    <h1>Questões</h1>
+    <AuthorizeView Roles="@Roles.Editors">
+        <a class="btn btn-primary" href="questoes/nova">Nova questão</a>
+    </AuthorizeView>
+</div>
 
 <p class="text-body-secondary">
     Questões no formato do ENADE com gabarito comentado.

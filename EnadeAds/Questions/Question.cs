@@ -20,6 +20,9 @@ public class Question
 
     public DateTimeOffset CreatedAt { get; set; }
 
+    /// <summary>Questão arquivada some das listas e da página pública; as tentativas dos alunos ficam.</summary>
+    public DateTimeOffset? ArchivedAt { get; set; }
+
     public List<QuestionOption> Options { get; set; } = [];
 }
 

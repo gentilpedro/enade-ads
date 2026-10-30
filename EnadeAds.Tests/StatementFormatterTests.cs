@@ -39,4 +39,65 @@ public class StatementFormatterTests
 
         Assert.False(Assert.Single(blocks).IsCode);
     }
+
+    [Fact]
+    public void FencedBlockKeepsBlankLinesAndIsCode()
+    {
+        var blocks = StatementFormatter.Split("Veja:\n\n```\nlinha 1\n\nlinha 3\n```\n\nFim.");
+
+        Assert.Equal(3, blocks.Count);
+        Assert.True(blocks[1].IsCode);
+        Assert.Equal("linha 1\n\nlinha 3", blocks[1].Text);
+    }
+
+    [Fact]
+    public void UnclosedFenceKeepsTheRestAsCode()
+    {
+        var blocks = StatementFormatter.Split("Texto\n\n```\nsem fechar");
+
+        Assert.True(blocks[^1].IsCode);
+        Assert.Equal("sem fechar", blocks[^1].Text);
+    }
+
+    [Fact]
+    public void RendersBoldInlineCodeAndHttpsImage()
+    {
+        var html = StatementFormatter.ToHtml("Use **pilha** e `push(x)`. ![diagrama](https://exemplo.com/a.png)");
+
+        Assert.Contains("<strong>pilha</strong>", html);
+        Assert.Contains("<code>push(x)</code>", html);
+        Assert.Contains("<img src=\"https://exemplo.com/a.png\" alt=\"diagrama\"", html);
+    }
+
+    [Theory]
+    [InlineData("<script>alert(1)</script>")]
+    [InlineData("**<img src=x onerror=alert(1)>**")]
+    [InlineData("`<iframe src=//mal.example>`")]
+    [InlineData("```\n</code></pre><script>alert(1)</script>\n```")]
+    public void NeverEmitsHtmlTypedByTheAuthor(string statement)
+    {
+        var html = StatementFormatter.ToHtml(statement);
+
+        Assert.DoesNotContain("<script", html);
+        Assert.DoesNotContain("<img src=x", html);
+        Assert.DoesNotContain("<iframe", html);
+        Assert.Contains("&lt;", html);
+    }
+
+    [Theory]
+    [InlineData("![x](http://exemplo.com/a.png)")]
+    [InlineData("![x](javascript:alert(1))")]
+    [InlineData("![x](data:image/png;base64,AAAA)")]
+    public void ImagesOnlyFromHttps(string statement)
+    {
+        Assert.DoesNotContain("<img", StatementFormatter.ToHtml(statement));
+    }
+
+    [Fact]
+    public void ImageAltCannotBreakTheAttribute()
+    {
+        var html = StatementFormatter.ToHtml("![\" onerror=\"alert(1)](https://exemplo.com/a.png)");
+
+        Assert.DoesNotContain("\" onerror=\"", html);
+    }
 }
