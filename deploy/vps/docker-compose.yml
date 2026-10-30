@@ -24,7 +24,14 @@ services:
       ReverseProxy__KnownNetworks__0: "172.30.5.1/32"
       # Chaves de Data Protection: login e formulários continuam válidos depois de cada deploy.
       DataProtection__KeysPath: /keys
-    networks: [rumo]
+      # E-mail pelo relay da VPS (/opt/smtp): smtp:25 na rede "mail", sem senha nem TLS (tráfego só
+      # dentro da VPS). Ele repassa pelo Resend e só aceita remetente @aamora.com.br.
+      Smtp__Host: smtp
+      Smtp__Port: "25"
+      Smtp__EnableSsl: "false"
+      Smtp__FromAddress: nao-responda@aamora.com.br
+      Smtp__FromName: Rumo
+    networks: [rumo, mail]
     volumes:
       - dpkeys:/keys
     depends_on:
@@ -51,6 +58,9 @@ volumes:
   dpkeys:
 
 networks:
+  # Rede do relay SMTP, criada pelo /opt/smtp.
+  mail:
+    external: true
   rumo:
     ipam:
       config:
