@@ -135,6 +135,14 @@ Alunos também têm e-mail institucional, muitas vezes no mesmo domínio dos pro
 - Cada resposta fica registrada como uma tentativa. O aluno pode responder de novo quantas vezes quiser; a lista de questões mostra o resultado da tentativa mais recente.
 - Toda questão informa a fonte: prova e ano do Inep, ou autoria própria.
 
+### Questões das provas do Inep
+
+- O banco já vem com as questões de ADS do ENADE 2021 e 2017 (formação geral e componente específico), com o gabarito definitivo do Inep.
+- Enunciado e alternativas são transcritos sem alterações (licença CC BY-ND do Inep). Os comentários das alternativas são da plataforma.
+- As discursivas trazem um padrão de resposta escrito pela plataforma, marcado como não oficial.
+- Questões anuladas pelo Inep não entram.
+- A importação é feita ao subir a aplicação e nunca sobrescreve uma questão já importada: se um professor corrigir algo pela tela, a correção fica.
+
 ### Questões discursivas
 
 - A discursiva tem enunciado, **padrão de resposta** (o que uma boa resposta deve conter) e um tamanho sugerido em linhas.

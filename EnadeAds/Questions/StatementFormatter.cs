@@ -153,9 +153,9 @@ public static partial class StatementFormatter
                     html.Append(Encode(match.Value));
                 }
             }
-            else if (TryHttps(match.Groups["src"].Value, out var uri))
+            else if (TryImageSource(match.Groups["src"].Value, out var source))
             {
-                html.Append("<img src=\"").Append(Html.Encode(uri.AbsoluteUri))
+                html.Append("<img src=\"").Append(Html.Encode(source))
                     .Append("\" alt=\"").Append(Html.Encode(match.Groups["alt"].Value))
                     .Append("\" loading=\"lazy\" class=\"img-fluid my-2\" />");
             }
@@ -170,6 +170,23 @@ public static partial class StatementFormatter
 
         html.Append(Encode(text[position..]));
         return html.ToString();
+    }
+
+    /// <summary>Imagem por https ou do próprio site, dentro de img/ (ex.: figuras das provas em img/inep/2021/q03-1.png).</summary>
+    private static bool TryImageSource(string value, out string source)
+    {
+        if (TryHttps(value, out var uri))
+        {
+            source = uri.AbsoluteUri;
+            return true;
+        }
+
+        source = value;
+        return value.StartsWith("img/", StringComparison.Ordinal)
+            && !value.Contains("..", StringComparison.Ordinal)
+            && !value.Contains("//", StringComparison.Ordinal)
+            && !value.Contains(':')
+            && !value.Contains('\\');
     }
 
     private static bool TryHttps(string value, out Uri uri) =>

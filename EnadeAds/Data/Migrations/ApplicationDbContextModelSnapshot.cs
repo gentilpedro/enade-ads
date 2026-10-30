@@ -407,6 +407,10 @@ namespace EnadeAds.Data.Migrations
                         .HasMaxLength(5000)
                         .HasColumnType("character varying(5000)");
 
+                    b.Property<string>("ExternalKey")
+                        .HasMaxLength(60)
+                        .HasColumnType("character varying(60)");
+
                     b.Property<int>("Kind")
                         .HasColumnType("integer");
 
@@ -429,6 +433,10 @@ namespace EnadeAds.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("ExternalKey")
+                        .IsUnique()
+                        .HasFilter("\"ExternalKey\" IS NOT NULL");
 
                     b.HasIndex("SubjectId");
 

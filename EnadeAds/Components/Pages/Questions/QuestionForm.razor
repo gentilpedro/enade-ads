@@ -176,7 +176,7 @@
                             var letter = ((char)('A' + index)).ToString();
                             var option = Input.Options[index];
                             <li class="mb-2">
-                                <strong>@letter)</strong> @option.Text
+                                <strong>@letter)</strong> <OptionText Text="@option.Text" />
                                 @if (letter == Input.CorrectLetter)
                                 {
                                     <span class="badge text-bg-success ms-1">Correta</span>

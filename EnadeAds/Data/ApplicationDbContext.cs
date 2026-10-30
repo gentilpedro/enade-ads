@@ -59,6 +59,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         {
             question.Property(q => q.Statement).HasMaxLength(8000);
             question.Property(q => q.Source).HasMaxLength(200);
+            question.Property(q => q.ExternalKey).HasMaxLength(60);
+            question.HasIndex(q => q.ExternalKey).IsUnique().HasFilter("\"ExternalKey\" IS NOT NULL");
             question.Property(q => q.ExpectedAnswer).HasMaxLength(QuestionEditor.ExpectedAnswerMaxLength);
             question.HasOne(q => q.Subject).WithMany().HasForeignKey(q => q.SubjectId).OnDelete(DeleteBehavior.Restrict);
             question.HasOne<ApplicationUser>().WithMany().HasForeignKey(q => q.AuthorId).OnDelete(DeleteBehavior.SetNull);

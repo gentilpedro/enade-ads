@@ -36,17 +36,15 @@ public class MockExamTests(EnadeAdsFactory factory)
     }
 
     [Fact]
-    public async Task Plans_FillMissingGeneralEducationWithSpecificQuestions()
+    public async Task Plans_FollowTheFormatWhenTheBankHasEnoughQuestions()
     {
         using var scope = factory.Services.CreateScope();
         var plans = await scope.ServiceProvider.GetRequiredService<MockExamService>().PlansAsync();
         var shortPlan = plans.Single(p => p.Format.Size == MockExamSize.Short);
 
-        // O banco de teste não tem formação geral: as 10 vagas objetivas vão para específicas
-        // (a seed tem 7; outros testes podem ter criado mais).
-        Assert.Equal(0, shortPlan.GeneralEducation);
-        Assert.InRange(shortPlan.Specific, 7, 10);
-        Assert.Equal(1, shortPlan.Discursive);
+        // Com as provas do Inep importadas há formação geral e específicas suficientes para o curto.
+        Assert.Equal((3, 7, 1), (shortPlan.GeneralEducation, shortPlan.Specific, shortPlan.Discursive));
+        Assert.False(shortPlan.IsShorterThanFormat);
         Assert.All(plans, p => Assert.InRange(p.Total, 1, p.Format.Total));
     }
 

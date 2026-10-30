@@ -1,4 +1,5 @@
 using EnadeAds.Accounts;
+using EnadeAds.Questions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +21,9 @@ public static class DatabaseInitializer
         {
             await db.Database.EnsureCreatedAsync();
         }
+
+        // Questões das provas do Inep (Data/Seed/inep): só entram as que ainda não existem.
+        await scope.ServiceProvider.GetRequiredService<InepQuestionImporter>().ImportFolderAsync(InepQuestionImporter.DefaultFolder);
 
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         foreach (var role in Roles.All)

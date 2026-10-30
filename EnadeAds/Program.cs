@@ -86,6 +86,7 @@ try
     builder.Services.AddScoped<SubjectCatalog>();
     builder.Services.AddScoped<QuestionBank>();
     builder.Services.AddScoped<QuestionEditor>();
+    builder.Services.AddScoped<InepQuestionImporter>();
     builder.Services.AddScoped<ChallengeService>();
     builder.Services.AddScoped<BlogService>();
     builder.Services.AddScoped<PerformanceService>();
