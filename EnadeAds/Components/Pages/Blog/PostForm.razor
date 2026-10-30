@@ -8,7 +8,8 @@
 @using EnadeAds.Questions
 @using Microsoft.AspNetCore.Identity
 
-@attribute [Authorize(Roles = Roles.Editors)]
+@* Qualquer conta publica; as categorias de aviso oficial ficam só para professor e admin (regra no BlogService). *@
+@attribute [Authorize]
 
 @inject BlogService Blog
 @inject UserManager<ApplicationUser> Users
@@ -18,7 +19,7 @@
 
 <nav aria-label="Trilha">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="blog">Blog</a></li>
+        <li class="breadcrumb-item"><a href="">Comunidade</a></li>
         @if (current is not null)
         {
             <li class="breadcrumb-item"><a href="blog/@current.Slug">@current.Title</a></li>
@@ -57,29 +58,29 @@
     <div class="mb-3">
         <label for="Input.Title" class="form-label">Título</label>
         <InputText @bind-Value="Input.Title" id="Input.Title" class="form-control" maxlength="@BlogService.TitleMaxLength"
-                   placeholder="Inep divulga o local de prova do ENADE 2026" />
+                   placeholder="@(official ? "Inep divulga o local de prova do ENADE 2026" : "Como diferenciar pilha de fila na prova?")" />
     </div>
     <div class="row g-3 mb-3">
         <div class="col-md-5">
             <label for="Input.Category" class="form-label">Categoria</label>
             <InputSelect @bind-Value="Input.Category" id="Input.Category" class="form-select">
-                @foreach (var category in PostCategoryNames.All)
+                @foreach (var category in PostCategoryNames.AvailableTo(official))
                 {
                     <option value="@category">@category.Name()</option>
                 }
             </InputSelect>
         </div>
         <div class="col-md-7">
-            <label for="Input.SourceUrl" class="form-label">Fonte oficial <span class="small text-body-secondary">(opcional)</span></label>
+            <label for="Input.SourceUrl" class="form-label">@(official ? "Fonte oficial" : "Link") <span class="small text-body-secondary">(opcional)</span></label>
             <InputText @bind-Value="Input.SourceUrl" id="Input.SourceUrl" class="form-control" type="url" maxlength="@BlogService.SourceMaxLength"
                        placeholder="https://www.gov.br/inep/..." />
         </div>
     </div>
     <div class="mb-3">
-        <label for="Input.Summary" class="form-label">Resumo</label>
+        <label for="Input.Summary" class="form-label">Resumo <span class="small text-body-secondary">(opcional)</span></label>
         <InputTextArea @bind-Value="Input.Summary" id="Input.Summary" class="form-control" rows="2" maxlength="@BlogService.SummaryMaxLength"
                        aria-describedby="summary-help" />
-        <div id="summary-help" class="form-text">Aparece na lista do blog, na página inicial e no feed RSS.</div>
+        <div id="summary-help" class="form-text">Aparece no feed. Sem resumo, o feed mostra o começo do texto.</div>
     </div>
     <div class="mb-3">
         <label for="Input.Body" class="form-label">Texto</label>
@@ -118,9 +119,9 @@
 @if (current is not null)
 {
     <section class="mt-5" aria-labelledby="manage-title">
-        <h2 id="manage-title" class="h6">Destaque e arquivamento</h2>
+        <h2 id="manage-title" class="h6">@(BlogService.CanPin(editor, current) ? "Destaque e arquivamento" : "Arquivamento")</h2>
         <div class="d-flex flex-wrap gap-3 align-items-start">
-            @if (current.IsPublished)
+            @if (current.IsPublished && BlogService.CanPin(editor, current))
             {
                 <form method="post" @formname="post-pin" @onsubmit="TogglePinAsync">
                     <AntiforgeryToken />
@@ -140,7 +141,7 @@
             }
             else
             {
-                <p class="small text-body-secondary">Para voltar a mostrar no blog, clique em <strong>Publicar</strong>.</p>
+                <p class="small text-body-secondary">Para voltar a mostrar no feed, clique em <strong>Publicar</strong>.</p>
             }
         </div>
     </section>
@@ -173,12 +174,14 @@
 
     private bool IsNew => Id is null;
 
+    private bool official => editor?.CanCreate == true;
+
     protected override async Task OnInitializedAsync()
     {
         editor = EditorFactory.From(HttpContext.User, Users.GetUserId(HttpContext.User));
         if (IsNew)
         {
-            Input ??= new PostFormModel();
+            Input ??= new PostFormModel { Category = official ? PostCategory.DatesAndDeadlines : PostCategory.Doubts };
             return;
         }
 
@@ -266,7 +269,7 @@
             return;
         }
 
-        Navigation.NavigateTo("blog");
+        Navigation.NavigateTo("");
     }
 
     private sealed class PostFormModel
@@ -274,7 +277,7 @@
         public string Title { get; set; } = "";
         public string Summary { get; set; } = "";
         public string Body { get; set; } = "";
-        public PostCategory Category { get; set; } = PostCategory.DatesAndDeadlines;
+        public PostCategory Category { get; set; } = PostCategory.Doubts;
         public string SourceUrl { get; set; } = "";
     }
 }

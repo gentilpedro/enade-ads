@@ -22,6 +22,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ChallengeSubmission> ChallengeSubmissions => Set<ChallengeSubmission>();
     public DbSet<Post> Posts => Set<Post>();
     public DbSet<PostComment> PostComments => Set<PostComment>();
+    public DbSet<PostVote> PostVotes => Set<PostVote>();
+    public DbSet<PostReport> PostReports => Set<PostReport>();
     public DbSet<MockExam> MockExams => Set<MockExam>();
     public DbSet<SiteSetting> SiteSettings => Set<SiteSetting>();
     public DbSet<MockExamQuestion> MockExamQuestions => Set<MockExamQuestion>();
@@ -122,6 +124,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             post.HasIndex(p => p.Slug).IsUnique();
             post.HasIndex(p => p.PublishedAt);
             post.Ignore(p => p.IsPublished);
+            post.HasOne<ApplicationUser>().WithMany().HasForeignKey(p => p.RemovedById).OnDelete(DeleteBehavior.SetNull);
             post.HasOne<ApplicationUser>().WithMany().HasForeignKey(p => p.AuthorId).OnDelete(DeleteBehavior.SetNull);
         });
 
@@ -132,6 +135,24 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             comment.HasOne<Post>().WithMany().HasForeignKey(c => c.PostId).OnDelete(DeleteBehavior.Cascade);
             // Excluir a conta mantém o comentário, sem autor: a conversa do post não perde o sentido.
             comment.HasOne<ApplicationUser>().WithMany().HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.SetNull);
+        });
+
+        builder.Entity<PostVote>(vote =>
+        {
+            vote.HasKey(v => new { v.PostId, v.UserId });
+            vote.HasIndex(v => v.UserId);
+            vote.HasOne<Post>().WithMany().HasForeignKey(v => v.PostId).OnDelete(DeleteBehavior.Cascade);
+            vote.HasOne<ApplicationUser>().WithMany().HasForeignKey(v => v.UserId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<PostReport>(report =>
+        {
+            report.Property(r => r.Reason).HasMaxLength(BlogService.ReportReasonMaxLength);
+            report.HasIndex(r => r.ResolvedAt);
+            report.HasOne<Post>().WithMany().HasForeignKey(r => r.PostId).OnDelete(DeleteBehavior.Cascade);
+            report.HasOne<PostComment>().WithMany().HasForeignKey(r => r.CommentId).OnDelete(DeleteBehavior.Cascade);
+            report.HasOne<ApplicationUser>().WithMany().HasForeignKey(r => r.ReporterId).OnDelete(DeleteBehavior.SetNull);
+            report.HasOne<ApplicationUser>().WithMany().HasForeignKey(r => r.ResolvedById).OnDelete(DeleteBehavior.SetNull);
         });
 
         builder.Entity<ApplicationUser>(user => user.Property(u => u.TermsVersion).HasMaxLength(20));

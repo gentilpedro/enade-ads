@@ -1,0 +1,112 @@
+@page "/moderacao"
+
+@using Microsoft.AspNetCore.Authorization
+@using EnadeAds.Accounts
+@using EnadeAds.Blog
+@using EnadeAds.Data
+@using EnadeAds.Questions
+@using EnadeAds.Study
+@using Microsoft.AspNetCore.Identity
+
+@attribute [Authorize(Roles = Roles.Editors)]
+
+@inject BlogService Blog
+@inject LocalCalendar Calendar
+@inject UserManager<ApplicationUser> Users
+@inject NavigationManager Navigation
+
+<PageTitle>Moderação</PageTitle>
+
+<h1 class="h3">Moderação</h1>
+<p class="text-body-secondary">
+    Denúncias abertas da comunidade, da mais antiga para a mais nova. <strong>Remover</strong> tira o conteúdo do ar;
+    <strong>Manter</strong> encerra a denúncia sem mexer no conteúdo.
+</p>
+
+@if (errorMessage is not null)
+{
+    <div class="alert alert-danger" role="alert">@errorMessage</div>
+}
+
+@if (reports is not null)
+{
+    @if (reports.Count == 0)
+    {
+        <div class="feed-empty">
+            <p class="mb-0"><strong>Nenhuma denúncia aberta.</strong> A comunidade está em ordem.</p>
+        </div>
+    }
+    else
+    {
+        <form method="post" @formname="moderation" @onsubmit="ResolveAsync">
+            <AntiforgeryToken />
+            <ol class="list-unstyled">
+                @foreach (var report in reports)
+                {
+                    var target = report.CommentId is null ? "post" : "comentário";
+                    var link = report.CommentId is null ? $"blog/{report.PostSlug}" : $"blog/{report.PostSlug}#comentario-{report.CommentId}";
+                    <li class="card mb-3">
+                        <div class="card-body">
+                            <p class="small text-body-secondary mb-1">
+                                <span class="badge text-bg-danger">@(report.Count == 1 ? "1 denúncia" : $"{report.Count} denúncias")</span>
+                                @(report.CommentId is null ? "Post" : "Comentário") de <strong class="text-body">@report.AuthorName</strong>
+                                em <a href="@link">@report.PostTitle</a>
+                                · desde @Calendar.ToLocal(report.FirstReportedAt).ToString("dd/MM/yyyy HH:mm")
+                            </p>
+                            <blockquote class="discursive-text border-start ps-3 my-2">@report.Content</blockquote>
+                            @if (report.Reasons.Count > 0)
+                            {
+                                <p class="small mb-1"><strong>Motivos:</strong></p>
+                                <ul class="small">
+                                    @foreach (var reason in report.Reasons)
+                                    {
+                                        <li>@reason</li>
+                                    }
+                                </ul>
+                            }
+                            <div class="d-flex flex-wrap gap-2">
+                                <button type="submit" name="Decision" value="@($"remove:{report.PostId}:{report.CommentId}")" class="btn btn-sm btn-outline-danger">
+                                    Remover @target <span class="visually-hidden">de @report.AuthorName</span>
+                                </button>
+                                <button type="submit" name="Decision" value="@($"keep:{report.PostId}:{report.CommentId}")" class="btn btn-sm btn-outline-secondary">
+                                    Manter @target <span class="visually-hidden">de @report.AuthorName</span>
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ol>
+        </form>
+    }
+}
+
+@code {
+    private IReadOnlyList<ReportGroup>? reports;
+    private string? errorMessage;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        reports = await Blog.OpenReportsAsync();
+    }
+
+    private async Task ResolveAsync()
+    {
+        var editor = EditorFactory.From(HttpContext.User, Users.GetUserId(HttpContext.User));
+        var parts = HttpContext.Request.Form["Decision"].ToString().Split(':');
+        long? commentId = parts.Length == 3 && long.TryParse(parts[2], out var parsed) ? parsed : null;
+
+        if (parts.Length != 3 || parts[0] is not ("remove" or "keep") || !int.TryParse(parts[1], out var postId)
+            || !await Blog.ResolveAsync(editor, postId, commentId, removeContent: parts[0] == "remove"))
+        {
+            errorMessage = "Não foi possível concluir: a denúncia pode já ter sido resolvida por outra pessoa.";
+            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            reports = await Blog.OpenReportsAsync();
+            return;
+        }
+
+        Navigation.NavigateTo("moderacao");
+    }
+}

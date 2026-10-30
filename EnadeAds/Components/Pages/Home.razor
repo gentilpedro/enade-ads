@@ -1,73 +1,293 @@
 @page "/"
+@page "/blog"
 
 @using EnadeAds.Accounts
 @using EnadeAds.Blog
+@using EnadeAds.Components.Pages.Blog
+@using EnadeAds.Data
+@using EnadeAds.Questions
 @using EnadeAds.Study
+@using Microsoft.AspNetCore.Identity
 
 @inject BlogService Blog
+@inject ExamSettings Exam
 @inject LocalCalendar Calendar
+@inject TimeProvider Clock
+@inject UserManager<ApplicationUser> Users
+@inject NavigationManager Navigation
 
 <PageTitle>ENADE ADS</PageTitle>
 
-<h1>ENADE ADS</h1>
+<HeadContent>
+    <link rel="alternate" type="application/rss+xml" title="ENADE ADS – avisos oficiais" href="@BlogFeed.Path.TrimStart('/')" />
+</HeadContent>
 
-<p>Plataforma aberta para estudantes de Análise e Desenvolvimento de Sistemas se prepararem para o ENADE.</p>
-
-<div class="d-flex flex-wrap gap-2 mb-4">
-    <a class="btn btn-primary" href="roadmap">Abrir o roadmap</a>
-    <a class="btn btn-outline-primary" href="materias">Ver as matérias</a>
-</div>
-
-@if (highlights is { Count: > 0 })
-{
-    <section class="mb-4" aria-labelledby="blog-title">
-        <div class="d-flex flex-wrap justify-content-between align-items-baseline gap-2">
-            <h2 id="blog-title" class="h5">Atualizações do ENADE</h2>
-            <a href="blog" class="small">Ver todas</a>
-        </div>
-        <div class="row row-cols-1 row-cols-md-3 g-3">
-            @foreach (var post in highlights)
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <h1 class="h3 mb-0">Comunidade</h1>
+            @if (userId is not null)
             {
-                <div class="col">
-                    <a class="card h-100 text-decoration-none @(post.PinnedAt is not null ? "border-primary" : "")" href="blog/@post.Slug">
-                        <div class="card-body">
-                            <p class="small text-body-secondary mb-1">
-                                @if (post.PinnedAt is not null)
-                                {
-                                    <span class="badge text-bg-primary me-1">Fixado</span>
-                                }
-                                @post.Category.Name() · @Calendar.ToLocal(post.PublishedAt!.Value).ToString("dd/MM/yyyy")
-                            </p>
-                            <h3 class="h6 card-title">@post.Title</h3>
-                            <p class="small text-body-secondary mb-0">@post.Summary</p>
-                        </div>
-                    </a>
-                </div>
+                <a class="btn btn-primary" href="blog/novo">Criar post</a>
+            }
+            else
+            {
+                <a class="btn btn-outline-primary" href="@LoginUrl">Entre para publicar</a>
             }
         </div>
-    </section>
-}
 
-<AuthorizeView Roles="@Roles.PendingTeacher">
-    <div class="alert alert-info" role="status">
-        Seu acesso de professor está <strong>pendente</strong>. Enquanto um administrador não aprova, você usa a plataforma como aluno.
+        <AuthorizeView Roles="@Roles.PendingTeacher">
+            <div class="alert alert-info" role="status">
+                Seu acesso de professor está <strong>pendente</strong>. Enquanto um administrador não aprova, você usa a plataforma como aluno.
+            </div>
+        </AuthorizeView>
+
+        <nav aria-label="Ordem do feed">
+            <ul class="nav nav-underline mb-3">
+                <li class="nav-item"><a class="nav-link @Active(Tab.Hot)" aria-current="@Current(Tab.Hot)" href="@Url(Tab.Hot, category, 1)">Em alta</a></li>
+                <li class="nav-item"><a class="nav-link @Active(Tab.New)" aria-current="@Current(Tab.New)" href="@Url(Tab.New, category, 1)">Novos</a></li>
+                <li class="nav-item"><a class="nav-link @Active(Tab.Official)" aria-current="@Current(Tab.Official)" href="@Url(Tab.Official, category, 1)">Avisos oficiais</a></li>
+            </ul>
+        </nav>
+
+        <nav aria-label="Categorias" class="d-flex flex-wrap gap-2 mb-3">
+            <a class="btn btn-sm rounded-pill @(category is null ? "btn-secondary" : "btn-outline-secondary")" href="@Url(tab, null, 1)"
+               aria-current="@(category is null ? "page" : null)">Todas</a>
+            @foreach (var item in PostCategoryNames.All)
+            {
+                <a class="btn btn-sm rounded-pill @(category == item ? "btn-secondary" : "btn-outline-secondary")" href="@Url(tab, item, 1)"
+                   aria-current="@(category == item ? "page" : null)">@item.Name()</a>
+            }
+        </nav>
+
+        @if (notPublished is { Count: > 0 })
+        {
+            <details class="mb-3">
+                <summary>Seus rascunhos, arquivados e removidos (@notPublished.Count)</summary>
+                <ul class="mt-2">
+                    @foreach (var post in notPublished)
+                    {
+                        <li>
+                            <a href="blog/@post.Slug">@post.Title</a>
+                            <span class="badge @(post.RemovedAt is not null ? "text-bg-danger" : post.ArchivedAt is null ? "text-bg-warning" : "text-bg-secondary")">
+                                @(post.RemovedAt is not null ? "Removido" : post.ArchivedAt is null ? "Rascunho" : "Arquivado")
+                            </span>
+                        </li>
+                    }
+                </ul>
+            </details>
+        }
+
+        @if (errorMessage is not null)
+        {
+            <div class="alert alert-danger" role="alert">@errorMessage</div>
+        }
+
+        @if (feed is not null)
+        {
+            @if (feed.Items.Count == 0)
+            {
+                <div class="feed-empty">
+                    <p class="mb-1"><strong>Nada por aqui ainda.</strong></p>
+                    <p class="mb-0 text-body-secondary">
+                        @(tab == Tab.Official ? "Os avisos dos professores aparecem nesta aba." : "Que tal abrir a conversa? Dúvidas de matéria e dicas de estudo são bem-vindas.")
+                    </p>
+                </div>
+            }
+            else
+            {
+                <form method="post" action="@CurrentUrl" @formname="feed-vote" @onsubmit="VoteAsync">
+                    <AntiforgeryToken />
+                    <ol class="feed list-unstyled">
+                        @foreach (var item in feed.Items)
+                        {
+                            var post = item.Post;
+                            <li>
+                                <article class="feed-post @(post.PinnedAt is not null ? "is-pinned" : "")" id="post-@post.Id" aria-labelledby="post-title-@post.Id">
+                                    <VoteControl PostId="post.Id" Title="@post.Title" Score="post.Score" MyVote="item.MyVote" />
+                                    <div class="feed-post-body">
+                                        <p class="feed-meta">
+                                            @if (post.PinnedAt is not null)
+                                            {
+                                                <span class="badge text-bg-primary">Fixado</span>
+                                            }
+                                            <a href="@Url(tab, post.Category, 1)" class="feed-category">@post.Category.Name()</a>
+                                            <span aria-hidden="true">·</span>
+                                            <span>@item.AuthorName</span>
+                                            @if (post.IsOfficial)
+                                            {
+                                                <span class="badge badge-teacher">Professor</span>
+                                            }
+                                            <span aria-hidden="true">·</span>
+                                            <time datetime="@post.PublishedAt!.Value.ToString("O")" title="@Calendar.ToLocal(post.PublishedAt.Value).ToString("dd/MM/yyyy HH:mm")">@When(post.PublishedAt.Value)</time>
+                                        </p>
+                                        <h2 class="feed-title" id="post-title-@post.Id"><a href="blog/@post.Slug">@post.Title</a></h2>
+                                        <p class="feed-excerpt">@post.Summary</p>
+                                        <a class="feed-comments" href="blog/@post.Slug#comentarios">
+                                            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2.5 3h11a1 1 0 0 1 1 1v6.5a1 1 0 0 1-1 1H7l-3 2.5v-2.5H2.5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" /></svg>
+                                            @(item.CommentCount == 1 ? "1 comentário" : $"{item.CommentCount} comentários")
+                                        </a>
+                                    </div>
+                                </article>
+                            </li>
+                        }
+                    </ol>
+                </form>
+
+                @if (feed.TotalPages > 1)
+                {
+                    <nav aria-label="Páginas do feed">
+                        <ul class="pagination">
+                            @for (var number = 1; number <= feed.TotalPages; number++)
+                            {
+                                <li class="page-item @(number == feed.Page ? "active" : "")">
+                                    <a class="page-link" href="@Url(tab, category, number)" aria-current="@(number == feed.Page ? "page" : null)">@number</a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                }
+            }
+        }
     </div>
-</AuthorizeView>
 
-<AuthorizeView>
-    <Authorized>
-        <p>Olá, @context.User.Identity?.Name!</p>
-    </Authorized>
-    <NotAuthorized>
-        <p><a href="Account/Register">Crie sua conta</a> ou <a href="Account/Login">entre</a> para salvar seu progresso.</p>
-    </NotAuthorized>
-</AuthorizeView>
+    <aside class="col-lg-4" aria-label="Sobre a plataforma">
+        <section class="side-card">
+            <h2 class="h6">ENADE ADS</h2>
+            <p class="small">Plataforma aberta para estudantes de Análise e Desenvolvimento de Sistemas se prepararem para o ENADE.</p>
+            @if (daysLeft >= 0)
+            {
+                <p class="exam-countdown">
+                    <strong>@(daysLeft == 0 ? "É hoje" : daysLeft == 1 ? "Falta 1 dia" : $"Faltam {daysLeft} dias")</strong>
+                    <span class="small text-body-secondary d-block">Prova em @examDate.ToString("dd/MM/yyyy")</span>
+                </p>
+            }
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-sm btn-primary" href="roadmap">Abrir o roadmap</a>
+                <a class="btn btn-sm btn-outline-primary" href="materias">Ver as matérias</a>
+            </div>
+            @if (userId is null)
+            {
+                <p class="small mt-3 mb-0"><a href="Account/Register">Crie sua conta</a> ou <a href="@LoginUrl">entre</a> para publicar, votar, comentar e salvar seu progresso.</p>
+            }
+        </section>
+
+        <section class="side-card">
+            <h2 class="h6">Combinados da comunidade</h2>
+            <ul class="small mb-2 ps-3">
+                <li>Dúvidas de matéria, dicas de estudo e discussão sobre o ENADE.</li>
+                <li>Respeito sempre: crítica é ao conteúdo, não à pessoa.</li>
+                <li>Nada de cola, gabarito vazado ou dado pessoal de colegas.</li>
+                <li>Viu algo errado? Use <strong>Denunciar</strong> no post. Professores removem o que fugir disso.</li>
+            </ul>
+            <a class="small" href="@BlogFeed.Path.TrimStart('/')">Avisos oficiais por RSS</a>
+        </section>
+    </aside>
+</div>
 
 @code {
-    private IReadOnlyList<Post>? highlights;
+    private enum Tab
+    {
+        Hot,
+        New,
+        Official,
+    }
+
+    private FeedPage? feed;
+    private IReadOnlyList<Post>? notPublished;
+    private PostCategory? category;
+    private Tab tab;
+    private string? userId;
+    private DateOnly examDate;
+    private int daysLeft = -1;
+    private DateTimeOffset now;
+    private string? errorMessage;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromQuery(Name = "categoria")]
+    private string? CategorySlug { get; set; }
+
+    [SupplyParameterFromQuery(Name = "ordem")]
+    private string? Order { get; set; }
+
+    [SupplyParameterFromQuery(Name = "pagina")]
+    private int? Pagina { get; set; }
+
+    private string CurrentUrl => Url(tab, category, feed?.Page ?? Pagina ?? 1);
+
+    private string LoginUrl => $"Account/Login?ReturnUrl={Uri.EscapeDataString("/" + CurrentUrl)}";
 
     protected override async Task OnInitializedAsync()
     {
-        highlights = await Blog.HighlightsAsync();
+        category = PostCategoryNames.FromSlug(CategorySlug);
+        tab = Order switch { "novos" => Tab.New, "oficiais" => Tab.Official, _ => Tab.Hot };
+        userId = Users.GetUserId(HttpContext.User);
+        now = Clock.GetUtcNow();
+
+        examDate = await Exam.ExamDateAsync();
+        daysLeft = examDate.DayNumber - Calendar.Today().DayNumber;
+
+        var editor = EditorFactory.From(HttpContext.User, userId);
+        if (editor is not null)
+        {
+            notPublished = await Blog.NotPublishedAsync(editor);
+        }
+
+        await LoadFeedAsync();
+    }
+
+    private async Task LoadFeedAsync()
+    {
+        var query = new FeedQuery(tab == Tab.New ? FeedSort.New : FeedSort.Hot, category, tab == Tab.Official, Pagina ?? 1);
+        feed = await Blog.ListAsync(query, userId);
+    }
+
+    private async Task VoteAsync()
+    {
+        if (userId is null)
+        {
+            Navigation.NavigateTo(LoginUrl);
+            return;
+        }
+
+        if (!VoteControl.TryParse(HttpContext.Request.Form["Vote"], out var postId, out var vote) || !await Blog.VoteAsync(userId, postId, vote))
+        {
+            errorMessage = "Não foi possível registrar o voto: o post pode ter saído do feed.";
+            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            await LoadFeedAsync();
+            return;
+        }
+
+        // Volta para o mesmo ponto do feed com um GET: recarregar a página não repete o voto.
+        Navigation.NavigateTo($"{CurrentUrl}#post-{postId}");
+    }
+
+    private string When(DateTimeOffset moment) => RelativeTime.Format(moment, now, Calendar.ToLocal(moment));
+
+    private string Active(Tab item) => item == tab ? "active" : "";
+
+    private string? Current(Tab item) => item == tab ? "page" : null;
+
+    private static string Url(Tab tab, PostCategory? category, int page)
+    {
+        var query = new List<string>();
+        if (tab != Tab.Hot)
+        {
+            query.Add($"ordem={(tab == Tab.New ? "novos" : "oficiais")}");
+        }
+
+        if (category is not null)
+        {
+            query.Add($"categoria={category.Value.Slug()}");
+        }
+
+        if (page > 1)
+        {
+            query.Add($"pagina={page}");
+        }
+
+        return query.Count == 0 ? "" : "?" + string.Join("&", query);
     }
 }

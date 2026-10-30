@@ -75,7 +75,7 @@ public class BlogTests(EnadeAdsFactory factory)
         Assert.Equal(HttpStatusCode.NotFound, (await NewClient().GetAsync($"/blog/{slug}")).StatusCode);
         Assert.Equal(HttpStatusCode.NotFound, (await student.GetAsync($"/blog/{slug}")).StatusCode);
         Assert.DoesNotContain("Rascunho secreto do professor", await GetHtmlAsync(NewClient(), "/blog"));
-        Assert.Contains("só você e os administradores veem", await GetHtmlAsync(teacher, $"/blog/{slug}"));
+        Assert.Contains("Rascunho: só você vê este post.", await GetHtmlAsync(teacher, $"/blog/{slug}"));
     }
 
     [Fact]
@@ -99,16 +99,15 @@ public class BlogTests(EnadeAdsFactory factory)
         Assert.EndsWith("/blog/local-de-prova-do-enade-2026-divulgado", response.Headers.Location!.ToString());
         var page = await GetHtmlAsync(NewClient(), "/blog/local-de-prova-do-enade-2026-divulgado");
         Assert.Contains("<li>Leve documento com foto</li>", page);
-        Assert.Contains("Fonte:", page);
+        Assert.Contains("Link:", page);
         Assert.Contains("Local de prova do ENADE 2026 divulgado", await GetHtmlAsync(NewClient(), "/blog?categoria=datas-e-prazos"));
         Assert.DoesNotContain("Local de prova do ENADE 2026 divulgado", await GetHtmlAsync(NewClient(), "/blog?categoria=dicas-de-estudo"));
     }
 
     [Fact]
-    public async Task Students_CannotOpenTheFormAndSourceMustBeHttps()
+    public async Task VisitorsCannotOpenTheFormAndSourceMustBeHttps()
     {
-        var student = await StudentClientAsync("blog.aluno.form@gmail.com");
-        var denied = await student.GetAsync("/blog/novo");
+        var denied = await NewClient().GetAsync("/blog/novo");
         var (_, editor) = await TeacherAsync("blog.fonte@faculdade.edu.br");
 
         using var scope = factory.Services.CreateScope();
@@ -116,8 +115,8 @@ public class BlogTests(EnadeAdsFactory factory)
         draft.SourceUrl = "javascript:alert(1)";
         var result = await scope.ServiceProvider.GetRequiredService<BlogService>().CreateAsync(editor, draft, PostAction.Publish);
 
-        Assert.Contains("/Account/AccessDenied", denied.Headers.Location?.ToString());
-        Assert.Contains(result.Errors, e => e.StartsWith("A fonte precisa ser um endereço https"));
+        Assert.Contains("/Account/Login", denied.Headers.Location?.ToString());
+        Assert.Contains(result.Errors, e => e.StartsWith("O link precisa ser um endereço https"));
     }
 
     [Fact]
@@ -183,7 +182,7 @@ public class BlogTests(EnadeAdsFactory factory)
         Assert.Null((await blog.FindAsync(first))!.PinnedAt);
         Assert.NotNull((await blog.FindAsync(second))!.PinnedAt);
         Assert.False(pinDraft.Succeeded);
-        Assert.Equal("Segundo fixado", (await blog.ListAsync(null, 1)).Items[0].Title);
+        Assert.Equal("Segundo fixado", (await blog.ListAsync(new FeedQuery(FeedSort.New, null, false, 1), null)).Items[0].Post.Title);
         Assert.Contains("Segundo fixado", await GetHtmlAsync(NewClient(), "/"));
 
         await blog.ArchiveAsync(editor, second);
