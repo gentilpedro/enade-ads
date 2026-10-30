@@ -1,0 +1,260 @@
+@page "/blog/{Slug}"
+
+@using EnadeAds.Blog
+@using EnadeAds.Data
+@using EnadeAds.Questions
+@using EnadeAds.Study
+@using Microsoft.AspNetCore.Identity
+
+@inject BlogService Blog
+@inject LocalCalendar Calendar
+@inject UserManager<ApplicationUser> Users
+@inject NavigationManager Navigation
+
+@if (post is not null)
+{
+    <PageTitle>@post.Title</PageTitle>
+
+    <nav aria-label="Trilha">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="blog">Blog</a></li>
+            <li class="breadcrumb-item"><a href="blog?categoria=@post.Category.Slug()">@post.Category.Name()</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@post.Title</li>
+        </ol>
+    </nav>
+
+    <article class="post">
+        <header class="mb-3">
+            @if (post.PublishedAt is null)
+            {
+                <div class="alert alert-warning" role="status">Rascunho: só você e os administradores veem este post.</div>
+            }
+            else if (post.ArchivedAt is not null)
+            {
+                <div class="alert alert-secondary" role="status">Post arquivado: não aparece no blog.</div>
+            }
+            <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+                <h1>@post.Title</h1>
+                @if (canEdit)
+                {
+                    <a class="btn btn-sm btn-outline-secondary" href="blog/@post.Id/editar">Editar post</a>
+                }
+            </div>
+            <p class="small text-body-secondary mb-1">
+                @post.Category.Name() · por @authorName
+                @if (post.PublishedAt is not null)
+                {
+                    <span> · <time datetime="@post.PublishedAt.Value.ToString("O")">@Calendar.ToLocal(post.PublishedAt.Value).ToString("dd/MM/yyyy")</time></span>
+                }
+            </p>
+            <p class="lead">@post.Summary</p>
+        </header>
+
+        @* HTML do StatementFormatter: todo texto é escapado e só tags fixas são adicionadas. *@
+        <div class="question-statement post-body">@((MarkupString)StatementFormatter.ToHtml(post.Body))</div>
+
+        @if (post.SourceUrl is not null)
+        {
+            <p class="small mt-3">
+                <strong>Fonte:</strong> <a href="@post.SourceUrl" target="_blank" rel="noopener noreferrer nofollow">@post.SourceUrl</a>
+            </p>
+        }
+    </article>
+
+    @if (post.IsPublished)
+    {
+        <section class="mt-5" aria-labelledby="comments-title">
+            <h2 id="comments-title" class="h5">Comentários (@comments.Count)</h2>
+
+            @if (errorMessage is not null)
+            {
+                <div class="alert alert-danger" role="alert">@errorMessage</div>
+            }
+
+            @if (comments.Count == 0)
+            {
+                <p class="text-body-secondary">Nenhum comentário ainda.</p>
+            }
+            else
+            {
+                <form method="post" action="blog/@post.Slug" @formname="comment-delete" @onsubmit="DeleteCommentAsync">
+                    <AntiforgeryToken />
+                    <ol class="list-unstyled">
+                        @foreach (var item in comments)
+                        {
+                            var comment = item.Comment;
+                            var own = comment.UserId == userId;
+                            <li class="border-start border-3 ps-3 mb-3" id="comentario-@comment.Id">
+                                <p class="small text-body-secondary mb-1">
+                                    <strong class="text-body">@item.AuthorName</strong>
+                                    · @Calendar.ToLocal(comment.CreatedAt).ToString("dd/MM/yyyy HH:mm")
+                                    @if (comment.EditedAt is not null)
+                                    {
+                                        <span>(editado)</span>
+                                    }
+                                </p>
+                                @if (own && EditingId == comment.Id)
+                                {
+                                    <p class="small text-body-secondary">Edite logo abaixo.</p>
+                                }
+                                else
+                                {
+                                    @* Comentário é texto livre: o Blazor escapa e o CSS mantém as quebras de linha. *@
+                                    <p class="discursive-text mb-1">@comment.Text</p>
+                                }
+                                <div class="d-flex gap-2">
+                                    @if (own)
+                                    {
+                                        <a class="btn btn-sm btn-link p-0" href="blog/@post.Slug?editar=@comment.Id#comentario-@comment.Id">Editar</a>
+                                    }
+                                    @if (own || canModerate)
+                                    {
+                                        <button type="submit" name="CommentId" value="@comment.Id" class="btn btn-sm btn-link p-0 text-danger">
+                                            Excluir <span class="visually-hidden">comentário de @item.AuthorName</span>
+                                        </button>
+                                    }
+                                </div>
+                            </li>
+                        }
+                    </ol>
+                </form>
+            }
+
+            @if (editing is not null)
+            {
+                <form method="post" action="blog/@post.Slug" @formname="comment-edit" @onsubmit="EditCommentAsync" class="mb-4">
+                    <AntiforgeryToken />
+                    <input type="hidden" name="CommentId" value="@editing.Id" />
+                    <label for="EditText" class="form-label h6">Editar seu comentário</label>
+                    <textarea id="EditText" name="CommentText" class="form-control" rows="4" maxlength="@BlogService.CommentMaxLength" required>@editing.Text</textarea>
+                    <div class="d-flex gap-2 mt-2">
+                        <button type="submit" class="btn btn-primary btn-sm">Salvar</button>
+                        <a class="btn btn-link btn-sm" href="blog/@post.Slug#comentario-@editing.Id">Cancelar</a>
+                    </div>
+                </form>
+            }
+
+            @if (userId is not null)
+            {
+                <form method="post" action="blog/@post.Slug" @formname="comment-add" @onsubmit="AddCommentAsync">
+                    <AntiforgeryToken />
+                    <label for="CommentText" class="form-label h6">Deixe um comentário ou dúvida</label>
+                    <textarea id="CommentText" name="CommentText" class="form-control" rows="4" maxlength="@BlogService.CommentMaxLength" required></textarea>
+                    <div class="form-text">Até @BlogService.CommentMaxLength caracteres. Seja respeitoso: professores podem remover comentários.</div>
+                    <button type="submit" class="btn btn-primary mt-2">Comentar</button>
+                </form>
+            }
+            else
+            {
+                <p><a href="@LoginUrl">Entre</a> para comentar.</p>
+            }
+        </section>
+    }
+}
+
+@code {
+    private Post? post;
+    private IReadOnlyList<CommentView> comments = [];
+    private PostComment? editing;
+    private string authorName = "";
+    private string? userId;
+    private EnadeAds.Questions.Editor? editor;
+    private bool canEdit;
+    private bool canModerate;
+    private string? errorMessage;
+
+    [Parameter]
+    public string Slug { get; set; } = "";
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromQuery(Name = "editar")]
+    private long? EditingId { get; set; }
+
+    private string LoginUrl => $"Account/Login?ReturnUrl={Uri.EscapeDataString($"/blog/{Slug}")}";
+
+    protected override async Task OnInitializedAsync()
+    {
+        post = await Blog.FindBySlugAsync(Slug);
+        userId = Users.GetUserId(HttpContext.User);
+        editor = EditorFactory.From(HttpContext.User, userId);
+
+        // Rascunho e arquivado só existem para quem pode editar.
+        if (post is null || !BlogService.CanView(editor, post))
+        {
+            post = null;
+            Navigation.NotFound();
+            return;
+        }
+
+        canEdit = BlogService.CanEdit(editor, post);
+        canModerate = BlogService.CanModerate(editor);
+        authorName = await Blog.AuthorNameAsync(post.AuthorId);
+        await LoadCommentsAsync();
+    }
+
+    private async Task LoadCommentsAsync()
+    {
+        comments = await Blog.CommentsAsync(post!.Id);
+        editing = comments.Select(c => c.Comment).FirstOrDefault(c => c.Id == EditingId && c.UserId == userId);
+    }
+
+    private async Task AddCommentAsync()
+    {
+        if (!RequireLogin())
+        {
+            return;
+        }
+
+        var comment = await Blog.AddCommentAsync(userId!, post!.Id, HttpContext.Request.Form["CommentText"]);
+        Fail(comment is null, $"Escreva o comentário (até {BlogService.CommentMaxLength} caracteres).");
+        await LoadCommentsAsync();
+    }
+
+    private async Task EditCommentAsync()
+    {
+        if (!RequireLogin() || !long.TryParse(HttpContext.Request.Form["CommentId"], out var commentId))
+        {
+            return;
+        }
+
+        var edited = await Blog.EditCommentAsync(userId!, commentId, HttpContext.Request.Form["CommentText"]);
+        Fail(!edited, "Não foi possível editar: o comentário não é seu ou o texto está vazio.");
+        EditingId = null;
+        await LoadCommentsAsync();
+    }
+
+    private async Task DeleteCommentAsync()
+    {
+        if (!RequireLogin() || !long.TryParse(HttpContext.Request.Form["CommentId"], out var commentId))
+        {
+            return;
+        }
+
+        var deleted = await Blog.DeleteCommentAsync(editor, userId!, commentId);
+        Fail(!deleted, "Você só pode excluir os próprios comentários.", StatusCodes.Status403Forbidden);
+        await LoadCommentsAsync();
+    }
+
+    // Comentar exige login; os formulários não aparecem para visitante, mas o POST pode ser forjado.
+    private bool RequireLogin()
+    {
+        if (userId is not null && post is not null)
+        {
+            return true;
+        }
+
+        HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        return false;
+    }
+
+    private void Fail(bool failed, string message, int status = StatusCodes.Status400BadRequest)
+    {
+        if (failed)
+        {
+            errorMessage = message;
+            HttpContext.Response.StatusCode = status;
+        }
+    }
+}

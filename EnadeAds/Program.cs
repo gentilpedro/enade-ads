@@ -1,4 +1,5 @@
 using EnadeAds.Accounts;
+using EnadeAds.Blog;
 using EnadeAds.Challenges;
 using EnadeAds.Components;
 using EnadeAds.Components.Account;
@@ -72,6 +73,7 @@ try
     builder.Services.AddScoped<QuestionBank>();
     builder.Services.AddScoped<QuestionEditor>();
     builder.Services.AddScoped<ChallengeService>();
+    builder.Services.AddScoped<BlogService>();
     builder.Services.AddSingleton<LocalCalendar>();
     builder.Services.AddSingleton(TimeProvider.System);
     builder.Services.Configure<ExamOptions>(builder.Configuration.GetSection(ExamOptions.SectionName));
@@ -126,6 +128,7 @@ try
 
     // Add additional endpoints required by the Identity /Account Razor components.
     app.MapAdditionalIdentityEndpoints();
+    app.MapBlogFeed();
 
     app.Run();
 }
