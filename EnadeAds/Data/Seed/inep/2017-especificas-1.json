@@ -1,0 +1,362 @@
+{
+  "year": 2017,
+  "questions": [
+    {
+      "key": "enade-2017-ads-d03",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão discursiva 3 (Inep)",
+      "kind": "Discursive",
+      "subject": "algoritmos-programacao",
+      "statement": "Uma empresa de cosméticos comercializa cinco diferentes tipos de produtos e os armazena em uma estante de 40 x 40 posições. Em cada posição da estante, pode ficar armazenada apenas uma caixa com um desses produtos. Para facilitar sua identificação, os produtos foram codificados da forma a seguir:\n\n```\n1: xampu;\n2: condicionador;\n3: hidratante;\n4: tintura;\n5: demaquilante;\n0: vazio.\n```\n\nNessa situação e considerando o desenvolvimento de um sistema para gerenciar a organização dos produtos na estante, estabeleceu-se a declaração de variáveis a seguir.\n\n```\nVar\n     Estante: matriz [1..40][1..40] de inteiro\n     Produtos: vetor [0..5] de texto = {\"vazio\",\"xampu\",\"condicionador\",\n                              \"hidratante\", \"tintura\", \"demaquilante\"}\n     Contador: vetor [0..5] de inteiro = {0,0,0,0,0,0}\n     i, j: inteiro\n```\n\nCom base nessa declaração e considerando a codificação dos produtos exposta, faça o que se pede nos itens a seguir, apresentando as soluções em pseudocódigo ou em linguagem de programação.\n\na) Escreva um trecho de código para ler os códigos dos produtos e armazená-los na matriz `Estante`. (valor: 4,0 pontos)\n\nb) Escreva um trecho de código para contar e imprimir a quantidade de caixas de cada tipo de produto na estante. (valor: 6,0 pontos)",
+      "expectedAnswer": "Padrão de resposta elaborado pela plataforma (não é o padrão oficial do Inep).\n\na) Dois laços aninhados percorrem todas as 40 x 40 posições (i de 1 a 40 e j de 1 a 40) e leem o código de cada posição direto em `Estante[i][j]`. É aceitável validar a leitura para só guardar valores de 0 a 5.\n\n```\npara i de 1 ate 40 faca\n    para j de 1 ate 40 faca\n        leia(Estante[i][j])\n    fimpara\nfimpara\n```\n\nb) Uma boa resposta percorre a matriz de novo e usa o próprio código lido como índice do vetor `Contador` (`Contador[Estante[i][j]] <- Contador[Estante[i][j]] + 1`), sem precisar de seis ifs. Depois, fora dos laços da matriz, percorre os índices 0 a 5 e imprime o nome do produto (`Produtos[k]`) com a quantidade (`Contador[k]`). Uma solução com `escolha`/`se` para cada código também vale, desde que conte certo.\n\n```\npara i de 1 ate 40 faca\n    para j de 1 ate 40 faca\n        Contador[Estante[i][j]] <- Contador[Estante[i][j]] + 1\n    fimpara\nfimpara\npara i de 0 ate 5 faca\n    imprima(Produtos[i], \": \", Contador[i])\nfimpara\n```\n\nPerde pontos a resposta que usa índices fora dos limites declarados (por exemplo, começar a matriz em 0 ou o vetor em 1 e esquecer a posição \"vazio\"), que percorre só uma linha ou só uma coluna da estante, que imprime dentro do laço da matriz (repetindo a saída 1 600 vezes), que soma o código em vez de contar caixas, ou que imprime só os números sem identificar o produto.",
+      "suggestedLines": 15
+    },
+    {
+      "key": "enade-2017-ads-d04",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão discursiva 4 (Inep)",
+      "kind": "Discursive",
+      "subject": "estruturas-dados",
+      "statement": "Uma empresa trabalha na produção de concreto e terceiriza o serviço de transporte do produto. Os caminhoneiros telefonam para a empresa e registram seu interesse pelo trabalho. Todas as manhãs, os caminhoneiros estacionam o caminhão no pátio da empresa e aguardam sua vez. O atendimento segue o critério de ordem de chegada. Esse processo é, atualmente, controlado pela secretária, que utiliza sua agenda para gerenciar os motoristas diariamente. A empresa, que carrega, no máximo, 10 caminhões por dia, pretende informatizar esse processo.\n\nPara a solução do problema, apresenta-se, a seguir, um pseudocódigo que utiliza o conceito de fila, mantendo os elementos sempre nas primeiras posições do vetor.\n\n```\nAlgoritmo Fila_Caminhoneiros\ninício\n   var\n        caminhoneiros : vetor[1..10] de texto\n        total : inteiro\n        procedimento inicializa()\n        início\n           total <- 0\n        fim\n        função estaVazia() : lógico\n        início\n           se (total = 0) então\n              retorna verdadeiro\n           senão\n              retorna falso\n           fim-se\n        fim\n        função estaCheia() : lógico\n        início\n           se (total >= 10) então\n              retorna verdadeiro\n           senão\n              retorna falso\n           fim-se\n        fim\n        procedimento enfileirar(caminhoneiro : texto)\n        início\n           se (estaCheia() = falso) então\n              total <- total + 1\n              caminhoneiros[total] <- caminhoneiro\n           senão\n              imprima(\"Fila cheia\")\n           fim-se\n        fim\nfim\n```\n\nCom base nas informações apresentadas, faça o que se pede nos itens a seguir, expondo cada solução em pseudocódigo ou em linguagem de programação.\n\na) Implemente a função `desenfileirar`, que deve remover e retornar um elemento representado por um caminhoneiro da fila ou a mensagem \"Fila vazia\" se não houver elementos. (valor: 6,0 pontos)\n\nb) Implemente o procedimento `mostrarFila`, que deve apresentar a lista de elementos, ou seja, os caminhoneiros que estão na fila. (valor: 4,0 pontos)",
+      "expectedAnswer": "Padrão de resposta elaborado pela plataforma (não é o padrão oficial do Inep).\n\na) A função deve respeitar a ordem de chegada (FIFO): remover o elemento da posição 1, que é o primeiro da fila. Como o enunciado exige que os elementos fiquem sempre nas primeiras posições do vetor, depois de guardar o primeiro é preciso deslocar os demais uma posição para a frente e decrementar `total`. Se a fila estiver vazia (usar `estaVazia()`), retorna \"Fila vazia\".\n\n```\nfunção desenfileirar() : texto\nvar\n   primeiro : texto\n   i : inteiro\ninício\n   se (estaVazia() = verdadeiro) então\n      retorna \"Fila vazia\"\n   senão\n      primeiro <- caminhoneiros[1]\n      para i de 1 até total - 1 faça\n         caminhoneiros[i] <- caminhoneiros[i + 1]\n      fim-para\n      total <- total - 1\n      retorna primeiro\n   fim-se\nfim\n```\n\nb) O procedimento percorre o vetor da posição 1 até `total` (e não até 10) imprimindo cada caminhoneiro, na ordem da fila. É bom tratar a fila vazia com uma mensagem.\n\n```\nprocedimento mostrarFila()\nvar\n   i : inteiro\ninício\n   se (estaVazia() = verdadeiro) então\n      imprima(\"Fila vazia\")\n   senão\n      para i de 1 até total faça\n         imprima(caminhoneiros[i])\n      fim-para\n   fim-se\nfim\n```\n\nPerde pontos a resposta que remove o último elemento (comportamento de pilha), que não desloca os elementos e deixa um buraco no início do vetor (contrariando a regra de manter os elementos nas primeiras posições), que esquece de decrementar `total`, que não testa a fila vazia, ou que em mostrarFila percorre as 10 posições fixas e imprime posições sem caminhoneiro.",
+      "suggestedLines": 15
+    },
+    {
+      "key": "enade-2017-ads-d05",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão discursiva 5 (Inep)",
+      "kind": "Discursive",
+      "subject": "orientacao-objetos",
+      "statement": "A coordenação de gestão de pessoas (CGP) de uma empresa solicitou à equipe de TI que desenvolvesse um aplicativo (app) para criação de uma rede social on-line que incentivasse os empregados a idealizar e executar projetos. A fim de realizar o levantamento de requisitos, a equipe de desenvolvimento se reuniu com a CGP e alguns empregados e, para melhorar a comunicação entre os envolvidos, os analistas de sistemas da empresa optaram pela prototipação de telas do app, conforme os exemplos a seguir.\n\n![Protótipos 1, 2 e 3 das telas do app: cadastro de projeto de Melhoria de Processo (com Departamento e Resultados esperados), cadastro de projeto Social (com Público beneficiário) e tela do projeto com equipe e comentários](img/inep/2017/d05-1.png)\n\nTendo-se usado a abordagem de prototipação, foram documentados os seguintes requisitos:\n\n- todo colaborador deve informar número de matrícula, nome, endereço de e-mail e senha de login para se cadastrar no app e poder registrar projetos e enviar comentários; a coordenação de um projeto é atribuída automaticamente ao colaborador que o registrar;\n- cada projeto pode ser classificado em uma de duas possíveis categorias: \"Melhoria de Processo\" ou \"Social\"; além dos dados em comum para ambas as categorias, um projeto de \"Melhoria de Processo\" deve ser alocado ao departamento (selecionado de uma lista) em que ele será aplicado e os resultados esperados devem ser informados (conforme o protótipo 1); para um projeto \"Social\", deve-se indicar o público beneficiário (conforme o protótipo 2);\n- uma vez registrado o projeto, qualquer colaborador pode visualizá-lo no app e registrar um ou mais comentários para contribuir com o refinamento da ideia (conforme o protótipo 3); os comentários são visualizados em ordem cronológica, por data e horário;\n- o coordenador do projeto pode incluir até três colaboradores para participarem da equipe.\n\nConsiderando a situação e as informações apresentadas, construa um diagrama de classe que esteja em conformidade com os requisitos, indicando os atributos de cada classe e as associações entre as classes. (valor: 10,0 pontos)",
+      "expectedAnswer": "Padrão de resposta elaborado pela plataforma (não é o padrão oficial do Inep).\n\nUma boa resposta apresenta, em notação UML, as classes abaixo com seus atributos e as associações com multiplicidade.\n\n- Colaborador: matricula, nome, email, senha.\n- Projeto (classe abstrata ou superclasse com os dados comuns): id, nome, descricao, estimativaDuracao (em horas).\n- ProjetoMelhoriaProcesso (subclasse de Projeto): resultadosEsperados.\n- ProjetoSocial (subclasse de Projeto): publicoBeneficiario.\n- Departamento (a lista de seleção do protótipo 1): codigo, nome.\n- Comentario: texto, dataHora (data e horário, que definem a ordem cronológica).\n\nAssociações esperadas:\n\n- Colaborador 1 \"coordena\" 0..* Projeto (o colaborador que registra é o coordenador).\n- Projeto 0..* \"equipe\" 0..3 Colaborador (até três participantes incluídos pelo coordenador).\n- ProjetoMelhoriaProcesso 0..* \"aplicado em\" 1 Departamento.\n- Projeto 1 \"possui\" 0..* Comentario (composição: o comentário não existe sem o projeto), de preferência marcada como {ordered} por dataHora.\n- Colaborador 1 \"escreve\" 0..* Comentario.\n\nUm esboço textual equivalente:\n\n```\nColaborador 1 ------ coordena ------ 0..* Projeto {abstract}\nColaborador 0..3 --- equipe -------- 0..* Projeto\nProjeto <|-- ProjetoMelhoriaProcesso   Projeto <|-- ProjetoSocial\nProjetoMelhoriaProcesso 0..* ------- 1 Departamento\nProjeto 1 <>------------------------ 0..* Comentario {ordered}\nColaborador 1 ---------------------- 0..* Comentario\n```\n\nTambém é aceitável modelar a categoria com um atributo/enumeração em Projeto, desde que os dados específicos de cada categoria (departamento e resultados esperados; público beneficiário) fiquem representados.\n\nPerde pontos a resposta que omite atributos, que não indica multiplicidades (sobretudo o limite de três colaboradores na equipe e o coordenador único), que trata departamento como texto solto em vez de algo escolhido de uma lista, que coloca os atributos específicos de uma categoria em todos os projetos sem nenhuma distinção, que esquece a data e o horário do comentário ou que não liga o comentário ao seu autor e ao projeto.",
+      "suggestedLines": 15
+    },
+    {
+      "key": "enade-2017-ads-q09",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 9 (Inep)",
+      "kind": "Objective",
+      "subject": "estatistica-analise-dados",
+      "statement": "Em uma pesquisa de satisfação com notas de 0 a 10, sendo 0 muito insatisfeito e 10 muito satisfeito, uma empresa construiu uma tabela, mostrada a seguir, com o resumo das notas atribuídas pelos seus clientes aos serviços recebidos.\n\n```\nNOTA   QUANTIDADE DE CLIENTES\n 0       0\n 1       0\n 2       0\n 3       1\n 4       2\n 5       2\n 6       2\n 7       2\n 8       2\n 9       1\n10       0\n```\n\nConsiderando essa situação e as informações apresentadas, avalie as afirmações a seguir.\n\nI. A média das notas dos clientes é igual a 6,0.\n\nII. A mediana das notas dos clientes é igual a 6,0.\n\nIII. O desvio padrão populacional é menor do que 3,0.\n\nIV. O conjunto de dados é amodal.\n\nV. Um cliente que atribuiu nota 3,0 encontra-se no 1º quartil.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I, II e III.",
+          "explanation": "Inclui I e II, que são verdadeiras, mas deixa de fora a V. Pelo gabarito, a III foi considerada falsa: a variância dá 38/12 ≈ 3,17, acima de 3. Note, porém, que o desvio padrão é a raiz disso, cerca de 1,78."
+        },
+        {
+          "text": "I, II e V.",
+          "explanation": "Correta. São 12 clientes com soma 72, então a média é 6,0 (I); ordenadas, as notas 6ª e 7ª são 6 e 6, logo a mediana é 6,0 (II); o primeiro quartil fica em torno de 4,5, então a nota 3 está no 1º quartil (V). O gabarito trata a III como falsa e a IV é falsa porque há modas (notas 4 a 8)."
+        },
+        {
+          "text": "I, III e IV.",
+          "explanation": "A IV é falsa: o conjunto não é amodal, pois as notas 4, 5, 6, 7 e 8 aparecem com a maior frequência (2), ou seja, ele é multimodal. A alternativa ainda deixa de fora a II e a V."
+        },
+        {
+          "text": "II, IV e V.",
+          "explanation": "A IV é falsa (há cinco modas, de 4 a 8) e a alternativa omite a I, que é verdadeira: 72 / 12 = 6,0."
+        },
+        {
+          "text": "III, IV e V.",
+          "explanation": "A IV é falsa, pois existem modas, e a alternativa deixa de fora a média e a mediana iguais a 6,0 (I e II), que são verdadeiras."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2017-ads-q10",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 10 (Inep)",
+      "kind": "Objective",
+      "subject": "logica-matematica",
+      "statement": "A álgebra booleana possui um operador unário ~, conhecido como NÃO, e os operadores binários * e +, conhecidos como E e OU, respectivamente. A tabela verdade é utilizada para validar uma fórmula composta de operadores da álgebra booleana. A seguir, é apresentada a tabela verdade para as proposições p, q e r diante da fórmula G, em que V representa uma proposição verdadeira e F uma proposição falsa.\n\n```\np   q   r   G\nV   V   V   V\nV   V   F   F\nV   F   V   F\nV   F   F   F\nF   V   V   V\nF   V   F   V\nF   F   V   V\nF   F   F   V\n```\n\nConsiderando as informações contidas na tabela acima e a ordem de precedência dos operadores booleanos, a fórmula G possui a mesma tabela verdade da proposição",
+      "options": [
+        {
+          "text": "p + ~q * r.",
+          "explanation": "Com p = V a fórmula seria sempre V, mas na tabela G é F em três linhas com p = V. Além disso, com p = F, q = V e r = V daria F, e G é V."
+        },
+        {
+          "text": "p + q * ~r.",
+          "explanation": "Também seria sempre V quando p = V, o que contradiz as linhas 2, 3 e 4 da tabela, em que G é F."
+        },
+        {
+          "text": "~p + q * r.",
+          "explanation": "Correta. Quando p = F, ~p = V e a fórmula é V (linhas 5 a 8). Quando p = V, o resultado depende só de q * r, que só é V na linha 1 (q = V e r = V), exatamente como G."
+        },
+        {
+          "text": "~p + ~q * r.",
+          "explanation": "Acerta as linhas com p = F, mas com p = V vira ~q * r: daria F na linha 1 (G é V) e V na linha 3 (G é F)."
+        },
+        {
+          "text": "~p + q * ~r.",
+          "explanation": "Com p = V vira q * ~r, que é V na linha 2 e F na linha 1, o contrário do que a tabela mostra para G."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2017-ads-q11",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 11 (Inep)",
+      "kind": "Objective",
+      "subject": "analise-arquitetura-sistemas",
+      "statement": "No desenvolvimento de um sistema de automação para um clube recreativo, serão implementados módulos para o departamento administrativo, tais como os módulos de cadastro de associados e de gestão de mensalidades. Na construção desses módulos, algumas regras de negócio serão aplicadas conforme o diagrama abaixo.\n\n![Diagrama de classes: Tipo_Associado (codigo, descricao, valorMensalidade) 1 — 0..* Associado (codigo, nome, endereco, telefone) 1 — 1..* Mensalidade (codigo, anomesreferencia, valormensalidade, datavencimento, valorpago, datapagamento)](img/inep/2017/q11-1.png)\n\nCom base nesse diagrama, avalie as afirmações a seguir.\n\nI. Haverá somente 12 mensalidades para cada associado, ou seja, as mensalidades do associado não poderão ultrapassar os 12 meses do ano.\n\nII. Não existem associados sem mensalidades, nem mensalidades sem associado a elas relacionado.\n\nIII. Alterando-se o valor da mensalidade definido para cada tipo de associado cadastrado, o sistema automaticamente altera os valores das mensalidades geradas anteriormente.\n\nIV. Poderão existir tipos de associados que não terão nenhum associado relacionado a eles.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e II.",
+          "explanation": "A I é falsa: a multiplicidade 1..* do lado de Mensalidade não tem limite superior, então nada restringe o associado a 12 mensalidades."
+        },
+        {
+          "text": "I e III.",
+          "explanation": "As duas são falsas. Não há limite de 12 mensalidades (1..*), e cada Mensalidade guarda o próprio valormensalidade, então mudar o valor do tipo não altera mensalidades já geradas."
+        },
+        {
+          "text": "II e IV.",
+          "explanation": "Correta. Associado 1 — 1..* Mensalidade obriga cada associado a ter ao menos uma mensalidade e cada mensalidade a ter exatamente um associado (II). Tipo_Associado 1 — 0..* Associado permite um tipo sem nenhum associado (IV)."
+        },
+        {
+          "text": "I, III e IV.",
+          "explanation": "Acerta a IV, mas a I e a III são falsas: não há teto de 12 mensalidades e o valor fica copiado em cada Mensalidade, sem atualização automática."
+        },
+        {
+          "text": "II, III e IV.",
+          "explanation": "A III é falsa: Mensalidade tem atributo valormensalidade próprio, que registra o valor no momento da geração; o diagrama não indica nenhuma atualização retroativa."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2017-ads-q12",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 12 (Inep)",
+      "kind": "Objective",
+      "subject": "engenharia-requisitos",
+      "statement": "A engenharia de requisitos, do ponto de vista do processo de software, é uma ação de engenharia de software importante, que se inicia durante a atividade de comunicação e continua na de modelagem. Ela deve ser adaptada às necessidades do processo, do projeto, do produto e das pessoas que estão realizando o trabalho.\n\nPRESSMAN, R. S. **Engenharia de software**: uma abordagem profissional. 8. ed. Porto Alegre: AMGH, 2016 (adaptado).\n\nConsidere os requisitos, a seguir, de um sistema para uma universidade, na qual se pretenda gerenciar o setor acadêmico.\n\n- **R1**: o sistema deve permitir que cada professor realize o lançamento de notas das turmas nas quais lecionou;\n- **R2**: o sistema deverá ser desenvolvido de forma a possibilitar seu transporte para outro sistema operacional em, no máximo, sessenta dias;\n- **R3:** o sistema deve permitir que um estudante realize a sua matrícula nas disciplinas oferecidas em um semestre letivo;\n- **R4**: o sistema atualiza a nota do estudante, permitindo sua visualização, em até dois segundos depois do momento que o professor a registra;\n- **R5:** o sistema deve permitir que o auxiliar de serviços acadêmicos realize o cadastro de um estudante em não mais do que dez minutos de orientação.\n\nNessa situação, representam descrições de requisitos não funcionais apenas os requisitos",
+      "options": [
+        {
+          "text": "R1, R2 e R3.",
+          "explanation": "R1 (lançar notas) e R3 (fazer matrícula) descrevem funções do sistema, ou seja, são requisitos funcionais."
+        },
+        {
+          "text": "R1, R2 e R5.",
+          "explanation": "R2 e R5 são não funcionais, mas R1 é funcional: descreve um serviço (lançamento de notas) e não uma qualidade. Falta o R4, de desempenho."
+        },
+        {
+          "text": "R1, R3 e R4.",
+          "explanation": "Só o R4 é não funcional (tempo de resposta). R1 e R3 descrevem o que o sistema faz, por isso são funcionais."
+        },
+        {
+          "text": "R2, R4 e R5.",
+          "explanation": "Correta. R2 trata de portabilidade (mudar de sistema operacional em até 60 dias), R4 de desempenho (atualização em até 2 segundos) e R5 de usabilidade/facilidade de aprendizado (até 10 minutos de orientação). Todos são qualidades, não funções."
+        },
+        {
+          "text": "R3, R4 e R5.",
+          "explanation": "R4 e R5 são não funcionais, mas R3 (matrícula em disciplinas) é uma função do sistema. Fica de fora o R2, de portabilidade."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2017-ads-q13",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 13 (Inep)",
+      "kind": "Objective",
+      "subject": "processo-software",
+      "statement": "Na área de desenvolvimento de software, prazos, custos e qualidade são questões que demandam gerenciamento, para que se evitem atrasos, estouros orçamentários e sistemas que não atendam aos requisitos.\n\nSobre o modelo CMMI, avalie as asserções a seguir e a relação proposta entre elas.\n\nI. O CMMI fornece diretrizes para a melhoria dos processos e habilidades organizacionais, incluindo o ciclo de vida de produtos e serviços, que abrange as fases de concepção, desenvolvimento, aquisição, entrega e manutenção.\n\n**PORQUE**\n\nII. As empresas brasileiras estão aderindo a programas de fomento à melhoria da qualidade de software, por meio da aplicação do modelo de maturidade CMMI, que é mais direcionado às pequenas e médias empresas, apesar de também ser um modelo aplicável em grandes organizações, sejam elas públicas ou privadas.\n\nA respeito dessas asserções, assinale a opção correta.",
+      "options": [
+        {
+          "text": "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
+          "explanation": "A II é falsa: o CMMI não é voltado principalmente a pequenas e médias empresas. Por ser caro e extenso, é mais associado a grandes organizações; o modelo brasileiro pensado para empresas menores é o MPS.BR."
+        },
+        {
+          "text": "As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.",
+          "explanation": "Considera a II verdadeira, mas ela erra ao dizer que o CMMI é mais direcionado a pequenas e médias empresas."
+        },
+        {
+          "text": "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.",
+          "explanation": "Correta. A I descreve bem o CMMI: diretrizes de melhoria de processo que cobrem o ciclo de vida de produtos e serviços. A II é falsa porque o CMMI não tem foco em pequenas e médias empresas; esse é o objetivo declarado do MPS.BR."
+        },
+        {
+          "text": "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.",
+          "explanation": "Inverte a avaliação: a I é a correta (o CMMI orienta a melhoria de processos ao longo do ciclo de vida) e a II é a falsa."
+        },
+        {
+          "text": "As asserções I e II são proposições falsas.",
+          "explanation": "A I é verdadeira: o CMMI de fato fornece diretrizes de melhoria de processos que abrangem concepção, desenvolvimento, aquisição, entrega e manutenção."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2017-ads-q14",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 14 (Inep)",
+      "kind": "Objective",
+      "subject": "gerencia-projetos",
+      "statement": "O método do caminho crítico identifica a sequência de atividades que o gerente de projetos deve dar mais atenção, porque, caso uma delas atrase, todo o projeto estará atrasado. A tabela a seguir apresenta a estrutura de atividades de um projeto.\n\n```\nAtividade   Atividade      Duração\n            predecessora   em dias\nA           --              3\nB           A               5\nC           --             12\nD           --              4\nE           D               2\nF           D               5\nG           F               7\nH           E e G           8\nI           B              11\nJ           C, H e I        3\n```\n\nA partir das informações apresentadas na tabela, avalie as afirmações a seguir.\n\nI. O caminho crítico é composto pelas atividades A, B, I e J.\n\nII. O caminho crítico tem 27 dias.\n\nIII. A atividade H faz parte do caminho crítico.\n\nIV. O projeto em pauta possui dois caminhos críticos.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e II.",
+          "explanation": "A I é falsa: A-B-I-J soma 3 + 5 + 11 + 3 = 22 dias, menos que o caminho D-F-G-H-J, de 27 dias."
+        },
+        {
+          "text": "I e IV.",
+          "explanation": "As duas são falsas. A-B-I-J tem 22 dias e há um único caminho de maior duração (D-F-G-H-J, 27 dias), então não existem dois caminhos críticos."
+        },
+        {
+          "text": "II e III.",
+          "explanation": "Correta. Os caminhos são A-B-I-J (22), C-J (15), D-E-H-J (17) e D-F-G-H-J (4 + 5 + 7 + 8 + 3 = 27). O mais longo, com 27 dias, é o crítico, e ele passa pela atividade H."
+        },
+        {
+          "text": "I, III e IV.",
+          "explanation": "A III é verdadeira, mas a I e a IV são falsas: A-B-I-J tem só 22 dias e só um caminho atinge 27 dias."
+        },
+        {
+          "text": "II, III e IV.",
+          "explanation": "A II e a III são verdadeiras, mas a IV é falsa: nenhum outro caminho chega a 27 dias, então há um só caminho crítico."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2017-ads-q16",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 16 (Inep)",
+      "kind": "Objective",
+      "subject": "orientacao-objetos",
+      "statement": "O seguinte diagrama de classe representa a modelagem de um serviço de transferência de materiais entre funcionários de uma empresa.\n\n![Diagrama de classes: RequisicaoTransferencia (dataRequisicao: date) com duas associações navegáveis para Funcionario (nome: string), papéis origem e destino, multiplicidade 1; e composição (losango cheio do lado de RequisicaoTransferencia, multiplicidade 0..1) com Material (descricao: string, preco: double), papel material, multiplicidade 1..*](img/inep/2017/q16-1.png)\n\nConsiderando o diagrama de classe apresentado, avalie as afirmações a seguir.\n\nI. A classe Funcionario é abstrata.\n\nII. Uma RequisicaoTransferencia só existe se estiver vinculada a um Material.\n\nIII. A classe Funcionario, em razão de sua associação, possui um atributo do tipo RequisicaoTransferencia.\n\nIV. Em uma implementação da classe RequisicaoTransferencia, é necessário adicionar um atributo simples do tipo Material.\n\nÉ correto o que se afirma em",
+      "options": [
+        {
+          "text": "II, apenas.",
+          "explanation": "Correta. A multiplicidade 1..* do lado de Material obriga toda RequisicaoTransferencia a ter pelo menos um Material. A I é falsa (o nome não está em itálico nem marcado como abstract), a III é falsa (as setas apontam para Funcionario, que não referencia a requisição) e a IV é falsa (1..* exige uma coleção, não um atributo simples)."
+        },
+        {
+          "text": "I e II, apenas.",
+          "explanation": "A I é falsa: no UML uma classe abstrata aparece com o nome em itálico ou com {abstract}, e Funcionario não tem nenhuma dessas marcas."
+        },
+        {
+          "text": "III e IV, apenas.",
+          "explanation": "As duas são falsas. A navegabilidade vai de RequisicaoTransferencia para Funcionario, então Funcionario não guarda atributo do tipo RequisicaoTransferencia; e a multiplicidade 1..* pede uma coleção de Material, não um atributo simples."
+        },
+        {
+          "text": "I, III e IV, apenas.",
+          "explanation": "Marca justamente as três falsas e deixa de fora a II, a única garantida pela multiplicidade 1..* do lado de Material."
+        },
+        {
+          "text": "I, II, III e IV.",
+          "explanation": "Só a II é verdadeira. Funcionario não é abstrata, não referencia a requisição (a seta aponta para ela) e o material, com multiplicidade 1..*, precisa de uma coleção."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "key": "enade-2017-ads-q17",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 17 (Inep)",
+      "kind": "Objective",
+      "subject": "operacoes-manutencao",
+      "statement": "Após a implantação de um sistema em ambiente de produção, este passa para a fase de manutenção dentro do ciclo de vida do desenvolvimento de software. Os sistemas geralmente necessitam de diversos tipos de manutenção durante sua existência.\n\nConsiderando a etapa de manutenção no processo de desenvolvimento de software, avalie as afirmações a seguir.\n\nI. A fase de manutenção é uma parte explícita do modelo em cascata do processo de desenvolvimento de software.\n\nII. A atualização do sistema para inserir customizações é considerada um tipo de manutenção.\n\nIII. A depuração do programa é um processo específico da fase de desenvolvimento e um tipo de manutenção.\n\nIV. O acréscimo de novas funções a um sistema existente, sem perturbar sua operação, é considerado um tipo de manutenção.\n\nV. A manutenção do sistema está relacionada ao aumento do ciclo de vida do software.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e III.",
+          "explanation": "A III é falsa: depuração é uma atividade de localizar e corrigir defeitos feita durante o desenvolvimento e os testes, não um tipo de manutenção. A alternativa também deixa de fora II, IV e V."
+        },
+        {
+          "text": "IV e V.",
+          "explanation": "IV e V são verdadeiras, mas a alternativa omite a I (o modelo em cascata tem a etapa de operação e manutenção) e a II (customização é manutenção adaptativa/evolutiva)."
+        },
+        {
+          "text": "I, II e III.",
+          "explanation": "Inclui a III, que é falsa, e deixa de fora a IV e a V, que são verdadeiras."
+        },
+        {
+          "text": "I, II, IV e V.",
+          "explanation": "Correta. O modelo em cascata termina com a etapa de operação e manutenção (I); customizar e acrescentar funções sem parar a operação são manutenção adaptativa e evolutiva (II e IV); e manter o sistema prolonga sua vida útil (V). A III é falsa porque depuração não é um tipo de manutenção."
+        },
+        {
+          "text": "II, III, IV e V.",
+          "explanation": "Troca a I, que é verdadeira (a manutenção é a última fase explícita da cascata), pela III, que é falsa."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2017-ads-q18",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 18 (Inep)",
+      "kind": "Objective",
+      "subject": "redes-sistemas-distribuidos",
+      "statement": "As redes de computadores estão por toda parte. A internet é uma delas, assim como as várias redes das quais ela é composta, que compartilham recursos por meio de Sistemas Distribuídos. Como o número de dispositivos tem crescido exponencialmente, em vez de paralelizar tarefas em várias máquinas, tornou-se cada vez mais importante empregar sistemas distribuídos, comunicando e coordenando dispositivos e, assim, contribuindo para o cotidiano de empresas, governos e demais instituições.\n\nCOULOURIS, G. et al. **Sistemas Distribuídos:** conceitos e projeto, 5. ed. Porto Alegre: Bookman, 2013 (adaptado).\n\nNesse contexto, assinale a opção que apresenta exemplos atuais de sistemas distribuídos.",
+      "options": [
+        {
+          "text": "Pesquisa na web, jogos on-line, E-Commerce e o banco de dados das agências bancárias.",
+          "explanation": "Correta. Todos dependem de vários computadores em rede que se coordenam: os buscadores usam milhares de servidores, os jogos on-line sincronizam jogadores, o comércio eletrônico integra lojas, pagamentos e estoque, e os bancos compartilham dados entre agências."
+        },
+        {
+          "text": "Jogos on-line, E-Commerce, pesquisa no Windows e e-mails.",
+          "explanation": "A pesquisa no Windows procura arquivos no próprio computador, sem coordenação entre máquinas, então não é exemplo de sistema distribuído."
+        },
+        {
+          "text": "E-Commerce, jogos em mídia física, pesquisa no Windows e redes sociais.",
+          "explanation": "Jogos em mídia física rodam localmente a partir do disco, e a pesquisa no Windows é local; nenhum dos dois é sistema distribuído."
+        },
+        {
+          "text": "Pesquisa na web, jogos em mídia física, E-Commerce e e-mails.",
+          "explanation": "Jogos em mídia física são executados na máquina local, sem dividir processamento ou dados com outros nós da rede."
+        },
+        {
+          "text": "Pesquisa no Windows, pesquisa na web, jogos on-line e o banco de dados das agências bancárias.",
+          "explanation": "Inclui a pesquisa no Windows, que é uma busca local no sistema de arquivos do computador e não envolve outras máquinas."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "key": "enade-2017-ads-q19",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 19 (Inep)",
+      "kind": "Objective",
+      "subject": "sistemas-operacionais",
+      "statement": "Conceitualmente, cada processo tem sua própria CPU (Central Processing Unit) virtual. É claro que, na realidade, a CPU troca a execução, a todo momento, de um processo para outro, mas, para entender esse sistema, é muito mais fácil pensar em um conjunto de processos sendo executados (pseudo) paralelamente do que tentar controlar o modo como a CPU faz esses chaveamentos.\n\nTANENBAUM, A. S. **Sistemas operacionais modernos**. 3. ed. São Paulo: Person, 2010 (adaptado).\n\nDe acordo com o exposto, o conceito descrito denomina-se",
+      "options": [
+        {
+          "text": "thread.",
+          "explanation": "Thread é uma linha de execução dentro de um processo, que compartilha o espaço de endereçamento com outras threads. O texto fala da troca da CPU entre processos, não da divisão interna de um processo."
+        },
+        {
+          "text": "multiprocessador.",
+          "explanation": "Multiprocessador é um hardware com várias CPUs, que dá paralelismo real. O texto descreve uma única CPU alternando entre processos, o que gera só um pseudoparalelismo."
+        },
+        {
+          "text": "multiprogramação.",
+          "explanation": "Correta. Multiprogramação é manter vários processos na memória e chavear a CPU rapidamente entre eles, dando a impressão de execução paralela (pseudoparalelismo), exatamente como o texto descreve."
+        },
+        {
+          "text": "processo monothread.",
+          "explanation": "Processo monothread é apenas um processo com uma única linha de execução; não explica a CPU alternando entre vários processos."
+        },
+        {
+          "text": "máquina de estados finitos.",
+          "explanation": "Máquina de estados finitos é um modelo computacional de estados e transições, não o mecanismo de compartilhar a CPU entre processos."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2017-ads-q20",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 20 (Inep)",
+      "kind": "Objective",
+      "subject": "engenharia-requisitos",
+      "statement": "O quadro a seguir apresenta um exemplo de documentação de caso de uso Encerrar Conta para um Sistema de Controle Bancário.\n\n![Quadro de documentação do caso de uso Encerrar Conta: ator principal Cliente, ator secundário Funcionário, fluxo principal (solicitar encerramento, executar Emitir Saldo, encerrar a conta), restrições (só o titular encerra; só com saldo zerado) e fluxos alternativos I (saldo positivo: Realizar Saque), II (saldo negativo: Realizar Depósito) e III (manutenção do Cadastro do Cliente: Manter Cliente)](img/inep/2017/q20-1.png)\n\nCom base no quadro apresentado, assinale a opção na qual o diagrama corresponde a documentação descrita para o caso de uso Encerrar Conta usando associação de extensão com restrição e ponto de extensão.",
+      "options": [
+        {
+          "text": "![Diagrama de casos de uso da alternativa A](img/inep/2017/q20-2.png)",
+          "explanation": "Tem os pontos de extensão, mas as restrições estão trocadas: põe {Se o saldo for negativo} no extend de Realizar saque e {Se o saldo for positivo} no de Realizar depósito. Pelo quadro, o saque ocorre com saldo positivo e o depósito com saldo negativo."
+        },
+        {
+          "text": "![Diagrama de casos de uso da alternativa B](img/inep/2017/q20-3.png)",
+          "explanation": "Encerrar Conta não lista nenhum ponto de extensão (o compartimento extension points está vazio) e as restrições também estão invertidas entre saque e depósito."
+        },
+        {
+          "text": "![Diagrama de casos de uso da alternativa C](img/inep/2017/q20-4.png)",
+          "explanation": "Não declara pontos de extensão e as notas só dizem {saldo}, sem a condição que dispara cada extensão, então a restrição não está representada."
+        },
+        {
+          "text": "![Diagrama de casos de uso da alternativa D](img/inep/2017/q20-5.png)",
+          "explanation": "Declara os pontos de extensão Saldo negativo e Saldo positivo, mas as notas trazem só {saldo}/{Saldo}, sem dizer em que condição cada extensão acontece."
+        },
+        {
+          "text": "![Diagrama de casos de uso da alternativa E](img/inep/2017/q20-6.png)",
+          "explanation": "Correta. Encerrar Conta declara os pontos de extensão Saldo negativo e Saldo positivo, inclui Emitir Saldo com <<include>>, e os <<extend>> trazem as restrições certas: Realizar saque {Se o saldo for positivo} e Realizar depósito {Se o saldo for negativo}, como nos fluxos alternativos I e II."
+        }
+      ],
+      "correct": "E"
+    }
+  ]
+}
