@@ -1,0 +1,167 @@
+@page "/simulados"
+
+@using EnadeAds.Data
+@using EnadeAds.MockExams
+@using EnadeAds.Study
+@using Microsoft.AspNetCore.Identity
+
+@inject MockExamService MockExams
+@inject LocalCalendar Calendar
+@inject UserManager<ApplicationUser> Users
+@inject NavigationManager Navigation
+
+<PageTitle>Simulados</PageTitle>
+
+<h1>Simulados</h1>
+
+<p class="text-body-secondary">
+    Treine com tempo, no formato da prova: questões de formação geral, específicas e uma discursiva.
+    O relógio é do servidor: recarregar a página não reinicia o tempo. O gabarito sai quando você entrega.
+</p>
+
+@if (errorMessage is not null)
+{
+    <div class="alert alert-danger" role="alert">@errorMessage</div>
+}
+
+@if (userId is null)
+{
+    <div class="alert alert-info" role="status">
+        <a href="Account/Login?ReturnUrl=%2Fsimulados">Entre</a> ou <a href="Account/Register">crie sua conta</a> para fazer um simulado.
+    </div>
+}
+else if (open is not null)
+{
+    <div class="alert alert-warning" role="status">
+        Você tem um simulado em andamento, que termina às <strong>@Calendar.ToLocal(open.DeadlineAt).ToString("HH:mm")</strong>
+        de @Calendar.ToLocal(open.DeadlineAt).ToString("dd/MM").
+        <a class="alert-link" href="simulados/@open.Id">Continuar o simulado</a>
+    </div>
+}
+else if (plans is not null)
+{
+    <form method="post" action="simulados" @formname="start-mock-exam" @onsubmit="StartAsync" class="mb-5">
+        <AntiforgeryToken />
+        <fieldset>
+            <legend class="h5">Escolha o tamanho</legend>
+            <div class="row row-cols-1 row-cols-md-3 g-3 mb-3">
+                @foreach (var plan in plans)
+                {
+                    var inputId = $"tamanho-{plan.Format.Size}";
+                    <div class="col">
+                        <label class="card h-100" for="@inputId">
+                            <div class="card-body">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="Size" id="@inputId" value="@plan.Format.Size"
+                                           checked="@(plan.Format.Size == MockExamSize.Short)" disabled="@(plan.Total == 0)" />
+                                    <span class="form-check-label fw-semibold">@plan.Format.Name</span>
+                                </div>
+                                <p class="mb-1 mt-2 font-monospace">@plan.Total questões · @Duration(plan.Minutes)</p>
+                                <p class="small text-body-secondary mb-0">
+                                    @plan.GeneralEducation de formação geral, @plan.Specific específicas e @plan.Discursive discursiva.
+                                </p>
+                                @if (plan.IsShorterThanFormat)
+                                {
+                                    <p class="small text-warning-emphasis mb-0 mt-1">
+                                        O formato pede @plan.Format.Total questões, mas o banco ainda tem menos. O tempo acompanha o número de questões.
+                                    </p>
+                                }
+                            </div>
+                        </label>
+                    </div>
+                }
+            </div>
+        </fieldset>
+        <button type="submit" class="btn btn-primary" disabled="@(plans.All(p => p.Total == 0))">Começar o simulado</button>
+        <span class="small text-body-secondary ms-2">O relógio começa a contar assim que você clicar.</span>
+    </form>
+}
+
+@if (history is { Count: > 0 })
+{
+    <section aria-labelledby="history-title">
+        <h2 id="history-title" class="h5">Seus simulados</h2>
+        <div class="table-responsive">
+            <table class="table table-sm align-middle">
+                <thead>
+                    <tr><th scope="col">Data</th><th scope="col">Tamanho</th><th scope="col">Acertos</th><th scope="col"><span class="visually-hidden">Ver</span></th></tr>
+                </thead>
+                <tbody>
+                    @foreach (var exam in history)
+                    {
+                        <tr>
+                            <td>@Calendar.ToLocal(exam.StartedAt).ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@MockExamFormat.Of(exam.Size).Name</td>
+                            <td class="font-monospace">
+                                @exam.CorrectCount de @exam.ObjectiveCount
+                                @if (exam.SubmittedByTimeout)
+                                {
+                                    <span class="badge text-bg-secondary ms-1">tempo esgotado</span>
+                                }
+                            </td>
+                            <td><a href="simulados/@exam.Id">Ver gabarito</a></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+}
+
+@code {
+    private IReadOnlyList<MockExamPlan>? plans;
+    private IReadOnlyList<MockExam>? history;
+    private MockExam? open;
+    private string? userId;
+    private string? errorMessage;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromForm(FormName = "start-mock-exam")]
+    private string? Size { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        userId = Users.GetUserId(HttpContext.User);
+        if (userId is null)
+        {
+            return;
+        }
+
+        open = await MockExams.OpenAsync(userId);
+        plans = await MockExams.PlansAsync();
+        history = await MockExams.HistoryAsync(userId);
+    }
+
+    private async Task StartAsync()
+    {
+        // Fazer simulado exige login; o formulário não aparece para visitante, mas o POST pode ser forjado.
+        if (userId is null)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return;
+        }
+
+        if (!Enum.TryParse<MockExamSize>(Size, out var size) || !Enum.IsDefined(size))
+        {
+            errorMessage = "Escolha o tamanho do simulado.";
+            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            return;
+        }
+
+        var result = await MockExams.StartAsync(userId, size);
+        if (result.Outcome == StartOutcome.NoQuestions)
+        {
+            errorMessage = "O banco ainda não tem questões para montar um simulado.";
+            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            return;
+        }
+
+        Navigation.NavigateTo($"simulados/{result.MockExamId}");
+    }
+
+    private static string Duration(int minutes) => minutes >= 60
+        ? $"{minutes / 60}h{(minutes % 60 == 0 ? "" : $"{minutes % 60:00}")}"
+        : $"{minutes} min";
+}
