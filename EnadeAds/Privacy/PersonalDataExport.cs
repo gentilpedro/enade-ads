@@ -44,6 +44,21 @@ public sealed class PersonalDataExport(ApplicationDbContext db, UserManager<Appl
             .Join(db.Posts, c => c.PostId, p => p.Id, (c, p) => new { Post = p.Title, Comentario = c.Text, Em = c.CreatedAt })
             .ToListAsync(cancellationToken);
 
+        var posts = await db.Posts.AsNoTracking()
+            .Where(p => p.AuthorId == userId)
+            .Select(p => new { Titulo = p.Title, Texto = p.Body, Criado = p.CreatedAt, Publicado = p.PublishedAt, Removido = p.RemovedAt })
+            .ToListAsync(cancellationToken);
+
+        var votes = await db.PostVotes.AsNoTracking()
+            .Where(v => v.UserId == userId)
+            .Join(db.Posts, v => v.PostId, p => p.Id, (v, p) => new { Post = p.Title, Voto = v.Value, Em = v.CreatedAt })
+            .ToListAsync(cancellationToken);
+
+        var reports = await db.PostReports.AsNoTracking()
+            .Where(r => r.ReporterId == userId)
+            .Join(db.Posts, r => r.PostId, p => p.Id, (r, p) => new { Post = p.Title, Comentario = r.CommentId, Motivo = r.Reason, Em = r.CreatedAt })
+            .ToListAsync(cancellationToken);
+
         return new
         {
             Conta = new
@@ -63,6 +78,9 @@ public sealed class PersonalDataExport(ApplicationDbContext db, UserManager<Appl
             Desafios = challenges,
             Simulados = mockExams,
             ComentariosNoBlog = comments,
+            Posts = posts,
+            Votos = votes,
+            Denuncias = reports,
         };
     }
 }

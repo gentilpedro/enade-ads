@@ -1,0 +1,40 @@
+@* Botões de voto de um post. Fica dentro de um <form> da página: o valor enviado é "id:1" ou "id:-1". *@
+
+<div class="vote-control" role="group" aria-label="Votos em @Title">
+    <button type="submit" name="Vote" value="@($"{PostId}:1")" class="vote-button vote-up" aria-pressed="@(MyVote > 0 ? "true" : "false")"
+            title="Votar a favor">
+        <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 3.5 13.5 10h-11z" /></svg>
+        <span class="visually-hidden">Votar a favor</span>
+    </button>
+    <span class="vote-score" aria-label="@ScoreLabel">@Score</span>
+    <button type="submit" name="Vote" value="@($"{PostId}:-1")" class="vote-button vote-down" aria-pressed="@(MyVote < 0 ? "true" : "false")"
+            title="Votar contra">
+        <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 12.5 2.5 6h11z" /></svg>
+        <span class="visually-hidden">Votar contra</span>
+    </button>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public int PostId { get; set; }
+
+    [Parameter, EditorRequired]
+    public string Title { get; set; } = "";
+
+    [Parameter]
+    public int Score { get; set; }
+
+    [Parameter]
+    public short MyVote { get; set; }
+
+    private string ScoreLabel => Score is 1 or -1 ? $"{Score} ponto" : $"{Score} pontos";
+
+    /// <summary>Lê o botão clicado ("12:1"). Devolve falso para qualquer valor forjado.</summary>
+    public static bool TryParse(string? value, out int postId, out short vote)
+    {
+        postId = 0;
+        vote = 0;
+        var parts = value?.Split(':');
+        return parts is { Length: 2 } && int.TryParse(parts[0], out postId) && short.TryParse(parts[1], out vote) && vote is 1 or -1;
+    }
+}

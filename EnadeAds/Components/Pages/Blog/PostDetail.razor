@@ -17,37 +17,69 @@
 
     <nav aria-label="Trilha">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="blog">Blog</a></li>
-            <li class="breadcrumb-item"><a href="blog?categoria=@post.Category.Slug()">@post.Category.Name()</a></li>
+            <li class="breadcrumb-item"><a href="">Comunidade</a></li>
+            <li class="breadcrumb-item"><a href="?categoria=@post.Category.Slug()">@post.Category.Name()</a></li>
             <li class="breadcrumb-item active" aria-current="page">@post.Title</li>
         </ol>
     </nav>
 
     <article class="post">
         <header class="mb-3">
-            @if (post.PublishedAt is null)
+            @if (post.RemovedAt is not null)
             {
-                <div class="alert alert-warning" role="status">Rascunho: só você e os administradores veem este post.</div>
+                <div class="alert alert-danger" role="status">
+                    Removido pela moderação: não aparece no feed e não pode mais ser editado.
+                    @if (canModerate)
+                    {
+                        <span>Se foi engano, use <strong>Restaurar</strong> no fim da página.</span>
+                    }
+                </div>
+            }
+            else if (post.PublishedAt is null)
+            {
+                <div class="alert alert-warning" role="status">Rascunho: só você vê este post.</div>
             }
             else if (post.ArchivedAt is not null)
             {
-                <div class="alert alert-secondary" role="status">Post arquivado: não aparece no blog.</div>
+                <div class="alert alert-secondary" role="status">Post arquivado: não aparece no feed.</div>
             }
-            <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
-                <h1>@post.Title</h1>
-                @if (canEdit)
+            @if (statusMessage is not null)
+            {
+                <div class="alert alert-success" role="status">@statusMessage</div>
+            }
+            <div class="d-flex align-items-start gap-3">
+                @if (post.IsPublished)
                 {
-                    <a class="btn btn-sm btn-outline-secondary" href="blog/@post.Id/editar">Editar post</a>
+                    <form method="post" action="blog/@post.Slug" @formname="post-vote" @onsubmit="VoteAsync">
+                        <AntiforgeryToken />
+                        <VoteControl PostId="post.Id" Title="@post.Title" Score="post.Score" MyVote="myVote" />
+                    </form>
                 }
-            </div>
+                <div class="flex-grow-1">
+                    <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+                        <h1 class="h2">@post.Title</h1>
+                        @if (canEdit)
+                        {
+                            <a class="btn btn-sm btn-outline-secondary" href="blog/@post.Id/editar">Editar post</a>
+                        }
+                    </div>
             <p class="small text-body-secondary mb-1">
                 @post.Category.Name() · por @authorName
+                @if (post.IsOfficial)
+                {
+                    <span class="badge badge-teacher">Professor</span>
+                }
                 @if (post.PublishedAt is not null)
                 {
                     <span> · <time datetime="@post.PublishedAt.Value.ToString("O")">@Calendar.ToLocal(post.PublishedAt.Value).ToString("dd/MM/yyyy")</time></span>
                 }
             </p>
-            <p class="lead">@post.Summary</p>
+            @if (post.IsOfficial)
+            {
+                <p class="lead">@post.Summary</p>
+            }
+                </div>
+            </div>
         </header>
 
         @* HTML do StatementFormatter: todo texto é escapado e só tags fixas são adicionadas. *@
@@ -56,14 +88,27 @@
         @if (post.SourceUrl is not null)
         {
             <p class="small mt-3">
-                <strong>Fonte:</strong> <a href="@post.SourceUrl" target="_blank" rel="noopener noreferrer nofollow">@post.SourceUrl</a>
+                <strong>Link:</strong> <a href="@post.SourceUrl" target="_blank" rel="noopener noreferrer nofollow">@post.SourceUrl</a>
             </p>
         }
     </article>
 
+    @if (post.IsPublished && userId is not null && post.AuthorId != userId)
+    {
+        <details class="mt-3 report-box">
+            <summary class="small">Denunciar este post</summary>
+            <form method="post" action="blog/@post.Slug" @formname="post-report" @onsubmit="ReportPostAsync" class="mt-2">
+                <AntiforgeryToken />
+                <label for="ReportReason" class="form-label small">O que tem de errado? <span class="text-body-secondary">(opcional)</span></label>
+                <textarea id="ReportReason" name="ReportReason" class="form-control form-control-sm" rows="2" maxlength="@BlogService.ReportReasonMaxLength"></textarea>
+                <button type="submit" class="btn btn-sm btn-outline-danger mt-2">Enviar denúncia</button>
+            </form>
+        </details>
+    }
+
     @if (post.IsPublished)
     {
-        <section class="mt-5" aria-labelledby="comments-title">
+        <section class="mt-5" id="comentarios" aria-labelledby="comments-title">
             <h2 id="comments-title" class="h5">Comentários (@comments.Count)</h2>
 
             @if (errorMessage is not null)
@@ -77,7 +122,7 @@
             }
             else
             {
-                <form method="post" action="blog/@post.Slug" @formname="comment-delete" @onsubmit="DeleteCommentAsync">
+                <form method="post" action="blog/@post.Slug" @formname="comment-delete" @onsubmit="CommentActionAsync">
                     <AntiforgeryToken />
                     <ol class="list-unstyled">
                         @foreach (var item in comments)
@@ -111,6 +156,12 @@
                                     {
                                         <button type="submit" name="CommentId" value="@comment.Id" class="btn btn-sm btn-link p-0 text-danger">
                                             Excluir <span class="visually-hidden">comentário de @item.AuthorName</span>
+                                        </button>
+                                    }
+                                    @if (userId is not null && !own)
+                                    {
+                                        <button type="submit" name="ReportCommentId" value="@comment.Id" class="btn btn-sm btn-link p-0 text-body-secondary">
+                                            Denunciar <span class="visually-hidden">comentário de @item.AuthorName</span>
                                         </button>
                                     }
                                 </div>
@@ -150,6 +201,28 @@
             }
         </section>
     }
+
+    @if (canModerate)
+    {
+        <section class="mt-5" aria-labelledby="moderation-title">
+            <h2 id="moderation-title" class="h6">Moderação</h2>
+            <form method="post" action="blog/@post.Slug" @formname="post-moderate" @onsubmit="ModerateAsync">
+                <AntiforgeryToken />
+                @if (post.RemovedAt is null)
+                {
+                    <div class="form-check mb-1">
+                        <input class="form-check-input" type="checkbox" name="ConfirmRemove" value="true" id="ConfirmRemove" required />
+                        <label class="form-check-label small" for="ConfirmRemove">Confirmo que este post foge dos combinados da comunidade</label>
+                    </div>
+                    <button type="submit" name="Moderation" value="remove" class="btn btn-outline-danger btn-sm">Remover post</button>
+                }
+                else
+                {
+                    <button type="submit" name="Moderation" value="restore" class="btn btn-outline-secondary btn-sm">Restaurar post</button>
+                }
+            </form>
+        </section>
+    }
 }
 
 @code {
@@ -161,7 +234,9 @@
     private EnadeAds.Questions.Editor? editor;
     private bool canEdit;
     private bool canModerate;
+    private short myVote;
     private string? errorMessage;
+    private string? statusMessage;
 
     [Parameter]
     public string Slug { get; set; } = "";
@@ -190,7 +265,8 @@
 
         canEdit = BlogService.CanEdit(editor, post);
         canModerate = BlogService.CanModerate(editor);
-        authorName = await Blog.AuthorNameAsync(post.AuthorId);
+        authorName = await Blog.AuthorNameAsync(post);
+        myVote = await Blog.MyVoteAsync(userId, post.Id);
         await LoadCommentsAsync();
     }
 
@@ -225,9 +301,83 @@
         await LoadCommentsAsync();
     }
 
-    private async Task DeleteCommentAsync()
+    private async Task VoteAsync()
     {
-        if (!RequireLogin() || !long.TryParse(HttpContext.Request.Form["CommentId"], out var commentId))
+        if (userId is null)
+        {
+            Navigation.NavigateTo(LoginUrl);
+            return;
+        }
+
+        if (VoteControl.TryParse(HttpContext.Request.Form["Vote"], out var postId, out var vote) && postId == post!.Id
+            && await Blog.VoteAsync(userId, postId, vote))
+        {
+            // GET depois do POST: recarregar a página não repete o voto.
+            Navigation.NavigateTo($"blog/{post.Slug}");
+            return;
+        }
+
+        Fail(true, "Não foi possível registrar o voto.");
+    }
+
+    private async Task ReportPostAsync()
+    {
+        if (!RequireLogin())
+        {
+            return;
+        }
+
+        var reported = await Blog.ReportAsync(userId!, post!.Id, null, HttpContext.Request.Form["ReportReason"]);
+        Fail(!reported, $"Não foi possível enviar a denúncia (o motivo tem até {BlogService.ReportReasonMaxLength} caracteres).");
+        if (reported)
+        {
+            statusMessage = "Denúncia enviada. Os professores vão analisar.";
+        }
+    }
+
+    private async Task ModerateAsync()
+    {
+        if (!RequireLogin() || !canModerate)
+        {
+            Fail(true, "Só professores e administradores moderam posts.", StatusCodes.Status403Forbidden);
+            return;
+        }
+
+        var restore = HttpContext.Request.Form["Moderation"] == "restore";
+        if (!restore && HttpContext.Request.Form["ConfirmRemove"] != "true")
+        {
+            Fail(true, "Marque a confirmação para remover o post.");
+            return;
+        }
+
+        var done = restore ? await Blog.RestoreAsync(editor, post!.Id) : await Blog.RemoveAsync(editor, post!.Id);
+        Fail(!done, "Não foi possível concluir a moderação.");
+        if (done)
+        {
+            Navigation.NavigateTo($"blog/{post.Slug}");
+        }
+    }
+
+    private async Task CommentActionAsync()
+    {
+        if (!RequireLogin())
+        {
+            return;
+        }
+
+        if (long.TryParse(HttpContext.Request.Form["ReportCommentId"], out var reportedId))
+        {
+            var reported = await Blog.ReportAsync(userId!, post!.Id, reportedId, null);
+            Fail(!reported, "Não foi possível denunciar o comentário.");
+            if (reported)
+            {
+                statusMessage = "Denúncia enviada. Os professores vão analisar.";
+            }
+
+            return;
+        }
+
+        if (!long.TryParse(HttpContext.Request.Form["CommentId"], out var commentId))
         {
             return;
         }
