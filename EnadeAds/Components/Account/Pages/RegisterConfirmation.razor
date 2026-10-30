@@ -11,9 +11,9 @@
 @inject IdentityRedirectManager RedirectManager
 @inject IWebHostEnvironment Environment
 
-<PageTitle>Confirme seu e-mail</PageTitle>
+<PageTitle>Cadastro concluído</PageTitle>
 
-<h1>Confirme seu e-mail</h1>
+<h1>Cadastro concluído</h1>
 
 <StatusMessage Message="@statusMessage" />
 
@@ -26,8 +26,14 @@
 }
 else
 {
-    <p role="alert">Enviamos um link de confirmação para o seu e-mail. Abra o link para ativar a conta.</p>
+    <div class="alert alert-success" role="status">
+        Sua conta foi criada. Enviamos um link de confirmação para <strong>@Email</strong>.
+        Abra o link para ativar a conta e depois entre.
+    </div>
+    <p>Não chegou em alguns minutos? Confira a caixa de spam ou <a href="Account/ResendEmailConfirmation">peça um novo e-mail</a>.</p>
 }
+
+<BackHome />
 
 @code {
     private string? emailConfirmationLink;
