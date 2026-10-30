@@ -44,6 +44,15 @@ Alunos também têm e-mail institucional, muitas vezes no mesmo domínio dos pro
 - Um admin **não altera a própria conta** por essa tela, para não se trancar fora nem deixar a plataforma sem admin por engano.
 - Novos admins continuam vindo só da configuração `Admin:Emails`.
 
+## Privacidade (LGPD)
+
+- O cadastro exige aceitar os **Termos de uso** e a **Política de privacidade**. A data e a versão aceitas ficam guardadas na conta.
+- Os textos ficam em `/termos` e `/privacidade`, com link no rodapé de todas as páginas. O responsável pelos dados e o e-mail de contato vêm da configuração (`Privacy:ControllerName`, `Privacy:ContactEmail`), porque cada instalação tem o seu responsável.
+- **Baixar meus dados** (Minha conta → Dados pessoais) entrega um arquivo com a conta, o progresso no roadmap, as respostas, os simulados, os desafios e os comentários.
+- **Excluir a conta** apaga a conta, o progresso, as respostas objetivas e discursivas, os simulados e os envios de desafio. Os **comentários no blog continuam, sem o nome** ("Participante que excluiu a conta"). Questões, desafios e posts que um professor publicou continuam, sem autor.
+- Registros técnicos de acesso ficam até 31 dias; cópias de segurança, até 30 dias.
+- O conteúdo publicado por professores segue a licença Creative Commons BY-SA 4.0; o código, a licença MIT.
+
 ## Proteção contra abuso
 
 - Os formulários de entrar, criar conta, esqueci a senha, reenviar confirmação, criar nova senha e códigos de 2FA aceitam no máximo **10 envios por minuto por IP**. Acima disso, a pessoa vê "Muitas tentativas em pouco tempo. Aguarde um minuto e tente de novo."

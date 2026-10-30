@@ -1,0 +1,58 @@
+@page "/termos"
+
+@using EnadeAds.Privacy
+
+<PageTitle>Termos de uso</PageTitle>
+
+<article class="legal">
+    <h1>Termos de uso</h1>
+    <p class="text-body-secondary small">Versão de @Version.ToString("dd/MM/yyyy")</p>
+
+    <p>
+        O ENADE ADS é uma plataforma gratuita e de código aberto para estudar para o ENADE de Análise e Desenvolvimento de Sistemas.
+        Ao criar uma conta, você concorda com estes termos e com a <a href="privacidade">política de privacidade</a>.
+    </p>
+
+    <h2 class="h5">Sua conta</h2>
+    <ul>
+        <li>Use seu nome real e um e-mail que seja seu. Cada pessoa tem uma conta.</li>
+        <li>Guarde sua senha. Tentativas erradas seguidas bloqueiam a conta por alguns minutos.</li>
+        <li>O acesso de professor depende de aprovação de um administrador e pode ser revogado.</li>
+    </ul>
+
+    <h2 class="h5">Regras de convivência no blog</h2>
+    <ul>
+        <li>Comente com respeito. Não são aceitos ofensas, discriminação, assédio, propaganda, spam ou conteúdo ilegal.</li>
+        <li>Não publique dados pessoais de outras pessoas.</li>
+        <li>Professores e administradores podem remover comentários que descumpram estas regras e bloquear contas em caso de abuso.</li>
+    </ul>
+
+    <h2 class="h5">Questões e conteúdo publicado</h2>
+    <ul>
+        <li>Toda questão informa a fonte: prova e ano do Inep, ou autoria própria.</li>
+        <li>Quem publica questões, desafios ou posts declara ter o direito de publicá-los. Não publique material de terceiros sem permissão.</li>
+        <li>
+            O conteúdo que professores publicam (questões, comentários das alternativas, posts e o roadmap) pode ser usado,
+            adaptado e compartilhado por outras pessoas, sempre citando a fonte, nos termos da licença
+            <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.pt_BR" target="_blank" rel="noopener">Creative Commons BY-SA 4.0</a>.
+        </li>
+        <li>O código da plataforma é aberto, sob a licença MIT, e está no <a href="https://github.com/gentilpedro/enade-ads" target="_blank" rel="noopener">GitHub</a>.</li>
+    </ul>
+
+    <h2 class="h5">Limites da plataforma</h2>
+    <ul>
+        <li>O ENADE ADS não tem ligação oficial com o Inep. Datas e regras oficiais estão nos editais e portarias do Inep; o blog indica a fonte de cada informação.</li>
+        <li>As questões e gabaritos são revisados por professores, mas podem conter erros. Se encontrar um, comente no blog ou avise um professor.</li>
+        <li>A plataforma é oferecida como está, sem garantia de funcionamento contínuo.</li>
+    </ul>
+
+    <h2 class="h5">Encerrar a conta</h2>
+    <p>Você pode excluir sua conta quando quiser, em <a href="Account/Manage/DeletePersonalData">Minha conta → Dados pessoais</a>.</p>
+
+    <h2 class="h5">Mudanças nestes termos</h2>
+    <p>Se os termos mudarem, a data da versão no topo muda e avisamos no <a href="blog">blog</a>.</p>
+</article>
+
+@code {
+    private static readonly DateOnly Version = DateOnly.ParseExact(PrivacyOptions.TermsVersion, "yyyy-MM-dd");
+}

@@ -1,4 +1,4 @@
-﻿@page "/Account/Manage/DeletePersonalData"
+@page "/Account/Manage/DeletePersonalData"
 
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Identity
@@ -18,6 +18,10 @@
 <div class="alert alert-warning" role="alert">
     <p>
         <strong>Excluir estes dados apaga sua conta para sempre. Não será possível recuperá-la.</strong>
+    </p>
+    <p class="mb-0">
+        Serão apagados: a conta, o progresso no roadmap, as respostas às questões, os simulados e os envios de desafio.
+        Seus comentários no blog continuam, mas sem o seu nome. Se quiser guardar uma cópia, <a href="Account/Manage/PersonalData">baixe seus dados</a> antes.
     </p>
 </div>
 

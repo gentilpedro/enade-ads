@@ -38,7 +38,9 @@ public class PostComment
 {
     public long Id { get; set; }
     public int PostId { get; set; }
-    public required string UserId { get; set; }
+
+    /// <summary>Nulo quando quem comentou excluiu a conta: o comentário fica, sem o nome (LGPD, #18).</summary>
+    public string? UserId { get; set; }
     public required string Text { get; set; }
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? EditedAt { get; set; }

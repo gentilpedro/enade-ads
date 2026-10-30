@@ -10,6 +10,7 @@ using Microsoft.Extensions.Primitives;
 using EnadeAds.Components.Account.Pages;
 using EnadeAds.Components.Account.Pages.Manage;
 using EnadeAds.Data;
+using EnadeAds.Privacy;
 
 namespace Microsoft.AspNetCore.Routing;
 
@@ -114,6 +115,7 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
         manageGroup.MapPost("/DownloadPersonalData", async (
             HttpContext context,
             [FromServices] UserManager<ApplicationUser> userManager,
+            [FromServices] PersonalDataExport export,
             [FromServices] AuthenticationStateProvider authenticationStateProvider) =>
         {
             var user = await userManager.GetUserAsync(context.User);
@@ -125,26 +127,16 @@ internal static class IdentityComponentsEndpointRouteBuilderExtensions
             var userId = await userManager.GetUserIdAsync(user);
             downloadLogger.LogInformation("User with ID '{UserId}' asked for their personal data.", userId);
 
-            // Only include personal data for download
-            var personalData = new Dictionary<string, string>();
-            var personalDataProps = typeof(ApplicationUser).GetProperties().Where(
-                prop => Attribute.IsDefined(prop, typeof(PersonalDataAttribute)));
-            foreach (var p in personalDataProps)
+            // Direito de acesso (LGPD): a conta e tudo o que a pessoa fez na plataforma.
+            // A chave do autenticador fica de fora: é um segredo de login, não um dado sobre a pessoa.
+            var personalData = await export.BuildAsync(user);
+            var fileBytes = JsonSerializer.SerializeToUtf8Bytes(personalData, new JsonSerializerOptions
             {
-                personalData.Add(p.Name, p.GetValue(user)?.ToString() ?? "null");
-            }
+                WriteIndented = true,
+                Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+            });
 
-            var logins = await userManager.GetLoginsAsync(user);
-            foreach (var l in logins)
-            {
-                personalData.Add($"{l.LoginProvider} external login provider key", l.ProviderKey);
-            }
-
-            personalData.Add("Authenticator Key", (await userManager.GetAuthenticatorKeyAsync(user))!);
-            var fileBytes = JsonSerializer.SerializeToUtf8Bytes(personalData);
-
-            context.Response.Headers.TryAdd("Content-Disposition", "attachment; filename=PersonalData.json");
-            return TypedResults.File(fileBytes, contentType: "application/json", fileDownloadName: "PersonalData.json");
+            return TypedResults.File(fileBytes, contentType: "application/json", fileDownloadName: "meus-dados-enade-ads.json");
         });
 
         return accountGroup;

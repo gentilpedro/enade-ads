@@ -1,4 +1,4 @@
-﻿@page "/Account/Manage/PersonalData"
+@page "/Account/Manage/PersonalData"
 
 @using Microsoft.AspNetCore.Identity
 @using EnadeAds.Data
@@ -13,9 +13,12 @@
 
 <div class="row">
     <div class="col-md-6">
-        <p>Sua conta guarda os dados pessoais que você nos forneceu. Nesta página você pode baixar ou excluir esses dados.</p>
         <p>
-            <strong>Excluir estes dados apaga sua conta para sempre. Não será possível recuperá-la.</strong>
+            <strong>Baixar</strong> gera um arquivo com a sua conta e tudo o que você fez na plataforma: progresso no roadmap,
+            respostas, simulados, desafios e comentários. Veja a <a href="privacidade">política de privacidade</a>.
+        </p>
+        <p>
+            <strong>Excluir</strong> apaga sua conta para sempre. Não será possível recuperá-la.
         </p>
         <form action="Account/Manage/DownloadPersonalData" method="post">
             <AntiforgeryToken />
