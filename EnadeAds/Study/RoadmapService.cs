@@ -1,6 +1,5 @@
 using EnadeAds.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace EnadeAds.Study;
 
@@ -17,7 +16,7 @@ public sealed record RoadmapView(IReadOnlyList<RoadmapItem> Spine, RoadmapCounts
         slug is null ? null : Spine.SelectMany(item => item.Topics.Prepend(item)).FirstOrDefault(item => item.Node.Slug == slug);
 }
 
-public sealed class RoadmapService(ApplicationDbContext db, IOptions<ExamOptions> exam, LocalCalendar calendar, TimeProvider clock)
+public sealed class RoadmapService(ApplicationDbContext db, ExamSettings exam, LocalCalendar calendar, TimeProvider clock)
 {
     public async Task<RoadmapView> GetAsync(string? userId, CancellationToken cancellationToken = default)
     {
@@ -47,7 +46,8 @@ public sealed class RoadmapService(ApplicationDbContext db, IOptions<ExamOptions
             trackable.Count(s => s == NodeStatus.InProgress),
             trackable.Count(s => s == NodeStatus.Skipped));
 
-        return new RoadmapView(spine, counts, DaysUntilExam(), exam.Value.ExamDate);
+        var examDate = await exam.ExamDateAsync(cancellationToken);
+        return new RoadmapView(spine, counts, Math.Max(0, examDate.DayNumber - calendar.Today().DayNumber), examDate);
     }
 
     /// <summary>Grava o status do nó para o aluno; <paramref name="status"/> nulo limpa o status.</summary>
@@ -81,5 +81,4 @@ public sealed class RoadmapService(ApplicationDbContext db, IOptions<ExamOptions
         return true;
     }
 
-    private int DaysUntilExam() => Math.Max(0, exam.Value.ExamDate.DayNumber - calendar.Today().DayNumber);
 }

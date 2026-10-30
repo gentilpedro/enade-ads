@@ -23,6 +23,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Post> Posts => Set<Post>();
     public DbSet<PostComment> PostComments => Set<PostComment>();
     public DbSet<MockExam> MockExams => Set<MockExam>();
+    public DbSet<SiteSetting> SiteSettings => Set<SiteSetting>();
     public DbSet<MockExamQuestion> MockExamQuestions => Set<MockExamQuestion>();
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -128,6 +129,13 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             comment.HasIndex(c => c.PostId);
             comment.HasOne<Post>().WithMany().HasForeignKey(c => c.PostId).OnDelete(DeleteBehavior.Cascade);
             comment.HasOne<ApplicationUser>().WithMany().HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<SiteSetting>(setting =>
+        {
+            setting.HasKey(s => s.Key);
+            setting.Property(s => s.Key).HasMaxLength(100);
+            setting.Property(s => s.Value).HasMaxLength(1000);
         });
 
         builder.Entity<MockExam>(exam =>

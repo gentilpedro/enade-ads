@@ -47,7 +47,16 @@ Alunos também têm e-mail institucional, muitas vezes no mesmo domínio dos pro
 - O roadmap mostra as 20 matérias da portaria e a Formação Geral, com seus assuntos e um checkpoint ao fim de cada bloco.
 - Cada aluno marca matérias e assuntos como **Concluído**, **Estudando** ou **Pulei**, e pode limpar o status.
 - A porcentagem conta só matérias e assuntos concluídos; checkpoints são marcos e não entram na conta.
-- A contagem regressiva usa a data da prova configurada (`Enade:ExamDate`) e o fuso de São Paulo.
+- A contagem regressiva usa a data da prova definida pelo **admin** na tela *Data da prova* (se nunca foi definida, vale a configuração `Enade:ExamDate`) e o fuso de São Paulo. A data não pode estar no passado.
+
+### Edição do roadmap
+
+- **Professor** e **Admin** editam o roadmap pela tela (link *Editar* no painel lateral e na página da matéria). Diferente de questões e posts, o roadmap é de todos os professores: qualquer professor edita qualquer tópico.
+- Das **matérias** dá para editar título e explicação e reordenar dentro do bloco. Elas **não podem ser removidas**, porque vêm da Portaria Inep nº 169/2026.
+- **Assuntos** podem ser criados (entram no fim da matéria), editados, reordenados dentro da matéria e removidos.
+- **Checkpoints** podem ser criados logo depois de uma matéria, editados, reordenados dentro do bloco e removidos.
+- O endereço de um tópico (`/roadmap?topico=...`) não muda quando o título é editado, para links compartilhados continuarem valendo.
+- Remover um assunto ou checkpoint apaga só o status que os alunos marcaram nele; o resto do progresso não muda.
 
 ## Simulados
 

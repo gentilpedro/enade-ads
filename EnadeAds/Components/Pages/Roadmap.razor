@@ -150,6 +150,11 @@
                     <p><a href="materias/@subject.Node.Slug">Ver a página da matéria</a></p>
                 }
 
+                @if (canEditRoadmap)
+                {
+                    <p><a class="btn btn-sm btn-outline-secondary" href="roadmap/editar/@node.Slug">Editar este tópico</a></p>
+                }
+
                 <hr />
 
                 @if (userId is not null)
@@ -183,6 +188,7 @@
     private RoadmapView? view;
     private RoadmapItem? selected;
     private string? userId;
+    private bool canEditRoadmap;
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
@@ -196,6 +202,7 @@
     protected override async Task OnInitializedAsync()
     {
         userId = Users.GetUserId(HttpContext.User);
+        canEditRoadmap = HttpContext.User.IsInRole(EnadeAds.Accounts.Roles.Teacher) || HttpContext.User.IsInRole(EnadeAds.Accounts.Roles.Admin);
         await LoadAsync();
     }
 
