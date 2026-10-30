@@ -316,6 +316,12 @@ namespace EnadeAds.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTimeOffset?>("GuardianConsentAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsMinor")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
 

@@ -72,6 +72,8 @@ public sealed class PersonalDataExport(ApplicationDbContext db, UserManager<Appl
                 Perfis = await users.GetRolesAsync(user),
                 TermosAceitosEm = user.TermsAcceptedAt,
                 VersaoDosTermos = user.TermsVersion,
+                MenorDeIdade = user.IsMinor,
+                AutorizacaoDoResponsavelEm = user.GuardianConsentAt,
                 LoginsExternos = (await users.GetLoginsAsync(user)).Select(l => l.LoginProvider),
             },
             Roadmap = roadmap,

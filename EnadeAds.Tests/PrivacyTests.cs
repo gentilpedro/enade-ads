@@ -45,14 +45,39 @@ public class PrivacyTests(EnadeAdsFactory factory)
 
         var refused = await TestAccounts.SubmitFormAsync(client, "/Account/Register", "register", fields);
         fields["Input.AcceptTerms"] = "true";
+        var noAge = await TestAccounts.SubmitFormAsync(client, "/Account/Register", "register", fields);
+        fields["Input.AgeGroup"] = "18+";
         var accepted = await TestAccounts.SubmitFormAsync(client, "/Account/Register", "register", fields);
 
         Assert.Contains("aceite os Termos de uso", WebUtility.HtmlDecode(await refused.Content.ReadAsStringAsync()));
+        Assert.Contains("Menores de 13 anos não podem criar conta", WebUtility.HtmlDecode(await noAge.Content.ReadAsStringAsync()));
         Assert.Equal(HttpStatusCode.Redirect, accepted.StatusCode);
         using var scope = factory.Services.CreateScope();
         var user = await scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>().FindByEmailAsync("privacidade.termos@gmail.com");
         Assert.NotNull(user!.TermsAcceptedAt);
         Assert.Equal(PrivacyOptions.TermsVersion, user.TermsVersion);
+        Assert.False(user.IsMinor);
+        Assert.Null(user.GuardianConsentAt);
+    }
+
+    [Fact]
+    public async Task Register_MinorDeclaresTheGuardianConsent()
+    {
+        var response = await TestAccounts.SubmitFormAsync(NewClient(), "/Account/Register", "register", new()
+        {
+            ["Input.FullName"] = "Estudante Menor",
+            ["Input.Email"] = "privacidade.menor@gmail.com",
+            ["Input.Password"] = TestAccounts.Password,
+            ["Input.ConfirmPassword"] = TestAccounts.Password,
+            ["Input.AcceptTerms"] = "true",
+            ["Input.AgeGroup"] = "13-17",
+        });
+
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        using var scope = factory.Services.CreateScope();
+        var user = await scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>().FindByEmailAsync("privacidade.menor@gmail.com");
+        Assert.True(user!.IsMinor);
+        Assert.Equal(user.TermsAcceptedAt, user.GuardianConsentAt);
     }
 
     [Fact]

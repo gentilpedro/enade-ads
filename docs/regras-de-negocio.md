@@ -28,6 +28,12 @@ Uma conta pode ter mais de um perfil ao mesmo tempo. Por exemplo, um professor a
 
 ## Cadastro
 
+### Idade
+
+- Só cria conta quem tem **13 anos ou mais**. O cadastro pede a faixa de idade: "18 anos ou mais" ou "de 13 a 17 anos, com autorização do responsável legal".
+- Para quem tem de 13 a 17 anos, a conta guarda `IsMinor` e a data da declaração de autorização (`GuardianConsentAt`). Não pedimos data de nascimento, documento nem escola (minimização, LGPD art. 14).
+- O texto dos termos e da política sobre menores é provisório e passa pela revisão de um advogado.
+
 - Toda conta nova recebe o perfil **Aluno**.
 - O formulário tem a caixa **"Sou professor"**. Ao marcá-la, aparece um texto explicando que o acesso depende de aprovação.
 - **"Sou professor" marcado e e-mail institucional:** a conta recebe **Aluno + ProfessorPendente**.

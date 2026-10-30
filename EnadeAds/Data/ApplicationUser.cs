@@ -11,4 +11,13 @@ public class ApplicationUser : IdentityUser
     public DateTimeOffset? TermsAcceptedAt { get; set; }
 
     public string? TermsVersion { get; set; }
+
+    /// <summary>
+    /// Declarou ter de 13 a 17 anos no cadastro. Junto vem <see cref="GuardianConsentAt"/>: quando declarou que o
+    /// responsável legal leu os termos e autorizou o cadastro (LGPD, art. 14).
+    /// </summary>
+    [PersonalData]
+    public bool IsMinor { get; set; }
+
+    public DateTimeOffset? GuardianConsentAt { get; set; }
 }

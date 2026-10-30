@@ -84,6 +84,7 @@ public class RegisterPageTests(EnadeAdsFactory factory)
             ["Input.Password"] = TestAccounts.Password,
             ["Input.ConfirmPassword"] = TestAccounts.Password,
             ["Input.AcceptTerms"] = "true",
+            ["Input.AgeGroup"] = "18+",
         };
         if (wantsTeacher)
         {
