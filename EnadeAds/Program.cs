@@ -11,6 +11,7 @@ using EnadeAds.Questions;
 using EnadeAds.Security;
 using EnadeAds.Study;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -114,6 +115,18 @@ try
         }
     });
 
+    // /health: o deploy só dá a versão como no ar quando ele responde (e volta a anterior se não responder).
+    builder.Services.AddHealthChecks();
+
+    // Em produção as chaves que protegem o cookie de login e os formulários ficam num volume
+    // (DataProtection:KeysPath): sem isso, cada deploy tiraria todo mundo da conta.
+    if (builder.Configuration["DataProtection:KeysPath"] is { Length: > 0 } keysPath)
+    {
+        builder.Services.AddDataProtection()
+            .SetApplicationName("Rumo")
+            .PersistKeysToFileSystem(new DirectoryInfo(keysPath));
+    }
+
     builder.Services.AddScoped<PersonalDataExport>();
     builder.Services.Configure<PrivacyOptions>(builder.Configuration.GetSection(PrivacyOptions.SectionName));
 
@@ -132,8 +145,9 @@ try
     }
     else
     {
-        // Sem SMTP fora de desenvolvimento, o link na tela permitiria confirmar qualquer e-mail .edu.
-        throw new InvalidOperationException("Configure a seção 'Smtp' (Host e FromAddress) para enviar os e-mails de confirmação.");
+        // Sem SMTP fora de desenvolvimento o site sobe, mas nenhum e-mail sai e o link não aparece na tela:
+        // mostrá-lo permitiria confirmar qualquer e-mail .edu. Contas novas esperam o SMTP.
+        builder.Services.AddSingleton<IEmailSender<ApplicationUser>, UnconfiguredEmailSender>();
     }
 
     var app = builder.Build();
@@ -174,6 +188,10 @@ try
     app.MapAdditionalIdentityEndpoints();
     app.MapBlogFeed();
     app.MapTrackSwitch();
+
+    // As migrations rodam antes do app começar a atender (DatabaseInitializer), então /health só
+    // responde com o banco atualizado.
+    app.MapHealthChecks("/health");
 
     app.Run();
 }

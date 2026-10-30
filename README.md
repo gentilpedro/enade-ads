@@ -60,7 +60,7 @@ Use variáveis de ambiente (o `__` separa as seções):
 | `Privacy__ControllerName`, `Privacy__ContactEmail` | Quem responde pelos dados desta instalação e o e-mail para pedidos de titulares (LGPD), mostrados na política de privacidade |
 | `RateLimit__AccountPostsPerMinute` | Envios de formulários de conta por IP por minuto (padrão 10) |
 
-Fora de desenvolvimento a aplicação não sobe sem SMTP: sem ele, a confirmação de e-mail não teria como provar que o professor é dono do endereço `.edu`.
+Fora de desenvolvimento a aplicação sobe sem SMTP, mas não envia e-mail nem mostra o link de confirmação na tela (isso deixaria confirmar qualquer endereço `.edu`). Até o SMTP ser configurado, ninguém consegue confirmar conta nova, e o log avisa a cada e-mail não enviado.
 
 Migrations novas: `dotnet ef migrations add <Nome> --project EnadeAds --output-dir Data/Migrations`.
 

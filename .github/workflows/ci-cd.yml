@@ -21,10 +21,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -39,11 +39,15 @@ jobs:
 
       - name: Publicar resultados de teste
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: test-results
           path: "**/test-results.trx"
           if-no-files-found: ignore
+
+      # A imagem de produção também entra no CI: um Dockerfile quebrado aparece no PR, não na tag.
+      - name: Montar a imagem de produção
+        run: docker build -f deploy/vps/Dockerfile -t rumo:ci .
 
   release:
     name: Publish & Release
@@ -54,10 +58,10 @@ jobs:
       contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v6
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
@@ -70,7 +74,82 @@ jobs:
           zip -r "../release-${{ github.ref_name }}.zip" .
 
       - name: Criar GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: release-${{ github.ref_name }}.zip
           generate_release_notes: true
+
+  # Deploy na VPS (https://rumo.aamora.com.br) — skill deploy-vps. Roda só na tag vX.Y.Z, depois do
+  # build-test: publicar a tag é o "sobe pra produção". A imagem é montada aqui e enviada por SSH
+  # com docker save, sem registry. A VPS_SSH_KEY só consegue rodar "app-deploy rumo" no
+  # servidor (forced command): não abre shell, não lê arquivos, não mexe em outra app.
+  deploy-vps:
+    name: Deploy na VPS
+    needs: build-test
+    if: needs.build-test.result == 'success' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    # Nunca dois deploys da mesma app ao mesmo tempo, e nunca cancelar um pela metade.
+    concurrency:
+      group: deploy-vps-rumo
+      cancel-in-progress: false
+    environment:
+      name: vps
+      url: https://rumo.aamora.com.br
+    env:
+      APP: rumo
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Versão
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+
+      - name: Montar a imagem
+        run: |
+          docker build -f deploy/vps/Dockerfile --build-arg VERSAO="$VERSION" -t "$APP:$VERSION" .
+          docker save "$APP:$VERSION" | gzip > image.tar.gz
+          ls -lh image.tar.gz
+
+      # VPS_KNOWN_HOSTS fixa a chave do servidor: sem ela o ssh aceitaria qualquer host que
+      # respondesse no IP, e a imagem (e os segredos) iriam para quem estivesse lá.
+      - name: Configurar o SSH
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          install -d -m 700 ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$VPS_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      # Mesmos nomes do SECRETS em deploy/vps/deploy.conf. Valores de uma linha só, sem aspas simples.
+      # Segredo ainda não cadastrado fica de fora, com aviso. O SMTP não passa por aqui: é o relay da VPS.
+      - name: Enviar os segredos
+        env:
+          Admin__Emails__0: ${{ secrets.ADMIN__EMAILS__0 }}
+          PRIVACY__CONTROLLERNAME: ${{ secrets.PRIVACY__CONTROLLERNAME }}
+          PRIVACY__CONTACTEMAIL: ${{ secrets.PRIVACY__CONTACTEMAIL }}
+        run: |
+          for nome in Admin__Emails__0 PRIVACY__CONTROLLERNAME PRIVACY__CONTACTEMAIL; do
+            [ -n "${!nome}" ] || { echo "::warning::secret $nome não cadastrado no repositório" >&2; continue; }
+            printf '%s=%s\n' "$nome" "${!nome}"
+          done | ssh -o BatchMode=yes "deploy@${{ secrets.VPS_HOST }}" set-secrets
+
+      - name: Enviar a imagem
+        run: ssh -o BatchMode=yes "deploy@${{ secrets.VPS_HOST }}" load-image "$VERSION" < image.tar.gz
+
+      # O app-deploy espera o container ficar saudável e volta para a versão anterior se não ficar.
+      - name: Subir a versão
+        run: ssh -o BatchMode=yes "deploy@${{ secrets.VPS_HOST }}" up "$VERSION"
+
+      # Confere de fora, pelo caminho real (Cloudflare → Nginx → container). Só avisa: o app-deploy já
+      # garantiu a saúde dentro da VPS, e o Cloudflare às vezes barra o runner (como no aamora-home).
+      - name: Conferir o site no ar
+        run: |
+          for i in 1 2 3 4 5 6; do
+            code=$(curl -s -m 10 -o /dev/null -w '%{http_code}' https://rumo.aamora.com.br/health || true)
+            if [ "$code" = "200" ]; then echo "ok"; exit 0; fi
+            sleep 10
+          done
+          echo "::warning::https://rumo.aamora.com.br/health respondeu $code de fora (o Cloudflare pode estar barrando o runner)."
