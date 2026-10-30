@@ -72,7 +72,8 @@ h1:focus {
 }
 
 /* Enunciado de questão: código, SQL e tabelas mantêm o alinhamento e rolam na horizontal se não couberem. */
-.question-statement pre {
+.question-statement pre,
+.option-content pre {
     padding: 0.75rem 1rem;
     overflow-x: auto;
     background: var(--bs-tertiary-bg);
@@ -110,4 +111,23 @@ h1:focus {
 /* Páginas de texto longo (política e termos): linha confortável de ler. */
 .legal {
     max-width: 70ch;
+}
+
+/* Alternativa com marcação: o primeiro parágrafo fica na linha da letra; código e imagens descem para a linha de baixo. */
+.option-content > p {
+    display: inline;
+    margin: 0;
+}
+
+.option-content > p + p,
+.option-content > pre,
+.option-content > ul {
+    display: block;
+    margin: 0.5rem 0 0;
+}
+
+.option-content img {
+    display: block;
+    max-width: 100%;
+    margin-top: 0.25rem;
 }

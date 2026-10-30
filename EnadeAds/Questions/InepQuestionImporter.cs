@@ -1,0 +1,160 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using EnadeAds.Data;
+using EnadeAds.Study;
+using Microsoft.EntityFrameworkCore;
+
+namespace EnadeAds.Questions;
+
+/// <summary>
+/// Importa as questões das provas do Inep a partir dos arquivos JSON em Data/Seed/inep. É idempotente: cada questão
+/// tem uma chave (ex.: enade-2021-ads-q12) e só entra se a chave ainda não existe. Questões já importadas nunca são
+/// sobrescritas, para não desfazer correções que os professores fizerem pela tela.
+/// </summary>
+public sealed class InepQuestionImporter(ApplicationDbContext db, ILogger<InepQuestionImporter> logger)
+{
+    public static readonly DateTimeOffset ImportDate = new(2026, 10, 30, 0, 0, 0, TimeSpan.Zero);
+
+    public static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() } };
+
+    public static string DefaultFolder => Path.Combine(AppContext.BaseDirectory, "Data", "Seed", "inep");
+
+    public async Task<int> ImportFolderAsync(string folder, CancellationToken cancellationToken = default)
+    {
+        if (!Directory.Exists(folder))
+        {
+            return 0;
+        }
+
+        var imported = 0;
+        foreach (var file in Directory.EnumerateFiles(folder, "*.json").Order())
+        {
+            SeedExam? exam;
+            try
+            {
+                await using var stream = File.OpenRead(file);
+                exam = await JsonSerializer.DeserializeAsync<SeedExam>(stream, JsonOptions, cancellationToken);
+            }
+            catch (JsonException error)
+            {
+                // Arquivo malformado não impede a aplicação de subir: fica de fora e aparece no log.
+                logger.LogError(error, "Arquivo de questões {File} inválido; nenhuma questão dele foi importada.", Path.GetFileName(file));
+                continue;
+            }
+
+            imported += await ImportAsync(exam?.Questions ?? [], Path.GetFileName(file), cancellationToken);
+        }
+
+        if (imported > 0)
+        {
+            logger.LogInformation("{Count} questões das provas do Inep importadas.", imported);
+        }
+
+        return imported;
+    }
+
+    public async Task<int> ImportAsync(IReadOnlyList<SeedQuestion> questions, string origin, CancellationToken cancellationToken = default)
+    {
+        var existing = await db.Questions.Where(q => q.ExternalKey != null).Select(q => q.ExternalKey!).ToListAsync(cancellationToken);
+        var known = existing.ToHashSet(StringComparer.Ordinal);
+        var subjects = await db.RoadmapNodes.Where(n => n.Kind == NodeKind.Subject).ToDictionaryAsync(n => n.Slug, n => n.Id, cancellationToken);
+
+        var added = 0;
+        foreach (var seed in questions)
+        {
+            if (known.Contains(seed.Key))
+            {
+                continue;
+            }
+
+            var problem = Validate(seed, subjects);
+            if (problem is not null)
+            {
+                // Uma questão com defeito no arquivo não derruba a aplicação: fica de fora e aparece no log.
+                logger.LogWarning("Questão {Key} de {File} ignorada: {Problem}", seed.Key, origin, problem);
+                continue;
+            }
+
+            db.Questions.Add(ToQuestion(seed, subjects[seed.Subject]));
+            known.Add(seed.Key);
+            added++;
+        }
+
+        await db.SaveChangesAsync(cancellationToken);
+        return added;
+    }
+
+    public static string? Validate(SeedQuestion seed, IReadOnlyDictionary<string, int> subjects)
+    {
+        if (string.IsNullOrWhiteSpace(seed.Key) || seed.Key.Length > 60)
+        {
+            return "chave vazia ou longa demais";
+        }
+
+        if (!subjects.ContainsKey(seed.Subject))
+        {
+            return $"matéria desconhecida: {seed.Subject}";
+        }
+
+        if (string.IsNullOrWhiteSpace(seed.Statement) || seed.Statement.Length > QuestionEditor.StatementMaxLength)
+        {
+            return "enunciado vazio ou longo demais";
+        }
+
+        if (string.IsNullOrWhiteSpace(seed.Source) || seed.Source.Length > QuestionEditor.SourceMaxLength)
+        {
+            return "fonte vazia ou longa demais";
+        }
+
+        return seed.Kind switch
+        {
+            QuestionKind.Objective when seed.Options is not { Count: QuestionDraft.OptionCount } => "a objetiva precisa de 5 alternativas",
+            QuestionKind.Objective when seed.Correct is not { Length: 1 } || seed.Correct[0] is < 'A' or > 'E' => "alternativa correta inválida",
+            QuestionKind.Objective when seed.Options!.Any(o => string.IsNullOrWhiteSpace(o.Text) || string.IsNullOrWhiteSpace(o.Explanation)
+                || o.Text.Length > QuestionEditor.OptionMaxLength || o.Explanation.Length > QuestionEditor.OptionMaxLength) => "alternativa sem texto ou comentário",
+            QuestionKind.Discursive when string.IsNullOrWhiteSpace(seed.ExpectedAnswer) || seed.ExpectedAnswer.Length > QuestionEditor.ExpectedAnswerMaxLength
+                => "discursiva sem padrão de resposta",
+            _ => null,
+        };
+    }
+
+    private static Question ToQuestion(SeedQuestion seed, int subjectId)
+    {
+        var objective = seed.Kind == QuestionKind.Objective;
+        return new Question
+        {
+            ExternalKey = seed.Key,
+            Kind = seed.Kind,
+            SubjectId = subjectId,
+            Statement = seed.Statement.Replace("\r\n", "\n").Trim(),
+            Source = seed.Source.Trim(),
+            CreatedAt = ImportDate,
+            ExpectedAnswer = objective ? null : seed.ExpectedAnswer!.Replace("\r\n", "\n").Trim(),
+            SuggestedLines = objective ? null : seed.SuggestedLines ?? 15,
+            Options = objective
+                ? seed.Options!.Select((option, index) => new QuestionOption
+                {
+                    Letter = (char)('A' + index),
+                    Text = option.Text.Trim(),
+                    Explanation = option.Explanation.Trim(),
+                    IsCorrect = (char)('A' + index) == seed.Correct![0],
+                }).ToList()
+                : [],
+        };
+    }
+}
+
+public sealed record SeedExam(int Year, IReadOnlyList<SeedQuestion> Questions);
+
+public sealed record SeedQuestion(
+    string Key,
+    string Source,
+    QuestionKind Kind,
+    string Subject,
+    string Statement,
+    IReadOnlyList<SeedOption>? Options,
+    string? Correct,
+    string? ExpectedAnswer,
+    int? SuggestedLines);
+
+public sealed record SeedOption(string Text, string Explanation);

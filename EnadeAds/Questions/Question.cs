@@ -16,6 +16,9 @@ public class Question
 {
     public int Id { get; set; }
     public QuestionKind Kind { get; set; }
+
+    /// <summary>Identificador estável de questões importadas (ex.: enade-2021-ads-q12); nulo para as criadas na tela.</summary>
+    public string? ExternalKey { get; set; }
     public int SubjectId { get; set; }
     public RoadmapNode? Subject { get; set; }
 

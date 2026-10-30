@@ -47,11 +47,13 @@ public class QuestionPageTests(EnadeAdsFactory factory)
     {
         var client = NewClient();
 
+        // O banco tem as questões do Inep além das de exemplo: o teste confere o filtro, não a contagem.
         var all = await GetHtmlAsync(client, "/questoes");
+        var stacks = await GetHtmlAsync(client, "/questoes?materia=estruturas-dados");
         var sql = await GetHtmlAsync(client, "/questoes?materia=banco-de-dados");
 
-        Assert.Contains("push(1)", all);
-        Assert.Contains("1 questão", sql);
+        Assert.Contains("questões", all);
+        Assert.Contains("push(1)", stacks);
         Assert.Contains("Considere as tabelas", sql);
         Assert.DoesNotContain("push(1)", sql);
     }

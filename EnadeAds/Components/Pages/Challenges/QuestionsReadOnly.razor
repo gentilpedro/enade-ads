@@ -1,5 +1,6 @@
 @using EnadeAds.Challenges
 @using EnadeAds.Questions
+@using EnadeAds.Components.Pages.Questions
 
 @* Questões do desafio sem gabarito: só enunciado e alternativas, com a escolha do aluno marcada se houver. *@
 @foreach (var item in Challenge.Questions)
@@ -14,7 +15,7 @@
                 @foreach (var option in question.Options)
                 {
                     <li class="mb-1">
-                        <strong>@option.Letter)</strong> @option.Text
+                        <strong>@option.Letter)</strong> <OptionText Text="@option.Text" />
                         @if (option.Id == chosenOptionId)
                         {
                             <span class="badge text-bg-primary ms-1">Sua resposta</span>

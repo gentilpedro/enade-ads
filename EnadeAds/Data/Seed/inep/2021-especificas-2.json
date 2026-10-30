@@ -1,0 +1,455 @@
+{
+  "year": 2021,
+  "questions": [
+    {
+      "key": "enade-2021-ads-q21",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 21 (Inep)",
+      "kind": "Objective",
+      "subject": "gerencia-configuracao",
+      "statement": "No decorrer de um projeto de desenvolvimento de software é compreensível que mudanças venham a ocorrer, sejam por novos entendimentos dos atores envolvidos ou até mesmo de novas demandas apresentadas pelos clientes. Nesta perspectiva, a Gestão de Configuração de Software estabelece um conjunto de atividades para gerenciar alterações através de todo o ciclo de vida de um software.\n\nPRESSMAN, R. S. **Engenharia de Software**: uma abordagem profissional. 8. ed. Porto Alegre: Artmed Editora S.A. e McGraw-Hill Education, 2016 (adaptado).\n\nCom base no texto, assinale a opção correta acerca das atividades de gestão de configuração de software.",
+      "options": [
+        {
+          "text": "Identificação de itens na configuração de software, gerenciamento de alterações, validação de versões e controle de qualidade.",
+          "explanation": "Mistura atividades de outras áreas. Validação de versões e controle de qualidade pertencem à garantia de qualidade, não ao conjunto de tarefas da gestão de configuração descrito por Pressman."
+        },
+        {
+          "text": "Identificação de objetos na configuração de software, controle de versão, controle de alterações, auditoria de configuração e relatório de status.",
+          "explanation": "Correta. Pressman lista exatamente essas cinco tarefas da gestão de configuração: identificar os itens (objetos) de configuração, controlar versões, controlar alterações, auditar a configuração e relatar o status."
+        },
+        {
+          "text": "Gerência de projeto, gerência de configuração de software, ciclo de vida do projeto, processo de software e evolução das configurações.",
+          "explanation": "Lista disciplinas e conceitos amplos da engenharia de software, não as atividades internas da gestão de configuração. Inclusive cita a própria gerência de configuração como se fosse uma atividade dela."
+        },
+        {
+          "text": "Construção de modelo de requisitos, métricas para modelo de projeto, métricas de controle de versão e relatório de manutenção.",
+          "explanation": "Modelo de requisitos e métricas de projeto são atividades de análise e de medição, não de gestão de configuração."
+        },
+        {
+          "text": "Identificação de alterações, controle de versão, mapeamento de alteração e notificação da alteração aos envolvidos.",
+          "explanation": "Parece próxima, mas deixa de fora a auditoria de configuração e troca a identificação dos itens de configuração por \"identificação de alterações\". \"Mapeamento\" e \"notificação\" não são as tarefas formais da disciplina."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2021-ads-q22",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 22 (Inep)",
+      "kind": "Objective",
+      "subject": "gerencia-configuracao",
+      "statement": "Um ponto importante para fábricas de software é a garantia de que seus produtos e/ou serviços acompanhem as diversas mudanças ocasionadas pelo mundo corporativo. As restrições de orçamento ou cronograma, reestruturação do negócio, modificações de regras de negócio ou novas necessidades do cliente, geram mudanças inevitáveis. Nesse cenário, a utilização de um processo de Gerência de Configuração de Software (GCS) que contemple características necessárias para gerenciar e controlar a evolução de um software, através do controle formal de versão e solicitação de mudanças, é extremamente importante.\n\nSobre o processo de Gerência de Configuração de Software (GCS), avalie as afirmações a seguir.\n\nI. O controle de versão possibilita o compartilhamento de dados e a edição colaborativa, permitindo a gestão de diferentes ramos de desenvolvimento e possibilitando a existência de diferentes versões de forma simultânea.\n\nII. A auditoria de configuração é uma atividade de garantia de qualidade do sistema que tem por objetivo assegurar que a qualidade do software seja mantida quando feitas alterações requisitadas.\n\nIII. O relatório de status de configuração possui informações sobre o GCS, tendo por objetivo manter o cliente informado sobre as alterações, e deve ser gerado ao final do processo.\n\nIV. A GCS proporciona um conjunto de atividades de acompanhamento e controle de mudanças que é iniciado logo depois que o software for fornecido ao cliente e colocado em operação.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e II.",
+          "explanation": "Correta. O controle de versão permite trabalho colaborativo com ramos (branches) e várias versões coexistindo (I), e a auditoria de configuração verifica se as mudanças foram feitas corretamente, preservando a qualidade (II). III erra porque o relatório de status é produzido continuamente e serve a toda a equipe, e IV erra porque a GCS começa junto com o projeto."
+        },
+        {
+          "text": "II e III.",
+          "explanation": "Inclui a III, que está errada: o relatório de status não é gerado só ao final nem serve só ao cliente; ele é atualizado ao longo do projeto para todos os envolvidos. Também deixa de fora a I, que é verdadeira."
+        },
+        {
+          "text": "III e IV.",
+          "explanation": "As duas afirmações estão erradas: o relatório de status é contínuo (III) e a GCS começa no início do desenvolvimento, não depois da entrega (IV)."
+        },
+        {
+          "text": "I, II e IV.",
+          "explanation": "Inclui a IV, que está errada. A GCS é uma atividade de apoio aplicada desde o início do projeto, não apenas depois que o software entra em operação."
+        },
+        {
+          "text": "I, III e IV.",
+          "explanation": "Inclui a III e a IV, ambas erradas, e exclui a II, que é verdadeira."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "key": "enade-2021-ads-q23",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 23 (Inep)",
+      "kind": "Objective",
+      "subject": "operacoes-manutencao",
+      "statement": "A evolução de sistemas de software legados pode ser dividida em três categorias: manutenção, modernização e substituição. De acordo com a figura a seguir, conforme o tempo aumenta, a quantidade de funcionalidades também cresce. No primeiro período de evolução a manutenção é realizada, pois as necessidades de negócio são alteradas e o sistema precisa suprir as mudanças por meio da manutenção. No segundo período é realizada a modernização do sistema, pois as necessidades de negócio continuam a crescer, mas há mudanças mais significativas que se fazem necessárias. Além da substituição do sistema de software, nos casos em que o modelo de negócio não atende mais a necessidade da empresa, a manutenção e modernização também não são mais suficientes.\n\n![Gráfico de funcionalidade versus tempo: o Software 1 é construído, passa por manutenção e modernização acompanhando a linha das necessidades de negócio, até ser substituído pelo Software 2, que entra em manutenção](img/inep/2021/q23-1.png)\n\nSEACORD, R. C.; PLAKOSH, D.; LEWIS, G. A. **Modernizing Legancy Systems**. Boston: Pearson Education, 2003 (adaptado).\n\nDe acordo com a figura apresentada e considerando um sistema de software implantado de ERP (Enterprise Resource Planning - Planejamento de Recursos Empresariais) contendo um conjunto de módulos que integra todos os departamentos existentes de uma empresa, observou-se a necessidade de criação de um relatório gerencial de comissão da equipe de vendas. Nesse contexto, é correto afirmar que a manutenção a ser realizada é",
+      "options": [
+        {
+          "text": "corretiva.",
+          "explanation": "Manutenção corretiva conserta defeitos. O ERP não está com erro; a empresa quer uma funcionalidade que ainda não existe."
+        },
+        {
+          "text": "evolutiva.",
+          "explanation": "Correta. Criar um relatório gerencial de comissão é acrescentar funcionalidade para acompanhar uma nova necessidade de negócio, que é o que a figura chama de manutenção no primeiro período e o que se classifica como manutenção evolutiva."
+        },
+        {
+          "text": "funcional.",
+          "explanation": "\"Manutenção funcional\" não é uma das categorias usuais de manutenção de software (corretiva, adaptativa, evolutiva/perfectiva e preventiva)."
+        },
+        {
+          "text": "preventiva.",
+          "explanation": "Manutenção preventiva melhora a estrutura do código para evitar problemas futuros, sem atender a um pedido novo do usuário. Aqui há um requisito novo."
+        },
+        {
+          "text": "adaptativa.",
+          "explanation": "Manutenção adaptativa ajusta o sistema a mudanças no ambiente, como novo sistema operacional, banco de dados ou legislação. Um relatório novo pedido pelo negócio não é adaptação ao ambiente."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2021-ads-q24",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 24 (Inep)",
+      "kind": "Objective",
+      "subject": "qualidade-testes",
+      "statement": "Em razão da Covid-19, muitos estabelecimentos viram no delivery uma forma de manter os negócios funcionando. As mudanças de hábitos dos brasileiros revelaram um aumento do interesse nesse tipo de serviço.\n\nNesse contexto, um restaurante solicitou o desenvolvimento de um sistema web que possibilite gerenciar automaticamente os pedidos de entrega. O sistema foi projetado com base em tecnologias web e modelado com UML (Unified Modeling Language). Durante o processo de desenvolvimento foram descritos alguns itens importantes que merecem atenção no processo de teste de software.\n\nConsiderem as seguintes descrições definidas pelo analista de teste:\n\n01 – Verificar se o método “Finalizar Pedido” da classe “Pedido” está funcionando corretamente.\n\n02 – Garantir que o sistema funcione corretamente em diferentes navegadores de internet.\n\n03 – O sistema deve passar por testes rigorosos na estrutura lógica interna do software.\n\n04 – O sistema deve garantir, no mínimo, o registro de 100 pedidos simultâneos.\n\n05 – O usuário deve testar o sistema em um ambiente controlado sob a supervisão dos desenvolvedores.\n\nConsiderando o texto e as descrições apresentadas, avalie as afirmações a seguir.\n\nI. A descrição 01 deve ser verificada com teste unitário.\n\nII. A descrição 02 deve ser executada com a abordagem caixa-branca.\n\nIII. A descrição 03 deve ser executada com a abordagem caixa-preta.\n\nIV. A descrição 04 deve ser verificada com teste carga.\n\nV. A descrição 05 deve ser classificada como teste alfa.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "II e III.",
+          "explanation": "Inverte as abordagens: testar em vários navegadores olha só o comportamento externo (caixa-preta), e testar a lógica interna do código é caixa-branca. As duas afirmações estão erradas."
+        },
+        {
+          "text": "I, II e IV.",
+          "explanation": "Inclui a II, que está errada: compatibilidade entre navegadores é verificada pelo comportamento visível, sem olhar o código, ou seja, caixa-preta. Também deixa de fora a V, que é verdadeira."
+        },
+        {
+          "text": "I, III e V.",
+          "explanation": "Inclui a III, que está errada: testar a estrutura lógica interna é justamente a definição de caixa-branca. Também deixa de fora a IV, que é verdadeira."
+        },
+        {
+          "text": "I, IV e V.",
+          "explanation": "Correta. Testar um método isolado de uma classe é teste unitário (I); garantir 100 pedidos simultâneos é teste de carga (IV); usuário testando em ambiente controlado com os desenvolvedores presentes é teste alfa (V). II e III trocam caixa-preta com caixa-branca."
+        },
+        {
+          "text": "II, III, IV e V.",
+          "explanation": "Inclui II e III, que trocam as abordagens caixa-branca e caixa-preta, e exclui a I, que é verdadeira."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2021-ads-q25",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 25 (Inep)",
+      "kind": "Objective",
+      "subject": "processo-software",
+      "statement": "Uma determinada empresa do ramo de piscicultura solicitou a uma instituição especializada no desenvolvimento de softwares de gestão a construção de um sistema que fosse capaz de gerenciar o processo de criação dos peixes, que começava ainda na fase de alevinos, estendia-se para a engorda, finalizando na fase adulta com a venda do peixe. O sistema deveria disponibilizar funcionalidades para armazenar informações sobre toda a etapa da criação, mortandade e rações utilizadas na engorda dos peixes, viabilizando uma melhor tomada de decisão dos investidores. Como não havia nenhuma solução e a demanda por peixes estava aumentando, a empresa solicitou extrema urgência na construção da aplicação.\n\nConsiderando o processo de desenvolvimento de software que deverá ser utilizado para construir o sistema mencionado no texto, avalie as afirmações a seguir.\n\nI. Para desenvolver o sistema, deve ser adotado um processo baseado no modelo cascata, pois ele se adapta melhor a cenários com muitas mudanças.\n\nII. Por se tratar de uma aplicação com escopo pequeno, o modelo espiral deverá ser utilizado no desenvolvimento do sistema solicitado, já que reduzirá riscos por meio da prototipação de especificações de cada fase dos peixes e diminuirá o tempo de entrega.\n\nIII. O modelo incremental deve ser utilizado na construção do software descrito no cenário, já que partes do sistema referentes à fase inicial dos peixes poderiam ser disponibilizadas, enquanto as demais estão nas etapas de concepção e desenvolvimento.\n\nIV. Em razão da extrema urgência no desenvolvimento do software solicitado, a empresa deve elaborar seu processo utilizando o modelo RAD (Rapid Application Development).\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I.",
+          "explanation": "A I está errada: o modelo cascata é sequencial e rígido, e lida mal com mudanças. Além disso, a alternativa ignora III e IV, que são verdadeiras."
+        },
+        {
+          "text": "IV.",
+          "explanation": "A IV é verdadeira, mas a alternativa deixa de fora a III: entregar primeiro a parte da fase de alevinos e depois o restante é exatamente a proposta do modelo incremental."
+        },
+        {
+          "text": "I e II.",
+          "explanation": "As duas estão erradas. O cascata não se adapta bem a mudanças (I), e o espiral é indicado para projetos grandes e de alto risco, com ciclos de análise de risco que não encurtam a entrega (II)."
+        },
+        {
+          "text": "II e III.",
+          "explanation": "Inclui a II, que está errada: o modelo espiral não é a escolha para escopo pequeno com urgência, porque cada volta envolve análise de riscos formal e tende a alongar o projeto."
+        },
+        {
+          "text": "III e IV.",
+          "explanation": "Correta. O sistema pode ser entregue em partes, começando pela fase inicial da criação dos peixes, o que caracteriza o modelo incremental (III). E a extrema urgência combina com o RAD, que busca ciclos curtos de desenvolvimento (IV)."
+        }
+      ],
+      "correct": "E"
+    },
+    {
+      "key": "enade-2021-ads-q26",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 26 (Inep)",
+      "kind": "Objective",
+      "subject": "legislacao-etica",
+      "statement": "Empreender em computação não se resume apenas ao fato de ter uma ideia sobre um aplicativo, implementá-la e disponibilizá-la aos seus usuários finais. Esse conceito vai além, é preciso analisar uma série de variáveis, como questões sociais e humanísticas, profissionais, ambientais, legais, políticas e tecnológicas.\n\nDentre as ações necessárias para empreender em computação, é imprescindível observar a legislação vigente. No Brasil, a Lei Geral de Proteção de Dados Pessoais (LGPD), n. 13.709/2018, dispõe sobre o tratamento de dados pessoais, inclusive nos meios digitais, por pessoa natural ou por pessoa jurídica de direito público ou privado, com o objetivo de proteger os direitos fundamentais de liberdade e de privacidade e o livre desenvolvimento da personalidade da pessoa natural.\n\nAcerca das providências dispostas no art. 2º da LGPD, assinale os fundamentos da disciplina da proteção de dados pessoais.",
+      "options": [
+        {
+          "text": "O direito ao usuário; das obrigações das organizações nacionais ou estrangeiras; obrigatoriedade do consentimento; a livre iniciativa, a livre concorrência e a defesa do consumidor; os direitos humanos, o livre desenvolvimento da personalidade, a dignidade e o exercício da cidadania pelas pessoas naturais e regulação da Autoridade Nacional de Proteção de Dados Pessoais (ANPD).",
+          "explanation": "Mistura dois fundamentos verdadeiros com itens que não estão no art. 2º. O consentimento é apenas uma das bases legais de tratamento (art. 7º), não um fundamento, e a ANPD é tratada em outra parte da lei."
+        },
+        {
+          "text": "O direito à revogação de um consentimento; a transferência de dados para outro fornecedor de serviços; a solicitação de remoção de dados pessoais; a inviolabilidade da intimidade, da honra e da imagem; o desenvolvimento econômico e tecnológico e inovação; a preservação da vida e da integridade física de uma pessoa.",
+          "explanation": "Revogação do consentimento, portabilidade e eliminação de dados são direitos do titular (art. 18), e proteção da vida é uma base legal de tratamento. Nenhum deles é fundamento do art. 2º."
+        },
+        {
+          "text": "O respeito à privacidade; obrigatoriedade do consentimento; os deveres e obrigações dos usuários finais; os deveres e obrigações das organizações nacionais ou estrangeiras; a observação ao código de defesa do consumidor; e, a obrigatoriedade do respeito à honra e à imagem.",
+          "explanation": "Só o respeito à privacidade é fundamento do art. 2º. Consentimento obrigatório, deveres dos usuários e das organizações não aparecem nessa lista."
+        },
+        {
+          "text": "O direito ao anonimato; a liberdade de expressão; a inviolabilidade da intimidade; a adoção de medidas preventivas de segurança; o direito ao recurso e revisão; a administração de riscos e falhas; o estabelecimento de agentes de tratamento; e, regulação da Autoridade Nacional de Proteção de Dados Pessoais (ANPD).",
+          "explanation": "Prevenção e segurança são princípios do art. 6º, e agentes de tratamento e ANPD são regulados em outros capítulos. \"Direito ao anonimato\" não é fundamento da LGPD."
+        },
+        {
+          "text": "O respeito à privacidade; a autodeterminação informativa; a liberdade de expressão, de informação, de comunicação e de opinião; a inviolabilidade da intimidade, da honra e da imagem; o desenvolvimento econômico e tecnológico e a inovação; a livre iniciativa, a livre concorrência e a defesa do consumidor; e, os direitos humanos, o livre desenvolvimento da personalidade, dignidade e o exercício da cidadania pelas pessoas naturais.",
+          "explanation": "Correta. É a lista dos sete incisos do art. 2º da LGPD: privacidade, autodeterminação informativa, liberdade de expressão, inviolabilidade da intimidade, desenvolvimento econômico e inovação, livre iniciativa e defesa do consumidor, e direitos humanos e cidadania."
+        }
+      ],
+      "correct": "E"
+    },
+    {
+      "key": "enade-2021-ads-q27",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 27 (Inep)",
+      "kind": "Objective",
+      "subject": "arquitetura-computadores",
+      "statement": "O sistema de numeração, inserido na arquitetura e no funcionamento dos computadores, sempre foi muito utilizado na área computacional e pode ser escrito em diferentes bases numéricas, como: binária, octal, decimal ou hexadecimal. Durante a execução dos programas, a Unidade Central de Processamento (CPU) trabalha com os dados e instruções convertidos para dois estados distintos: 0 (zero) e 1 (um), que podem ser entendidos como “com energia” e “sem energia”, a chamada linguagem binária ou 0 e 1. Durante o processamento dos dados, instruções e os dados são armazenados no formato binário na memória principal do computador. A CPU, trabalhando com dados no formato binário, aumenta sua capacidade e velocidade no processamento dos dados.\n\nAlguns exemplos dos dados, representados em diferentes bases, são utilizados nos sistemas computacionais diariamente: o endereçamento IP dos computadores em uma rede são configurados na base decimal pontuada se for o IPv4, exemplo: 192.168.70.10; o número do endereço MAC-Address da placa de rede do computador é hexadecimal, exemplo: 00-15-5D-01-F2-00; já o sistema octal foi muito utilizado na computação, como uma alternativa mais compacta do sistema binário, na programação em linguagem de máquina.\n\nOs profissionais que atuam na área da Tecnologia da Informação (TI) precisam constantemente interpretar, fazer cálculos ou converter dados entre as bases binária, decimal, octal ou hexadecimal. A tabela abaixo mostra os dígitos, a notação e alguns exemplos nas bases numéricas: 2, 8, 10 e 16.\n\n```\nSistema na Base          Dígitos utilizados                                   Notação e exemplos\nBinário - base 2         0, 1                                                 (1001)₂; (11011)₂\nOctal - base 8           0, 1, 2, 3, 4, 5, 6, 7                               (27)₈; (35)₈; (16)₈\nDecimal - base 10        0, 1, 2, 3, 4, 5, 6, 7, 8, 9                         (45)₁₀; (120)₁₀\nHexadecimal - base 16    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A, B, C, D, E, F       (1A)₁₆; (48)₁₆; (1E2)₁₆\n```\n\nSTALLINGS, W. **Arquitetura e Organização de Computadores**. São Paulo: Pearson Education do Brasil, 2017 (adaptado).\n\nFazendo a conversão da soma de: (1001)₂ + (15)₈ + (FF)₁₆, qual é o número equivalente na base decimal?",
+      "options": [
+        {
+          "text": "(188)₁₀",
+          "explanation": "Não corresponde à soma. As três parcelas valem 9, 13 e 255 em decimal, e só (FF)₁₆ já passa de 188."
+        },
+        {
+          "text": "(215)₁₀",
+          "explanation": "Não corresponde à soma. Como (FF)₁₆ = 255 sozinho, qualquer resultado abaixo de 255 indica erro na conversão do hexadecimal."
+        },
+        {
+          "text": "(277)₁₀",
+          "explanation": "Correta. (1001)₂ = 8 + 1 = 9; (15)₈ = 1×8 + 5 = 13; (FF)₁₆ = 15×16 + 15 = 255. Somando: 9 + 13 + 255 = 277."
+        },
+        {
+          "text": "(316)₁₀",
+          "explanation": "Valor acima da soma correta. Pode surgir de converter alguma parcela com a base errada, por exemplo ler (15)₈ ou (1001)₂ como se fossem decimais."
+        },
+        {
+          "text": "(345)₁₀",
+          "explanation": "Valor acima da soma correta (9 + 13 + 255 = 277), resultado de erro de conversão em alguma das parcelas."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2021-ads-q28",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 28 (Inep)",
+      "kind": "Objective",
+      "subject": "sistemas-operacionais",
+      "statement": "O modo clássico de encarar um sistema operacional é como um gerenciador de recursos. Desse ponto de vista, o sistema operacional é responsável pelo hardware do sistema. Nesse papel, ele recebe solicitações de acesso a recursos por parte das aplicações e concede ou nega tais acessos. Ao conceder solicitações de alocação, ele deve dispor com cuidado os recursos, de modo que os programas não interfiram uns nos outros.\n\nPor exemplo, é uma péssima ideia permitir que os programas tenham acesso sem restrição à memória uns dos outros. Se um programa com defeito (ou malicioso) escreve no espaço de memória do outro programa, o segundo programa travará, na melhor das hipóteses, ou produzirá resultados incorretos, na pior das hipóteses. Ou ainda, se o programa ofensivo modificar a memória do sistema operacional poderá afetar o comportamento de todo o sistema.\n\nSTUART. B. L. **Princípios de Sistemas Operacionais**: projetos e aplicações. São Paulo: Cengage Learning, 2011 (adaptado).\n\nConsiderando que o texto alerta para a possibilidade de um programa interferir no outro, a atividade que um sistema operacional garante essa proteção é",
+      "options": [
+        {
+          "text": "o programa antivírus.",
+          "explanation": "Antivírus é um aplicativo, não uma função do sistema operacional, e não impede que um programa com defeito escreva na memória de outro."
+        },
+        {
+          "text": "o gerenciamento de memória.",
+          "explanation": "Correta. O gerenciador de memória dá a cada processo seu próprio espaço de endereçamento e usa mecanismos como registradores base/limite, paginação e bits de proteção para barrar acessos à memória alheia e à do próprio sistema."
+        },
+        {
+          "text": "o gerenciamento de arquivos.",
+          "explanation": "O gerenciamento de arquivos controla o acesso a dados em disco por permissões. O problema do texto é escrita indevida na memória principal."
+        },
+        {
+          "text": "o gerenciamento de processos.",
+          "explanation": "O gerenciamento de processos cuida de criação, escalonamento e sincronização. Quem isola o espaço de memória de cada processo é o gerenciamento de memória."
+        },
+        {
+          "text": "o gerenciamento de entrada e saída.",
+          "explanation": "Entrada e saída trata da comunicação com dispositivos periféricos, não da proteção do espaço de memória entre programas."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2021-ads-q29",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 29 (Inep)",
+      "kind": "Objective",
+      "subject": "algoritmos-programacao",
+      "statement": "Um algoritmo é qualquer procedimento computacional bem definido que toma algum valor ou conjunto de valores como entrada e produz algum valor ou conjunto de valores como saída.\n\nCORMEN, T. H. et al. **Algoritmos Teoria e Prática**. Rio de Janeiro: Elsevier, 2002 (adaptado).\n\nConsidere o algoritmo a seguir.\n\n```\nAlgoritmo Calcular\n   var\n      mat [1..3][1..5] de inteiro =\n      {{1, 2, -1, 2, 3}, {1, -3, 4, 2, 0}, {-3, 5, 2, 3, 4}}\n      sl[1..3] de inteiro = {0, 0, 0}\n      x, i, j : inteiro\n      x <- 0\n   início\n      para i <- 1 até 3 faça\n          para j <- 1 até 5 faça\n             sl[i] <- sl[i] + mat[i][j]\n          fimpara\n          x <- x + sl[i]\n      fimpara\n      imprima x\n   fim\n```\n\nNo fim da execução do código apresentado, será exibido o valor",
+      "options": [
+        {
+          "text": "4.",
+          "explanation": "4 é apenas a soma da segunda linha (1 - 3 + 4 + 2 + 0). O algoritmo acumula em x as somas das três linhas."
+        },
+        {
+          "text": "7.",
+          "explanation": "7 é apenas a soma da primeira linha (1 + 2 - 1 + 2 + 3). O laço externo continua e soma também as outras duas linhas em x."
+        },
+        {
+          "text": "11.",
+          "explanation": "11 é apenas a soma da terceira linha (-3 + 5 + 2 + 3 + 4). x guarda o total acumulado, não só a última linha."
+        },
+        {
+          "text": "22.",
+          "explanation": "Correta. O laço interno soma cada linha em sl[i]: 7, 4 e 11. Depois de cada linha, x recebe x + sl[i], então x = 7 + 4 + 11 = 22, que é a soma de todos os elementos da matriz."
+        },
+        {
+          "text": "30.",
+          "explanation": "Não sai da execução. Pode vir de somar os valores ignorando os sinais negativos ou de contar alguma linha duas vezes; a soma correta dos 15 elementos é 22."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2021-ads-q30",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 30 (Inep)",
+      "kind": "Objective",
+      "subject": "redes-sistemas-distribuidos",
+      "statement": "Suponha que sua faculdade tendo, em sua rede de computadores, máquinas que compartilham arquivos e serviços, contratou você para uma consultoria de TI. Atualmente, na sala dos professores, existem 3 máquinas ligadas à rede, com as configurações conforme a imagem a seguir. Porém, a estação de trabalho “PROFESSORES01” não consegue enviar documentos para impressão em uma impressora, corretamente instalada e compartilhada na estação de trabalho “PROFESSORES03”.\n\n![Configuração das três estações: PROFESSORES 01 com IP 175.16.10.200, máscara 255.255.255.0 e gateway 175.16.1.1; PROFESSORES 02 com IP 175.16.20.200, máscara 255.255.0.0 e gateway 175.16.1.1; PROFESSORES 03 com IP 175.16.30.200, máscara 255.255.0.0 e gateway 175.16.1.1](img/inep/2021/q30-1.png)\n\nNesse caso, que alteração deve ser realizada para que o problema seja resolvido?",
+      "options": [
+        {
+          "text": "Alterar o gateway da estação PROFESSORES03 para 175.16.10.200.",
+          "explanation": "O problema está na configuração da PROFESSORES01, cuja máscara a coloca numa sub-rede diferente. Mudar o gateway da PROFESSORES03 para o IP de outra estação não resolve, porque uma estação comum não roteia pacotes."
+        },
+        {
+          "text": "Alterar o endereço de IP da estação PROFESSORES01 para 175.16.30.200.",
+          "explanation": "175.16.30.200 já é o IP da PROFESSORES03. Repetir o endereço gera conflito de IP na rede."
+        },
+        {
+          "text": "Alterar a máscara de sub-rede da estação PROFESSORES01 para 255.255.0.0.",
+          "explanation": "Correta. Com máscara 255.255.255.0, a PROFESSORES01 só enxerga a rede 175.16.10.0/24, e a PROFESSORES03 (175.16.30.200) e até o gateway 175.16.1.1 ficam fora dela. Com 255.255.0.0, igual às demais, todas passam a estar na rede 175.16.0.0/16 e se comunicam diretamente."
+        },
+        {
+          "text": "Alterar a máscara de sub-rede da estação PROFESSORES03 para 255.255.255.0.",
+          "explanation": "Isso colocaria a PROFESSORES03 na rede 175.16.30.0/24, separada também da PROFESSORES01. O problema da máscara da PROFESSORES01 continuaria e ainda surgiria outro."
+        },
+        {
+          "text": "Alterar o gateway da estação PROFESSORES01 para o endereço de IP 175.16.30.200.",
+          "explanation": "Com máscara /24, a PROFESSORES01 não alcança 175.16.30.200 nem como gateway, pois o gateway precisa estar na mesma sub-rede. Além disso, a PROFESSORES03 não é um roteador."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2021-ads-q31",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 31 (Inep)",
+      "kind": "Objective",
+      "subject": "engenharia-requisitos",
+      "statement": "Foi solicitado o desenvolvimento de um software para o controle e gestão das matrículas dos alunos em uma universidade. Os alunos poderão realizá-las diretamente no sistema, em um terminal a ser disponibilizado na universidade. Além dessas características, o sistema deverá considerar as restrições representadas no diagrama a seguir:\n\n![Diagrama de casos de uso: o ator Aluno se associa a Realizar Matricula; Realizar Matricula Fora do Prazo estende (<<extend>>) Realizar Matricula; Realizar Matricula inclui (<<include>>) Validar Aluno; Validar via Retina e Validar via Digital são especializações (generalização) de Validar Aluno](img/inep/2021/q31-1.png)\n\nCom base no texto e no diagrama, avalie as afirmações a seguir.\n\nI. O aluno poderá realizar a matrícula fora do prazo e as tratativas são as mesmas da matrícula feita dentro do prazo.\n\nII. O aluno poderá, opcionalmente, realizar a matrícula fora do prazo.\n\nIII. O sistema, obrigatoriamente, deverá validar o aluno que realizar a matrícula fora do prazo.\n\nIV. A validação do aluno deverá ser feita a partir da sua matrícula informada no sistema.\n\nV. A validação do aluno, a ser feita por retina, é diferente da validação feita pela digital.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e IV.",
+          "explanation": "As duas estão erradas. O <<extend>> indica que a matrícula fora do prazo acrescenta comportamento próprio (I), e o diagrama mostra validação por retina ou digital, não pelo número de matrícula (IV)."
+        },
+        {
+          "text": "I, II e IV.",
+          "explanation": "A II está certa, mas I e IV estão erradas: o caso estendido tem tratativas adicionais, e a validação é biométrica (retina ou digital), não pela matrícula informada."
+        },
+        {
+          "text": "I, III e V.",
+          "explanation": "Inclui a I, que está errada: se as tratativas fossem as mesmas, não haveria caso de uso separado ligado por <<extend>>. Também deixa de fora a II."
+        },
+        {
+          "text": "II, III e V.",
+          "explanation": "Correta. <<extend>> marca comportamento opcional, que só ocorre em certa condição (II). Como Realizar Matricula inclui (<<include>>) Validar Aluno, toda matrícula, inclusive a estendida fora do prazo, valida o aluno obrigatoriamente (III). Retina e digital são especializações distintas de Validar Aluno (V)."
+        },
+        {
+          "text": "II, III, IV e V.",
+          "explanation": "Inclui a IV, que está errada: nada no diagrama diz que a validação usa a matrícula informada; as formas previstas são retina e digital."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2021-ads-q32",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 32 (Inep)",
+      "kind": "Objective",
+      "subject": "empreendedorismo",
+      "statement": "Um modelo de negócios descreve a lógica de criação, entrega e captura de valor por parte de uma organização. A ferramenta de geração de modelo de negócios Canvas, desenvolvida por Osterwalder, tem sido uma das mais utilizadas, principalmente entre as startups. O Canvas é dividido em nove componentes básicos, que cobrem as quatro áreas principais de um negócio: clientes, oferta, infraestrutura e viabilidade financeira. Os componentes são os seguintes: 1) segmentos de clientes; 2) proposta de valor; 3) canais; 4) relacionamento com cliente; 5) fontes de receita; 6) recursos principais; 7) atividades-chave; 8) parcerias principais; e 9) estrutura de custo.\n\nOSTERWALDER, A.; PIGNEUR, Y. **Business Model Generation** - Inovação em Modelos de Negócios: um manual para visionários, inovadores e revolucionários. Rio de Janeiro: Alta Books, 2011 (adaptado).\n\nDiante deste contexto, conclui-se que as startups",
+      "options": [
+        {
+          "text": "financeiras desenvolvem primeiro o plano de negócios, para em seguida partir para o Canvas.",
+          "explanation": "Não há essa regra para startups financeiras. O Canvas costuma vir antes do plano de negócios, como forma rápida de desenhar e testar o modelo."
+        },
+        {
+          "text": "de big data utilizam o Canvas para a modelagem da validação da ideia de negócio, ou seja, do problema a ser resolvido.",
+          "explanation": "Correta. O Canvas serve para modelar e validar a ideia de negócio de qualquer startup, deixando claro qual problema se resolve, para quem e como se gera valor. Isso vale também para startups de big data."
+        },
+        {
+          "text": "de educação dispensam a utilização do Canvas, ou seja, os modelos de negócios deste segmento já nascem validados.",
+          "explanation": "Nenhum segmento nasce com o modelo de negócios validado. Startups de educação também precisam testar hipóteses sobre clientes, proposta de valor e receitas."
+        },
+        {
+          "text": "de logística utilizam o plano de negócios ao invés do Canvas, ou seja, elas nascem a partir de um produto mínimo viável (MVP).",
+          "explanation": "Contradiz a si mesma: o MVP é uma prática de validação rápida associada ao Canvas e à startup enxuta, não ao plano de negócios tradicional. Também não há regra que faça startups de logística dispensarem o Canvas."
+        },
+        {
+          "text": "de impacto social podem desconsiderar o componente 1 (segmentos de clientes), pois possuem somente um segmento.",
+          "explanation": "Segmentos de clientes é um componente central do Canvas e não pode ser ignorado. Negócios de impacto social costumam ter até mais de um segmento, como beneficiários e financiadores."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2021-ads-q33",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 33 (Inep)",
+      "kind": "Objective",
+      "subject": "processo-software",
+      "statement": "Um dos fatores essenciais para o sucesso de um Processo de Software é a habilidade de capturar e gerenciar as mudanças e oportunidades de negócio. Muitas vezes as oportunidades de negócio são perdidas em função do tempo requerido para efetivar mudanças nos sistemas de software ou em função de defeitos nesse sistema. Basicamente, o software é o Produto do Processo de Software. Assim, identificar o grau de desenvolvimento do processo de software de uma empresa é o passo inicial para o seu melhoramento. O Modelo de Maturidade da Capacidade (CMMi) descreve práticas, processos e atividades de gestão, guiando o melhoramento do Processo de Software para atingir o mais elevado nível de maturidade da capacidade.\n\nConsiderando os diversos aspectos do processo de desenvolvimento de um produto ou sistema de software, avalie as afirmações a seguir.\n\nI. A maturidade implica no crescimento da capacidade e indica tanto a efetividade do Processo de Software quanto o grau de consistência com que este é aplicado nos diferentes projetos desenvolvidos pela organização.\n\nII. A maturidade do Processo de Software implica melhorias contínuas do processo com base em etapas evolutivas que se caracterizam pela capacidade de inovação e absorção de novas tecnologias.\n\nIII. A maturidade do Processo de Software implica na sua institucionalização por meio de políticas e padrões organizacionais levando a uma cultura corporativa de métodos, práticas e procedimentos com efetividade plenamente reconhecida.\n\nIV. Cada nível do CMMi implica na satisfação de um conjunto de metas de processo que estabilizam um componente importante do Processo de Software e representa o seu estágio de maturidade da capacidade.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "III.",
+          "explanation": "A III é verdadeira, mas I e IV também são: maturidade indica efetividade e consistência do processo, e cada nível corresponde a um conjunto de metas que estabiliza parte do processo."
+        },
+        {
+          "text": "I e II.",
+          "explanation": "Inclui a II, que não caracteriza a maturidade: os níveis do CMMI são definidos por processos estabilizados e institucionalizados, e não pela capacidade de inovação e absorção de tecnologias, que é só um aspecto do nível mais alto."
+        },
+        {
+          "text": "II e IV.",
+          "explanation": "Inclui a II, que confunde maturidade com inovação tecnológica, e deixa de fora I e III, que são verdadeiras."
+        },
+        {
+          "text": "I, III e IV.",
+          "explanation": "Correta. Maturidade indica efetividade e consistência do processo entre projetos (I), depende de institucionalizar o processo por políticas e padrões (III) e é medida por níveis, cada um com metas que estabilizam parte do processo (IV). A II erra ao definir a maturidade pela inovação e absorção de tecnologias."
+        },
+        {
+          "text": "I, II, III e IV.",
+          "explanation": "Inclui a II. No CMMI, as etapas evolutivas são marcadas pela estabilização e institucionalização dos processos, não pela capacidade de inovar e absorver tecnologias."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2021-ads-q34",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 34 (Inep)",
+      "kind": "Objective",
+      "subject": "estatistica-analise-dados",
+      "statement": "Sistemas especialistas são aqueles que fazem uso intensivo do conhecimento especializado para resolver problemas de modo semelhante àquele de um especialista humano. Uma das diversas utilizações de sistemas especialistas é na elaboração de diagnósticos destinados a inferir sobre o mau funcionamento de um sistema, a partir de observações, de modo a prescrever soluções para a anomalia detectada. A medicina, atualmente, já se beneficia do uso de sistemas especialistas em conjunto com técnicas de inferência estatística.\n\nUma das formas de trabalhar com sistemas especialistas é por meio do uso de “regras de produção”, que são instruções do tipo “se - então”. As regras de produção aplicam-se à memória de trabalho, que contém dados, e se tiverem êxito, contribuirão com alguma nova informação para a memória.\n\nA metodologia de trabalho de um médico do serviço de emergência inclui a utilização de um sistema especialista para diagnóstico de dengue, para o qual se encontra a seguinte regra de produção.\n\nSe ((temperatura > 38º) e (dores musculares intensas))\n\nentão (quadro de dengue, com 70% de chance);\n\nsenão(quadro de resfriado comum com 30% de chance);\n\nLevando em conta a regra de produção do sistema especialista utilizado pelo médico, é correto afirmar que",
+      "options": [
+        {
+          "text": "cada pessoa que procura atendimento apresentando ambos os sintomas, possui a probabilidade “0,7” de estar contaminada pela dengue.",
+          "explanation": "Correta. Quem tem febre acima de 38º e dores musculares intensas satisfaz a condição do \"se\", e a regra conclui quadro de dengue com 70% de chance, ou seja, probabilidade 0,7 para cada pessoa nessa situação."
+        },
+        {
+          "text": "se 50 pessoas procurarem o atendimento apresentando um dos dois sintomas, provavelmente 15 pessoas estarão com resfriado comum.",
+          "explanation": "A regra atribui um grau de certeza ao diagnóstico de cada paciente que cai no \"senão\", mas não descreve a distribuição de doenças num grupo. Transformar essa chance em contagem de pessoas de um grupo extrapola o que a regra afirma."
+        },
+        {
+          "text": "se 100 pessoas procurarem o atendimento apresentando ambos os sintomas, a quantidade de pessoas com dengue será igual a 70.",
+          "explanation": "Probabilidade não garante contagem exata. Com 70% de chance para cada pessoa, o esperado gira em torno de 70, mas o número real pode ser diferente."
+        },
+        {
+          "text": "cada pessoa que chega apresentando um dos dois sintomas estará com resfriado comum.",
+          "explanation": "A regra fala em 30% de chance de resfriado, não em certeza. Ter só um sintoma não garante resfriado comum."
+        },
+        {
+          "text": "a cada 100 pessoas que procuram atendimento, no máximo 30 estarão doentes.",
+          "explanation": "A regra não estabelece limite de doentes. Os 30% se referem à chance de resfriado no caso do \"senão\", e quem tem os dois sintomas tem 70% de chance de dengue."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "key": "enade-2021-ads-q35",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 35 (Inep)",
+      "kind": "Objective",
+      "subject": "logica-matematica",
+      "statement": "Uma equipe de matemáticos foi contratada para proceder com a análise e especificação de critérios para a identificação de potenciais clientes para uma empresa de seguros. Após a análise, a equipe determinou que deve-se considerar as seguintes variáveis:\n\na) ser maior de idade.\n\nb) possuir residência própria ou não.\n\nc) possuir algum parente que já possui seguro da companhia.\n\nEm função da análise realizada, a companhia pretende estipular a viabilidade ou não do seguro, além de decidir seu preço. A equipe contratada modelou cada variável identificada utilizando as seguintes funções booleanas.\n\nI(x): função que verifica se a pessoa x é maior de idade.\n\nR(x): função que verifica se a pessoa x possui residência própria.\n\nP(x,y): função que verifica se as pessoas x e y são parentes.\n\nS(x): função que verifica se a pessoa x já possui seguro da companhia.\n\nApós essa modelagem matemática, a seguinte tabela foi obtida. Ela expressa, utilizando a notação de lógica quantitativa, os critérios para estabelecimento de viabilidade e eventuais preços de seguros a serem concedidos.\n\n```\nCritério                              Resultado\n¬I(x)                                 Inviável\nI(x)∧ R(x) ∧∃y (S(y) ∧ P(x, y))       Viável, preço: R$200\nI(x)∧ ¬R(x) ∧∃y (S(y) ∧ P(x, y))      Viável, preço: R$300\n¬I(x)∨ (R(x) ∧ I (x))                 Viável, preço: R$500\n```\n\nA tabela foi repassada à equipe de programadores, cenário comum em que profissionais de diferentes áreas do conhecimento devem interagir a fim de obter as soluções desejadas. A solução foi implementada utilizando a linguagem C. Considere que as funções I e R foram escritas e são booleanas, operando de acordo com a definição dada pela equipe. A função “obtem” encapsula o funcionamento das funções P e S. Ela percorre a base de dados da companhia e obtém um parente da pessoa apontada por “p” que possua o seguro, caso exista. Caso contrário, ela devolve NULL.\n\n```\nvoid obtem_resultado (pessoa * p){\n   pessoa*y = NULL;\n   if(!I(p))\n       printf(“Inviável”);\n  else if (I(p)&&R(p)&&y=obtem(p))\n    printf(“Viável,preço:R$200”);\n else if(I(p)&&!R(p)&&y=obtem(p))\n printf(“Viável,preço:R$300”);\n else if(!I(p)||(R(p)&&I(p)))\n printf(“Viável,preço:“R$500”);\n}\n```\n\nConsiderando as informações apresentadas, avalie as afirmações a seguir.\n\nI. A tabela apresentada é ambígua, pois há pessoas para as quais a análise resultaria em dois resultados diferentes.\n\nII. Embora a tabela seja ambígua, não existe a possibilidade de o programa exibir mais de um resultado para uma pessoa.\n\nIII. Segundo a tabela, não existe a possibilidade de pessoas sem residência própria serem contempladas com o seguro.\n\nIV. Segundo o funcionamento do programa, o seguro para uma pessoa menor de idade e sem residência própria é viável e lhe custará R$500.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e II.",
+          "explanation": "Correta. A tabela é ambígua: um menor de idade satisfaz ¬I(x) (Inviável) e também ¬I(x) ∨ (...) (R$500), e um maior com residência e parente segurado cai nas linhas de R$200 e de R$500 (I). Já o programa usa uma cadeia de if/else if, então só um printf é executado por pessoa (II)."
+        },
+        {
+          "text": "II e III.",
+          "explanation": "Inclui a III, que está errada: a terceira linha da tabela, I(x) ∧ ¬R(x) ∧ ∃y (S(y) ∧ P(x, y)), concede o seguro por R$300 a quem é maior de idade, não tem residência própria e tem parente segurado."
+        },
+        {
+          "text": "III e IV.",
+          "explanation": "As duas estão erradas. A tabela prevê seguro de R$300 para quem não tem residência própria (III), e no programa um menor de idade entra no primeiro if e recebe \"Inviável\", sem chegar ao else if do R$500 (IV)."
+        },
+        {
+          "text": "I, II e IV.",
+          "explanation": "Inclui a IV, que está errada: para um menor de idade, !I(p) é verdadeiro no primeiro if, o programa imprime \"Inviável\" e os demais else if não são avaliados."
+        },
+        {
+          "text": "I, III e IV.",
+          "explanation": "Inclui III e IV, ambas erradas: a tabela dá R$300 a quem não tem residência própria, e o programa responde \"Inviável\" para menores de idade antes de chegar à condição do R$500."
+        }
+      ],
+      "correct": "A"
+    }
+  ]
+}

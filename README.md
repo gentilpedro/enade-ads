@@ -15,6 +15,18 @@ Plataforma aberta para estudantes de **Tecnologia em Análise e Desenvolvimento 
 
 As regras de perfis e de acesso estão em [docs/regras-de-negocio.md](docs/regras-de-negocio.md).
 
+## Questões das provas do Inep
+
+O banco já vem com as questões de ADS do ENADE 2021 e 2017, em `EnadeAds/Data/Seed/inep/*.json`, importadas ao subir a aplicação
+(só entram as que ainda não existem; correções feitas pelos professores na tela não são sobrescritas). As figuras ficam em
+`EnadeAds/wwwroot/img/inep/`.
+
+- **Fonte:** provas e gabaritos definitivos publicados em [download.inep.gov.br](https://download.inep.gov.br/enade/provas_e_gabaritos/).
+- **Licença:** o portal do Inep publica seu conteúdo sob [Creative Commons Atribuição-SemDerivações 3.0](https://creativecommons.org/licenses/by-nd/3.0/deed.pt_BR).
+  Por isso enunciados e alternativas são transcritos sem alterações e cada questão cita prova, ano e número.
+  Os comentários das alternativas e os padrões de resposta das discursivas são da plataforma (CC BY-SA 4.0); o Inep não publicou padrão de resposta acessível para essas provas.
+- **Anuladas:** a questão 15 de 2017 foi anulada pelo Inep e não entra.
+
 ## Stack
 
 - Blazor Web App .NET 10 (render mode `InteractiveAuto`), a partir do template [`GentilPedro.Templates.Blazor10`](https://github.com/gentilpedro/template-dotnet-blazor10)

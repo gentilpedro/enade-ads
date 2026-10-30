@@ -1,0 +1,392 @@
+{
+  "year": 2021,
+  "questions": [
+    {
+      "key": "enade-2021-ads-d03",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão discursiva 3 (Inep)",
+      "kind": "Discursive",
+      "subject": "algoritmos-programacao",
+      "statement": "Considere a realização de uma pesquisa com 1 000 pessoas para obtenção das seguintes informações: o valor da maior altura; o valor da menor altura; a média das alturas; quantas pessoas têm altura inferior à média das alturas.\n\nConsidere, ainda, que um programador foi selecionado para desenvolver um modelo de código que soluciona o problema automatizando a coleta das alturas e a geração das informações.\n\nCom base nas informações apresentadas, desenvolva o código adequado para resolver o problema usando pseudocódigo ou uma linguagem de programação. (valor: 10,0 pontos)",
+      "expectedAnswer": "Padrão de resposta elaborado pela plataforma (não é o padrão oficial do Inep).\n\nUma boa resposta precisa:\n\n- guardar as 1 000 alturas em um vetor, porque a contagem de quem está abaixo da média só pode ser feita depois que a média for conhecida;\n- ler as alturas em um laço e, no mesmo laço (ou em outro), acumular a soma e atualizar a maior e a menor altura;\n- iniciar maior e menor com a primeira altura lida (ou com valores extremos adequados), e não com 0 para a menor;\n- calcular a média como soma / 1000 em tipo real;\n- percorrer o vetor de novo contando as alturas estritamente menores que a média;\n- exibir maior, menor, média e a quantidade.\n\nExemplo em pseudocódigo:\n\n```\nreal alturas[1000]\nreal maior, menor, soma, media\ninteiro i, abaixo\nsoma <- 0\npara i de 0 ate 999 faca\n    leia(alturas[i])\n    se i = 0 entao\n        maior <- alturas[i]\n        menor <- alturas[i]\n    senao\n        se alturas[i] > maior entao maior <- alturas[i]\n        se alturas[i] < menor entao menor <- alturas[i]\n    fimse\n    soma <- soma + alturas[i]\nfimpara\nmedia <- soma / 1000\nabaixo <- 0\npara i de 0 ate 999 faca\n    se alturas[i] < media entao abaixo <- abaixo + 1\nfimpara\nescreva(maior, menor, media, abaixo)\n```\n\nPerde pontos a resposta que não armazena as alturas e tenta contar quem está abaixo da média antes de calculá-la, que inicia a menor altura com 0, que usa divisão inteira na média, que conta com <= em vez de <, ou que deixa de exibir alguma das quatro informações.",
+      "suggestedLines": 15
+    },
+    {
+      "key": "enade-2021-ads-d04",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão discursiva 4 (Inep)",
+      "kind": "Discursive",
+      "subject": "analise-arquitetura-sistemas",
+      "statement": "Um analista de requisitos identificou as seguintes histórias de usuários para um sistema web de reserva de passagens de uma empresa aérea:\n\nHST 01: COMO cliente, GOSTARIA de me cadastrar no site da empresa informando meu e-mail, nome, CPF, telefone e endereço PARA poder usar os serviços web da empresa.\n\nHST 02: COMO cliente, GOSTARIA de pesquisar por preços das passagens aéreas informando data, hora, cidade e aeroporto de ida e de volta PARA poder escolher uma opção de reserva que me interessa.\n\nHST 03: COMO cliente, GOSTARIA de confirmar uma reserva de passagem aérea selecionada, escolhendo uma das formas de pagamento disponibilizada pela empresa PARA poder viajar para o local escolhido na reserva.\n\nHST 04: COMO cliente, GOSTARIA de fazer o check-in online da reserva PARA poder realizar meu embarque.\n\nTendo por base essas histórias de usuários, elabore um diagrama de classes da UML (Unified Modeling Language) para o sistema, identificando as classes (máximo seis), atributos e associações entre as classes com as respectivas multiplicidades. Deverão ser representadas as reservas de ida e de volta como classes de uma associação do tipo generalização (herança) e também ser identificados pelo menos três métodos para a classe Reserva. Para as demais classes não é necessário identificar os métodos. Também não há necessidade de identificar a multiplicidade dos atributos nas classes. (valor: 10,0 pontos).",
+      "expectedAnswer": "Padrão de resposta elaborado pela plataforma (não é o padrão oficial do Inep).\n\nUma boa resposta apresenta no máximo seis classes, por exemplo:\n\n- Cliente: email, nome, cpf, telefone, endereco (HST 01).\n- Voo (ou Passagem): data, hora, cidadeOrigem, aeroportoOrigem, cidadeDestino, aeroportoDestino, preco (HST 02).\n- Reserva: codigo, dataReserva, valor, situacao, checkinRealizado; métodos como confirmar(), cancelar(), realizarCheckin() e calcularValor() (HST 03 e HST 04).\n- ReservaIda e ReservaVolta: subclasses de Reserva, ligadas a ela por generalização (seta de triângulo vazado apontando para Reserva).\n- FormaPagamento (ou Pagamento): tipo, valor, dataPagamento (HST 03).\n\nAssociações com multiplicidade coerentes com as histórias, por exemplo:\n\n- Cliente 1 — 0..* Reserva (um cliente pode ter várias reservas; cada reserva é de um cliente).\n- Reserva 0..* — 1 Voo (cada reserva é de um voo; um voo tem várias reservas).\n- Reserva 0..* — 1 FormaPagamento (ou Reserva 1 — 0..1 Pagamento, já que a reserva só tem pagamento depois de confirmada).\n\nO check-in pode aparecer como método de Reserva e atributo de situação, sem precisar de classe própria.\n\nPerde pontos a resposta que passa de seis classes, não representa ida e volta como herança de Reserva, traz menos de três métodos em Reserva, omite multiplicidades nas associações, ou deixa de cobrir algum dado pedido nas histórias (dados do cliente, dados da pesquisa de voo, forma de pagamento, check-in).",
+      "suggestedLines": 15
+    },
+    {
+      "key": "enade-2021-ads-d05",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão discursiva 5 (Inep)",
+      "kind": "Discursive",
+      "subject": "estruturas-dados",
+      "statement": "Com a finalidade de melhorar o atendimento e priorizar os casos mais urgentes, a direção de um hospital criou um sistema de triagem em que um profissional da saúde classifica a ordem de atendimento com base numa avaliação prévia do paciente, entregando-lhe um cartão numerado verde (V) ou amarelo (A), que define o menor ou maior grau de urgência da ocorrência, respectivamente. Para informatizar esse processo, o software desenvolvido tem como base o seguinte trecho de código-fonte:\n\n```\n 1 struct lista {\n 2     int numero;\n 3     char cor;\n 4     struct lista* prox;\n 5 };\n 6\n 7 typedef struct lista Lista;\n 8\n 9 Lista* inserir_fim(Lista* l, Lista* no) {\n10     Lista* aux;\n11\n12     no->prox = NULL;\n13     aux = l;\n14     while (aux->prox != NULL)\n15         aux = aux->prox;\n16     aux->prox = no;\n17\n18     return l;\n19 }\n20\n21 Lista* inserir(Lista* l, int numero, char cor) {\n22     Lista* no = (Lista*) malloc(sizeof(Lista));\n23     no->numero = numero;\n24     no->cor = cor;\n25\n26     if (l == NULL) {\n27         no->prox = l;\n28         l = no;\n29     } else {\n30         if (no->cor == 'V')\n31             l = inserir_fim(l, no);\n32         else\n33             l = inserir_prioridade(l, no);\n34     }\n35\n36     return l;\n37 }\n```\n\nNa linha 21, a função inserir recebe o número e a cor do cartão entregue ao paciente na triagem. Pacientes com cartão verde são inseridos no final da fila pela função `inserir_fim` (linhas 9-19). Pacientes com cartão amarelo têm prioridade no atendimento e são inseridos no início da fila, em ordem de chegada, pela função `inserir_prioridade`. Portanto, se são entregues os cartões `10-V, 11-V, 5-A, 12-V e 6-A`, nessa ordem, a fila deve ficar assim organizada:\n\n![Lista encadeada apontada por l com os nós 5 A, 6 A, 10 V, 11 V e 12 V, nessa ordem](img/inep/2021/d05-1.png)\n\nConsiderando o processo de triagem descrito e o trecho de código-fonte apresentado, implemente a função inserir_prioridade conforme indicado.\n\n```\nLista* inserir_prioridade(Lista* l, Lista* no)\n```\n\n(valor: 10,0 pontos)",
+      "expectedAnswer": "Padrão de resposta elaborado pela plataforma (não é o padrão oficial do Inep).\n\nA função precisa colocar o novo cartão amarelo depois do último amarelo que já está no início da fila e antes do primeiro verde. Assim os amarelos ficam na frente, mas entre si mantêm a ordem de chegada (5 antes de 6, no exemplo).\n\nPassos esperados:\n\n- percorrer a lista a partir de l guardando o nó anterior, enquanto o nó atual existir e tiver cor 'A';\n- ligar no->prox ao primeiro nó que não é amarelo (ou NULL, se a lista só tiver amarelos);\n- se não houver amarelo antes (anterior nulo), o novo nó vira a cabeça da lista e a função retorna no; caso contrário, anterior->prox recebe no e a função retorna l.\n\nExemplo em C:\n\n```\nLista* inserir_prioridade(Lista* l, Lista* no) {\n    Lista* ant = NULL;\n    Lista* aux = l;\n\n    while (aux != NULL && aux->cor == 'A') {\n        ant = aux;\n        aux = aux->prox;\n    }\n    no->prox = aux;\n    if (ant == NULL)\n        l = no;\n    else\n        ant->prox = no;\n\n    return l;\n}\n```\n\nPerde pontos a resposta que insere sempre na cabeça da lista (a fila ficaria 6 A, 5 A, quebrando a ordem de chegada), que não atualiza a cabeça quando o primeiro nó é verde, que perde o restante da lista ao não ligar no->prox, que acessa aux->cor sem testar se aux é NULL, ou que não retorna o ponteiro para o início da lista.",
+      "suggestedLines": 15
+    },
+    {
+      "key": "enade-2021-ads-q09",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 9 (Inep)",
+      "kind": "Objective",
+      "subject": "engenharia-requisitos",
+      "statement": "A etapa de definição de requisitos é voltada para estabelecer quais as funções são requeridas pelo sistema e as restrições sobre a operação e o desenvolvimento do software. Os requisitos de software podem ser classificados como requisitos funcionais e não funcionais.\n\nSOMMERVILLE, I. **Engenharia de Software**, 10. ed. São Paulo: Pearson Education, 2019 (adaptado).\n\nConsiderando as informações do texto, assinale a alternativa em que o item é um requisito funcional.",
+      "options": [
+        {
+          "text": "O software deve ser operacionalizado no sistema Linux.",
+          "explanation": "Define a plataforma em que o sistema roda. É uma restrição de ambiente (requisito não funcional), não uma função que o sistema oferece ao usuário."
+        },
+        {
+          "text": "O tempo de desenvolvimento não deve ultrapassar seis meses.",
+          "explanation": "Trata do prazo do projeto, uma restrição sobre o processo de desenvolvimento. Não descreve nenhum comportamento do software."
+        },
+        {
+          "text": "O software deve emitir relatórios de compras a cada quinze dias.",
+          "explanation": "Correta. Descreve um serviço que o sistema deve prestar (gerar relatórios de compras periodicamente), que é exatamente o que caracteriza um requisito funcional."
+        },
+        {
+          "text": "O tempo de resposta do sistema não deve ultrapassar 30 segundos.",
+          "explanation": "É um requisito de desempenho. Diz quão rápido o sistema deve responder, não o que ele faz, por isso é não funcional."
+        },
+        {
+          "text": "A base de dados deve ser protegida para acesso apenas de usuários autorizados.",
+          "explanation": "É um requisito de segurança, uma qualidade exigida do sistema. Por isso é classificado como não funcional."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2021-ads-q10",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 10 (Inep)",
+      "kind": "Objective",
+      "subject": "algoritmos-programacao",
+      "statement": "Uma fábrica adquiriu máquinas de costura industrial para a produção de jogos de toalhas de mesa e guardanapos de tecido com estampas quadriculadas. Cada quadrículo tem tamanho padrão de 5 cm X 5 cm. Para a configuração da costura, é preciso um programa de computador para criar um molde em que sejam informadas as quantidades de quadrículos por comprimento e por largura, além do desenho da estampa a ser costurada. Por exemplo, para um guardanapo de tecido que tenha 30 cm X 30 cm, com uma estampa representada pelo caractere “#”, o seguinte molde precisa ser criado:\n\n![Molde 6 x 6 em xadrez: a primeira linha começa vazia e alterna com #, a segunda começa com # e assim por diante; ao lado, um quadrículo ampliado de 5 cm x 5 cm com #](img/inep/2021/q10-1.png)\n\nComo uma toalha pode ter, no máximo, 250 cm de comprimento e 200 cm de largura, o programador declarou uma matriz `char molde[40][50]` para ser possível representar moldes cujas medidas compreendam esses limites. Ele também implementou, entre outras, as seguintes funções:\n\n- `criar_molde`, para a qual os seguintes parâmetros são esperados, nessa ordem: uma referência à matriz molde, o comprimento e a largura do tecido (em quantidades de quadrículos) e o caractere que representa a estampa;\n- `alternar_estampa`, que tem a tarefa de controlar a disposição alternada das estampas no molde.\n\nConsiderando o cenário descrito, que alternativa a seguir apresenta a implementação correta das funções `criar_molde e alternar_estampa`?",
+      "options": [
+        {
+          "text": "```\nchar alternar_estampa(char estampa, char *proxima) {\n    *proxima = *proxima == estampa ? ' ' : estampa;\n    return *proxima;\n}\n\nvoid criar_molde(char molde[][50], int c, int l, char estampa) {\n    char proxima = estampa;\n    for (int i = 0; i < l; i++)\n        for (int j = 0; j < c; j++)\n            molde[i][j] = alternar_estampa(estampa, &proxima);\n}\n```",
+          "explanation": "A alternância por ponteiro funciona, mas o valor de proxima continua de uma linha para a outra. Com 6 colunas, a linha seguinte começa igual à anterior e o molde vira listras verticais, não xadrez (só daria certo com quantidade ímpar de colunas)."
+        },
+        {
+          "text": "```\nchar alternar_estampa(char estampa, char proxima) {\n    proxima = proxima == estampa ? ' ' : estampa;\n    return proxima;\n}\n\nvoid criar_molde(char molde[][50], int c, int l, char estampa) {\n    char proxima = estampa;\n    for (int i = 0; i < l; i++)\n        for (int j = 0; j < c; j++)\n            molde[i][j] = alternar_estampa(estampa, proxima);\n}\n```",
+          "explanation": "proxima é passada por valor, então a alteração feita dentro de alternar_estampa se perde. Em criar_molde ela vale sempre a estampa, a função devolve sempre ' ' e o molde sai todo em branco."
+        },
+        {
+          "text": "```\nchar alternar_estampa(char estampa, char *proxima) {\n    return *proxima == estampa ? ' ' : estampa;\n}\n\nvoid criar_molde(char molde[][50], int c, int l, char estampa) {\n    char proxima = estampa;\n    for (int i = 0; i < l; i++)\n        for (int j = 0; j < c; j++)\n            molde[i][j] = alternar_estampa(estampa, &proxima);\n}\n```",
+          "explanation": "Recebe o ponteiro, mas nunca grava em *proxima. Como proxima continua igual à estampa, todas as chamadas retornam ' ' e não há alternância."
+        },
+        {
+          "text": "```\nchar alternar_estampa(char estampa, char *proxima) {\n    *proxima = *proxima == estampa ? ' ' : estampa;\n    return *proxima;\n}\n\nvoid criar_molde(char molde[][50], int c, int l, char estampa) {\n    char proxima = estampa;\n    for (int i = 0; i < l; i++) {\n        for (int j = 0; j < c; j++)\n            molde[i][j] = alternar_estampa(estampa, &proxima);\n        proxima = molde[i][0];\n    }\n}\n```",
+          "explanation": "Correta. O ponteiro faz proxima alternar entre ' ' e a estampa a cada célula, e a linha proxima = molde[i][0] faz a próxima linha começar com o oposto do primeiro caractere da linha atual. A primeira linha começa em branco e a segunda com #, formando o xadrez para qualquer número de colunas."
+        },
+        {
+          "text": "```\nchar alternar_estampa(char estampa, char proxima) {\n    proxima = proxima == estampa ? ' ' : estampa;\n    return proxima;\n}\n\nvoid criar_molde(char molde[][50], int c, int l, char estampa) {\n    char proxima = estampa;\n    for (int i = 0; i < l; i++) {\n        for (int j = 0; j < c; j++)\n            molde[i][j] = alternar_estampa(estampa, proxima);\n        proxima = molde[i][0];\n    }\n}\n```",
+          "explanation": "A passagem por valor impede a alternância dentro da linha: cada linha sai inteira com o mesmo caractere. O ajuste no fim de cada linha só troca o caractere entre linhas, gerando listras horizontais em vez de xadrez."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2021-ads-q11",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 11 (Inep)",
+      "kind": "Objective",
+      "subject": "estruturas-dados",
+      "statement": "O código Java, a seguir, contém a implementação de uma Pilha utilizando a estratégia encadeada.\n\n```\npublic class No{\n  public int dado;\n  public No prox;\n  public No(int dado){\n    this.dado = dado;\n  }\n}\npublic class PilhaEncadeada{\n  private No topo;\n  public int pop(){\n    if (topo == null)\n      return -1;\n    No lixo = topo;\n    topo = topo.prox;\n    lixo.prox = null;\n    return lixo.dado;\n  }\n\n  public int top(){\n    if (topo == null)\n      return -1;\n    return (topo.dado);\n  }\n}\n```\n\nCom base no exposto, assinale a opção que possui a implementação correta do método push para essa Pilha.",
+      "options": [
+        {
+          "text": "```\npublic void push(int elemento){\nNo novo = new No(elemento);\nif(topo == null)\n  topo = novo;\nelse\n  topo.prox = novo;\n}\n```",
+          "explanation": "Com a pilha não vazia, o novo nó é pendurado depois do topo e o topo não muda. O próximo pop devolveria o elemento antigo, e o que estava em topo.prox antes é perdido."
+        },
+        {
+          "text": "```\npublic void push(int elemento){\n  No novo = new No(elemento);\n  topo = novo;\n}\n```",
+          "explanation": "O novo nó vira o topo, mas não é ligado ao topo anterior (novo.prox fica null). Todos os elementos que já estavam na pilha são perdidos."
+        },
+        {
+          "text": "```\npublic void push(int elemento){\ntopo.dado = elemento;\n}\n```",
+          "explanation": "Não cria nó: só sobrescreve o dado do topo atual, apagando o valor que estava lá. Com a pilha vazia, topo é null e o código lança NullPointerException."
+        },
+        {
+          "text": "```\npublic void push(int elemento){\n  No novo = new No(elemento);\n  while (topo != null)\n    topo = topo.prox;\n  topo.prox = novo;\n}\n```",
+          "explanation": "O laço anda com o próprio topo até ele ficar null, destruindo a referência à pilha. Em seguida topo.prox é acessado com topo nulo e ocorre NullPointerException."
+        },
+        {
+          "text": "```\npublic void push(int elemento){\n  No novo = new No(elemento);\n  novo.prox = topo;\n  topo = novo;\n}\n```",
+          "explanation": "Correta. O novo nó aponta para o topo atual (novo.prox = topo) e depois passa a ser o topo. Funciona também com a pilha vazia, pois novo.prox recebe null, e combina com o pop, que remove sempre pelo topo."
+        }
+      ],
+      "correct": "E"
+    },
+    {
+      "key": "enade-2021-ads-q12",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 12 (Inep)",
+      "kind": "Objective",
+      "subject": "processo-software",
+      "statement": "Uma fábrica de software está realizando entrevistas para contração de um profissional que esteja alinhado às exigências do atual mundo corporativo. Sabe-se que processos ágeis de desenvolvimento têm se tornado essenciais para empresas que desejam realizar entregas rápidas e frequentes de produtos e/ou serviços de software. Essa empresa possui uma equipe de desenvolvimento que faz uso de processos ágeis como o Scrum e eXtreme Programming (XP) e o acompanhamento por meio do quadro Kanban. Sendo assim, um conjunto de características deve ser verificado durante a entrevista para garantir que o candidato a ser contratado possua conhecimentos necessários para atuar juntamente a esta equipe.\n\nCom base no texto e nos processos ágeis de desenvolvimento de software, avalie as afirmações a seguir.\n\nI. Métodos Ágeis são baseados em ciclos iterativo e incremental que se concentram no desenvolvimento rápido e na flexibilidade às mudanças, com a participação do cliente no processo de software.\n\nII. Uma forte característica da XP é a garantia da qualidade do código produzido e, para isso, os desenvolvedores produzem testes automatizados antes mesmo de codificar uma funcionalidade.\n\nIII. O planejamento no Scrum é baseado na elaboração dos itens do product backlog, que é uma lista de funcionalidades desejadas pelo cliente, sendo o Scrum Master o responsável por gerenciá-lo.\n\nIV. O quadro Kanban permite monitorar a evolução das tarefas necessárias durante o processo ágil de desenvolvimento de software, possibilitando um acompanhamento de forma visual das atividades em construção.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "II.",
+          "explanation": "A afirmação II está certa, mas I e IV também estão: métodos ágeis são iterativos e incrementais com o cliente participando, e o Kanban é um quadro visual de acompanhamento das tarefas."
+        },
+        {
+          "text": "I e III.",
+          "explanation": "Inclui a III, que está errada: quem gerencia o product backlog no Scrum é o Product Owner, não o Scrum Master. Também deixa de fora as afirmações II e IV, que estão certas."
+        },
+        {
+          "text": "I, II e IV.",
+          "explanation": "Correta. I descreve os métodos ágeis, II descreve o desenvolvimento orientado a testes (test-first) da XP e IV descreve o quadro Kanban. A III erra ao atribuir o product backlog ao Scrum Master, papel que é do Product Owner."
+        },
+        {
+          "text": "I, III e IV.",
+          "explanation": "Inclui a III, que está errada: o product backlog é responsabilidade do Product Owner. E omite a II, que está certa sobre os testes automatizados escritos antes do código na XP."
+        },
+        {
+          "text": "II, III e IV.",
+          "explanation": "Inclui a III, que está errada porque o dono do product backlog é o Product Owner. E omite a I, que descreve corretamente os métodos ágeis."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2021-ads-q13",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 13 (Inep)",
+      "kind": "Objective",
+      "subject": "estruturas-dados",
+      "statement": "Considere que as variáveis pilha e fila correspondem, respectivamente, às estruturas de dados do tipo Pilha e Fila. Para testar as duas estruturas, um programador realizou a série de operações a seguir.\n\n```\nPilha pilha = new Pilha();\nFila fila = new Fila();\npilha.push(‘A’);\npilha.push(‘B’);\npilha.push(‘C’);\nfila.enqueue(pilha.top());\nfila.enqueue(pilha.top());\nfila.enqueue(‘D’);\npilha.push(fila.dequeue());\nfila.enqueue(fila.dequeue());\nfila.enqueue(pilha.pop());\npilha.push(‘E’);\nfila.enqueue(‘E’);\npilha.pop();\n```\n\nApós essas operações, ao imprimir o conteúdo de pilha e fila, respectivamente, seria exibido:",
+      "options": [
+        {
+          "text": "pilha: topo → C → A → E.\n\nfila: início → D → A → A → E.",
+          "explanation": "A pilha nunca perde o B e o E sai no último pop, então ela não pode terminar com A e E. Na fila, os dois primeiros elementos vêm de pilha.top(), que devolve C, não A."
+        },
+        {
+          "text": "pilha: topo →A.\n\nfila: início → D → B → C → E.",
+          "explanation": "Trata top() como se removesse o elemento. top() só consulta o topo, por isso B e C continuam na pilha e a fila recebe C duas vezes."
+        },
+        {
+          "text": "pilha: topo → C → B → A.\n\nfila: início → D → C → C → E.",
+          "explanation": "Correta. Após os três push a pilha é A, B, C (topo C). A fila recebe C, C e D. O dequeue tira C e o empilha (topo C, C, B, A). A fila gira: tira C e põe no fim (D, C). O pop tira C da pilha e o enfileira (D, C, C). Entra E na pilha e E na fila, e o último pop remove o E. Resultado: pilha C, B, A e fila D, C, C, E."
+        },
+        {
+          "text": "pilha: topo → B → A.\n\nfila: início → D → B → C → E.",
+          "explanation": "Esquece que o C retirado da fila voltou para a pilha com pilha.push(fila.dequeue()), por isso a pilha termina com C no topo. Também supõe que top() devolveria B na segunda chamada."
+        },
+        {
+          "text": "pilha: topo → C → B → A.\n\nfila: início → D → B → C → E.",
+          "explanation": "A pilha está certa, mas a fila não. As duas chamadas a pilha.top() devolvem C, porque top() não remove o topo; nunca entra um B na fila."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2021-ads-q14",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 14 (Inep)",
+      "kind": "Objective",
+      "subject": "gerencia-projetos",
+      "statement": "Um projeto de integração de um ERP com um CRM não implementou todos os serviços esperados e há falhas nos serviços já implementados. Uma auditoria avaliou a situação e identificou que há desentendimentos entre os membros da equipe; os membros da qualidade não compreendem o que deve ser avaliado; demandas de novos solicitantes aparecem constantemente; e o patrocinador demora muito a responder às solicitações da equipe. Tudo isso fez com que o projeto ficasse bastante atrasado e com orçamento excedido.\n\nConsiderando o cenário descrito, o gerente de projeto deve priorizar o gerenciamento de",
+      "options": [
+        {
+          "text": "custo.",
+          "explanation": "O orçamento estourado é consequência dos problemas, não a causa. Controlar custo não resolve conflitos na equipe, solicitantes novos nem a demora do patrocinador."
+        },
+        {
+          "text": "tempo.",
+          "explanation": "O atraso também é efeito. Refazer o cronograma não ataca as causas apontadas pela auditoria, que são todas ligadas às pessoas envolvidas no projeto."
+        },
+        {
+          "text": "escopo.",
+          "explanation": "As demandas novas pressionam o escopo, mas vêm de solicitantes não gerenciados. Escopo não cobre os desentendimentos da equipe, a confusão da qualidade nem o patrocinador ausente."
+        },
+        {
+          "text": "qualidade.",
+          "explanation": "As falhas nos serviços são sintoma. A equipe de qualidade não sabe o que avaliar porque falta alinhamento entre as partes, o que é problema de engajamento e comunicação, não de processo de qualidade."
+        },
+        {
+          "text": "partes interessadas.",
+          "explanation": "Correta. Todas as causas citadas envolvem stakeholders: equipe em conflito, área de qualidade desalinhada, novos solicitantes trazendo demandas e patrocinador sem responder. Identificar, engajar e alinhar essas partes é o que resolve a raiz do atraso e do custo."
+        }
+      ],
+      "correct": "E"
+    },
+    {
+      "key": "enade-2021-ads-q15",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 15 (Inep)",
+      "kind": "Objective",
+      "subject": "analise-arquitetura-sistemas",
+      "statement": "Uma fundação municipal de arte e cultura oferece cursos para crianças e adolescentes de até 16 anos. Os registros de matrículas são realizados em uma planilha eletrônica ilustrada a seguir, o que dificulta bastante o controle dos dados frente ao número expressivo de estudantes, muitos dos quais solicitam matrícula em mais de um curso. A administração da fundação, então, solicitou o desenvolvimento de um programa para facilitar o registro e a consulta desses dados, incluindo-se a data de efetivação de cada matrícula, para fins de controles específicos da secretaria.\n\n![Planilha de matrículas com as colunas número, nome do estudante, data de nascimento, nome do responsável, contatos, curso, horário e professor(a), e cinco estudantes de exemplo](img/inep/2021/q15-1.png)\n\nA equipe de desenvolvimento de softwares da prefeitura, após uma breve entrevista com a administração da fundação e de posse da planilha eletrônica, modelou um Diagrama de Classes como parte da especificação dos requisitos do sistema.\n\nConsiderando o cenário descrito, assinale a opção a seguir que exibe o Diagrama de Classes modelado corretamente pela equipe de desenvolvimento.",
+      "options": [
+        {
+          "text": "![Diagrama de classes da alternativa A](img/inep/2021/q15-2.png)",
+          "explanation": "Liga a Matricula e o Professor diretamente ao Curso. Pela planilha, o mesmo curso (Desenho) tem professores e horários diferentes, então o estudante se matricula em uma turma, e é a turma que tem professor e horário."
+        },
+        {
+          "text": "![Diagrama de classes da alternativa B](img/inep/2021/q15-3.png)",
+          "explanation": "Correta. A Matricula (com a data) é classe de associação entre Estudante (0..*) e Turma (1..*). A Turma faz parte do Curso (composição 1 para 0..*), tem um Professor e 1..* Horarios. Contato é 0..* para o Responsavel, já que Kristen Nygaard não tem contato. Isso cobre tudo o que a planilha mostra."
+        },
+        {
+          "text": "![Diagrama de classes da alternativa C](img/inep/2021/q15-4.png)",
+          "explanation": "Exige 1..* contatos por responsável, mas a planilha tem responsável sem contato. Também liga o Professor ao Curso, não à Turma, e põe multiplicidade 1 do lado da Turma na matrícula, impedindo o estudante de cursar mais de uma turma."
+        },
+        {
+          "text": "![Diagrama de classes da alternativa D](img/inep/2021/q15-5.png)",
+          "explanation": "Exige 1..* contatos por responsável, o que a planilha contradiz. Limita cada estudante a 1 turma, mas há estudantes em dois cursos, e dá apenas 1 horário por turma."
+        },
+        {
+          "text": "![Diagrama de classes da alternativa E](img/inep/2021/q15-6.png)",
+          "explanation": "Liga a Matricula ao Curso e o Professor ao Horario, deixando a Turma sem professor. Como um curso pode ter turmas com professores e horários diferentes, a matrícula precisa ser na turma."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2021-ads-q16",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 16 (Inep)",
+      "kind": "Objective",
+      "subject": "orientacao-objetos",
+      "statement": "Uma ONG decidiu construir um hospital de campanha para tratamento de pacientes diagnosticados com a Covid-19. Para auxiliar na gerência hospitalar, a ONG contratou alguns programadores voluntários para desenvolver um Sistema de Suporte à Decisão para Gestão Hospitalar. Esse sistema irá auxiliar no registro de todos os procedimentos diários realizados no paciente que dá entrada no hospital, desde sua internação até a saída, seja essa saída por recebimento de alta, por transferência ou óbito. O sistema foi todo desenvolvido em Java de acordo com o Paradigma Orientado a Objetos. Durante o curto processo de análise, devido à urgência, foram construídos diversos diagramas em UML (Unified Modeling Language). Um desses diagramas relaciona a interação entre os objetos do sistema, o Diagrama de Sequência. Esse diagrama é apresentado a seguir.\n\n![Diagrama de sequência com as linhas de vida Paciente, Registro, Leito, Profissional, UTI e Intervencao e as mensagens 1 a 12, incluindo um fragmento Laço e a destruição dos objetos ao final](img/inep/2021/q16-1.png)\n\nConsiderando o Diagrama de Sequência apresentado, assinale a opção correta.",
+      "options": [
+        {
+          "text": "Leito é uma subclasse de UTI.",
+          "explanation": "Diagrama de sequência mostra troca de mensagens entre objetos, não herança. Nada nele indica que Leito herde de UTI; o que existe é Leito enviando a mensagem consultaUTI() para UTI."
+        },
+        {
+          "text": "O método registraPaciente() é implementado por Paciente.",
+          "explanation": "A mensagem registraPaciente() sai de Paciente e chega em Registro. Em diagrama de sequência, quem recebe a mensagem é quem implementa a operação, então o método é de Registro."
+        },
+        {
+          "text": "Todos os objetos foram criados no instante de execução do Caso de Uso representado.",
+          "explanation": "Paciente, Registro, Leito e Profissional já existem no topo do diagrama. Só UTI e Intervencao surgem no meio, no ponto em que recebem a mensagem, ou seja, só eles são criados durante o caso de uso."
+        },
+        {
+          "text": "O diagrama apresenta um erro ao não representar as mensagens de retorno depois da destruição dos objetos.",
+          "explanation": "Mensagens de retorno são opcionais em UML, e um objeto destruído (marcado com X) não envia mais mensagens. A ausência de retorno após a destruição não é erro."
+        },
+        {
+          "text": "A mensagem 4 pode ser substituída pelo estereótipo <<create>> sem causar prejuízo à interpretação correta do Diagrama de Sequência representado.",
+          "explanation": "Correta. A seta da mensagem 4 (consultaUTI()) termina na caixa de UTI, que aparece mais abaixo que os demais objetos: é a notação de criação de objeto. Por isso essa mensagem pode ser rotulada como <<create>> sem mudar o sentido do diagrama."
+        }
+      ],
+      "correct": "E"
+    },
+    {
+      "key": "enade-2021-ads-q17",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 17 (Inep)",
+      "kind": "Objective",
+      "subject": "banco-de-dados",
+      "statement": "O modelo de dados relacional a seguir representa de forma simplificada o banco de dados para um sistema de informação bancário:\n\n![Modelo relacional com as tabelas CATEGORIA_CLIENTE, CLIENTE, AGENCIA, CONTA, TIPO_CONTA, TIPO_MOVIMENTACAO e HISTORICO_MOVIMENTACAO, com chaves primárias e estrangeiras](img/inep/2021/q17-1.png)\n\nUsando a linguagem SQL (Structured Query Language) indique a consulta que recupera o nome dos clientes e o valor médio movimentado por eles em sua conta até o momento. Primeiro devem ser exibidos os clientes com maior média de valor movimentado.",
+      "options": [
+        {
+          "text": "```\nSELECT CL.NOME, HM.VAL_MOVIMENTADO\nFROM CLIENTE CL INNER JOIN CONTA CO ON CL.COD_CLIENTE = CO.COD_CLIENTE\nINNER JOIN HISTORICO_MOVIMENTACAO HM ON CO.NUM_CONTA = HM.NUM_CONTA\nORDER BY HM.VAL_MOVIMENTADO\n```",
+          "explanation": "Não calcula média: lista cada movimentação separadamente, sem AVG nem GROUP BY. Além disso, ORDER BY sem DESC ordena do menor para o maior valor."
+        },
+        {
+          "text": "```\nSELECT CL.NOME, AVG(HM.VAL_MOVIMENTADO)\nFROM CLIENTE CL INNER JOIN CONTA CO ON CL.COD_CLIENTE = CO.COD_CLIENTE\nINNER JOIN HISTORICO_MOVIMENTACAO HM ON CO.NUM_CONTA = HM.NUM_CONTA\nORDER BY HM.VAL_MOVIMENTADO DESC\n```",
+          "explanation": "Usa AVG ao lado de CL.NOME sem GROUP BY, o que gera erro (ou uma única média geral, dependendo do SGBD). E ordena por uma coluna não agregada em vez da média."
+        },
+        {
+          "text": "```\nSELECT CL.NOME, AVG(HM.VAL_MOVIMENTADO)\nFROM CLIENTE CL INNER JOIN CONTA CO ON CL.COD_CLIENTE = CO.COD_CLIENTE\nINNER JOIN HISTORICO_MOVIMENTACAO HM ON CO.NUM_CONTA = HM.NUM_CONTA\nGROUP BY CL.COD_CLIENTE, CL.NOME\nORDER BY AVG(HM.VAL_MOVIMENTADO) DESC\n```",
+          "explanation": "Correta. Os INNER JOIN ligam cliente, conta e histórico pelas chaves certas, o GROUP BY CL.COD_CLIENTE, CL.NOME calcula uma média por cliente (sem misturar homônimos) e o ORDER BY AVG(...) DESC mostra primeiro as maiores médias."
+        },
+        {
+          "text": "```\nSELECT CL.NOME, AVG(HM.VAL_MOVIMENTADO)\nFROM CLIENTE CL LEFT OUTER JOIN CONTA CO ON CL.COD_CLIENTE = CO.NUM_CONTA\nLEFT OUTER JOIN HISTORICO_MOVIMENTACAO HM ON CO.NUM_CONTA = HM.COD_HISTORICO_MOVIMENTACAO\nGROUP BY CL.NOME\nORDER BY AVG(HM.VAL_MOVIMENTADO) DESC\n```",
+          "explanation": "As condições de junção estão erradas: compara COD_CLIENTE com NUM_CONTA e NUM_CONTA com COD_HISTORICO_MOVIMENTACAO, ligando registros sem relação. As médias calculadas não correspondem às contas dos clientes."
+        },
+        {
+          "text": "```\nSELECT CL.NOME, AVG(HM.VAL_MOVIMENTADO)\nFROM CLIENTE CL LEFT OUTER JOIN CONTA CO ON CL.COD_CLIENTE = CO.COD_CLIENTE\nLEFT OUTER JOIN HISTORICO_MOVIMENTACAO HM ON CO.NUM_CONTA = HM.NUM_CONTA\nGROUP BY CL.NOME\nORDER BY AVG(HM.VAL_MOVIMENTADO) DESC\n```",
+          "explanation": "Agrupa só por CL.NOME, então clientes diferentes com o mesmo nome têm as movimentações somadas numa média só. O LEFT OUTER JOIN ainda traz clientes sem movimentação, com média nula, que não respondem ao que foi pedido."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2021-ads-q18",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 18 (Inep)",
+      "kind": "Objective",
+      "subject": "engenharia-requisitos",
+      "statement": "A engenharia de requisitos é uma área que inclui quatro subprocessos relacionados de alto nível. Esses subprocessos são: 1) avaliação se o sistema será útil para a empresa (estudo de viabilidade); 2) obtenção de requisitos (elicitação de requisitos); 3) conversão desses requisitos em alguma forma padrão (especificação); 4) verificação se os requisitos realmente definem o sistema que o cliente deseja (validação).\n\nSOMMERVILLE, I. **Engenharia de Software**. São Paulo: Pearson Addison-Wesley, 2017 (adaptado).\n\nUma equipe de Tecnologia da Informação de uma empresa de consultoria desenvolverá um software de Suporte Técnico para uma grande empresa fornecedora de equipamentos eletrônicos. O estudo de viabilidade do software já foi realizado e aprovado. A equipe de Tecnologia da Informação seguirá os três subprocessos seguintes de alto nível de engenharia de requisitos descritos no texto de Sommerville, ou seja, os subprocessos de elicitação de requisitos, especificação e validação.\n\nPara esses três subprocessos, quais são os artefatos que podem ser utilizados por essa equipe de Tecnologia da Informação?",
+      "options": [
+        {
+          "text": "Documento de entrevista com usuários; modelo de caso de uso para os requisitos funcionais; prototipação de telas.",
+          "explanation": "Correta. A entrevista com usuários serve à elicitação, o modelo de casos de uso documenta os requisitos funcionais na especificação e o protótipo de telas permite ao cliente conferir se os requisitos estão certos, o que é validação."
+        },
+        {
+          "text": "Documento de estudo de viabilidade; modelo de caso de uso para os requisitos funcionais; prototipação de telas.",
+          "explanation": "O estudo de viabilidade pertence ao primeiro subprocesso, que já foi concluído. Não é artefato de elicitação, especificação ou validação."
+        },
+        {
+          "text": "Matriz de rastreabilidade; modelo de caso de uso para os requisitos não-funcionais; prototipação de telas.",
+          "explanation": "Casos de uso descrevem interações do usuário com o sistema, ou seja, requisitos funcionais, não não funcionais. E a matriz de rastreabilidade é ferramenta de gerenciamento de requisitos, não de elicitação."
+        },
+        {
+          "text": "Documento de entrevista com usuários; modelo de caso de uso para os requisitos não-funcionais; matriz de rastreabilidade.",
+          "explanation": "A entrevista está certa para a elicitação, mas casos de uso modelam requisitos funcionais, não os não funcionais. A matriz de rastreabilidade serve ao gerenciamento de mudanças, não à validação com o cliente."
+        },
+        {
+          "text": "Documento de estudo de viabilidade; modelo de caso de uso para os requisitos funcionais; matriz de rastreabilidade.",
+          "explanation": "Começa pelo estudo de viabilidade, que é do subprocesso já realizado e não da elicitação. E a matriz de rastreabilidade não valida com o cliente se os requisitos estão corretos."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "key": "enade-2021-ads-q19",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 19 (Inep)",
+      "kind": "Objective",
+      "subject": "analise-arquitetura-sistemas",
+      "statement": "Arquitetura de software é uma representação que permite analisar a efetividade do projeto no entendimento dos requisitos declarados. Durante a fase de concepção da arquitetura, podem-se considerar alternativas de arquitetura em um estágio em que mudanças ainda são realizadas com menor esforço, diminuindo riscos associados à construção do software ainda na fase inicial.\n\nPRESSMAN, R. S. **Engenharia de Software**: uma abordagem profissional. 8. ed. Porto Alegue: AMGH, 2016 (adaptado).\n\nA respeito dos estilos e padrões arquiteturais contidos na engenharia de software, avalie as afirmações a seguir.\n\nI. Em arquiteturas orientadas a objetos, a comunicação entre os componentes do software é realizada por intermédio da troca de mensagens.\n\nII. As arquiteturas monolíticas consistem de um sistema dividido em pequenas partes, possibilitando que estas tenham sua manutenção, execução e evolução individual.\n\nIII. No padrão arquitetural Modelo-Visão-Controle (MVC), a camada de Modelo armazena as interações realizadas no Controle, podendo ser apresentados/manipulados posteriormente na Visão.\n\nIV. Nas arquiteturas microsserviços, o software possui componentes altamente acoplados, dificultando a manutenção.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e III.",
+          "explanation": "Correta. Em arquitetura orientada a objetos os componentes se comunicam por mensagens (chamadas de métodos), e no MVC o Modelo guarda os dados alterados pelo Controle para a Visão exibir. A II descreve microsserviços, não monólito, e a IV inverte a ideia: microsserviços são fracamente acoplados."
+        },
+        {
+          "text": "II e III.",
+          "explanation": "A II está errada: um sistema dividido em partes com manutenção, execução e evolução independentes é a definição de microsserviços. O monólito é implantado como uma unidade só."
+        },
+        {
+          "text": "II e IV.",
+          "explanation": "As duas estão erradas. A II atribui ao monólito características de microsserviços, e a IV diz que microsserviços são altamente acoplados, quando o objetivo deles é justamente o baixo acoplamento."
+        },
+        {
+          "text": "I, II e IV.",
+          "explanation": "Acerta a I, mas inclui a II, que descreve microsserviços como se fossem monólito, e a IV, que contradiz o baixo acoplamento dos microsserviços. E deixa de fora a III, que está certa."
+        },
+        {
+          "text": "I, III e IV.",
+          "explanation": "Inclui a IV, que está errada: microsserviços são independentes e fracamente acoplados, o que facilita a manutenção, não dificulta."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "key": "enade-2021-ads-q20",
+      "source": "ENADE 2021 – Análise e Desenvolvimento de Sistemas, questão 20 (Inep)",
+      "kind": "Objective",
+      "subject": "interacao-humano-computador",
+      "statement": "Uma secretaria municipal de esportes decidiu criar e disponibilizar um site que sirva como portal de comunicação com pessoas da terceira idade. A finalidade é fornecer orientações que propiciem práticas para uma vida mais saudável, além de divulgar eventos esportivos ofertados pelo município para esse público-alvo. O projeto ainda prevê a interação entre os usuários do site, por meio da publicação de fotos, que podem ser curtidas e comentadas.\n\nA iniciativa de criação do site foi embasada em uma pesquisa mostrando que a maioria da população de terceira idade do município dispõe de acesso à internet, especialmente por meio de dispositivos móveis (smartphones e tablets), embora uma parcela dessa população prefira realizar o acesso com computadores de mesa e notebooks.\n\nConsiderando as informações do texto e as responsabilidades inerentes ao desenvolvimento do site, avalie as afirmações a seguir.\n\nI. A segurança no uso é um fator crítico de usabilidade a ser considerado no projeto de interface para o site, tendo em vista que pessoas da terceira idade são temerosas quanto ao registro de dados pessoais e confidenciais em sites e aplicativos.\n\nII. A responsividade, que pressupõe o uso de valores relativos para definir as dimensões de elementos na estilização de páginas HTML, deve ser considerada na construção do site, tendo em vista que o acesso deve ocorrer através de dispositivos com diferentes tamanhos de tela.\n\nIII. A construção de protótipos pode antecipar problemas de design de interação e minimizar custos de desenvolvimento e, por isso, é viável para estabelecer uma comunicação mais objetiva com o público-alvo e assim possibilitar a validação de usabilidade e da experiência do usuário.\n\nIV. O design participativo é um processo de design de Interação Humano-Computador (IHC) viável para direcionar o projeto de interfaces e de experiência com o usuário do site, pois o público-alvo tende a apresentar dificuldades no manuseio de tecnologias da informação e da comunicação.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e II.",
+          "explanation": "Inclui a I, que o gabarito considera errada: segurança no uso, como meta de usabilidade, é proteger o usuário de erros e situações indesejadas na interação, e não o receio de cadastrar dados pessoais, que é questão de privacidade. Também omite III e IV."
+        },
+        {
+          "text": "I e III.",
+          "explanation": "Inclui a I, que confunde segurança no uso (evitar erros do usuário) com proteção de dados pessoais. E deixa de fora a II e a IV, que estão certas."
+        },
+        {
+          "text": "II e IV.",
+          "explanation": "II e IV estão certas, mas a III também está: protótipos antecipam problemas de interação a baixo custo e permitem validar a usabilidade com o público."
+        },
+        {
+          "text": "I, III e IV.",
+          "explanation": "Inclui a I, que mistura usabilidade com privacidade de dados, e omite a II, que está certa: o público acessa por celular, tablet e computador, então o site precisa ser responsivo."
+        },
+        {
+          "text": "II, III e IV.",
+          "explanation": "Correta. A II justifica o design responsivo pelos vários tamanhos de tela, a III mostra o valor dos protótipos para validar usabilidade cedo e a IV indica o design participativo para um público com dificuldade com tecnologia. A I erra ao tratar segurança no uso, meta de usabilidade ligada a evitar erros, como se fosse medo de registrar dados pessoais."
+        }
+      ],
+      "correct": "E"
+    }
+  ]
+}

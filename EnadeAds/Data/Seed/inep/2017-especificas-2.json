@@ -1,0 +1,455 @@
+{
+  "year": 2017,
+  "questions": [
+    {
+      "key": "enade-2017-ads-q21",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 21 (Inep)",
+      "kind": "Objective",
+      "subject": "processo-software",
+      "statement": "Os modelos de processo foram propostos para trazer ordem ao caos existente na área de desenvolvimento de software. A história mostra que esses modelos trouxeram considerável contribuição no trabalho da engenharia de software.\n\nPRESSMAN, R. S. **Engenharia de software**: uma abordagem profissional. 8. ed. Porto Alegre: AMGH, 2016 (adaptado).\n\nA respeito dos modelos de processo, avalie as afirmações a seguir.\n\nI. São atividades do modelo incremental: especificação, desenvolvimento e validação.\n\nII. No modelo espiral, a fase de modelagem é responsável, entre outras atividades, pela estimativa, cronograma e análise de risco.\n\nIII. O modelo cascata sugere uma abordagem sequencial e sistemática para o desenvolvimento de software, iniciando na especificação de requisitos e finalizando com a entrega do software concluído.\n\nÉ correto o que se afirma em",
+      "options": [
+        {
+          "text": "II, apenas.",
+          "explanation": "A afirmação II está errada: no modelo espiral, estimativa, cronograma e análise de risco pertencem ao planejamento, não à modelagem. Além disso, a alternativa deixa de fora I e III, que estão corretas."
+        },
+        {
+          "text": "III, apenas.",
+          "explanation": "A afirmação III está correta, mas a I também está: no desenvolvimento incremental, especificação, desenvolvimento e validação se intercalam a cada incremento."
+        },
+        {
+          "text": "I e II, apenas.",
+          "explanation": "Inclui a afirmação II, que é falsa: estimativa, cronograma e análise de risco são atividades de planejamento no espiral, não de modelagem. E deixa de fora a III, que descreve corretamente o cascata."
+        },
+        {
+          "text": "I e III, apenas.",
+          "explanation": "Correta. No modelo incremental, especificação, desenvolvimento e validação acontecem intercaladas em cada incremento (I), e o cascata é sequencial, indo dos requisitos até a entrega (III). A II erra ao atribuir estimativa, cronograma e risco à modelagem, quando isso é planejamento."
+        },
+        {
+          "text": "I, II e III.",
+          "explanation": "A afirmação II é falsa: no espiral de Pressman, estimativa, cronograma e análise de risco ficam na atividade de planejamento, e a modelagem trata de análise e projeto."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2017-ads-q22",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 22 (Inep)",
+      "kind": "Objective",
+      "subject": "gerencia-configuracao",
+      "statement": "Um desenvolvedor de software recém-formado foi contratado para a implementação de um projeto em uma empresa e, em reunião, recebeu várias explicações sobre como a gerência de configuração funcionava.\n\nConsiderando essa situação, avalie as afirmações a seguir, referentes às informações dadas ao desenvolvedor.\n\nI. Inicialmente, para ter acesso à base de desenvolvimento, o profissional deve realizar uma operação de checkout para baixar os arquivos do projeto que estão armazenados no servidor.\n\nII. Na situação em que mais de um desenvolvedor estiver modificando um mesmo documento, ao se tentar realizar uma operação de commit, pode ser necessário realizar uma operação de tag (release) para resolução do conflito entre a versão local e a versão mais recente no repositório, caso algum desenvolvedor tenha submetido uma mudança no documento previamente.\n\nIII. No desenvolvimento de um novo caso de uso, em que diversos arquivos sejam modificados, é recomendada a criação de uma ramificação (branch).\n\nIV. A versão estável é o ramo principal de desenvolvimento, que segue do começo do desenvolvimento até o momento presente.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e II.",
+          "explanation": "A afirmação II está errada: conflito entre a cópia local e a versão mais recente se resolve com update/merge, não com tag. Tag só marca uma versão (por exemplo, uma release)."
+        },
+        {
+          "text": "I e III.",
+          "explanation": "Correta. O checkout traz a cópia de trabalho do repositório (I), e uma mudança que mexe em vários arquivos, como um novo caso de uso, deve ser isolada em um branch (III). Tag não resolve conflito (II) e o ramo principal não é a versão estável (IV)."
+        },
+        {
+          "text": "II e IV.",
+          "explanation": "As duas afirmações são falsas: tag não resolve conflito de commit (isso é merge), e o ramo principal (tronco) recebe mudanças contínuas, enquanto a versão estável é uma linha de base ou release marcada."
+        },
+        {
+          "text": "I, III e IV.",
+          "explanation": "A IV é falsa: o ramo principal que vai do início até hoje é o tronco (trunk/mainline), que recebe mudanças em andamento. A versão estável é uma release marcada, não o próprio tronco."
+        },
+        {
+          "text": "II, III e IV.",
+          "explanation": "Inclui a II, que confunde tag com merge, e a IV, que confunde o tronco de desenvolvimento com a versão estável. Também deixa de fora a I, que está correta."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2017-ads-q23",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 23 (Inep)",
+      "kind": "Objective",
+      "subject": "qualidade-testes",
+      "statement": "Um software com defeito pode ser consequência de problemas no levantamento dos requisitos, uma vez que o requisito pode ser ambíguo porque o cliente não estava convicto da sua real necessidade ou porque a equipe o interpretou mal e registrou uma especificação de forma incorreta. Por esses motivos, as verificações, as validações e os testes são fundamentais para se certificar da qualidade do software resultante.\n\nConsiderando esse contexto, avalie as afirmações a seguir.\n\nI. O teste funcional certifica se o software desempenha as funções especificadas nos requisitos.\n\nII. O teste de desempenho valida a conformidade da especificação do processo de desenvolvimento de software.\n\nIII. O teste de aceitação é realizado pelo cliente a fim de validar se aquilo que foi implementado é o que foi solicitado.\n\nIV. O teste de instalação, invariavelmente, é executado no local determinado pelo cliente para instalação do software.\n\nV. As técnicas de verificação e validação de software asseguram que o sistema que está sendo desenvolvido seja adequado ao seu propósito.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e IV.",
+          "explanation": "A IV é falsa por causa do \"invariavelmente\": o teste de instalação pode ser feito em ambientes de teste que simulam o do cliente, não só no local do cliente. E a alternativa deixa de fora III e V, que estão corretas."
+        },
+        {
+          "text": "I, III e V.",
+          "explanation": "Correta. O teste funcional confere as funções especificadas (I), o de aceitação é feito pelo cliente para confirmar que recebeu o que pediu (III), e verificação e validação garantem que o sistema serve ao seu propósito (V)."
+        },
+        {
+          "text": "II, III e IV.",
+          "explanation": "A II é falsa: teste de desempenho mede tempo de resposta, carga e uso de recursos do produto, não a conformidade do processo de desenvolvimento. A IV também é falsa pelo \"invariavelmente\"."
+        },
+        {
+          "text": "II, IV e V.",
+          "explanation": "Inclui a II (teste de desempenho não avalia o processo) e a IV (o teste de instalação não ocorre obrigatoriamente no local do cliente), e deixa de fora I e III, que estão corretas."
+        },
+        {
+          "text": "I, II, III e V.",
+          "explanation": "Inclui a II, que é falsa: teste de desempenho avalia o comportamento do software sob carga, não a especificação do processo de desenvolvimento."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2017-ads-q24",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 24 (Inep)",
+      "kind": "Objective",
+      "subject": "operacoes-manutencao",
+      "statement": "Nas décadas de 1970 e 1980, muitos sistemas corporativos foram desenvolvidos com a linguagem Cobol, utilizando o Sistema Gerenciador de Banco de dados ADABAS e arquivos indexados do tipo ISAM e VISAM. Alguns desses produtos de implementação foram, ou estão sendo, descontinuados pelos seus fabricantes. Por isso, o trabalho de reengenharia desses sistemas, utilizando linguagens mais modernas, como Python, Java ou mesmo C++, associadas com sistemas de banco de dados mais atuais, apresenta-se como uma boa oportunidade de negócios.\n\nConsiderando esse cenário, avalie as afirmações a seguir.\n\nI. A dificuldade de reengenharia de sistemas antigos deve-se ao fato de que, na maioria das vezes, o desenvolvedor definia o sistema e esse já era o próprio processo da organização.\n\nII. O custo de alteração para modernização de uma linha de código em Cobol é alto, por isso, fazer a manutenção desses sistemas é menos despendioso.\n\nIII. Uma estratégia de conversão dos referidos sistemas para uma linguagem orientada a objetos é definir uma estrutura de classes e métodos e realizar o refatoramento do código.\n\nÉ correto o que se afirma em",
+      "options": [
+        {
+          "text": "I, apenas.",
+          "explanation": "A I está correta, mas a alternativa ignora a II e a III, que o gabarito oficial também considera corretas."
+        },
+        {
+          "text": "III, apenas.",
+          "explanation": "A III está correta, mas a I também: em sistemas legados, as regras de negócio ficaram embutidas no código, que virou o próprio processo da organização. A II também é considerada correta pelo gabarito."
+        },
+        {
+          "text": "I e II, apenas.",
+          "explanation": "Deixa de fora a III: definir classes e métodos e refatorar o código é uma estratégia válida para converter o legado para orientação a objetos."
+        },
+        {
+          "text": "II e III, apenas.",
+          "explanation": "Deixa de fora a I: a reengenharia é difícil justamente porque o sistema antigo concentra regras de negócio que muitas vezes não estão documentadas fora do código."
+        },
+        {
+          "text": "I, II e III.",
+          "explanation": "Correta. Segundo o gabarito, as três estão certas: o legado incorpora o processo da empresa (I), modernizar linha a linha um código Cobol custa caro, o que torna a manutenção a opção menos dispendiosa (II), e a conversão para OO passa por definir classes e métodos e refatorar (III)."
+        }
+      ],
+      "correct": "E"
+    },
+    {
+      "key": "enade-2017-ads-q25",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 25 (Inep)",
+      "kind": "Objective",
+      "subject": "estruturas-dados",
+      "statement": "O fragmento de código C++, a seguir, contém a implementação da inserção de um nó em uma árvore binária.\n\n```\n...\nstruct noArvore {\n   int dado;\n   noArvore *esquerda;\n   noArvore *direita;\n};\n\nnoArvore *insere(noArvore *arvore, int valor) {\n   if (arvore == NULL) {\n      arvore = new noArvore;\n      arvore->esquerda = NULL;\n      arvore->direita = NULL;\n      arvore->dado = valor;\n   } else if(valor < arvore->dado) {\n        arvore->esquerda = insere (arvore->esquerda, valor);\n     }\n     else {\n        arvore->direita = insere (arvore->direita, valor);\n     }\n     return(arvore);\n}\n...\n```\n\nCom base no exposto, assinale a opção que apresenta o fragmento de programa para imprimir os valores contidos nos nós, percorrendo a árvore em pré-ordem.",
+      "options": [
+        {
+          "text": "```\nvoid preorder(noArvore *raiz) {\n   if (raiz != NULL) {\n      cout << raiz->dado << \" \";\n      preorder(raiz->esquerda);\n      preorder(raiz->direita);\n   }\n}\n```",
+          "explanation": "Correta. Pré-ordem visita primeiro a raiz e depois as subárvores esquerda e direita: o `cout` vem antes das duas chamadas recursivas, na ordem esquerda e depois direita."
+        },
+        {
+          "text": "```\nvoid preorder(noArvore *raiz) {\n   if (raiz != NULL) {\n      preorder(raiz->direita);\n      preorder(raiz->esquerda);\n      cout << raiz->dado << \" \";\n   }\n}\n```",
+          "explanation": "Imprime o nó só depois de percorrer as duas subárvores, e ainda começando pela direita. Isso é um percurso em pós-ordem espelhado, não pré-ordem."
+        },
+        {
+          "text": "```\nvoid preorder(noArvore *raiz) {\n   if (raiz != NULL) {\n      preorder(raiz->esquerda);\n      cout << raiz->dado << \" \";\n      preorder(raiz->direita);\n   }\n}\n```",
+          "explanation": "Visita a esquerda, depois o nó, depois a direita: é o percurso em ordem simétrica (in-ordem), que numa árvore de busca imprime os valores em ordem crescente."
+        },
+        {
+          "text": "```\nvoid preorder(noArvore *raiz) {\n   if (raiz != NULL) {\n      preorder(raiz->esquerda);\n      preorder(raiz->direita);\n      cout << raiz->dado << \" \";\n   }\n}\n```",
+          "explanation": "Imprime o nó depois das duas subárvores: é o percurso em pós-ordem."
+        },
+        {
+          "text": "```\nvoid preorder(noArvore *raiz) {\n   if (raiz != NULL) {\n      preorder(raiz->direita);\n      cout << raiz->dado << \" \";\n      preorder(raiz->esquerda);\n   }\n}\n```",
+          "explanation": "Visita a direita, o nó e depois a esquerda: é a ordem simétrica invertida, que imprime os valores em ordem decrescente."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "key": "enade-2017-ads-q26",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 26 (Inep)",
+      "kind": "Objective",
+      "subject": "analise-arquitetura-sistemas",
+      "statement": "Para que se realize a multiplicação de probabilidades com maior facilidade, foi desenvolvida, utilizando-se o padrão MVC (Model-View-Controller), uma calculadora que pode ser configurada de dois modos: comum e probabilista. No primeiro, as multiplicações ocorrem de forma ordinária. No segundo, as multiplicações são feitas utilizando-se uma fórmula específica.\n\nA classe a seguir, escrita na linguagem Java, define o método `multiplica`. Ele é executado quando o botão da multiplicação é pressionado, e recebe como parâmetro os valores que o usuário deseja usar na operação, além de possuir uma variável de instância do tipo `CalculadoraController`. O método `alteraModo` é encarregado de alterar a instância para a qual essa variável faz referência conforme o modo selecionado pelo usuário. A instância interage com as partes do model apropriadas à solicitação realizada pelo usuário. Quando o usuário deseja usar o modo probabilista, a variável `modo` tem o valor 1, caso contrário, ela tem o valor 0.\n\n```\npublic class Calculadora {\n\n   private CalculadoraController c;\n   private int modo;\n\n   public double multiplica (double[] valores) {\n      return c.multiplica (valores);\n   }\n\n   public void alteraModo () {\n\n      if ( modo == 1)\n         c = new ProbabilistaController();\n      else\n         c = new OrdinarioController();\n      }\n}\n```\n\nO diagrama de classe que se segue mostra a hierarquia de controllers definida para a implementação da calculadora descrita. A hierarquia de classes de controle representa uma família de algoritmos intercambiáveis, por isso, o comportamento dos componentes da view, a cada instante, pode ser dinamicamente alterado, bastando trocar o tipo da instância referenciada pela variável `c`.\n\n![Diagrama de classes: CalculadoraController, com o método multiplica, que recebe um vetor de double e devolve double, é superclasse de ProbabilistaController e OrdinarioController, que redefinem multiplica](img/inep/2017/q26-1.png)\n\nConsiderando esse cenário, avalie as afirmações a seguir.\n\nI. A hierarquia exibida ilustra o uso do padrão de projetos Strategy.\n\nII. O padrão composto MVC define a existência de um único controller e, portanto, a solução proposta não caracteriza o uso desse padrão.\n\nIII. O método `multiplica` da classe `Calculadora` chama o método `multiplica` de `CalculadoraController`, o que caracteriza uma conversão de interfaces e, portanto, o uso do padrão de projetos Adapter.\n\nÉ correto o que se afirma em",
+      "options": [
+        {
+          "text": "I, apenas.",
+          "explanation": "Correta. `ProbabilistaController` e `OrdinarioController` são algoritmos intercambiáveis atrás da mesma abstração, e `alteraModo` troca qual deles a variável `c` referencia: isso é Strategy. No MVC, a relação entre view e controller é justamente um Strategy."
+        },
+        {
+          "text": "II, apenas.",
+          "explanation": "A II é falsa: o MVC não exige um único controller. Trocar o controller para mudar o comportamento da view é exatamente como o MVC usa o Strategy."
+        },
+        {
+          "text": "I e III, apenas.",
+          "explanation": "A III é falsa: `Calculadora` apenas delega a chamada para um objeto com a mesma assinatura de `multiplica`. Não há conversão de uma interface em outra, então não é Adapter."
+        },
+        {
+          "text": "II e III, apenas.",
+          "explanation": "As duas são falsas: o MVC admite vários controllers (II), e a simples delegação de `multiplica` para `c` não converte interfaces, logo não caracteriza Adapter (III)."
+        },
+        {
+          "text": "I, II e III.",
+          "explanation": "Só a I está correta. A II erra ao dizer que o MVC tem um único controller, e a III confunde delegação com o padrão Adapter."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "key": "enade-2017-ads-q27",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 27 (Inep)",
+      "kind": "Objective",
+      "subject": "orientacao-objetos",
+      "statement": "O diagrama de classe apresentado na figura a seguir mapeia um processo de um simulador de voo. Nesse diagrama, é utilizado o padrão de projeto Strategy, que define uma família de algoritmos, encapsula cada um deles e os torna intercambiáveis. O padrão Strategy, que deixa o algoritmo variar independentemente dos clientes que o utilizam, aplica o princípio de projeto: “programar para uma interface, não para uma implementação”.\n\nLARMAN, C. **Utilizando UML e padrões**: uma introdução à análise e ao projeto orientados a objetos e ao desenvolvimento iterativo. Porto Alegre: Bookman, 2007 (adaptado).\n\nConsidere o diagrama de classe a seguir que descreve um simulador de voo.\n\n![Diagrama de classes: a classe abstrata Aviao (atributos voarForma e pousarForma; métodos perfomanceVoar, performancePousar, setVoar, setPousar, informarDados) se associa às interfaces Voar (voar) e Pousar (pousar); VoarDia e VoarNoite implementam Voar; PousarDia e PousarNoite implementam Pousar; Boeing757 herda de Aviao e se liga a SimuladorBoeing757 (main)](img/inep/2017/q27-1.png)\n\nConsidere ainda o seguinte código em linguagem Java como implementação do simulador.\n\n```\npublic interface Voar {\n\n   public void voar();\n}\npublic interface Pousar {\n   public void pousar();\n}\npublic class VoarDia implements Voar {\n   public void voar() {\n      System.out.println(“Voar durante o dia.”);\n   }\n}\npublic class VoarNoite implements Voar {\n   public void voar() {\n      System.out.println(“Voar durante a noite.”);\n   }\n}\npublic class PousarDia implements Pousar {\n   public void pousar() {\n      System.out.println(“Pousar durante o dia.”);\n   }\n}\npublic class PousarNoite implements Pousar {\n   public void pousar() {\n      System.out.println(“Pousar durante a noite.”);\n   }\n}\npublic abstract class Aviao {\n   Voar voarForma;\n   Pousar pousarForma;\n   public Aviao() {}\n   public abstract void informarDados();\n   public void performanceVoar() {\n      voarForma.voar();\n   }\n   public void performancePousar() {\n      pousarForma.pousar();\n   }\n   public void setVoar(Voar v) {\n      voarForma = v;\n   }\n   public void setPousar(Pousar p) {\n      pousarForma = p;\n   }\n}\npublic class Boeing757 extends Aviao {\n   public Boeing757() {\n      voarForma = new VoarDia();\n      pousarForma = new PousarDia();\n   }\n   public void informarDados() {\n      System.out.println(“Informando dados de um Boeing 757.”);\n   }\n}\npublic class SimuladorBoeing757 {\n   public static void main(String[] args) {\n      Boeing757 b757 = new Boeing757();\n      b757.performanceVoar();\n      b757.performancePousar();\n      b757.setVoar(new VoarNoite());\n      b757.setPousar(new PousarNoite());\n      b757.performanceVoar();\n      b757.performancePousar();\n   }\n}\n```\n\nCom base no diagrama de classe, no código em linguagem Java e no conceito do padrão de projeto Strategy, assinale a opção correta.",
+      "options": [
+        {
+          "text": "A classe `Aviao` implementa as interfaces `Voar` e `Pousar`.",
+          "explanation": "`Aviao` não declara `implements Voar, Pousar`; ela tem atributos desses tipos (`voarForma` e `pousarForma`) e delega a eles. É composição, não implementação."
+        },
+        {
+          "text": "A classe `Boeing757` não aplica o princípio de herança, uma vez que esse princípio já foi aplicado pela classe `Aviao`, nas interfaces `Voar` e `Pousar`.",
+          "explanation": "`Boeing757` usa herança, sim: `extends Aviao`. E `Aviao` não herda nem implementa as interfaces, apenas as usa como tipo dos atributos."
+        },
+        {
+          "text": "Por implementarem as interfaces `Voar` e `Pousar`, as classes `VoarDia`, `VoarNoite`, `PousarDia` e `PousarNoite` também são uma interface.",
+          "explanation": "Implementar uma interface não torna a classe uma interface. Elas são classes concretas que fornecem o corpo de `voar()` e `pousar()`."
+        },
+        {
+          "text": "Na classe `SimuladorBoeing757`, os métodos `setVoar` e `setPousar` são os responsáveis por aplicar, respectivamente, as saídas “Voar durante o dia” e “Pousar durante o dia” para as saídas “Voar durante a noite” e “Pousar durante a noite”.",
+          "explanation": "Correta. O avião começa com `VoarDia` e `PousarDia`; as chamadas `setVoar(new VoarNoite())` e `setPousar(new PousarNoite())` trocam a estratégia em tempo de execução, e as chamadas seguintes passam a imprimir as mensagens da noite."
+        },
+        {
+          "text": "Quando for executada, a classe `SimuladorBoeing757` apresentará um erro em tempo de execução porque os métodos `setVoar` e `setPousar` recebem respectivamente, como parâmetros, variáveis do tipo classe, o que não é permitido na orientação a objetos.",
+          "explanation": "Passar objetos como parâmetro é normal em Java e é o que faz o Strategy funcionar. O programa roda e imprime as quatro mensagens sem erro."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2017-ads-q28",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 28 (Inep)",
+      "kind": "Objective",
+      "subject": "engenharia-requisitos",
+      "statement": "Os requisitos de um sistema consistem nas descrições daquilo que o sistema deve fazer, dos serviços que oferece e das restrições a seu funcionamento. Esses requisitos refletem as necessidades específicas dos clientes do sistema, como controlar um dispositivo, realizar um pedido ou encontrar informações. O processo de descobrir, analisar, documentar e verificar esses serviços e restrições é denominado de engenharia de requisitos.\n\nSOMMERVILLE, I. **Engenharia de software**. 9. Ed. São Paulo: Pearson, 2011 (adaptado).\n\nTendo o texto como referência, avalie as atribuições listadas a seguir, no que se refere à etapa de especificação de requisitos em projetos de software.\n\nI. Identificar as expectativas e necessidades dos stakeholders com relação ao software a ser desenvolvido.\n\nII. Distribuir os requisitos em categorias, explorar as relações entre eles e classificar sua importância para os stakeholders.\n\nIII. Produzir um documento de especificação de requisitos, de forma que todos os stakeholders possam entendê-lo.\n\nIV. Examinar a especificação do software para assegurar que todos os requisitos foram definidos sem inconsistências.\n\nSão atribuições na etapa de especificação de requisitos os itens",
+      "options": [
+        {
+          "text": "I e III, apenas.",
+          "explanation": "Deixa de fora II e IV. Para o gabarito, organizar e priorizar requisitos (II) e revisar a especificação em busca de inconsistências (IV) também fazem parte do trabalho de especificar requisitos, como o texto descreve: descobrir, analisar, documentar e verificar."
+        },
+        {
+          "text": "I e IV, apenas.",
+          "explanation": "Deixa de fora II (classificar e priorizar) e III (produzir o documento de requisitos), que o gabarito considera atribuições da especificação."
+        },
+        {
+          "text": "II e III, apenas.",
+          "explanation": "Deixa de fora I (identificar necessidades dos stakeholders) e IV (verificar a consistência), que o texto inclui no processo de descobrir, analisar, documentar e verificar."
+        },
+        {
+          "text": "II e IV, apenas.",
+          "explanation": "Deixa de fora I e III. Identificar necessidades e produzir o documento de especificação também são atribuições, segundo o gabarito."
+        },
+        {
+          "text": "I, II, III e IV.",
+          "explanation": "Correta. O gabarito trata a especificação de forma ampla, seguindo o texto de apoio: descobrir as necessidades (I), analisar e priorizar (II), documentar (III) e verificar a consistência (IV)."
+        }
+      ],
+      "correct": "E"
+    },
+    {
+      "key": "enade-2017-ads-q29",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 29 (Inep)",
+      "kind": "Objective",
+      "subject": "logica-matematica",
+      "statement": "Uma pesquisa está sendo realizada para identificar a renda média de um grupo de profissionais, em função de algumas variáveis de interesse. As variáveis utilizadas são “possui ensino superior”, “possui pós-graduação” e “possui pelo menos 5 anos de experiência em sua área de atuação”. Os conjuntos de pessoas representados por essas variáveis são denotados A, B e C, respectivamente. Dado que as variáveis não são mutuamente exclusivas, uma pessoa pode pertencer a mais de um conjunto. As expressões a seguir representam subconjuntos para os quais se deseja obter a renda média das pessoas a eles pertencentes, tarefa que será realizada posteriormente.\n\n- Expressão 1: `x ∈ A ∧ x ∉ (B ∪ C);`\n- Expressão 2: `x ∈ A − (B ∪ C);`\n- Expressão 3: `x ∈ A ∧ x ∈ B ∧ x ∈ C`.\n\nConsidere que, em função das expressões dadas, o seguinte programa em linguagem de programação C foi escrito, para que posteriormente se realize os cálculos desejados. Considere, ainda, que `A`, `B` e `C` são estruturas de dados apropriadamente definidas e que contém as pessoas exatamente como especificado. A função `contem` opera sobre elas e devolve um valor booleano, indicando se a pessoa apontada por `p` existe ou não na estrutura especificada.\n\n```\nvoid determina_renda (pessoa *p) {\n   /* condição 1 */\n   if (contem (A, p) && !contem (B, p) && !contem (C, p)) {\n      //renda será determinada posteriormente\n   }\n   /* condição 2 */\n   else if (contem (A, p) || contem (B, p) || contem (C, p)) {\n     //renda será determinada posteriormente\n   }\n}\n```\n\nCom base nessa situação e nas informações apresentadas, assinale a opção correta.",
+      "options": [
+        {
+          "text": "A condição 2 do programa é equivalente à expressão 3.",
+          "explanation": "A condição 2 usa `||` (ou): basta estar em um dos conjuntos. A expressão 3 é a interseção, exige estar nos três ao mesmo tempo."
+        },
+        {
+          "text": "Pessoas com pós-graduação pertencem ao conjunto definido pela expressão 2.",
+          "explanation": "A expressão 2 é A − (B ∪ C): ela retira justamente quem está em B (pós-graduação) ou em C. Quem tem pós-graduação fica de fora."
+        },
+        {
+          "text": "A condição 1 do programa é verdadeira para todas as pessoas com ensino superior.",
+          "explanation": "A condição 1 exige também `!contem (B, p)` e `!contem (C, p)`. Quem tem ensino superior e também pós-graduação ou 5 anos de experiência não satisfaz a condição."
+        },
+        {
+          "text": "A condição 1 do programa e as expressões 1 e 2, que representam o mesmo subconjunto, são equivalentes.",
+          "explanation": "Correta. As três descrevem quem está em A e não está em B nem em C: a expressão 1 diz x ∈ A e x ∉ (B ∪ C), a 2 é a diferença A − (B ∪ C), e a condição 1 testa A && !B && !C, que pela lei de De Morgan é o mesmo."
+        },
+        {
+          "text": "A condição 2 do programa define o conjunto de pessoas que tem ensino superior, pós-graduação e pelo menos cinco anos de experiência em sua área de atuação.",
+          "explanation": "Isso seria a interseção (expressão 3), com `&&`. A condição 2 usa `||`, então aceita quem está em pelo menos um dos conjuntos (e ainda só é testada quando a condição 1 falha)."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2017-ads-q30",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 30 (Inep)",
+      "kind": "Objective",
+      "subject": "orientacao-objetos",
+      "statement": "A área de desenvolvimento de software está se tornando cada vez mais complexa. Para lidar com essa realidade, os desenvolvedores contam com linguagens de programação baseadas no paradigma de orientação a objetos, cujos pilares são abstração, encapsulamento, herança e polimorfismo. No código a seguir, observa-se a implementação de classes relacionadas.\n\n```\npublic abstract class Impressora {\n   String nome;\n\n   Impressora() {}\n\n   Impressora(String n) {\n      this.nome = n;\n   }\n\n   public void imprimir() {}\n}\n\npublic class Laser extends Impressora {\n\n   public Laser() {}\n\n   public void imprimir() {\n      System.out.println(“Imprimindo na Laser”);\n   }\n}\n\nclass Matricial extends Impressora {\n\n   public Matricial () {}\n\n   public void imprimir() {\n      System.out.println(“Imprimindo na Matricial”);\n   }\n}\n\npublic class JatoDeTinta extends Impressora {\n\n   public JatoDeTinta() {}\n\n   public void imprimir(){\n      System.out.println(“Imprimindo na Jato de tinta”);\n   }\n\n}\n\npublic class Main {\n\n   public static void main(String args[]) {\n      Impressora imp[] = new Impressora[3];\n      imp[0] = new Laser();\n      imp[1] = new JatoDeTinta();\n      imp[2] = new Matricial();\n\n      for(int i = imp.length - 1; i >= 0; i--){\n         imp[i].imprimir();\n      }\n   }\n}\n```\n\nCom base nas informações do texto e no código apresentado, avalie as afirmações a seguir.\n\nI. A execução do código, via classe `Main`, resulta na seguinte saída:\nImprimindo na Laser\nImprimindo na Matricial\nImprimindo na Jato de tinta\n\nII. O código faz uso da técnica denominada polimorfismo.\n\nIII. O código não será compilado, pois o vetor `imp` foi instanciado por meio da classe abstrata `Impressora`.\n\nÉ correto o que se afirma em",
+      "options": [
+        {
+          "text": "II, apenas.",
+          "explanation": "Correta. Cada `imp[i].imprimir()` chama a versão da subclasse real do objeto, o que é polimorfismo (II). A I erra a ordem: o laço vai de `i = 2` até 0, imprimindo Matricial, Jato de tinta e Laser. A III é falsa: `new Impressora[3]` cria um vetor de referências, o que é permitido mesmo com classe abstrata."
+        },
+        {
+          "text": "III, apenas.",
+          "explanation": "A III é falsa: o que não pode é `new Impressora()`. Criar um vetor do tipo abstrato (`new Impressora[3]`) e guardar nele objetos das subclasses é permitido e compila."
+        },
+        {
+          "text": "I e II, apenas.",
+          "explanation": "A I está errada: o `for` percorre o vetor de trás para frente (`i = imp.length - 1` até 0), então a saída começa por Matricial, depois Jato de tinta e só no fim Laser."
+        },
+        {
+          "text": "I e III, apenas.",
+          "explanation": "As duas estão erradas: a ordem da saída é invertida pelo laço decrescente (I) e o vetor de tipo abstrato compila normalmente (III)."
+        },
+        {
+          "text": "I, II e III.",
+          "explanation": "Só a II está correta. A ordem da saída é Matricial, Jato de tinta e Laser, e o código compila, pois criar vetor de uma classe abstrata não é instanciar a classe."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "key": "enade-2017-ads-q31",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 31 (Inep)",
+      "kind": "Objective",
+      "subject": "engenharia-requisitos",
+      "statement": "À medida que o projeto de uma interface do usuário evolui, quatro questões de projeto comuns quase sempre vêm à tona: tempo de resposta do sistema, recursos de ajuda ao usuário, informações de tratamento de erros e atribuição de nomes a comandos.\n\nPRESSMAN, R. S. **Engenharia de software**: uma abordagem profissional. 8. ed. São Paulo: AMGH, 2016 (adaptado).\n\nNesse contexto, avalie as afirmações a seguir, a respeito do projeto de interface e dos requisitos de software.\n\nI. A análise de interfaces tem por objetivo identificar o perfil dos usuários e auxiliar na especificação do requisito não funcional de segurança pertinente ao perfil de acesso dos usuários.\n\nII. O requisito não funcional de segurança descreve as características relacionadas a inteligibilidade, modo de usar ou operar o sistema.\n\nIII. O requisito não funcional de confiabilidade descreve as características relacionadas ao tempo de resposta para processamento de dados ou informações.\n\nIV. O requisito não funcional de usabilidade descreve diretrizes de acessibilidade para pessoas com deficiência.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e III.",
+          "explanation": "A III é falsa: tempo de resposta é requisito de desempenho (eficiência). Confiabilidade trata de falhas, disponibilidade e tolerância a erros."
+        },
+        {
+          "text": "I e IV.",
+          "explanation": "Correta. A análise de interface levanta o perfil dos usuários, o que ajuda a definir quem acessa o quê (I), e acessibilidade para pessoas com deficiência é tratada dentro de usabilidade (IV)."
+        },
+        {
+          "text": "II e IV.",
+          "explanation": "A II é falsa: inteligibilidade e facilidade de uso e operação descrevem usabilidade, não segurança."
+        },
+        {
+          "text": "I, II e III.",
+          "explanation": "Inclui a II, que descreve usabilidade como se fosse segurança, e a III, que descreve desempenho como se fosse confiabilidade. Também deixa de fora a IV, que está correta."
+        },
+        {
+          "text": "II, III e IV.",
+          "explanation": "A II e a III trocam os conceitos: inteligibilidade é usabilidade, e tempo de resposta é desempenho. Além disso, a alternativa deixa de fora a I, que está correta."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2017-ads-q32",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 32 (Inep)",
+      "kind": "Objective",
+      "subject": "banco-de-dados",
+      "statement": "Um cliente solicitou a uma empresa a criação de um banco de dados para armazenar o resultado de uma eleição presidencial, com dados sobre os partidos políticos, os candidatos e a votação obtida por cada candidato em cada unidade da federação. O seguinte diagrama de Entidade-Relacionamento foi elaborado como representação dos requisitos obtidos com o cliente.\n\n![Diagrama ER: Candidato (numero, nome) se relaciona 1:1 com Partido (numero, nome, sigla) por Filia; Partido se relaciona 1:N com Votacao (partido, votos, estado) por Possui](img/inep/2017/q32-1.png)\n\nAs tabelas a seguir contêm os dados registrados a partir do resultado dessa eleição.\n\n```\nPartido\nnúmero  nome       sigla\n91      Partido 1  P1\n92      Partido 2  P2\n93      Partido 3  P3\n94      Partido 4  P4\n95      Partido 5  P5\n\nCandidato\nnúmero  nome\n91      Candidato 1\n92      Candidato 2\n93      Candidato 3\n94      Candidato 4\n95      Candidato 5\n\nVotação\npartido      votos  estado\n91          12 345  AC\n91          98 323  PE\n91       1 726 453  SP\n92          98 463  AC\n92         192 837  PE\n92       4 283 747  SP\n93          16 253  AC\n93         293 845  PE\n93       6 253 745  SP\n94          98 372  AC\n94         598 333  PE\n94       8 271 347  SP\n95          46 837  AC\n95         327 264  PE\n95       5 938 374  SP\n```\n\nCom base nas informações e na situação apresentada, qual o comando SQL que seleciona corretamente os nomes dos candidatos, seus partidos e o total de votos de cada partido nessa eleição?",
+      "options": [
+        {
+          "text": "```\nSELECT c.nome, p.nome, SUM(v.votos) FROM Partido p, Candidato c,\nVotacao v WHERE c.numero = p.numero and v.partido = c.numero;\n```",
+          "explanation": "Usa `SUM` junto com colunas não agregadas (`c.nome`, `p.nome`) sem `GROUP BY`. Isso dá erro na maioria dos SGBDs ou devolve uma única linha com a soma geral, não o total por partido."
+        },
+        {
+          "text": "```\nSELECT c.nome, p.nome, COUNT(v.votos) FROM Partido p, Candidato c,\nVotacao v WHERE c.numero = p.numero and v.partido = c.numero GROUP BY\nc.nome, p.nome;\n```",
+          "explanation": "`COUNT` conta linhas, não soma valores. O resultado seria 3 para cada partido (um registro por estado), não o total de votos."
+        },
+        {
+          "text": "```\nSELECT c.nome, p.nome, SUM(v.votos) FROM Partido p, Candidato c,\nVotacao v WHERE c.numero = p.numero and v.partido = c.numero GROUP BY\nc.nome, p.nome;\n```",
+          "explanation": "Correta. As junções ligam candidato, partido e votação pelo número, e o `GROUP BY c.nome, p.nome` com `SUM(v.votos)` soma os votos dos três estados de cada partido (por exemplo, 91 dá 1 837 121)."
+        },
+        {
+          "text": "```\nSELECT c.nome, p.nome, v.votos FROM Partido p, Candidato c, Votacao v\nWHERE c.numero = p.numero and v.partido = c.numero GROUP BY c.nome,\np.nome, SUM(v.votos);\n```",
+          "explanation": "Função de agregação não pode ficar no `GROUP BY`, e `v.votos` no `SELECT` não está agregado. O comando é inválido."
+        },
+        {
+          "text": "```\nSELECT c.nome, p.nome, COUNT(v.votos) FROM Partido p, Candidato c,\nVotacao v WHERE c.numero = p.numero and v.partido = c.numero GROUP BY\nc.nome, p.nome, v.votos;\n```",
+          "explanation": "Agrupar também por `v.votos` gera um grupo por linha de votação, e `COUNT` devolve 1 em cada uma. Não há total por partido."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2017-ads-q33",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 33 (Inep)",
+      "kind": "Objective",
+      "subject": "algoritmos-programacao",
+      "statement": "A ordenação por inserção funciona de modo semelhante à forma como algumas pessoas ordenam cartas de baralho. Inicia-se com a mão esquerda vazia e as cartas empilhadas na mesa. Remove-se da pilha uma carta de cada vez, inserindo-a na posição correta na mão esquerda. Para se identificar a posição correta de uma carta, deve-se compará-la com as cartas presentes na mão esquerda, no sentido da direita para a esquerda. Em todos os momentos, as cartas na mão esquerda estão ordenadas, tendo sido obtidas no topo da pilha da mesa.\n\nCORMEN, T. H. et al. **Introduction to algorithms.** 3. ed. Cambridge: The MIT Press, 2009 (adaptado).\n\nUm programador implementou um algoritmo de ordenação semelhante à forma de ordenação de cartas descrita no texto. Ao realizar um teste com um vetor de nove posições (`vetor[1..9]`), verificou que o algoritmo não funcionava corretamente.\n\n```\n01 para i <- 2 até 9 faça\n02    valor <- vetor[i]\n03    j <- i – 1\n04    enquanto ((j >= 1) e (valor < vetor[j])) faça\n05       vetor[i] <- vetor[j]\n06          j <- j – 1\n07          se (j = 0) então\n08             interrompa\n09          fim se\n10    fim enquanto\n11    vetor[j + 1] <- valor\n12 fim para\n```\n\nCom base nessas informações, assinale a opção em que se apresentam a linha e o respectivo comando a ser substituído, para que o algoritmo ordene corretamente um vetor de inteiros de forma crescente.",
+      "options": [
+        {
+          "text": "Linha 01; `para i <- 1 até 9 faça`",
+          "explanation": "Começar em 1 só acrescenta uma iteração inútil (com `j = 0`, o laço interno nem roda). O erro da linha 05 continua e o vetor segue mal ordenado."
+        },
+        {
+          "text": "Linha 03; `j <- i`",
+          "explanation": "Com `j = i`, a primeira comparação é `valor < vetor[i]`, ou seja, o elemento com ele mesmo, que é sempre falsa. O laço nunca roda e nada é deslocado."
+        },
+        {
+          "text": "Linha 04; `enquanto ((j >= 1) ou (valor < vetor[j])) faça`",
+          "explanation": "Com \"ou\", o laço continua mesmo quando `valor` já não é menor que `vetor[j]`, deslocando elementos que deveriam ficar no lugar. O \"e\" original está certo."
+        },
+        {
+          "text": "Linha 05; `vetor[j + 1] <- vetor[j]`",
+          "explanation": "Correta. Na inserção, cada elemento maior que `valor` deve andar uma posição para a direita, abrindo espaço. A linha original grava sempre em `vetor[i]`, sobrescrevendo a mesma posição e perdendo elementos; com `vetor[j + 1] <- vetor[j]` o deslocamento acontece e a linha 11 coloca `valor` no buraco certo."
+        },
+        {
+          "text": "Linha 11; `vetor[j] <- valor`",
+          "explanation": "Ao sair do laço, `j` aponta para o primeiro elemento menor ou igual a `valor` (ou 0), então a posição livre é `j + 1`. Gravar em `vetor[j]` apagaria esse elemento, e o erro da linha 05 continuaria."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2017-ads-q34",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 34 (Inep)",
+      "kind": "Objective",
+      "subject": "banco-de-dados",
+      "statement": "JOÃO GRILO: — Isso é coisa de seca. Acaba nisso, essa fome: ninguém pode ter menino e haja cavalo no mundo. A comida é mais barata e é coisa que se pode vender. Mas seu cavalo, como foi?\n\nCHICÓ: — Foi uma velha que me vendeu barato, porque ia se mudar, mas recomendou todo cuidado, porque o cavalo era bento. E só podia ser mesmo, porque cavalo bom como aquele eu nunca tinha visto.\n\nSUASSUNA, A. **Auto da Compadecida**. Rio de Janeiro: Agir, 2000 (adaptado).\n\nA seguir apresenta-se um modelo de dados elaborado a partir do diálogo entre Chicó e João Grilo.\n\n![Diagrama ER: entidade pessoa (codigo como identificador, rg, nome, cpf) ligada à entidade cavalo (codigo como identificador, eBento?, raca) pelo relacionamento possui, com cardinalidade (1,1) do lado de pessoa e (0,1) do lado de cavalo](img/inep/2017/q34-1.png)\n\nCom base no diálogo e no diagrama apresentados, avalie as afirmações a seguir.\n\nI. O Chicó e a velha poderão ser cadastrados na entidade pessoa.\n\nII. O Chicó e a velha poderão ter mais que um cavalo cadastrados.\n\nIII. O atributo rg da entidade pessoa pode ter a função de chave primária nessa entidade.\n\nIV. O cavalo deverá ter no mínimo uma pessoa e uma pessoa poderá ser cadastrada sem a necessidade de ter um cavalo.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e III.",
+          "explanation": "A III é falsa: no diagrama, o identificador de pessoa é `codigo` (círculo preenchido); `rg` é um atributo comum (círculo vazio)."
+        },
+        {
+          "text": "I e IV.",
+          "explanation": "Correta. Chicó e a velha são pessoas, então cabem na entidade pessoa (I). O (1,1) junto de pessoa diz que cada cavalo tem exatamente uma pessoa, e o (0,1) junto de cavalo diz que a pessoa pode ter nenhum ou um cavalo (IV)."
+        },
+        {
+          "text": "II e III.",
+          "explanation": "A II é falsa porque a cardinalidade máxima do lado de cavalo é 1: uma pessoa tem no máximo um cavalo. A III é falsa porque o identificador marcado é `codigo`, não `rg`."
+        },
+        {
+          "text": "I, II e IV.",
+          "explanation": "A II é falsa: o (0,1) do lado de cavalo limita cada pessoa a no máximo um cavalo."
+        },
+        {
+          "text": "II, III e IV.",
+          "explanation": "Inclui a II (o modelo permite no máximo um cavalo por pessoa) e a III (a chave de pessoa é `codigo`), e deixa de fora a I, que está correta."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2017-ads-q35",
+      "source": "ENADE 2017 – Análise e Desenvolvimento de Sistemas, questão 35 (Inep)",
+      "kind": "Objective",
+      "subject": "interacao-humano-computador",
+      "statement": "Em um sistema web para venda de ingressos para shows musicais, a equipe de marketing solicitou a um web designer que, na página inicial, os links para a área de venda de ingressos de cada show fossem imagens, para tornar a navegação pelos conteúdos da página mais atrativa e para que o próprio link já servisse como material de divulgação.\n\n![Protótipo da página inicial: janela de navegador com o título \"Slogan do site\" e seis espaços de imagem de 145 x 95, em duas linhas de três](img/inep/2017/q35-1.png)\n\nA partir do protótipo da página inicial apresentado e usando HTML, o web designer optou por implementar cada link de forma que a imagem forneça um texto informativo (por meio do atributo `alt`) para usuários que usem leitores de tela, conforme a seguir.\n\n```\n<a href=\"link-area-venda-ingresso\">\n   <img src=\"imagem-show.jpg\" alt=\"identificação do show\" />\n</a>\n```\n\nConsiderando a situação apresentada, o uso do atributo `alt` e aspectos da interação humano-computador, pode-se afirmar que o web designer atendeu, em sua implementação, o requisito de",
+      "options": [
+        {
+          "text": "segurança no uso, pois se uma imagem tiver baixa resolução e impossibilitar a correta visualização, o texto informativo associado à imagem possibilita a identificação do conteúdo do respectivo link.",
+          "explanation": "Segurança no uso trata de evitar erros e danos ao usuário. Além disso, o `alt` não aparece quando a imagem está apenas com baixa resolução; ele é lido por leitores de tela ou exibido quando a imagem não carrega."
+        },
+        {
+          "text": "facilidade de aprendizado, pois a comunicação visual do sistema web, por meio do uso de imagens, aliada à comunicação textual, por meio do uso de textos informativos para cada imagem, ajuda o usuário a aprender os caminhos de navegação.",
+          "explanation": "O `alt` não é exibido para quem enxerga a imagem, então não ensina caminhos de navegação. O enunciado diz que ele foi pensado para leitores de tela."
+        },
+        {
+          "text": "acessibilidade, pois a possibilidade de acesso à página por pessoas com deficiência visual, para que interajam com os conteúdos, oferece condições de igualdade às pessoas na interação com o sistema web.",
+          "explanation": "Correta. O `alt` dá um texto que o leitor de tela lê no lugar da imagem, permitindo que pessoas com deficiência visual saibam para onde cada link leva. Isso é acessibilidade."
+        },
+        {
+          "text": "ergonomia, pois o uso de imagens em links causa um cansaço visual quando o sistema web é aberto em um smartphone ou em um tablet com baixa resolução, e o atributo `alt` substitui a imagem por texto.",
+          "explanation": "O `alt` não substitui a imagem em telas pequenas; a imagem continua sendo exibida. O atributo não tem relação com cansaço visual."
+        },
+        {
+          "text": "comunicabilidade, pois se uma imagem não comunica adequadamente a informação desejada, um texto alternativo deve complementar a respectiva informação, de forma que a interação com o sistema web não seja prejudicada.",
+          "explanation": "O `alt` não complementa a imagem para quem a vê; ele a substitui para quem não pode vê-la. O objetivo declarado é atender usuários de leitores de tela, ou seja, acessibilidade."
+        }
+      ],
+      "correct": "C"
+    }
+  ]
+}

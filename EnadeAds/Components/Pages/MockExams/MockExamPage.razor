@@ -4,6 +4,7 @@
 @using EnadeAds.Data
 @using EnadeAds.MockExams
 @using EnadeAds.Questions
+@using EnadeAds.Components.Pages.Questions
 @using EnadeAds.Study
 @using Microsoft.AspNetCore.Identity
 
@@ -68,7 +69,7 @@
                                 <div class="form-check mb-1">
                                     <input class="form-check-input" type="radio" name="q-@question.Id" id="@inputId" value="@option.Letter"
                                            checked="@(item.SelectedOptionId == option.Id)" />
-                                    <label class="form-check-label" for="@inputId"><strong>@option.Letter)</strong> @option.Text</label>
+                                    <label class="form-check-label" for="@inputId"><strong>@option.Letter)</strong> <OptionText Text="@option.Text" /></label>
                                 </div>
                             }
                         }
@@ -129,7 +130,7 @@
                             @foreach (var option in question.Options)
                             {
                                 <li class="border rounded p-2 @(option.IsCorrect ? "border-success" : option.Id == item.SelectedOptionId ? "border-danger" : "")">
-                                    <strong>@option.Letter)</strong> @option.Text
+                                    <strong>@option.Letter)</strong> <OptionText Text="@option.Text" />
                                     @if (option.IsCorrect)
                                     {
                                         <span class="badge text-bg-success ms-1">Correta</span>

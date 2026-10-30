@@ -1,0 +1,9 @@
+@using EnadeAds.Questions
+
+@* Texto de alternativa com a mesma marcação segura do enunciado: provas reais têm alternativas com código, SQL e diagramas. *@
+<span class="option-content">@((MarkupString)StatementFormatter.ToHtml(Text))</span>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Text { get; set; } = "";
+}
