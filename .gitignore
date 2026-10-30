@@ -480,3 +480,7 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Impeccable: esboços e capturas locais de revisão
+.impeccable/mocks/
+.impeccable/review/
