@@ -8,8 +8,10 @@ main {
     flex: 1;
 }
 
+/* Barra lateral sólida e escura nos dois temas: os ícones do menu são SVG brancos. */
 .sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    background-color: #111c2b;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .top-row {

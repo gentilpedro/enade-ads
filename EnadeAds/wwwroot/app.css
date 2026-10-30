@@ -2,12 +2,47 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-a, .btn-link {
+a:not(.btn), .btn-link {
     color: #006bb7;
 }
 
-html[data-bs-theme="dark"] a, html[data-bs-theme="dark"] .btn-link {
+/* :not(.btn): um link com cara de botão mantém a cor do botão (antes ficava azul claro sobre azul, 2,1:1). */
+html[data-bs-theme="dark"] a:not(.btn), html[data-bs-theme="dark"] .btn-link {
     color: #6ea8fe;
+}
+
+html[data-bs-theme="dark"] .btn-outline-primary {
+    --bs-btn-color: #6ea8fe;
+    --bs-btn-border-color: #6ea8fe;
+    --bs-btn-hover-bg: #6ea8fe;
+    --bs-btn-hover-border-color: #6ea8fe;
+    --bs-btn-hover-color: #0b1320;
+    --bs-btn-active-bg: #8bb9fe;
+    --bs-btn-active-border-color: #8bb9fe;
+    --bs-btn-active-color: #0b1320;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;
+}
+
+p, li, dd, figcaption {
+    text-wrap: pretty;
+}
+
+::selection {
+    background-color: rgba(37, 140, 251, 0.3);
+}
+
+.badge {
+    font-size: 0.75rem;
+}
+
+/* Medida de leitura: enunciados e posts longos ficam em ~75 caracteres por linha. */
+.question-statement > p,
+.question-statement > ul,
+.option-content > p {
+    max-width: 75ch;
 }
 
 .btn-primary {
@@ -130,4 +165,12 @@ h1:focus {
     display: block;
     max-width: 100%;
     margin-top: 0.25rem;
+}
+
+/* Avisos informativos no azul da marca em vez do ciano padrão do Bootstrap (gritante no tema escuro). */
+.alert-info {
+    --bs-alert-color: var(--bs-primary-text-emphasis);
+    --bs-alert-bg: var(--bs-primary-bg-subtle);
+    --bs-alert-border-color: var(--bs-primary-border-subtle);
+    --bs-alert-link-color: var(--bs-primary-text-emphasis);
 }
