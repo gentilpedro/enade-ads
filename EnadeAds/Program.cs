@@ -83,6 +83,7 @@ try
     builder.Services.AddScoped<RoadmapService>();
     builder.Services.AddScoped<RoadmapEditor>();
     builder.Services.AddScoped<ExamSettings>();
+    builder.Services.AddScoped<SemesterPlan>();
     builder.Services.AddScoped<SubjectCatalog>();
     builder.Services.AddScoped<QuestionBank>();
     builder.Services.AddScoped<QuestionEditor>();

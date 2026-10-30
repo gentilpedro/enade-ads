@@ -1,0 +1,76 @@
+@using System.Globalization
+@using EnadeAds.Challenges
+@using EnadeAds.Study
+
+@* A faixa do semestre: as semanas até a prova como colunas da grade horária. *@
+<section class="semester" aria-labelledby="semester-title">
+    <div class="semester-head">
+        <h2 id="semester-title" class="semester-count">
+            @if (View.DaysLeft == 0)
+            {
+                <strong>Hoje</strong> <span>é a prova</span>
+            }
+            else
+            {
+                <strong>@View.DaysLeft</strong> <span>@(View.DaysLeft == 1 ? "dia até a prova" : "dias até a prova")</span>
+            }
+        </h2>
+        <p class="semester-date">ENADE @View.ExamDate.Year · @View.ExamDate.ToString("dd/MM", Culture)</p>
+    </div>
+
+    <ol class="semester-weeks">
+        @for (var index = 0; index < View.Weeks.Count; index++)
+        {
+            var week = View.Weeks[index];
+            @if (View.SkippedWeeks > 0 && index == View.Weeks.Count - 1)
+            {
+                <li class="week is-gap" aria-label="@View.SkippedWeeks semanas sem coluna">
+                    <span>+@View.SkippedWeeks @(View.SkippedWeeks == 1 ? "semana" : "semanas")</span>
+                </li>
+            }
+            <li class="week @(week.IsCurrent ? "is-current" : "")" aria-current="@(week.IsCurrent ? "date" : null)">
+                <p class="week-code">
+                    <span class="label-narrow">@(week.IsCurrent ? "Esta semana" : $"Sem {week.Number}")</span>
+                    <span>· @week.Start.ToString("dd/MM", Culture)–@week.End.ToString("dd/MM", Culture)</span>
+                </p>
+                @foreach (var challenge in week.Challenges)
+                {
+                    <a class="slot @SlotClass(challenge)" href="desafios/@challenge.Id">
+                        <span class="slot-title">Desafio: @challenge.Title</span>
+                        <small>@SlotState(challenge)</small>
+                    </a>
+                }
+                @if (week.HasExam)
+                {
+                    <p class="slot slot-exam">ENADE @View.ExamDate.Year<small>@View.ExamDate.ToString("dddd, dd/MM", Culture)</small></p>
+                }
+                else if (week.Challenges.Count == 0)
+                {
+                    <p class="week-empty">Sem desafio marcado</p>
+                }
+            </li>
+        }
+    </ol>
+</section>
+
+@code {
+    private static readonly CultureInfo Culture = CultureInfo.GetCultureInfo("pt-BR");
+
+    [Parameter, EditorRequired]
+    public SemesterView View { get; set; } = default!;
+
+    /// <summary>Se quem vê está logado: sem conta, desafio aberto é só "aberto", não "pendente".</summary>
+    [Parameter]
+    public bool SignedIn { get; set; }
+
+    private string SlotClass(WeekChallenge challenge) =>
+        challenge.Done ? "is-done" : challenge.Status == ChallengeStatus.Ended ? "is-missed" : "is-pending";
+
+    private string SlotState(WeekChallenge challenge) => challenge switch
+    {
+        { Done: true } => "Entregue",
+        { Status: ChallengeStatus.Ended } => SignedIn ? "Encerrado sem entrega" : "Encerrado",
+        { Status: ChallengeStatus.Upcoming } => "Agendado",
+        _ => SignedIn ? "Pendente" : "Aberto",
+    };
+}

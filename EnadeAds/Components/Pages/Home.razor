@@ -4,13 +4,16 @@
 @using EnadeAds.Accounts
 @using EnadeAds.Blog
 @using EnadeAds.Components.Pages.Blog
+@using EnadeAds.Components.Shared
 @using EnadeAds.Data
+@using EnadeAds.Performance
 @using EnadeAds.Questions
 @using EnadeAds.Study
 @using Microsoft.AspNetCore.Identity
 
 @inject BlogService Blog
-@inject ExamSettings Exam
+@inject SemesterPlan Semester
+@inject PerformanceService Performance
 @inject LocalCalendar Calendar
 @inject TimeProvider Clock
 @inject UserManager<ApplicationUser> Users
@@ -22,10 +25,15 @@
     <link rel="alternate" type="application/rss+xml" title="ENADE ADS – avisos oficiais" href="@BlogFeed.Path.TrimStart('/')" />
 </HeadContent>
 
-<div class="row g-4">
+@if (semester is not null)
+{
+    <SemesterStrip View="semester" SignedIn="userId is not null" />
+}
+
+<div class="row g-5">
     <div class="col-lg-8">
-        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
-            <h1 class="h3 mb-0">Comunidade</h1>
+        <div class="feed-head">
+            <h1>Comunidade</h1>
             @if (userId is not null)
             {
                 <a class="btn btn-primary" href="blog/novo">Criar post</a>
@@ -43,26 +51,24 @@
         </AuthorizeView>
 
         <nav aria-label="Ordem do feed">
-            <ul class="nav nav-underline mb-3">
+            <ul class="nav nav-underline">
                 <li class="nav-item"><a class="nav-link @Active(Tab.Hot)" aria-current="@Current(Tab.Hot)" href="@Url(Tab.Hot, category, 1)">Em alta</a></li>
                 <li class="nav-item"><a class="nav-link @Active(Tab.New)" aria-current="@Current(Tab.New)" href="@Url(Tab.New, category, 1)">Novos</a></li>
                 <li class="nav-item"><a class="nav-link @Active(Tab.Official)" aria-current="@Current(Tab.Official)" href="@Url(Tab.Official, category, 1)">Avisos oficiais</a></li>
             </ul>
         </nav>
 
-        <nav aria-label="Categorias" class="d-flex flex-wrap gap-2 mb-3">
-            <a class="btn btn-sm rounded-pill @(category is null ? "btn-secondary" : "btn-outline-secondary")" href="@Url(tab, null, 1)"
-               aria-current="@(category is null ? "page" : null)">Todas</a>
+        <nav aria-label="Categorias" class="feed-filters">
+            <a href="@Url(tab, null, 1)" aria-current="@(category is null ? "page" : null)">Todas</a>
             @foreach (var item in PostCategoryNames.All)
             {
-                <a class="btn btn-sm rounded-pill @(category == item ? "btn-secondary" : "btn-outline-secondary")" href="@Url(tab, item, 1)"
-                   aria-current="@(category == item ? "page" : null)">@item.Name()</a>
+                <a href="@Url(tab, item, 1)" aria-current="@(category == item ? "page" : null)">@item.Name()</a>
             }
         </nav>
 
         @if (notPublished is { Count: > 0 })
         {
-            <details class="mb-3">
+            <details class="my-3">
                 <summary>Seus rascunhos, arquivados e removidos (@notPublished.Count)</summary>
                 <ul class="mt-2">
                     @foreach (var post in notPublished)
@@ -80,14 +86,14 @@
 
         @if (errorMessage is not null)
         {
-            <div class="alert alert-danger" role="alert">@errorMessage</div>
+            <div class="alert alert-danger mt-3" role="alert">@errorMessage</div>
         }
 
         @if (feed is not null)
         {
             @if (feed.Items.Count == 0)
             {
-                <div class="feed-empty">
+                <div class="feed-empty mt-3">
                     <p class="mb-1"><strong>Nada por aqui ainda.</strong></p>
                     <p class="mb-0 text-body-secondary">
                         @(tab == Tab.Official ? "Os avisos dos professores aparecem nesta aba." : "Que tal abrir a conversa? Dúvidas de matéria e dicas de estudo são bem-vindas.")
@@ -96,7 +102,7 @@
             }
             else
             {
-                <form method="post" action="@CurrentUrl" @formname="feed-vote" @onsubmit="VoteAsync">
+                <form method="post" action="@CurrentUrl" @formname="feed-vote" @onsubmit="VoteAsync" class="mt-3">
                     <AntiforgeryToken />
                     <ol class="feed list-unstyled">
                         @foreach (var item in feed.Items)
@@ -109,14 +115,13 @@
                                         <p class="feed-meta">
                                             @if (post.PinnedAt is not null)
                                             {
-                                                <span class="badge text-bg-primary">Fixado</span>
+                                                <span class="pinned-mark">Fixado</span>
                                             }
-                                            <a href="@Url(tab, post.Category, 1)" class="feed-category">@post.Category.Name()</a>
-                                            <span aria-hidden="true">·</span>
+                                            <a href="@Url(tab, post.Category, 1)" class="tag @TagClass(post.Category)">@post.Category.Name()</a>
                                             <span>@item.AuthorName</span>
                                             @if (post.IsOfficial)
                                             {
-                                                <span class="badge badge-teacher">Professor</span>
+                                                <span class="badge-teacher">Professor</span>
                                             }
                                             <span aria-hidden="true">·</span>
                                             <time datetime="@post.PublishedAt!.Value.ToString("O")" title="@Calendar.ToLocal(post.PublishedAt.Value).ToString("dd/MM/yyyy HH:mm")">@When(post.PublishedAt.Value)</time>
@@ -136,7 +141,7 @@
 
                 @if (feed.TotalPages > 1)
                 {
-                    <nav aria-label="Páginas do feed">
+                    <nav aria-label="Páginas do feed" class="mt-3">
                         <ul class="pagination">
                             @for (var number = 1; number <= feed.TotalPages; number++)
                             {
@@ -151,30 +156,12 @@
         }
     </div>
 
-    <aside class="col-lg-4" aria-label="Sobre a plataforma">
-        <section class="side-card">
-            <h2 class="h6">ENADE ADS</h2>
-            <p class="small">Plataforma aberta para estudantes de Análise e Desenvolvimento de Sistemas se prepararem para o ENADE.</p>
-            @if (daysLeft >= 0)
-            {
-                <p class="exam-countdown">
-                    <strong>@(daysLeft == 0 ? "É hoje" : daysLeft == 1 ? "Falta 1 dia" : $"Faltam {daysLeft} dias")</strong>
-                    <span class="small text-body-secondary d-block">Prova em @examDate.ToString("dd/MM/yyyy")</span>
-                </p>
-            }
-            <div class="d-flex flex-wrap gap-2">
-                <a class="btn btn-sm btn-primary" href="roadmap">Abrir o roadmap</a>
-                <a class="btn btn-sm btn-outline-primary" href="materias">Ver as matérias</a>
-            </div>
-            @if (userId is null)
-            {
-                <p class="small mt-3 mb-0"><a href="Account/Register">Crie sua conta</a> ou <a href="@LoginUrl">entre</a> para publicar, votar, comentar e salvar seu progresso.</p>
-            }
-        </section>
+    <aside class="col-lg-4" aria-label="Seu estudo e combinados">
+        <YourWeek Report="report" />
 
-        <section class="side-card">
-            <h2 class="h6">Combinados da comunidade</h2>
-            <ul class="small mb-2 ps-3">
+        <section class="module" aria-labelledby="rules-title">
+            <h2 id="rules-title" class="module-title">Combinados da comunidade</h2>
+            <ul class="rules-list">
                 <li>Dúvidas de matéria, dicas de estudo e discussão sobre o ENADE.</li>
                 <li>Respeito sempre: crítica é ao conteúdo, não à pessoa.</li>
                 <li>Nada de cola, gabarito vazado ou dado pessoal de colegas.</li>
@@ -195,11 +182,11 @@
 
     private FeedPage? feed;
     private IReadOnlyList<Post>? notPublished;
+    private SemesterView? semester;
+    private PerformanceReport? report;
     private PostCategory? category;
     private Tab tab;
     private string? userId;
-    private DateOnly examDate;
-    private int daysLeft = -1;
     private DateTimeOffset now;
     private string? errorMessage;
 
@@ -226,13 +213,12 @@
         userId = Users.GetUserId(HttpContext.User);
         now = Clock.GetUtcNow();
 
-        examDate = await Exam.ExamDateAsync();
-        daysLeft = examDate.DayNumber - Calendar.Today().DayNumber;
-
         var editor = EditorFactory.From(HttpContext.User, userId);
+        semester = await Semester.BuildAsync(userId, canSeeUpcoming: editor?.CanCreate == true);
         if (editor is not null)
         {
             notPublished = await Blog.NotPublishedAsync(editor);
+            report = await Performance.GetAsync(editor.UserId);
         }
 
         await LoadFeedAsync();
@@ -269,6 +255,14 @@
     private string Active(Tab item) => item == tab ? "active" : "";
 
     private string? Current(Tab item) => item == tab ? "page" : null;
+
+    private static string TagClass(PostCategory category) => category switch
+    {
+        _ when category.IsOfficialOnly() => "tag-official",
+        PostCategory.Doubts => "tag-doubt",
+        PostCategory.StudyTips => "tag-tip",
+        _ => "tag-discussion",
+    };
 
     private static string Url(Tab tab, PostCategory? category, int page)
     {
