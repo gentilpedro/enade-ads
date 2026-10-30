@@ -139,11 +139,11 @@
 
     private sealed class InputModel
     {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Preencha este campo.")]
+        [EmailAddress(ErrorMessage = "E-mail inválido.")]
         public string Email { get; set; } = "";
 
-        [Required]
+        [Required(ErrorMessage = "Preencha este campo.")]
         [DataType(DataType.Password)]
         public string Password { get; set; } = "";
 

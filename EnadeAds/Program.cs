@@ -63,6 +63,7 @@ try
             options.Stores.SchemaVersion = IdentitySchemaVersions.Version3;
         })
         .AddRoles<IdentityRole>()
+        .AddErrorDescriber<PortugueseIdentityErrorDescriber>()
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddSignInManager()
         .AddDefaultTokenProviders();
