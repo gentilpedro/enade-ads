@@ -44,6 +44,8 @@ Use variáveis de ambiente (o `__` separa as seções):
 | `ConnectionStrings__DefaultConnection` | String de conexão do PostgreSQL |
 | `Admin__Emails__0`, `Admin__Emails__1`... | E-mails que recebem o perfil Admin ao se cadastrar |
 | `Smtp__Host`, `Smtp__Port`, `Smtp__UserName`, `Smtp__Password`, `Smtp__FromAddress` | Envio dos e-mails de confirmação e de senha |
+| `ReverseProxy__KnownNetworks__0` | Rede do proxy reverso (ex.: `172.18.0.0/16`), para ler o IP real do `X-Forwarded-For` |
+| `RateLimit__AccountPostsPerMinute` | Envios de formulários de conta por IP por minuto (padrão 10) |
 
 Fora de desenvolvimento a aplicação não sobe sem SMTP: sem ele, a confirmação de e-mail não teria como provar que o professor é dono do endereço `.edu`.
 

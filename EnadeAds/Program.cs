@@ -7,8 +7,10 @@ using EnadeAds.Data;
 using EnadeAds.MockExams;
 using EnadeAds.Performance;
 using EnadeAds.Questions;
+using EnadeAds.Security;
 using EnadeAds.Study;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -60,6 +62,11 @@ try
             options.SignIn.RequireConfirmedAccount = true;
             options.User.RequireUniqueEmail = true;
             options.Password.RequiredLength = 8;
+
+            // 5 senhas erradas seguidas bloqueiam a conta por 15 minutos (força bruta em uma conta específica).
+            options.Lockout.AllowedForNewUsers = true;
+            options.Lockout.MaxFailedAccessAttempts = 5;
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
             options.Stores.SchemaVersion = IdentitySchemaVersions.Version3;
         })
         .AddRoles<IdentityRole>()
@@ -86,6 +93,19 @@ try
     builder.Services.AddSingleton(TimeProvider.System);
     builder.Services.Configure<ExamOptions>(builder.Configuration.GetSection(ExamOptions.SectionName));
 
+    // Limite de tentativas por IP nos formulários de conta (força bruta e cadastro em massa).
+    builder.Services.AddAccountRateLimit(builder.Configuration);
+
+    // Atrás do Nginx: o IP do aluno vem no X-Forwarded-For, aceito só dos proxies listados em ReverseProxy:KnownNetworks.
+    builder.Services.Configure<ForwardedHeadersOptions>(options =>
+    {
+        options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+        foreach (var network in builder.Configuration.GetSection("ReverseProxy:KnownNetworks").Get<string[]>() ?? [])
+        {
+            options.KnownIPNetworks.Add(System.Net.IPNetwork.Parse(network));
+        }
+    });
+
     builder.Services.Configure<AdminOptions>(builder.Configuration.GetSection(AdminOptions.SectionName));
     builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection(SmtpOptions.SectionName));
 
@@ -109,6 +129,9 @@ try
 
     await DatabaseInitializer.InitializeAsync(app.Services);
 
+    app.UseForwardedHeaders();
+    app.UseSecurityHeaders();
+
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
     {
@@ -126,6 +149,7 @@ try
     app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
     app.UseHttpsRedirection();
 
+    app.UseRateLimiter();
     app.UseAntiforgery();
 
     app.MapStaticAssets();
