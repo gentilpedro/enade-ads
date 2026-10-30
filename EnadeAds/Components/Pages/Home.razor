@@ -1,6 +1,11 @@
 @page "/"
 
 @using EnadeAds.Accounts
+@using EnadeAds.Blog
+@using EnadeAds.Study
+
+@inject BlogService Blog
+@inject LocalCalendar Calendar
 
 <PageTitle>ENADE ADS</PageTitle>
 
@@ -12,6 +17,36 @@
     <a class="btn btn-primary" href="roadmap">Abrir o roadmap</a>
     <a class="btn btn-outline-primary" href="materias">Ver as matérias</a>
 </div>
+
+@if (highlights is { Count: > 0 })
+{
+    <section class="mb-4" aria-labelledby="blog-title">
+        <div class="d-flex flex-wrap justify-content-between align-items-baseline gap-2">
+            <h2 id="blog-title" class="h5">Atualizações do ENADE</h2>
+            <a href="blog" class="small">Ver todas</a>
+        </div>
+        <div class="row row-cols-1 row-cols-md-3 g-3">
+            @foreach (var post in highlights)
+            {
+                <div class="col">
+                    <a class="card h-100 text-decoration-none @(post.PinnedAt is not null ? "border-primary" : "")" href="blog/@post.Slug">
+                        <div class="card-body">
+                            <p class="small text-body-secondary mb-1">
+                                @if (post.PinnedAt is not null)
+                                {
+                                    <span class="badge text-bg-primary me-1">Fixado</span>
+                                }
+                                @post.Category.Name() · @Calendar.ToLocal(post.PublishedAt!.Value).ToString("dd/MM/yyyy")
+                            </p>
+                            <h3 class="h6 card-title">@post.Title</h3>
+                            <p class="small text-body-secondary mb-0">@post.Summary</p>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </section>
+}
 
 <AuthorizeView Roles="@Roles.PendingTeacher">
     <div class="alert alert-info" role="status">
@@ -27,3 +62,12 @@
         <p><a href="Account/Register">Crie sua conta</a> ou <a href="Account/Login">entre</a> para salvar seu progresso.</p>
     </NotAuthorized>
 </AuthorizeView>
+
+@code {
+    private IReadOnlyList<Post>? highlights;
+
+    protected override async Task OnInitializedAsync()
+    {
+        highlights = await Blog.HighlightsAsync();
+    }
+}

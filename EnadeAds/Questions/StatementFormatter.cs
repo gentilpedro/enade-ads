@@ -1,10 +1,15 @@
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.RegularExpressions;
+using System.Text.Unicode;
 
 namespace EnadeAds.Questions;
 
-public sealed record StatementBlock(string Text, bool IsCode);
+public sealed record StatementBlock(string Text, bool IsCode)
+{
+    /// <summary>Bloco em que toda linha começa com "- ": vira lista.</summary>
+    public bool IsList => !IsCode && Text.Split('\n').All(line => line.StartsWith("- ", StringComparison.Ordinal));
+}
 
 /// <summary>
 /// Converte o enunciado (texto com marcação mínima) em HTML seguro. Todo texto é escapado antes de
@@ -13,13 +18,17 @@ public sealed record StatementBlock(string Text, bool IsCode);
 /// Marcação aceita:
 /// - linha em branco separa parágrafos;
 /// - bloco entre linhas <c>```</c> vira código pré-formatado;
-/// - <c>**negrito**</c>, <c>`código`</c> e <c>![descrição](https://…)</c> dentro de parágrafos;
+/// - bloco em que toda linha começa com <c>- </c> vira lista;
+/// - <c>**negrito**</c>, <c>`código`</c>, <c>[texto](https://…)</c> e <c>![descrição](https://…)</c> dentro de parágrafos;
 /// - sem cercas, blocos com cara de código (indentação, tabelas, chaves, <c>;</c>) também viram código,
 ///   para manter o conteúdo antigo legível.
 /// </summary>
 public static partial class StatementFormatter
 {
     private const string Fence = "```";
+
+    // Mantém acentos legíveis no HTML; continua escapando < > & " ' e caracteres de controle.
+    private static readonly HtmlEncoder Html = HtmlEncoder.Create(UnicodeRanges.All);
 
     public static IReadOnlyList<StatementBlock> Split(string statement)
     {
@@ -92,7 +101,17 @@ public static partial class StatementFormatter
         {
             if (block.IsCode)
             {
-                html.Append("<pre><code>").Append(HtmlEncoder.Default.Encode(block.Text)).Append("</code></pre>");
+                html.Append("<pre><code>").Append(Html.Encode(block.Text)).Append("</code></pre>");
+            }
+            else if (block.IsList)
+            {
+                html.Append("<ul>");
+                foreach (var line in block.Text.Split('\n'))
+                {
+                    html.Append("<li>").Append(Inline(line[2..])).Append("</li>");
+                }
+
+                html.Append("</ul>");
             }
             else
             {
@@ -120,10 +139,24 @@ public static partial class StatementFormatter
             {
                 html.Append("<code>").Append(Encode(match.Groups["code"].Value)).Append("</code>");
             }
-            else if (Uri.TryCreate(match.Groups["src"].Value, UriKind.Absolute, out var uri) && uri.Scheme == Uri.UriSchemeHttps)
+            else if (match.Groups["href"].Success)
             {
-                html.Append("<img src=\"").Append(HtmlEncoder.Default.Encode(uri.AbsoluteUri))
-                    .Append("\" alt=\"").Append(HtmlEncoder.Default.Encode(match.Groups["alt"].Value))
+                if (TryHttps(match.Groups["href"].Value, out var link))
+                {
+                    html.Append("<a href=\"").Append(Html.Encode(link.AbsoluteUri))
+                        .Append("\" target=\"_blank\" rel=\"noopener noreferrer nofollow\">")
+                        .Append(Encode(match.Groups["label"].Value)).Append("</a>");
+                }
+                else
+                {
+                    // Link sem https (javascript:, data:, http) aparece como texto.
+                    html.Append(Encode(match.Value));
+                }
+            }
+            else if (TryHttps(match.Groups["src"].Value, out var uri))
+            {
+                html.Append("<img src=\"").Append(Html.Encode(uri.AbsoluteUri))
+                    .Append("\" alt=\"").Append(Html.Encode(match.Groups["alt"].Value))
                     .Append("\" loading=\"lazy\" class=\"img-fluid my-2\" />");
             }
             else
@@ -139,7 +172,10 @@ public static partial class StatementFormatter
         return html.ToString();
     }
 
-    private static string Encode(string text) => HtmlEncoder.Default.Encode(text).Replace("&#xA;", "<br />");
+    private static bool TryHttps(string value, out Uri uri) =>
+        Uri.TryCreate(value, UriKind.Absolute, out uri!) && uri.Scheme == Uri.UriSchemeHttps;
+
+    private static string Encode(string text) => Html.Encode(text).Replace("&#xA;", "<br />");
 
     private static bool LooksLikeCode(string line) =>
         line.StartsWith("  ", StringComparison.Ordinal)
@@ -148,6 +184,6 @@ public static partial class StatementFormatter
         || line.Contains('{') || line.Contains('}')
         || line.TrimEnd().EndsWith(';');
 
-    [GeneratedRegex(@"\*\*(?<bold>[^*\n]+)\*\*|`(?<code>[^`\n]+)`|!\[(?<alt>[^\]\n]*)\]\((?<src>[^)\s]+)\)")]
+    [GeneratedRegex(@"\*\*(?<bold>[^*\n]+)\*\*|`(?<code>[^`\n]+)`|!\[(?<alt>[^\]\n]*)\]\((?<src>[^)\s]+)\)|\[(?<label>[^\]\n]+)\]\((?<href>[^)\s]+)\)")]
     private static partial Regex InlineToken();
 }

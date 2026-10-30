@@ -49,6 +49,19 @@ Alunos também têm e-mail institucional, muitas vezes no mesmo domínio dos pro
 - A porcentagem conta só matérias e assuntos concluídos; checkpoints são marcos e não entram na conta.
 - A contagem regressiva usa a data da prova configurada (`Enade:ExamDate`) e o fuso de São Paulo.
 
+## Blog de atualizações
+
+- O blog reúne **atualizações sobre o ENADE** em quatro categorias: *Datas e prazos*, *Portarias e editais*, *Dicas de estudo* e *Avisos da turma*.
+- **Professor** e **Admin** escrevem posts com título, resumo, texto, categoria e, se houver, o link da **fonte oficial** (sempre https).
+- O post pode ficar como **rascunho** (só o autor e os admins veem) até ser publicado. Professor edita só os próprios posts; admin edita qualquer um.
+- O endereço do post (`/blog/titulo-do-post`) sai do título e **não muda depois de publicado**, para links compartilhados continuarem valendo.
+- **Fixar** coloca o post no topo do blog e da página inicial. Só um post fica fixado por vez.
+- **Arquivar** tira o post do blog, da página inicial e do feed. Publicar de novo traz ele de volta.
+- Qualquer pessoa lê posts e comentários. **Comentar exige login.**
+- O autor edita e exclui o próprio comentário; professor e admin excluem qualquer comentário (moderação).
+- O texto do post aceita a marcação mínima (parágrafos, listas, negrito, links e imagens por https). Comentários são texto puro.
+- O feed RSS (`/blog/feed.xml`) traz os 20 posts publicados mais recentes.
+
 ## Desafios semanais
 
 - **Professor** e **Admin** criam desafios: título, descrição, primeiro e último dia, e de 1 a 30 questões **objetivas** publicadas do banco.

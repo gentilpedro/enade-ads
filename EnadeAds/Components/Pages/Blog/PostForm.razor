@@ -1,0 +1,280 @@
+@page "/blog/novo"
+@page "/blog/{Id:int}/editar"
+
+@using Microsoft.AspNetCore.Authorization
+@using EnadeAds.Accounts
+@using EnadeAds.Blog
+@using EnadeAds.Data
+@using EnadeAds.Questions
+@using Microsoft.AspNetCore.Identity
+
+@attribute [Authorize(Roles = Roles.Editors)]
+
+@inject BlogService Blog
+@inject UserManager<ApplicationUser> Users
+@inject NavigationManager Navigation
+
+<PageTitle>@(IsNew ? "Novo post" : "Editar post")</PageTitle>
+
+<nav aria-label="Trilha">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="blog">Blog</a></li>
+        @if (current is not null)
+        {
+            <li class="breadcrumb-item"><a href="blog/@current.Slug">@current.Title</a></li>
+        }
+        <li class="breadcrumb-item active" aria-current="page">@(IsNew ? "Novo post" : "Editar")</li>
+    </ol>
+</nav>
+
+<h1 class="h3">@(IsNew ? "Novo post" : "Editar post")</h1>
+
+@if (current is not null)
+{
+    <p class="small text-body-secondary">
+        Situação: <strong>@(current.ArchivedAt is not null ? "arquivado" : current.PublishedAt is null ? "rascunho" : "publicado")</strong>
+        @if (current.PinnedAt is not null)
+        {
+            <span>· fixado no topo</span>
+        }
+    </p>
+}
+
+@if (errors.Count > 0)
+{
+    <div class="alert alert-danger" role="alert">
+        <p class="mb-1"><strong>Corrija antes de salvar:</strong></p>
+        <ul class="mb-0">
+            @foreach (var error in errors)
+            {
+                <li>@error</li>
+            }
+        </ul>
+    </div>
+}
+
+<EditForm Model="Input" method="post" FormName="post-form" OnSubmit="SaveAsync">
+    <div class="mb-3">
+        <label for="Input.Title" class="form-label">Título</label>
+        <InputText @bind-Value="Input.Title" id="Input.Title" class="form-control" maxlength="@BlogService.TitleMaxLength"
+                   placeholder="Inep divulga o local de prova do ENADE 2026" />
+    </div>
+    <div class="row g-3 mb-3">
+        <div class="col-md-5">
+            <label for="Input.Category" class="form-label">Categoria</label>
+            <InputSelect @bind-Value="Input.Category" id="Input.Category" class="form-select">
+                @foreach (var category in PostCategoryNames.All)
+                {
+                    <option value="@category">@category.Name()</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="col-md-7">
+            <label for="Input.SourceUrl" class="form-label">Fonte oficial <span class="small text-body-secondary">(opcional)</span></label>
+            <InputText @bind-Value="Input.SourceUrl" id="Input.SourceUrl" class="form-control" type="url" maxlength="@BlogService.SourceMaxLength"
+                       placeholder="https://www.gov.br/inep/..." />
+        </div>
+    </div>
+    <div class="mb-3">
+        <label for="Input.Summary" class="form-label">Resumo</label>
+        <InputTextArea @bind-Value="Input.Summary" id="Input.Summary" class="form-control" rows="2" maxlength="@BlogService.SummaryMaxLength"
+                       aria-describedby="summary-help" />
+        <div id="summary-help" class="form-text">Aparece na lista do blog, na página inicial e no feed RSS.</div>
+    </div>
+    <div class="mb-3">
+        <label for="Input.Body" class="form-label">Texto</label>
+        <InputTextArea @bind-Value="Input.Body" id="Input.Body" class="form-control" rows="14" maxlength="@BlogService.BodyMaxLength"
+                       aria-describedby="body-help" />
+        <div id="body-help" class="form-text">
+            Linha em branco separa parágrafos. Linhas começando com <code>- </code> viram lista.
+            <code>**negrito**</code>, <code>[texto](https://…)</code> para links e <code>![descrição](https://…)</code> para imagens.
+        </div>
+    </div>
+
+    <div class="d-flex flex-wrap gap-2">
+        <button type="submit" name="Command" value="@PreviewCommand" class="btn btn-outline-primary">Pré-visualizar</button>
+        @if (current?.IsPublished != true)
+        {
+            <button type="submit" name="Command" value="@DraftCommand" class="btn btn-outline-secondary">Salvar rascunho</button>
+        }
+        <button type="submit" name="Command" value="@PublishCommand" class="btn btn-primary">@(current?.IsPublished == true ? "Salvar alterações" : "Publicar")</button>
+    </div>
+</EditForm>
+
+@if (preview)
+{
+    <section class="mt-4" aria-labelledby="preview-title">
+        <h2 id="preview-title" class="h5">Pré-visualização</h2>
+        <div class="card">
+            <div class="card-body">
+                <h3>@Input.Title</h3>
+                <p class="lead">@Input.Summary</p>
+                <div class="question-statement post-body">@((MarkupString)StatementFormatter.ToHtml(Input.Body))</div>
+            </div>
+        </div>
+    </section>
+}
+
+@if (current is not null)
+{
+    <section class="mt-5" aria-labelledby="manage-title">
+        <h2 id="manage-title" class="h6">Destaque e arquivamento</h2>
+        <div class="d-flex flex-wrap gap-3 align-items-start">
+            @if (current.IsPublished)
+            {
+                <form method="post" @formname="post-pin" @onsubmit="TogglePinAsync">
+                    <AntiforgeryToken />
+                    <button type="submit" class="btn btn-outline-primary btn-sm">@(current.PinnedAt is null ? "Fixar no topo" : "Desafixar")</button>
+                </form>
+            }
+            @if (current.ArchivedAt is null)
+            {
+                <form method="post" @formname="post-archive" @onsubmit="ArchiveAsync">
+                    <AntiforgeryToken />
+                    <div class="form-check mb-1">
+                        <input class="form-check-input" type="checkbox" name="ConfirmArchive" value="true" id="ConfirmArchive" required />
+                        <label class="form-check-label small" for="ConfirmArchive">Confirmo que quero arquivar este post</label>
+                    </div>
+                    <button type="submit" class="btn btn-outline-danger btn-sm">Arquivar</button>
+                </form>
+            }
+            else
+            {
+                <p class="small text-body-secondary">Para voltar a mostrar no blog, clique em <strong>Publicar</strong>.</p>
+            }
+        </div>
+    </section>
+}
+
+@code {
+    private const string PreviewCommand = "pre-visualizar";
+    private const string DraftCommand = "rascunho";
+    private const string PublishCommand = "publicar";
+
+    private Post? current;
+    private Editor? editor;
+    private List<string> errors = [];
+    private bool preview;
+
+    [Parameter]
+    public int? Id { get; set; }
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromForm(FormName = "post-form")]
+    private PostFormModel Input { get; set; } = default!;
+
+    [SupplyParameterFromForm(FormName = "post-form")]
+    private string? Command { get; set; }
+
+    [SupplyParameterFromForm(FormName = "post-archive")]
+    private bool ConfirmArchive { get; set; }
+
+    private bool IsNew => Id is null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        editor = EditorFactory.From(HttpContext.User, Users.GetUserId(HttpContext.User));
+        if (IsNew)
+        {
+            Input ??= new PostFormModel();
+            return;
+        }
+
+        current = await Blog.FindAsync(Id!.Value);
+        if (current is null)
+        {
+            Navigation.NotFound();
+            return;
+        }
+
+        if (!BlogService.CanEdit(editor, current))
+        {
+            current = null;
+            HttpContext.Response.StatusCode = StatusCodes.Status403Forbidden;
+            Navigation.NavigateTo("Account/AccessDenied");
+            return;
+        }
+
+        Input ??= new PostFormModel
+        {
+            Title = current.Title,
+            Summary = current.Summary,
+            Body = current.Body,
+            Category = current.Category,
+            SourceUrl = current.SourceUrl ?? "",
+        };
+    }
+
+    private async Task SaveAsync()
+    {
+        if (editor is null)
+        {
+            return;
+        }
+
+        if (Command == PreviewCommand)
+        {
+            preview = true;
+            return;
+        }
+
+        var action = Command == DraftCommand ? PostAction.SaveDraft : PostAction.Publish;
+        var draft = new PostDraft { Title = Input.Title, Summary = Input.Summary, Body = Input.Body, Category = Input.Category, SourceUrl = Input.SourceUrl };
+        var result = IsNew ? await Blog.CreateAsync(editor, draft, action) : await Blog.UpdateAsync(editor, Id!.Value, draft, action);
+        if (!result.Succeeded)
+        {
+            errors = result.Errors.ToList();
+            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            return;
+        }
+
+        var saved = await Blog.FindAsync(result.Id!.Value);
+        Navigation.NavigateTo($"blog/{saved!.Slug}");
+    }
+
+    private async Task TogglePinAsync()
+    {
+        if (editor is null || current is null)
+        {
+            return;
+        }
+
+        var result = await Blog.SetPinnedAsync(editor, current.Id, pinned: current.PinnedAt is null);
+        if (!result.Succeeded)
+        {
+            errors = result.Errors.ToList();
+            return;
+        }
+
+        Navigation.NavigateTo($"blog/{current.Slug}");
+    }
+
+    private async Task ArchiveAsync()
+    {
+        if (editor is null || current is null || !ConfirmArchive)
+        {
+            errors = ["Marque a confirmação para arquivar."];
+            return;
+        }
+
+        var result = await Blog.ArchiveAsync(editor, current.Id);
+        if (!result.Succeeded)
+        {
+            errors = result.Errors.ToList();
+            return;
+        }
+
+        Navigation.NavigateTo("blog");
+    }
+
+    private sealed class PostFormModel
+    {
+        public string Title { get; set; } = "";
+        public string Summary { get; set; } = "";
+        public string Body { get; set; } = "";
+        public PostCategory Category { get; set; } = PostCategory.DatesAndDeadlines;
+        public string SourceUrl { get; set; } = "";
+    }
+}

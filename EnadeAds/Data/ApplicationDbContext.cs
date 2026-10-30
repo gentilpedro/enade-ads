@@ -1,8 +1,10 @@
+using EnadeAds.Blog;
 using EnadeAds.Challenges;
 using EnadeAds.Questions;
 using EnadeAds.Study;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EnadeAds.Data;
 
@@ -17,6 +19,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Challenge> Challenges => Set<Challenge>();
     public DbSet<ChallengeQuestion> ChallengeQuestions => Set<ChallengeQuestion>();
     public DbSet<ChallengeSubmission> ChallengeSubmissions => Set<ChallengeSubmission>();
+    public DbSet<Post> Posts => Set<Post>();
+    public DbSet<PostComment> PostComments => Set<PostComment>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -101,6 +105,38 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             submission.HasOne<Challenge>().WithMany().HasForeignKey(s => s.ChallengeId).OnDelete(DeleteBehavior.Cascade);
             submission.HasOne<ApplicationUser>().WithMany().HasForeignKey(s => s.UserId).OnDelete(DeleteBehavior.Cascade);
         });
+
+        builder.Entity<Post>(post =>
+        {
+            post.Property(p => p.Slug).HasMaxLength(Slugs.MaxLength + 10);
+            post.Property(p => p.Title).HasMaxLength(BlogService.TitleMaxLength);
+            post.Property(p => p.Summary).HasMaxLength(BlogService.SummaryMaxLength);
+            post.Property(p => p.Body).HasMaxLength(BlogService.BodyMaxLength);
+            post.Property(p => p.SourceUrl).HasMaxLength(BlogService.SourceMaxLength);
+            post.HasIndex(p => p.Slug).IsUnique();
+            post.HasIndex(p => p.PublishedAt);
+            post.Ignore(p => p.IsPublished);
+            post.HasOne<ApplicationUser>().WithMany().HasForeignKey(p => p.AuthorId).OnDelete(DeleteBehavior.SetNull);
+        });
+
+        builder.Entity<PostComment>(comment =>
+        {
+            comment.Property(c => c.Text).HasMaxLength(BlogService.CommentMaxLength);
+            comment.HasIndex(c => c.PostId);
+            comment.HasOne<Post>().WithMany().HasForeignKey(c => c.PostId).OnDelete(DeleteBehavior.Cascade);
+            comment.HasOne<ApplicationUser>().WithMany().HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // O SQLite (usado nos testes) não ordena nem compara DateTimeOffset; guarda como número só nele.
+        // Receita da documentação do EF Core; no PostgreSQL nada muda.
+        if (Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")
+        {
+            foreach (var property in builder.Model.GetEntityTypes().SelectMany(t => t.GetProperties())
+                         .Where(p => p.ClrType == typeof(DateTimeOffset) || p.ClrType == typeof(DateTimeOffset?)))
+            {
+                property.SetValueConverter(new DateTimeOffsetToBinaryConverter());
+            }
+        }
 
         builder.Entity<DiscursiveAnswer>(answer =>
         {
