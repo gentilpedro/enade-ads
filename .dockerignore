@@ -1,0 +1,16 @@
+.git
+.github
+.vs
+.vscode
+.idea
+.impeccable
+**/bin
+**/obj
+**/node_modules
+**/logs
+dist
+**/TestResults
+EnadeAds.Tests
+*.env
+.env*
+!.env.example

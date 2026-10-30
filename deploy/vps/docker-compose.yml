@@ -1,0 +1,58 @@
+# rumo em produção na VPS (https://rumo.aamora.com.br). Cópia em /opt/rumo/docker-compose.yml.
+# Quem sobe o serviço web é o /usr/local/bin/app-deploy, com a imagem rumo:<versão> enviada
+# pelo próprio deploy (docker save por SSH, sem registry).
+name: rumo
+
+services:
+  web:
+    image: rumo:${APP_VERSION:?APP_VERSION não definido}
+    restart: unless-stopped
+    # A VPS tem 3,6 GB para todas as apps: confira a soma dos mem_limit no vps_info.sh.
+    mem_limit: 384m
+    # Só o Nginx do host fala com o app.
+    ports: ["127.0.0.1:5106:8080"]
+    # .env: senha do Postgres, gerada no servidor. secrets.env: escrito a cada deploy (set-secrets).
+    env_file: [.env, secrets.env]
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: "Host=db;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}"
+      # 127.0.0.1: o app-deploy confere a saúde por http://127.0.0.1:5106.
+      AllowedHosts: "rumo.aamora.com.br;localhost;127.0.0.1"
+      # O Nginx do host chega no container pelo gateway fixo da rede abaixo. Só dele o app aceita
+      # X-Forwarded-For/Proto (IP real do aluno no limite de tentativas, cookies Secure).
+      PROXY_GATEWAY: 172.30.5.1
+      ReverseProxy__KnownNetworks__0: "172.30.5.1/32"
+      # Chaves de Data Protection: login e formulários continuam válidos depois de cada deploy.
+      DataProtection__KeysPath: /keys
+    networks: [rumo]
+    volumes:
+      - dpkeys:/keys
+    depends_on:
+      db: { condition: service_healthy }
+
+  db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    mem_limit: 192m
+    env_file: .env
+    command: >
+      postgres -c shared_buffers=48MB -c effective_cache_size=128MB
+               -c max_connections=30 -c work_mem=4MB
+    volumes:
+      - pgdata:/var/lib/postgresql
+    networks: [rumo]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+
+volumes:
+  pgdata:
+  dpkeys:
+
+networks:
+  rumo:
+    ipam:
+      config:
+        - subnet: 172.30.5.0/24
+          gateway: 172.30.5.1
