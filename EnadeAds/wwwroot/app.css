@@ -1,28 +1,139 @@
-html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+/* Archivo, hospedada no próprio site (a CSP só aceita fonte de 'self'; e sem Google Fonts, nada de IP do aluno indo para terceiros).
+   Fonte variável: o eixo de largura dá a versão estreita dos rótulos sem baixar outra família. Licença em fonts/OFL-Archivo.txt. */
+@font-face {
+    font-family: "Archivo";
+    src: url("fonts/archivo-latin-ext.woff2") format("woff2");
+    font-weight: 100 900;
+    font-stretch: 62% 125%;
+    font-display: swap;
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
-a:not(.btn), .btn-link {
-    color: #006bb7;
+@font-face {
+    font-family: "Archivo";
+    src: url("fonts/archivo-latin.woff2") format("woff2");
+    font-weight: 100 900;
+    font-stretch: 62% 125%;
+    font-display: swap;
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-/* :not(.btn): um link com cara de botão mantém a cor do botão (antes ficava azul claro sobre azul, 2,1:1). */
-html[data-bs-theme="dark"] a:not(.btn), html[data-bs-theme="dark"] .btn-link {
-    color: #6ea8fe;
+/* Grade do semestre: tokens do app. A casca é azul-tinta nos dois temas; o chão muda com o tema.
+   Coral é reservado para "você" (sua semana, seu voto, seu próximo passo); as cores de bloco só aparecem onde há matéria. */
+:root,
+[data-bs-theme="light"] {
+    --ink: #14213D;
+    --ink-text: #E9EDF5;
+    --ink-muted: #AEB8CF;
+    --you-on-ink: #FF8A65;
+    --ground: #FFFFFF;
+    --ground-alt: #F4F6F9;
+    --rule: #D9DEE7;
+    --rule-strong: #9AA3B5;
+    --text: #1A2335;
+    --muted: #556075;
+    --link: #1D4FA3;
+    --you: #C23D1C;
+    --you-tint: #FCECE6;
+    --block-fund: #0B7F70;
+    --block-fund-tint: #E0F2EF;
+    --block-data: #4646BE;
+    --block-data-tint: #ECECFB;
+    --block-soft: #2A7739;
+    --block-soft-tint: #E4F1E6;
+    --block-prof: #93570E;
+    --block-prof-tint: #FAEFDD;
+    --block-gen: #8A3883;
+    --block-gen-tint: #F5E7F3;
+    --narrow: 75%;
+    --page-max: 82rem;
+    --gutter: 2rem;
+
+    --bs-body-bg: var(--ground);
+    --bs-body-color: var(--text);
+    --bs-emphasis-color: var(--text);
+    --bs-secondary-color: var(--muted);
+    --bs-tertiary-color: var(--muted);
+    --bs-secondary-bg: #E9ECF1;
+    --bs-tertiary-bg: var(--ground-alt);
+    --bs-border-color: var(--rule);
+    --bs-link-color: var(--link);
+    --bs-link-color-rgb: 29, 79, 163;
+    --bs-link-hover-color: var(--ink);
+    --bs-link-hover-color-rgb: 20, 33, 61;
+    --bs-primary: #14213D;
+    --bs-primary-rgb: 20, 33, 61;
+    --bs-primary-text-emphasis: #14213D;
+    --bs-primary-bg-subtle: #E8ECF4;
+    --bs-primary-border-subtle: #B7C1D6;
 }
 
-html[data-bs-theme="dark"] .btn-outline-primary {
-    --bs-btn-color: #6ea8fe;
-    --bs-btn-border-color: #6ea8fe;
-    --bs-btn-hover-bg: #6ea8fe;
-    --bs-btn-hover-border-color: #6ea8fe;
-    --bs-btn-hover-color: #0b1320;
-    --bs-btn-active-bg: #8bb9fe;
-    --bs-btn-active-border-color: #8bb9fe;
-    --bs-btn-active-color: #0b1320;
+[data-bs-theme="dark"] {
+    --ink: #0A1120;
+    --ink-text: #E6EAF2;
+    --ink-muted: #A3AEC6;
+    --you-on-ink: #FF8A65;
+    --ground: #121A2B;
+    --ground-alt: #18223A;
+    --rule: #2A3652;
+    --rule-strong: #4A5878;
+    --text: #E4E8F0;
+    --muted: #9EA9BE;
+    --link: #8DB4FF;
+    --you: #FF8A65;
+    --you-tint: #3B231C;
+    --block-fund: #4CC7B3;
+    --block-fund-tint: #123430;
+    --block-data: #A3A3FF;
+    --block-data-tint: #23234A;
+    --block-soft: #6CC77E;
+    --block-soft-tint: #173320;
+    --block-prof: #E8AE5C;
+    --block-prof-tint: #3A2A12;
+    --block-gen: #E58AD9;
+    --block-gen-tint: #3A1C36;
+
+    --bs-body-bg: var(--ground);
+    --bs-body-color: var(--text);
+    --bs-emphasis-color: #fff;
+    --bs-secondary-color: var(--muted);
+    --bs-tertiary-color: var(--muted);
+    --bs-secondary-bg: #222D47;
+    --bs-tertiary-bg: var(--ground-alt);
+    --bs-border-color: var(--rule);
+    --bs-link-color: var(--link);
+    --bs-link-color-rgb: 141, 180, 255;
+    --bs-link-hover-color: #fff;
+    --bs-link-hover-color-rgb: 255, 255, 255;
+    --bs-primary: #2F5FBF;
+    --bs-primary-rgb: 47, 95, 191;
+    --bs-primary-text-emphasis: #C9D6F2;
+    --bs-primary-bg-subtle: #172238;
+    --bs-primary-border-subtle: #33456B;
 }
 
-h1, h2, h3, h4, h5, h6 {
+:root {
+    --bs-body-font-family: "Archivo", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --bs-body-line-height: 1.55;
+    --bs-border-radius: 0.25rem;
+    --bs-border-radius-sm: 0.1875rem;
+    --bs-border-radius-lg: 0.375rem;
+    --bs-border-radius-pill: 50rem;
+}
+
+@media (max-width: 767.98px) {
+    :root {
+        --gutter: 1rem;
+    }
+}
+
+body {
+    font-feature-settings: "tnum" 0;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-weight: 700;
+    letter-spacing: -0.012em;
     text-wrap: balance;
 }
 
@@ -30,12 +141,153 @@ p, li, dd, figcaption {
     text-wrap: pretty;
 }
 
+/* Rótulo estreito em caixa alta: abas de módulo, cabeçalhos de coluna e códigos (Sem 44, 2021·Q12). */
+.label-narrow {
+    font-size: 0.75rem;
+    font-stretch: var(--narrow);
+    font-weight: 700;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+}
+
+.tabular {
+    font-variant-numeric: tabular-nums;
+}
+
+a:not(.btn) {
+    color: var(--link);
+    text-underline-offset: 0.18em;
+}
+
+a:not(.btn):hover {
+    color: var(--bs-link-hover-color);
+}
+
 ::selection {
-    background-color: rgba(37, 140, 251, 0.3);
+    background-color: rgba(194, 61, 28, 0.22);
+}
+
+:focus-visible {
+    outline: 2px solid var(--link);
+    outline-offset: 2px;
 }
 
 .badge {
     font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/* Botões: azul-tinta no claro, porcelana no escuro (a casca e o chão nunca se confundem com o botão). */
+.btn {
+    font-weight: 600;
+}
+
+.btn-primary {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--ink);
+    --bs-btn-border-color: var(--ink);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #23335A;
+    --bs-btn-hover-border-color: #23335A;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #0D1730;
+    --bs-btn-active-border-color: #0D1730;
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: var(--rule-strong);
+    --bs-btn-disabled-border-color: var(--rule-strong);
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--ink);
+    --bs-btn-border-color: var(--ink);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--ink);
+    --bs-btn-hover-border-color: var(--ink);
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: var(--ink);
+    --bs-btn-active-border-color: var(--ink);
+}
+
+[data-bs-theme="dark"] .btn-primary {
+    --bs-btn-color: #0A1120;
+    --bs-btn-bg: #E6EAF2;
+    --bs-btn-border-color: #E6EAF2;
+    --bs-btn-hover-color: #0A1120;
+    --bs-btn-hover-bg: #FFFFFF;
+    --bs-btn-hover-border-color: #FFFFFF;
+    --bs-btn-active-color: #0A1120;
+    --bs-btn-active-bg: #C9D2E3;
+    --bs-btn-active-border-color: #C9D2E3;
+}
+
+[data-bs-theme="dark"] .btn-outline-primary {
+    --bs-btn-color: #E6EAF2;
+    --bs-btn-border-color: #8B97B0;
+    --bs-btn-hover-color: #0A1120;
+    --bs-btn-hover-bg: #E6EAF2;
+    --bs-btn-hover-border-color: #E6EAF2;
+    --bs-btn-active-color: #0A1120;
+    --bs-btn-active-bg: #E6EAF2;
+    --bs-btn-active-border-color: #E6EAF2;
+}
+
+.btn:focus-visible,
+.btn:active:focus-visible,
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+    border-color: var(--link);
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-link-color-rgb), 0.3);
+}
+
+.pagination {
+    --bs-pagination-color: var(--link);
+    --bs-pagination-active-bg: var(--ink);
+    --bs-pagination-active-border-color: var(--ink);
+    --bs-pagination-focus-box-shadow: 0 0 0 0.2rem rgba(var(--bs-link-color-rgb), 0.3);
+}
+
+[data-bs-theme="dark"] .pagination {
+    --bs-pagination-active-bg: #E6EAF2;
+    --bs-pagination-active-border-color: #E6EAF2;
+    --bs-pagination-active-color: #0A1120;
+}
+
+.nav-underline {
+    --bs-nav-underline-link-active-color: var(--text);
+    --bs-nav-link-color: var(--muted);
+    --bs-nav-link-hover-color: var(--text);
+}
+
+.nav-underline .nav-link.active {
+    border-bottom-color: var(--you);
+}
+
+/* Módulo: fio grosso em cima e aba de título estreita, no lugar de cartão flutuante. */
+.module {
+    border-top: 2px solid var(--text);
+    padding-top: 0.625rem;
+    margin-bottom: 1.75rem;
+}
+
+.module-title {
+    margin: 0 0 0.75rem;
+    font-size: 0.8125rem;
+    font-stretch: var(--narrow);
+    font-weight: 700;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+}
+
+/* Cor de bloco do roadmap: a cor de cada matéria vem do bloco dela. */
+.block-fund { --block: var(--block-fund); --block-tint: var(--block-fund-tint); }
+.block-data { --block: var(--block-data); --block-tint: var(--block-data-tint); }
+.block-soft { --block: var(--block-soft); --block-tint: var(--block-soft-tint); }
+.block-prof { --block: var(--block-prof); --block-tint: var(--block-prof-tint); }
+.block-gen { --block: var(--block-gen); --block-tint: var(--block-gen-tint); }
+
+h1:focus {
+    outline: none;
 }
 
 /* Medida de leitura: enunciados e posts longos ficam em ~75 caracteres por linha. */
@@ -43,24 +295,6 @@ p, li, dd, figcaption {
 .question-statement > ul,
 .option-content > p {
     max-width: 75ch;
-}
-
-.btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem var(--bs-body-bg), 0 0 0 0.25rem #258cfb;
-}
-
-.content {
-    padding-top: 1.1rem;
-}
-
-h1:focus {
-    outline: none;
 }
 
 .valid.modified:not([type=checkbox]) {
@@ -131,16 +365,8 @@ h1:focus {
 
 /* Simulado: o aviso de horário fica visível enquanto o aluno rola as questões. */
 .mock-exam-clock {
-    top: env(safe-area-inset-top, 0px);
+    top: 3.5rem;
     z-index: 1020;
-}
-
-/* Rodapé com os links legais. */
-.site-footer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem 1.25rem;
-    border-top: 1px solid var(--bs-border-color);
 }
 
 /* Páginas de texto longo (política e termos): linha confortável de ler. */
@@ -175,74 +401,364 @@ h1:focus {
     --bs-alert-link-color: var(--bs-primary-text-emphasis);
 }
 
-/* Feed da comunidade (Início) */
-.feed-post {
-    display: flex;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem 0.75rem 0.5rem;
-    margin-bottom: 0.75rem;
-    border: 1px solid var(--bs-border-color);
-    border-radius: 0.5rem;
-    background-color: var(--bs-body-bg);
-    transition: border-color 0.15s ease-out;
+
+/* Faixa do semestre: uma coluna por semana até a prova, como a grade horária. */
+.semester {
+    display: grid;
+    grid-template-columns: 11rem 1fr;
+    margin: -0.25rem 0 2rem;
+    border-top: 2px solid var(--text);
+    border-bottom: 1px solid var(--rule);
 }
 
-.feed-post:hover {
-    border-color: var(--bs-secondary-color);
+.semester-head {
+    padding: 0.875rem 1rem 0.875rem 0;
+}
+
+.semester-count {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.2;
+    color: var(--muted);
+}
+
+.semester-count strong {
+    display: block;
+    font-size: 2.25rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+}
+
+.semester-date {
+    margin: 0.375rem 0 0;
+    font-size: 0.8125rem;
+    color: var(--muted);
+}
+
+.semester-weeks {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(9rem, 1fr);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.week {
+    position: relative;
+    min-width: 0;
+    padding: 0.75rem 0.75rem 0.875rem;
+    border-left: 1px solid var(--rule);
+}
+
+.week-code {
+    margin: 0 0 0.5rem;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+.week-code .label-narrow {
+    color: var(--text);
+}
+
+.week-code span:last-child {
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Semana atual: a cor de "você", em cima, como o marcador de hoje na grade. */
+.week.is-current {
+    background-color: var(--you-tint);
+}
+
+.week.is-current::before {
+    content: "";
+    position: absolute;
+    left: -1px;
+    right: 0;
+    top: -2px;
+    height: 4px;
+    background-color: var(--you);
+}
+
+.week.is-current .week-code .label-narrow {
+    color: var(--you);
+}
+
+.week.is-gap {
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    font-size: 0.8125rem;
+    background: repeating-linear-gradient(135deg, transparent 0 6px, var(--ground-alt) 6px 12px);
+}
+
+/* Bloco da semana. Estado pela forma da borda: sólida entregue, tracejada pendente, apagada perdida. */
+.slot {
+    display: block;
+    margin-top: 0.375rem;
+    padding: 0.375rem 0.5rem;
+    border: 1px dashed var(--rule-strong);
+    border-radius: 0.1875rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text);
+    text-decoration: none;
+    background-color: var(--ground);
+}
+
+a.slot:not(.btn) {
+    color: var(--text);
+    text-decoration: none;
+}
+
+a.slot:hover {
+    border-color: var(--text);
+}
+
+.slot small {
+    display: block;
+    font-weight: 500;
+    color: var(--muted);
+}
+
+.slot.is-done {
+    border-style: solid;
+    border-color: var(--block-soft);
+    background-color: var(--block-soft-tint);
+}
+
+.slot.is-missed {
+    border-style: solid;
+    color: var(--muted);
+    background-color: var(--ground-alt);
+}
+
+.slot.is-missed .slot-title {
+    text-decoration: line-through;
+}
+
+.slot-exam {
+    border: 0;
+    background-color: var(--ink);
+    color: #fff;
+    padding: 0.5rem;
+}
+
+.slot-exam small {
+    color: var(--ink-muted);
+}
+
+.week-empty {
+    margin: 0.375rem 0 0;
+    font-size: 0.8125rem;
+    color: var(--muted);
+}
+
+@media (max-width: 991.98px) {
+    .semester {
+        grid-template-columns: 1fr;
+    }
+
+    .semester-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--rule);
+    }
+
+    .semester-count strong {
+        display: inline;
+        font-size: 1.75rem;
+        margin-right: 0.375rem;
+    }
+
+    .semester-date {
+        margin: 0;
+    }
+
+    /* No celular a faixa rola de lado, uma semana por vez. */
+    .semester-weeks {
+        grid-auto-columns: minmax(10.5rem, 46%);
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        overscroll-behavior-x: contain;
+    }
+
+    .week {
+        scroll-snap-align: start;
+    }
+
+    .week:first-child {
+        border-left: 0;
+    }
+}
+
+/* Feed da comunidade: linhas separadas por fios, como as linhas da grade. */
+.feed-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.feed-head h1 {
+    margin: 0;
+    font-size: 1.625rem;
+}
+
+.feed-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+    margin: 0.75rem 0 0.25rem;
+}
+
+.feed-filters a:not(.btn) {
+    padding: 0.1875rem 0.5rem;
+    border: 1px solid var(--rule);
+    border-radius: 0.1875rem;
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-stretch: var(--narrow);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+}
+
+.feed-filters a:not(.btn):hover {
+    border-color: var(--text);
+    color: var(--text);
+}
+
+.feed-filters a[aria-current="page"]:not(.btn) {
+    border-color: var(--text);
+    background-color: var(--text);
+    color: var(--ground);
+}
+
+.feed {
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--rule);
+}
+
+.feed-post {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 0.75rem;
+    padding: 0.875rem 0.25rem 0.875rem 0;
+    border-bottom: 1px solid var(--rule);
 }
 
 .feed-post.is-pinned {
-    border-color: var(--bs-primary-border-subtle);
-    background-color: var(--bs-tertiary-bg);
+    background-color: var(--ground-alt);
+    box-shadow: inset 0 2px 0 var(--text);
 }
 
 .feed-post-body {
     min-width: 0;
-    flex: 1;
 }
 
 .feed-meta {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.375rem;
+    gap: 0.25rem 0.5rem;
     margin: 0 0 0.25rem;
     font-size: 0.8125rem;
-    color: var(--bs-secondary-color);
+    color: var(--muted);
 }
 
-.feed .feed-category:not(.btn) {
-    color: var(--bs-body-color);
-    font-weight: 600;
+/* Etiqueta de categoria: avisos oficiais em azul-tinta, a conversa da turma nas cores de bloco. */
+.tag {
+    display: inline-block;
+    padding: 0.0625rem 0.375rem;
+    border-radius: 0.125rem;
+    font-size: 0.6875rem;
+    font-stretch: var(--narrow);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    line-height: 1.5;
+    text-transform: uppercase;
     text-decoration: none;
 }
 
-.feed .feed-category:not(.btn):hover {
+a.tag:not(.btn):hover {
     text-decoration: underline;
+}
+
+.tag-official,
+a.tag-official:not(.btn) {
+    background-color: var(--text);
+    color: var(--ground);
+}
+
+.tag-doubt,
+a.tag-doubt:not(.btn) {
+    background-color: var(--block-data-tint);
+    color: var(--block-data);
+}
+
+.tag-tip,
+a.tag-tip:not(.btn) {
+    background-color: var(--block-fund-tint);
+    color: var(--block-fund);
+}
+
+.tag-discussion,
+a.tag-discussion:not(.btn) {
+    background-color: var(--block-prof-tint);
+    color: var(--block-prof);
+}
+
+.badge-teacher {
+    padding: 0 0.3125rem;
+    border: 1px solid currentColor;
+    border-radius: 0.125rem;
+    color: var(--text);
+    font-size: 0.6875rem;
+    font-stretch: var(--narrow);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.pinned-mark {
+    color: var(--text);
+    font-weight: 700;
 }
 
 .feed-title {
     margin: 0 0 0.25rem;
     font-size: 1.0625rem;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.35;
 }
 
 .feed .feed-title a:not(.btn) {
-    color: var(--bs-body-color);
+    color: var(--text);
     text-decoration: none;
 }
 
 .feed .feed-title a:not(.btn):hover {
     text-decoration: underline;
-    text-underline-offset: 0.15em;
 }
 
 .feed-excerpt {
-    max-width: 75ch;
+    max-width: 72ch;
     margin-bottom: 0.375rem;
     font-size: 0.9375rem;
-    color: var(--bs-secondary-color);
+    color: var(--muted);
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -253,61 +769,110 @@ h1:focus {
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
-    margin-left: -0.375rem;
-    padding: 0.125rem 0.375rem;
-    border-radius: 0.375rem;
-    font-size: 0.8125rem;
-    color: var(--bs-secondary-color);
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-stretch: var(--narrow);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     text-decoration: none;
 }
 
 .feed .feed-comments:not(.btn):hover {
-    background-color: var(--bs-secondary-bg);
-    color: var(--bs-body-color);
+    color: var(--text);
 }
 
 .feed-comments svg {
-    width: 1rem;
-    height: 1rem;
+    width: 0.9375rem;
+    height: 0.9375rem;
     fill: none;
     stroke: currentColor;
-    stroke-width: 1.25;
+    stroke-width: 1.4;
     stroke-linejoin: round;
 }
 
-.badge-teacher {
-    background-color: var(--bs-success-bg-subtle);
-    color: var(--bs-success-text-emphasis);
-    border: 1px solid var(--bs-success-border-subtle);
-    font-weight: 600;
-}
-
 .feed-empty {
-    padding: 1.5rem;
-    border: 1px dashed var(--bs-border-color);
-    border-radius: 0.5rem;
+    padding: 2rem 1rem;
+    border-bottom: 1px solid var(--rule);
     text-align: center;
 }
 
-.side-card {
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border: 1px solid var(--bs-border-color);
-    border-radius: 0.5rem;
-    background-color: var(--bs-tertiary-bg);
+/* Lateral: sua semana e o próximo passo. */
+.your-week {
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
-.exam-countdown strong {
-    font-size: 1.25rem;
+.your-week li {
+    display: grid;
+    grid-template-columns: 1fr 2.75rem;
+    gap: 0.25rem 0.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.875rem;
+}
+
+.your-week a:not(.btn) {
+    color: var(--text);
+    text-decoration: none;
+}
+
+.your-week a:not(.btn):hover {
+    text-decoration: underline;
+}
+
+.your-week .pct {
+    text-align: right;
+    font-weight: 700;
     font-variant-numeric: tabular-nums;
 }
 
+.meter {
+    grid-column: 1 / -1;
+    height: 0.375rem;
+    background-color: var(--ground-alt);
+    box-shadow: inset 0 0 0 1px var(--rule);
+}
+
+.meter > span {
+    display: block;
+    height: 100%;
+    background-color: var(--block);
+}
+
+.next-step {
+    padding: 0.75rem 0.875rem;
+    background-color: var(--you-tint);
+    box-shadow: inset 0 2px 0 var(--you);
+}
+
+.next-step h3 {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+}
+
+.next-step p {
+    margin: 0 0 0.625rem;
+    font-size: 0.875rem;
+    color: var(--muted);
+}
+
+.rules-list {
+    margin: 0 0 0.5rem;
+    padding-left: 1.1rem;
+    font-size: 0.875rem;
+}
+
+.rules-list li + li {
+    margin-top: 0.25rem;
+}
+
 .report-box summary {
-    color: var(--bs-secondary-color);
+    color: var(--muted);
     cursor: pointer;
 }
 
-/* Votos: setas sem moldura, a cor marca o voto dado. */
+/* Votos: setas sem moldura; a cor de "você" marca o voto dado. */
 .vote-control {
     display: flex;
     flex-direction: column;
@@ -320,50 +885,107 @@ h1:focus {
     align-items: center;
     justify-content: center;
     width: 2rem;
-    height: 2rem;
+    height: 1.75rem;
     padding: 0;
     border: 0;
-    border-radius: 0.375rem;
+    border-radius: 0.1875rem;
     background: none;
-    color: var(--bs-secondary-color);
+    color: var(--muted);
     cursor: pointer;
 }
 
 .vote-button svg {
-    width: 1.125rem;
-    height: 1.125rem;
+    width: 1rem;
+    height: 1rem;
     fill: currentColor;
 }
 
 .vote-button:hover {
-    background-color: var(--bs-secondary-bg);
-    color: var(--bs-body-color);
+    background-color: var(--ground-alt);
+    color: var(--text);
 }
 
 .vote-button:focus-visible {
-    outline: 2px solid #258cfb;
-    outline-offset: 1px;
+    outline: 2px solid var(--link);
+    outline-offset: 0;
 }
 
 .vote-up[aria-pressed="true"] {
-    color: #c2410c;
+    color: var(--you);
 }
 
 .vote-down[aria-pressed="true"] {
-    color: #4f46e5;
-}
-
-html[data-bs-theme="dark"] .vote-up[aria-pressed="true"] {
-    color: #fb923c;
-}
-
-html[data-bs-theme="dark"] .vote-down[aria-pressed="true"] {
-    color: #a5b4fc;
+    color: var(--block-data);
 }
 
 .vote-score {
     font-size: 0.875rem;
-    font-weight: 600;
+    font-weight: 700;
     font-variant-numeric: tabular-nums;
     line-height: 1.2;
+}
+
+[data-bs-theme="dark"] .slot-exam {
+    background-color: #E6EAF2;
+    color: #0A1120;
+}
+
+[data-bs-theme="dark"] .slot-exam small {
+    color: #3A4560;
+}
+
+/* Lista de questões: linhas com a cor da matéria, como a feed. */
+.question-rows {
+    margin: 0 0 1.5rem;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--rule);
+}
+
+.question-row {
+    position: relative;
+    padding: 0.875rem 0;
+    border-bottom: 1px solid var(--rule);
+}
+
+.question-row:hover {
+    background-color: var(--ground-alt);
+}
+
+.question-row-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.5rem;
+    margin-bottom: 0.25rem;
+    font-size: 0.8125rem;
+    color: var(--muted);
+}
+
+.subject-tag {
+    padding: 0.0625rem 0.375rem;
+    border-radius: 0.125rem;
+    background-color: var(--block-tint);
+    color: var(--block);
+    font-size: 0.6875rem;
+    font-stretch: var(--narrow);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.question-row-text {
+    max-width: 66ch;
+    margin: 0 0 0.25rem;
+}
+
+.question-row-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+}
+
+.question-row-link {
+    font-size: 0.875rem;
+    font-weight: 600;
 }

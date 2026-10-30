@@ -1,110 +1,70 @@
-.page {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-}
-
-main {
-    flex: 1;
-}
-
-/* Barra lateral sólida e escura nos dois temas: os ícones do menu são SVG brancos. */
-.sidebar {
-    background-color: #111c2b;
-    border-right: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.top-row {
-    /* Variáveis do Bootstrap: acompanham o data-bs-theme do <html>. */
-    background-color: var(--bs-tertiary-bg);
-    border-bottom: 1px solid var(--bs-border-color);
-    justify-content: flex-end;
-    height: 3.5rem;
-    display: flex;
-    align-items: center;
-}
-
-.theme-toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 1.5rem;
-    padding: 0.375rem;
-    border: 0;
+.skip-link {
+    position: absolute;
+    left: 0.5rem;
+    top: -3rem;
+    z-index: 1040;
+    padding: 0.5rem 0.875rem;
     border-radius: 0.25rem;
-    background: none;
-    color: var(--bs-body-color);
-    cursor: pointer;
+    background-color: #fff;
+    color: var(--ink);
+    font-weight: 700;
 }
 
-    .theme-toggle:hover {
-        background-color: var(--bs-secondary-bg);
-    }
-
-.theme-icon {
-    width: 1.1rem;
-    height: 1.1rem;
-    display: none;
+.skip-link:focus {
+    top: 0.5rem;
 }
 
-/* Mostra o ícone do tema para o qual o clique vai levar. */
-html[data-bs-theme="light"] .theme-icon-moon,
-html[data-bs-theme="dark"] .theme-icon-sun {
+.page-body {
     display: block;
+    max-width: var(--page-max);
+    min-height: calc(100vh - 3.5rem - 4rem);
+    margin: 0 auto;
+    padding: 1.5rem var(--gutter) 3rem;
 }
 
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-        text-decoration: none;
-    }
-
-    .top-row ::deep a:hover, .top-row ::deep .btn-link:hover {
-        text-decoration: underline;
-    }
-
-    .top-row ::deep a:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-@media (max-width: 640.98px) {
-    .top-row {
-        justify-content: space-between;
-    }
-
-    .top-row ::deep a, .top-row ::deep .btn-link {
-        margin-left: 0;
-    }
+.page-body:focus {
+    outline: none;
 }
 
-@media (min-width: 641px) {
-    .page {
-        flex-direction: row;
+.site-footer {
+    border-top: 1px solid var(--rule);
+    font-size: 0.8125rem;
+    color: var(--muted);
+}
+
+.site-footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: 1.25rem var(--gutter);
+}
+
+.site-footer-inner span {
+    margin-right: auto;
+}
+
+.site-footer-inner a {
+    color: var(--muted);
+}
+
+.site-footer-inner a:hover {
+    color: var(--text);
+}
+
+/* Celular: espaço para as abas fixas não cobrirem o rodapé. */
+@media (max-width: 767.98px) {
+    .page-body {
+        padding-top: 1rem;
     }
 
-    .sidebar {
-        width: 250px;
-        height: 100vh;
-        position: sticky;
-        top: 0;
+    .site-footer {
+        padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0px));
     }
 
-    .top-row {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-    }
-
-    .top-row.auth ::deep a:first-child {
-        flex: 1;
-        text-align: right;
-        width: 0;
-    }
-
-    .top-row, article {
-        padding-left: 2rem !important;
-        padding-right: 1.5rem !important;
+    .site-footer-inner span {
+        flex-basis: 100%;
     }
 }
 
@@ -119,7 +79,7 @@ html[data-bs-theme="dark"] .theme-icon-sun {
     padding: 0.6rem 1.25rem 0.7rem 1.25rem;
     position: fixed;
     width: 100%;
-    z-index: 1000;
+    z-index: 1050;
 }
 
     #blazor-error-ui .dismiss {
