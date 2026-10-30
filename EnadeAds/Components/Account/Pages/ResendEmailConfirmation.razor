@@ -1,4 +1,4 @@
-﻿@page "/Account/ResendEmailConfirmation"
+@page "/Account/ResendEmailConfirmation"
 
 @using System.ComponentModel.DataAnnotations
 @using System.Text
@@ -12,10 +12,10 @@
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 
-<PageTitle>Resend email confirmation</PageTitle>
+<PageTitle>Reenviar confirmação de e-mail</PageTitle>
 
-<h1>Resend email confirmation</h1>
-<h2>Enter your email.</h2>
+<h1>Reenviar confirmação de e-mail</h1>
+<h2 class="h5">Informe o e-mail usado no cadastro.</h2>
 <hr />
 <StatusMessage Message="@message" />
 <div class="row">
@@ -24,11 +24,11 @@
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" role="alert" />
             <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.Email" id="Input.Email" class="form-control" aria-required="true" placeholder="name@example.com" />
-                <label for="Input.Email" class="form-label">Email</label>
+                <InputText @bind-Value="Input.Email" id="Input.Email" class="form-control" aria-required="true" placeholder="nome@exemplo.com" />
+                <label for="Input.Email" class="form-label">E-mail</label>
                 <ValidationMessage For="() => Input.Email" class="text-danger" />
             </div>
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Resend</button>
+            <button type="submit" class="w-100 btn btn-lg btn-primary">Reenviar</button>
         </EditForm>
     </div>
 </div>
@@ -49,7 +49,7 @@
         var user = await UserManager.FindByEmailAsync(Input.Email!);
         if (user is null)
         {
-            message = "Verification email sent. Please check your email.";
+            message = "Se existir uma conta com esse e-mail, enviamos o link de confirmação. Confira também a caixa de spam.";
             return;
         }
 
@@ -61,13 +61,13 @@
             new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code });
         await EmailSender.SendConfirmationLinkAsync(user, Input.Email, HtmlEncoder.Default.Encode(callbackUrl));
 
-        message = "Verification email sent. Please check your email.";
+        message = "Se existir uma conta com esse e-mail, enviamos o link de confirmação. Confira também a caixa de spam.";
     }
 
     private sealed class InputModel
     {
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Preencha este campo.")]
+        [EmailAddress(ErrorMessage = "E-mail inválido.")]
         public string Email { get; set; } = "";
     }
 }

@@ -1,4 +1,4 @@
-﻿@page "/Account/ConfirmEmailChange"
+@page "/Account/ConfirmEmailChange"
 
 @using System.Text
 @using Microsoft.AspNetCore.Identity
@@ -9,9 +9,9 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject IdentityRedirectManager RedirectManager
 
-<PageTitle>Confirm email change</PageTitle>
+<PageTitle>Confirmação de troca de e-mail</PageTitle>
 
-<h1>Confirm email change</h1>
+<h1>Confirmação de troca de e-mail</h1>
 
 <StatusMessage Message="@message" />
 
@@ -42,7 +42,7 @@
         var user = await UserManager.FindByIdAsync(UserId);
         if (user is null)
         {
-            message = "Unable to find user with Id '{userId}'";
+            message = "Erro: não encontramos a conta deste link.";
             return;
         }
 
@@ -50,7 +50,7 @@
         var result = await UserManager.ChangeEmailAsync(user, Email, code);
         if (!result.Succeeded)
         {
-            message = "Error changing email.";
+            message = "Erro: não foi possível trocar o e-mail. O link pode ter expirado.";
             return;
         }
 
@@ -59,11 +59,11 @@
         var setUserNameResult = await UserManager.SetUserNameAsync(user, Email);
         if (!setUserNameResult.Succeeded)
         {
-            message = "Error changing user name.";
+            message = "Erro: não foi possível atualizar o login com o novo e-mail.";
             return;
         }
 
         await SignInManager.RefreshSignInAsync(user);
-        message = "Thank you for confirming your email change.";
+        message = "E-mail trocado com sucesso.";
     }
 }
