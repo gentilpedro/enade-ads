@@ -44,6 +44,13 @@ Alunos também têm e-mail institucional, muitas vezes no mesmo domínio dos pro
 - Um admin **não altera a própria conta** por essa tela, para não se trancar fora nem deixar a plataforma sem admin por engano.
 - Novos admins continuam vindo só da configuração `Admin:Emails`.
 
+## Proteção contra abuso
+
+- Os formulários de entrar, criar conta, esqueci a senha, reenviar confirmação, criar nova senha e códigos de 2FA aceitam no máximo **10 envios por minuto por IP**. Acima disso, a pessoa vê "Muitas tentativas em pouco tempo. Aguarde um minuto e tente de novo."
+- **5 senhas erradas seguidas** bloqueiam a conta por **15 minutos**. O admin pode desbloquear antes pela tela *Contas*.
+- Todo texto enviado tem limite de tamanho: comentário 2.000 caracteres, resposta discursiva 5.000, enunciado 8.000, post 20.000.
+- O site envia cabeçalhos de segurança: política de conteúdo (CSP), proibição de ser exibido dentro de outro site (frame) e de adivinhar tipo de arquivo.
+
 ## Acesso ao conteúdo
 
 - **Conteúdo é aberto:** roadmap, matérias, enunciados das questões, desafios e avisos podem ser vistos sem login.

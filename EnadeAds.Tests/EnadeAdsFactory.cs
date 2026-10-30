@@ -27,6 +27,9 @@ public sealed class EnadeAdsFactory : WebApplicationFactory<Program>
         builder.UseSetting("ConnectionStrings:DefaultConnection", "Host=nao-usado");
         builder.UseSetting("Admin:Emails:0", AdminEmail);
 
+        // Os testes fazem centenas de logins pelo mesmo "IP"; o limite em si é testado direto em AccountRateLimitTests.
+        builder.UseSetting("RateLimit:AccountPostsPerMinute", "100000");
+
         builder.ConfigureServices(services =>
         {
             services.RemoveAll<DbContextOptions<ApplicationDbContext>>();
