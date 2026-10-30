@@ -4,6 +4,7 @@ using EnadeAds.Data;
 using EnadeAds.MockExams;
 using EnadeAds.Performance;
 using EnadeAds.Questions;
+using EnadeAds.Study;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,17 +23,29 @@ public class MockExamTests(EnadeAdsFactory factory)
     [InlineData(1, 10)]
     public void Duration_IsProportionalToTheRealExam(int questions, int minutes)
     {
-        Assert.Equal(minutes, MockExamFormat.MinutesFor(questions));
+        Assert.Equal(minutes, MockExamFormat.MinutesFor(MockExamStyle.Enade, questions));
+    }
+
+    [Theory]
+    [InlineData(90, 300)]
+    [InlineData(45, 150)]
+    [InlineData(20, 67)]
+    public void Duration_FollowsAnEnemDay(int questions, int minutes)
+    {
+        Assert.Equal(minutes, MockExamFormat.MinutesFor(MockExamStyle.Enem, questions));
     }
 
     [Fact]
     public void Formats_FollowThePortariaProportion()
     {
-        var full = MockExamFormat.Of(MockExamSize.Full);
+        var full = MockExamFormat.Of(MockExamStyle.Enade, MockExamSize.Full);
+        var enem = MockExamFormat.Of(MockExamStyle.Enem, MockExamSize.Full);
 
         Assert.Equal((15, 30, 1), (full.GeneralEducation, full.Specific, full.Discursive));
-        Assert.Equal(MockExamFormat.FullQuestionCount, full.Total);
-        Assert.All(MockExamFormat.All, f => Assert.Equal(1, f.Discursive));
+        Assert.Equal(46, full.Total);
+        Assert.All(MockExamFormat.For(MockExamStyle.Enade), f => Assert.Equal(1, f.Discursive));
+        // ENEM: um dia de prova tem 90 objetivas; a redação não entra no simulado.
+        Assert.Equal((0, 90, 0), (enem.GeneralEducation, enem.Specific, enem.Discursive));
     }
 
     [Fact]
@@ -73,7 +86,7 @@ public class MockExamTests(EnadeAdsFactory factory)
         Assert.Equal(StartOutcome.Started, first.Outcome);
         Assert.Equal(StartOutcome.AlreadyOpen, second.Outcome);
         Assert.Equal(first.MockExamId, second.MockExamId);
-        Assert.Equal(MockExamFormat.MinutesFor(exam!.Questions.Count), (int)(exam.DeadlineAt - exam.StartedAt).TotalMinutes);
+        Assert.Equal(MockExamFormat.MinutesFor(MockExamStyle.Enade, exam!.Questions.Count), (int)(exam.DeadlineAt - exam.StartedAt).TotalMinutes);
         Assert.Equal(QuestionKind.Discursive, exam.Questions[^1].Question!.Kind);
         Assert.Equal(exam.Questions.Count - 1, exam.ObjectiveCount);
     }

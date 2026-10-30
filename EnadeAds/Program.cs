@@ -82,6 +82,9 @@ try
     builder.Services.AddScoped<AccountAdmin>();
     builder.Services.AddScoped<RoadmapService>();
     builder.Services.AddScoped<RoadmapEditor>();
+    builder.Services.AddHttpContextAccessor();
+    builder.Services.AddScoped<TrackScope>();
+    builder.Services.AddScoped<TrackCatalog>();
     builder.Services.AddScoped<ExamSettings>();
     builder.Services.AddScoped<SemesterPlan>();
     builder.Services.AddScoped<SubjectCatalog>();
@@ -167,6 +170,7 @@ try
     // Add additional endpoints required by the Identity /Account Razor components.
     app.MapAdditionalIdentityEndpoints();
     app.MapBlogFeed();
+    app.MapTrackSwitch();
 
     app.Run();
 }

@@ -17,7 +17,14 @@ public sealed class InepQuestionImporter(ApplicationDbContext db, ILogger<InepQu
 
     public static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() } };
 
-    public static string DefaultFolder => Path.Combine(AppContext.BaseDirectory, "Data", "Seed", "inep");
+    /// <summary>Pastas lidas na subida: provas do Inep (ENADE) e questões de autoria própria das outras trilhas.</summary>
+    public static IReadOnlyList<string> DefaultFolders { get; } =
+    [
+        Path.Combine(AppContext.BaseDirectory, "Data", "Seed", "inep"),
+        Path.Combine(AppContext.BaseDirectory, "Data", "Seed", "enem"),
+    ];
+
+    public static string DefaultFolder => DefaultFolders[0];
 
     public async Task<int> ImportFolderAsync(string folder, CancellationToken cancellationToken = default)
     {
@@ -42,22 +49,35 @@ public sealed class InepQuestionImporter(ApplicationDbContext db, ILogger<InepQu
                 continue;
             }
 
-            imported += await ImportAsync(exam?.Questions ?? [], Path.GetFileName(file), cancellationToken);
+            var trackId = Tracks.IdOf(exam?.Track ?? "enade-ads");
+            if (trackId is null)
+            {
+                logger.LogError("Arquivo de questões {File} aponta para a trilha {Track}, que não existe.", Path.GetFileName(file), exam?.Track);
+                continue;
+            }
+
+            imported += await ImportAsync(exam?.Questions ?? [], Path.GetFileName(file), trackId.Value, cancellationToken);
         }
 
         if (imported > 0)
         {
-            logger.LogInformation("{Count} questões das provas do Inep importadas.", imported);
+            logger.LogInformation("{Count} questões importadas de {Folder}.", imported, Path.GetFileName(folder));
         }
 
         return imported;
     }
 
-    public async Task<int> ImportAsync(IReadOnlyList<SeedQuestion> questions, string origin, CancellationToken cancellationToken = default)
+    public Task<int> ImportAsync(IReadOnlyList<SeedQuestion> questions, string origin, CancellationToken cancellationToken = default) =>
+        ImportAsync(questions, origin, Tracks.EnadeAds, cancellationToken);
+
+    /// <summary>As matérias (<c>subject</c>) são procuradas só na trilha <paramref name="trackId"/>; a chave é única na plataforma.</summary>
+    public async Task<int> ImportAsync(IReadOnlyList<SeedQuestion> questions, string origin, int trackId, CancellationToken cancellationToken = default)
     {
-        var existing = await db.Questions.Where(q => q.ExternalKey != null).Select(q => q.ExternalKey!).ToListAsync(cancellationToken);
+        var existing = await db.Questions.IgnoreQueryFilters().Where(q => q.ExternalKey != null).Select(q => q.ExternalKey!).ToListAsync(cancellationToken);
         var known = existing.ToHashSet(StringComparer.Ordinal);
-        var subjects = await db.RoadmapNodes.Where(n => n.Kind == NodeKind.Subject).ToDictionaryAsync(n => n.Slug, n => n.Id, cancellationToken);
+        var subjects = await db.RoadmapNodes.IgnoreQueryFilters()
+            .Where(n => n.TrackId == trackId && n.Kind == NodeKind.Subject)
+            .ToDictionaryAsync(n => n.Slug, n => n.Id, cancellationToken);
 
         var added = 0;
         foreach (var seed in questions)
@@ -144,7 +164,8 @@ public sealed class InepQuestionImporter(ApplicationDbContext db, ILogger<InepQu
     }
 }
 
-public sealed record SeedExam(int Year, IReadOnlyList<SeedQuestion> Questions);
+/// <param name="Track">Slug da trilha das questões; sem ele, ENADE ADS (os arquivos do Inep vieram antes das trilhas).</param>
+public sealed record SeedExam(int Year, IReadOnlyList<SeedQuestion> Questions, string? Track = null);
 
 public sealed record SeedQuestion(
     string Key,

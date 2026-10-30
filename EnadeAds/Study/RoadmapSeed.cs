@@ -9,9 +9,9 @@ namespace EnadeAds.Study;
 /// </summary>
 public static class RoadmapSeed
 {
-    private sealed record Subject(string Slug, string Title, StudyBlock Block, string Summary, (string Slug, string Title, string Summary)[] Topics);
+    internal sealed record Subject(string Slug, string Title, StudyBlock Block, string Summary, (string Slug, string Title, string Summary)[] Topics);
 
-    private sealed record Checkpoint(string Slug, string Title, StudyBlock Block, string Summary);
+    internal sealed record Checkpoint(string Slug, string Title, StudyBlock Block, string Summary);
 
     private static readonly object[] Spine =
     [
@@ -218,26 +218,30 @@ public static class RoadmapSeed
             "Faça um simulado de 4 horas no mesmo horário da prova. Depois, revise só o caderno de erros até o dia do ENADE."),
     ];
 
-    public static IReadOnlyList<RoadmapNode> Nodes { get; } = Build();
+    public static IReadOnlyList<RoadmapNode> Nodes { get; } = Build(Spine, Tracks.EnadeAds, idBase: 0);
 
-    private static List<RoadmapNode> Build()
+    /// <summary>
+    /// Ids a partir de <paramref name="idBase"/>: a n-ésima matéria ganha <c>idBase + n × 100</c>, os tópicos dela os
+    /// números seguintes e os checkpoints <c>idBase + 10.000 + n</c>. Cada trilha usa uma faixa própria.
+    /// </summary>
+    internal static List<RoadmapNode> Build(object[] spine, int trackId, int idBase)
     {
         var nodes = new List<RoadmapNode>();
         var spineOrder = 0;
         var subjectNumber = 0;
         var checkpointNumber = 0;
 
-        foreach (var item in Spine)
+        foreach (var item in spine)
         {
             spineOrder++;
             switch (item)
             {
                 case Subject subject:
                     subjectNumber++;
-                    var subjectId = subjectNumber * 100;
+                    var subjectId = idBase + subjectNumber * 100;
                     nodes.Add(new RoadmapNode
                     {
-                        Id = subjectId, Slug = subject.Slug, Title = subject.Title, Summary = subject.Summary,
+                        Id = subjectId, TrackId = trackId, Slug = subject.Slug, Title = subject.Title, Summary = subject.Summary,
                         Kind = NodeKind.Subject, Block = subject.Block, Order = spineOrder,
                     });
                     for (var i = 0; i < subject.Topics.Length; i++)
@@ -245,7 +249,7 @@ public static class RoadmapSeed
                         var topic = subject.Topics[i];
                         nodes.Add(new RoadmapNode
                         {
-                            Id = subjectId + i + 1, Slug = topic.Slug, Title = topic.Title, Summary = topic.Summary,
+                            Id = subjectId + i + 1, TrackId = trackId, Slug = topic.Slug, Title = topic.Title, Summary = topic.Summary,
                             Kind = NodeKind.Topic, Block = subject.Block, Order = i + 1, ParentId = subjectId,
                         });
                     }
@@ -255,7 +259,7 @@ public static class RoadmapSeed
                     checkpointNumber++;
                     nodes.Add(new RoadmapNode
                     {
-                        Id = 10_000 + checkpointNumber, Slug = checkpoint.Slug, Title = checkpoint.Title, Summary = checkpoint.Summary,
+                        Id = idBase + 10_000 + checkpointNumber, TrackId = trackId, Slug = checkpoint.Slug, Title = checkpoint.Title, Summary = checkpoint.Summary,
                         Kind = NodeKind.Checkpoint, Block = checkpoint.Block, Order = spineOrder,
                     });
                     break;

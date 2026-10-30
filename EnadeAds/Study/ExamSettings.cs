@@ -1,6 +1,5 @@
 using EnadeAds.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace EnadeAds.Study;
 
@@ -12,35 +11,22 @@ public class SiteSetting
     public DateTimeOffset UpdatedAt { get; set; }
 }
 
-/// <summary>Data da prova: a que o admin gravou no banco ou, se nunca gravou, a da configuração (<c>Enade:ExamDate</c>).</summary>
-public sealed class ExamSettings(ApplicationDbContext db, IOptions<ExamOptions> exam, TimeProvider clock)
+/// <summary>Datas de prova da trilha ativa. Cada trilha tem as suas, e o admin muda pela tela.</summary>
+public sealed class ExamSettings(ApplicationDbContext db, TrackCatalog tracks)
 {
-    public const string ExamDateKey = "ExamDate";
-
-    public async Task<DateOnly> ExamDateAsync(CancellationToken cancellationToken = default)
+    /// <summary>Próximo dia de prova a partir de <paramref name="today"/>; depois da prova, o último dia dela.</summary>
+    public async Task<DateOnly> ExamDateAsync(DateOnly today, CancellationToken cancellationToken = default)
     {
-        var stored = await db.SiteSettings.AsNoTracking()
-            .Where(s => s.Key == ExamDateKey)
-            .Select(s => s.Value)
-            .FirstOrDefaultAsync(cancellationToken);
-
-        return DateOnly.TryParseExact(stored, "yyyy-MM-dd", out var date) ? date : exam.Value.ExamDate;
+        var track = await tracks.CurrentAsync(cancellationToken);
+        return track.ExamDays.Where(day => day >= today).DefaultIfEmpty(track.LastExamDay).Min();
     }
 
-    public async Task SetExamDateAsync(DateOnly date, CancellationToken cancellationToken = default)
+    public async Task SetExamDatesAsync(DateOnly first, DateOnly? second = null, CancellationToken cancellationToken = default)
     {
-        var setting = await db.SiteSettings.FirstOrDefaultAsync(s => s.Key == ExamDateKey, cancellationToken);
-        var value = date.ToString("yyyy-MM-dd");
-        if (setting is null)
-        {
-            db.SiteSettings.Add(new SiteSetting { Key = ExamDateKey, Value = value, UpdatedAt = clock.GetUtcNow() });
-        }
-        else
-        {
-            setting.Value = value;
-            setting.UpdatedAt = clock.GetUtcNow();
-        }
-
+        var current = await tracks.CurrentAsync(cancellationToken);
+        var track = await db.Tracks.FirstAsync(t => t.Id == current.Id, cancellationToken);
+        track.ExamDate = first;
+        track.SecondExamDate = second;
         await db.SaveChangesAsync(cancellationToken);
     }
 }

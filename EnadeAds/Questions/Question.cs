@@ -11,7 +11,7 @@ public enum QuestionKind
     Discursive = 1,
 }
 
-/// <summary>Questão no formato do ENADE: objetiva (cinco alternativas) ou discursiva (padrão de resposta).</summary>
+/// <summary>Questão objetiva (cinco alternativas, como no ENADE e no ENEM) ou discursiva (padrão de resposta). A trilha é a da matéria.</summary>
 public class Question
 {
     public int Id { get; set; }

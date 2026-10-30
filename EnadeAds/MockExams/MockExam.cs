@@ -1,3 +1,5 @@
+using EnadeAds.Study;
+
 namespace EnadeAds.MockExams;
 
 public enum MockExamSize
@@ -11,6 +13,7 @@ public enum MockExamSize
 public class MockExam
 {
     public int Id { get; set; }
+    public int TrackId { get; set; } = Study.Tracks.Default;
     public required string UserId { get; set; }
     public MockExamSize Size { get; set; }
     public DateTimeOffset StartedAt { get; set; }
@@ -42,24 +45,40 @@ public class MockExamQuestion
     public string? DiscursiveText { get; set; }
 }
 
-/// <summary>Quantas questões de cada parte o simulado pede (Portaria Inep nº 169/2026: 15 + 30 + 1 discursiva em 4 horas).</summary>
-public sealed record MockExamFormat(MockExamSize Size, string Name, int GeneralEducation, int Specific, int Discursive)
+/// <summary>
+/// Quantas questões de cada parte o simulado pede, conforme o estilo da trilha.
+/// ENADE (Portaria Inep nº 169/2026): 15 de formação geral + 30 específicas + 1 discursiva em 4 horas.
+/// ENEM: 90 questões objetivas num dia de prova de 5 horas (o segundo dia), equilibradas entre as áreas;
+/// a redação não entra no simulado. No ENEM, <see cref="Specific"/> são as objetivas.
+/// </summary>
+public sealed record MockExamFormat(MockExamStyle Style, MockExamSize Size, string Name, int GeneralEducation, int Specific, int Discursive)
 {
-    public const int FullMinutes = 240;
-    public const int FullQuestionCount = 46;
-
     public static IReadOnlyList<MockExamFormat> All { get; } =
     [
-        new(MockExamSize.Short, "Curto", 3, 7, 1),
-        new(MockExamSize.Medium, "Médio", 7, 15, 1),
-        new(MockExamSize.Full, "Completo, como a prova", 15, 30, 1),
+        new(MockExamStyle.Enade, MockExamSize.Short, "Curto", 3, 7, 1),
+        new(MockExamStyle.Enade, MockExamSize.Medium, "Médio", 7, 15, 1),
+        new(MockExamStyle.Enade, MockExamSize.Full, "Completo, como a prova", 15, 30, 1),
+        new(MockExamStyle.Enem, MockExamSize.Short, "Curto", 0, 20, 0),
+        new(MockExamStyle.Enem, MockExamSize.Medium, "Médio", 0, 45, 0),
+        new(MockExamStyle.Enem, MockExamSize.Full, "Completo, como um dia de prova", 0, 90, 0),
     ];
 
     public int Total => GeneralEducation + Specific + Discursive;
 
-    public static MockExamFormat Of(MockExamSize size) => All.Single(f => f.Size == size);
+    public static IReadOnlyList<MockExamFormat> For(MockExamStyle style) => All.Where(f => f.Style == style).ToList();
 
-    /// <summary>Tempo proporcional ao da prova: 4 horas para 46 questões.</summary>
-    public static int MinutesFor(int questionCount) =>
-        Math.Max(10, (int)Math.Round(FullMinutes * questionCount / (double)FullQuestionCount));
+    public static MockExamFormat Of(MockExamStyle style, MockExamSize size) => All.Single(f => f.Style == style && f.Size == size);
+
+    /// <summary>Formato de um simulado já feito, pela trilha dele.</summary>
+    public static MockExamFormat Of(MockExam exam) => Of(StyleOf(exam.TrackId), exam.Size);
+
+    public static MockExamStyle StyleOf(int trackId) =>
+        Tracks.Seed.FirstOrDefault(t => t.Id == trackId)?.MockExamStyle ?? MockExamStyle.Enade;
+
+    /// <summary>Tempo proporcional ao da prova: 4 horas para 46 questões no ENADE, 5 horas para 90 no ENEM.</summary>
+    public static int MinutesFor(MockExamStyle style, int questionCount)
+    {
+        var (minutes, questions) = style == MockExamStyle.Enem ? (300, 90) : (240, 46);
+        return Math.Max(10, (int)Math.Round(minutes * questionCount / (double)questions));
+    }
 }

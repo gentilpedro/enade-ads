@@ -13,6 +13,7 @@ public enum ChallengeStatus
 public class Challenge
 {
     public int Id { get; set; }
+    public int TrackId { get; set; } = Study.Tracks.Default;
     public required string Title { get; set; }
     public required string Description { get; set; }
 

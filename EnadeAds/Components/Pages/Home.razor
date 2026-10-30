@@ -13,16 +13,17 @@
 
 @inject BlogService Blog
 @inject SemesterPlan Semester
+@inject TrackCatalog Tracks
 @inject PerformanceService Performance
 @inject LocalCalendar Calendar
 @inject TimeProvider Clock
 @inject UserManager<ApplicationUser> Users
 @inject NavigationManager Navigation
 
-<PageTitle>ENADE ADS</PageTitle>
+<PageTitle>Rumo @track?.Label</PageTitle>
 
 <HeadContent>
-    <link rel="alternate" type="application/rss+xml" title="ENADE ADS – avisos oficiais" href="@BlogFeed.Path.TrimStart('/')" />
+    <link rel="alternate" type="application/rss+xml" title="Rumo – avisos oficiais" href="@BlogFeed.Path.TrimStart('/')" />
 </HeadContent>
 
 @if (semester is not null)
@@ -162,7 +163,7 @@
         <section class="module" aria-labelledby="rules-title">
             <h2 id="rules-title" class="module-title">Combinados da comunidade</h2>
             <ul class="rules-list">
-                <li>Dúvidas de matéria, dicas de estudo e discussão sobre o ENADE.</li>
+                <li>Dúvidas de matéria, dicas de estudo e discussão sobre a prova.</li>
                 <li>Respeito sempre: crítica é ao conteúdo, não à pessoa.</li>
                 <li>Nada de cola, gabarito vazado ou dado pessoal de colegas.</li>
                 <li>Viu algo errado? Use <strong>Denunciar</strong> no post. Professores removem o que fugir disso.</li>
@@ -173,6 +174,8 @@
 </div>
 
 @code {
+    private Track? track;
+
     private enum Tab
     {
         Hot,
@@ -208,6 +211,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        track = await Tracks.CurrentAsync();
         category = PostCategoryNames.FromSlug(CategorySlug);
         tab = Order switch { "novos" => Tab.New, "oficiais" => Tab.Official, _ => Tab.Hot };
         userId = Users.GetUserId(HttpContext.User);

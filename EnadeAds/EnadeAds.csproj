@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <!-- Questões das provas do Inep, importadas ao subir a aplicação. -->
-    <Content Update="Data\Seed\inep\*.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Update="Data\Seed\**\*.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

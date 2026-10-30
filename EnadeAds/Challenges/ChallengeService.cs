@@ -196,6 +196,7 @@ public sealed class ChallengeService(ApplicationDbContext db, LocalCalendar cale
 
         var challenge = new Challenge
         {
+            TrackId = db.CurrentTrackId,
             Title = draft.Title.Trim(),
             Description = draft.Description.Trim(),
             StartsOn = draft.StartsOn,

@@ -162,7 +162,7 @@ public class RoadmapEditingTests(EnadeAdsFactory factory)
         {
             // Volta para a data usada pelos outros testes (contagem regressiva do roadmap).
             using var scope = factory.Services.CreateScope();
-            await scope.ServiceProvider.GetRequiredService<ExamSettings>().SetExamDateAsync(new DateOnly(2026, 11, 29));
+            await scope.ServiceProvider.GetRequiredService<ExamSettings>().SetExamDatesAsync(new DateOnly(2026, 11, 29));
         }
     }
 

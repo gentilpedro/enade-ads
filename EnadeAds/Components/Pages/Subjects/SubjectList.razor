@@ -3,13 +3,14 @@
 @using EnadeAds.Study
 
 @inject SubjectCatalog Catalog
+@inject TrackCatalog Tracks
 
 <PageTitle>Matérias</PageTitle>
 
 <h1>Matérias</h1>
 
 <p class="text-body-secondary">
-    Os objetos de conhecimento da Portaria Inep nº 169/2026 (Art. 6º) e a Formação Geral, agrupados por bloco.
+    As matérias de @track?.Name, agrupadas por bloco.
     Para ver a ordem de estudo, abra o <a href="roadmap">roadmap</a>.
 </p>
 
@@ -39,9 +40,11 @@
 
 @code {
     private IReadOnlyList<RoadmapNode>? subjects;
+    private Track? track;
 
     protected override async Task OnInitializedAsync()
     {
+        track = await Tracks.CurrentAsync();
         subjects = await Catalog.ListAsync();
     }
 }

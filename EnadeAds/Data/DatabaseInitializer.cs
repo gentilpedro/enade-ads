@@ -22,8 +22,12 @@ public static class DatabaseInitializer
             await db.Database.EnsureCreatedAsync();
         }
 
-        // Questões das provas do Inep (Data/Seed/inep): só entram as que ainda não existem.
-        await scope.ServiceProvider.GetRequiredService<InepQuestionImporter>().ImportFolderAsync(InepQuestionImporter.DefaultFolder);
+        // Questões das seeds (Data/Seed/inep e enem): só entram as que ainda não existem.
+        var importer = scope.ServiceProvider.GetRequiredService<InepQuestionImporter>();
+        foreach (var folder in InepQuestionImporter.DefaultFolders)
+        {
+            await importer.ImportFolderAsync(folder);
+        }
 
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         foreach (var role in Roles.All)

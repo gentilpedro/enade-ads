@@ -1,10 +1,32 @@
 @using EnadeAds.Accounts
+@using EnadeAds.Study
 
 @inject NavigationManager Navigation
+@inject TrackCatalog Tracks
 
 <header class="site-header">
     <div class="site-header-inner">
-        <a class="brand" href="">ENADE<span aria-hidden="true">·</span><span class="visually-hidden"> </span>ADS</a>
+        <div class="brand-group">
+            <a class="brand" href="">Rumo</a>
+            @* A trilha ativa ao lado da marca: "Rumo ENEM". Clicar troca de trilha, sem JavaScript. *@
+            <details class="track-menu">
+                <summary aria-label="Trilha: @track?.Name. Trocar de trilha">
+                    <span class="track-label">@track?.Label</span>
+                    <svg class="chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" /></svg>
+                </summary>
+                <div class="track-panel">
+                    <p class="track-panel-title">Estudar para</p>
+                    @foreach (var option in tracks)
+                    {
+                        var isCurrent = option.Id == track?.Id;
+                        <a href="@SwitchUrl(option)" aria-current="@(isCurrent ? "true" : null)" class="@(isCurrent ? "is-current" : null)">
+                            <span class="track-option-name">@option.Name</span>
+                            <span class="track-option-level">@option.Level.LevelName()</span>
+                        </a>
+                    }
+                </div>
+            </details>
+        </div>
 
         <nav class="primary-nav" aria-label="Seções">
             <NavLink href="" Match="NavLinkMatch.All">Início</NavLink>
@@ -68,8 +90,27 @@
 
 @code {
     private string? currentUrl;
+    private Track? track;
+    private IReadOnlyList<Track> tracks = [];
 
-    protected override void OnInitialized() => currentUrl = Navigation.ToBaseRelativePath(Navigation.Uri);
+    protected override async Task OnInitializedAsync()
+    {
+        currentUrl = Navigation.ToBaseRelativePath(Navigation.Uri);
+        track = await Tracks.CurrentAsync();
+        tracks = await Tracks.ListAsync();
+    }
+
+    /// <summary>
+    /// Volta para a mesma seção na outra trilha. Páginas de um item (uma matéria, uma questão) voltam para a lista,
+    /// porque o item é da trilha anterior; conta e admin voltam para a mesma página.
+    /// </summary>
+    private string SwitchUrl(Track option)
+    {
+        var path = (currentUrl ?? "").Split('?', '#')[0];
+        var first = path.Split('/')[0];
+        var back = first is "Account" or "admin" ? "/" + path : "/" + first;
+        return $"trilha/{option.Slug}?volta={Uri.EscapeDataString(back)}";
+    }
 
     private static string Initial(string? name) =>
         string.IsNullOrWhiteSpace(name) ? "?" : name.Trim()[..1].ToUpperInvariant();

@@ -15,7 +15,14 @@
 <h1>Simulados</h1>
 
 <p class="text-body-secondary">
-    Treine com tempo, no formato da prova: questões de formação geral, específicas e uma discursiva.
+    @if (MockExams.Style == MockExamStyle.Enem)
+    {
+        <text>Treine com tempo, no ritmo do ENEM: questões objetivas das quatro áreas, com cerca de 3 minutos por questão. A redação você treina pelo roadmap.</text>
+    }
+    else
+    {
+        <text>Treine com tempo, no formato da prova: questões de formação geral, específicas e uma discursiva.</text>
+    }
     O relógio é do servidor: recarregar a página não reinicia o tempo. O gabarito sai quando você entrega.
 </p>
 
@@ -58,7 +65,14 @@ else if (plans is not null)
                                 </div>
                                 <p class="mb-1 mt-2 font-monospace">@plan.Total questões · @Duration(plan.Minutes)</p>
                                 <p class="small text-body-secondary mb-0">
-                                    @plan.GeneralEducation de formação geral, @plan.Specific específicas e @plan.Discursive discursiva.
+                                    @if (plan.Format.Style == MockExamStyle.Enem)
+                                    {
+                                        <text>Objetivas, revezando entre Linguagens, Humanas, Natureza e Matemática.</text>
+                                    }
+                                    else
+                                    {
+                                        <text>@plan.GeneralEducation de formação geral, @plan.Specific específicas e @plan.Discursive discursiva.</text>
+                                    }
                                 </p>
                                 @if (plan.IsShorterThanFormat)
                                 {
@@ -91,7 +105,7 @@ else if (plans is not null)
                     {
                         <tr>
                             <td>@Calendar.ToLocal(exam.StartedAt).ToString("dd/MM/yyyy HH:mm")</td>
-                            <td>@MockExamFormat.Of(exam.Size).Name</td>
+                            <td>@MockExamFormat.Of(exam).Name</td>
                             <td class="font-monospace">
                                 @exam.CorrectCount de @exam.ObjectiveCount
                                 @if (exam.SubmittedByTimeout)

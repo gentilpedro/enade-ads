@@ -8,14 +8,14 @@
         <h2 id="semester-title" class="semester-count">
             @if (View.DaysLeft == 0)
             {
-                <strong>Hoje</strong> <span>é a prova</span>
+                <strong>Hoje</strong> <span>é dia de @View.Track.ExamName</span>
             }
             else
             {
-                <strong>@View.DaysLeft</strong> <span>@(View.DaysLeft == 1 ? "dia até a prova" : "dias até a prova")</span>
+                <strong>@View.DaysLeft</strong> <span>@(View.DaysLeft == 1 ? "dia até o" : "dias até o") @View.Track.ExamName</span>
             }
         </h2>
-        <p class="semester-date">ENADE @View.ExamDate.Year · @View.ExamDate.ToString("dd/MM", Culture)</p>
+        <p class="semester-date">@View.Track.Name · @string.Join(" e ", View.Track.ExamDays.Select(day => day.ToString("dd/MM", Culture)))</p>
     </div>
 
     <ol class="semester-weeks">
@@ -40,11 +40,11 @@
                         <small>@SlotState(challenge)</small>
                     </a>
                 }
-                @if (week.HasExam)
+                @foreach (var day in week.ExamDays)
                 {
-                    <p class="slot slot-exam">ENADE @View.ExamDate.Year<small>@View.ExamDate.ToString("dddd, dd/MM", Culture)</small></p>
+                    <p class="slot slot-exam">@ExamDayTitle(day)<small>@day.ToString("dddd, dd/MM", Culture)</small></p>
                 }
-                else if (week.Challenges.Count == 0)
+                @if (!week.HasExam && week.Challenges.Count == 0)
                 {
                     <p class="week-empty">Sem desafio marcado</p>
                 }
@@ -70,6 +70,11 @@
         // Perdido fica cinza; os outros levam a cor do bloco da matéria, e a borda diz o estado.
         return challenge.Block is { } block && state != "is-missed" ? $"{state} {block.ColorClass()}" : state;
     }
+
+    /// <summary>"ENEM · 1º dia" quando a prova tem dois dias; senão, só o nome da prova.</summary>
+    private string ExamDayTitle(DateOnly day) => View.Track.SecondExamDate is null
+        ? View.Track.Name
+        : $"{View.Track.ExamName} · {(day == View.Track.ExamDate ? 1 : 2)}º dia";
 
     private string SlotState(WeekChallenge challenge) => challenge switch
     {

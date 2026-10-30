@@ -69,6 +69,7 @@ public sealed class RoadmapEditor(ApplicationDbContext db, ILogger<RoadmapEditor
         var topic = new RoadmapNode
         {
             Id = await NextIdAsync(cancellationToken),
+            TrackId = subject.TrackId,
             Slug = await UniqueSlugAsync(title, cancellationToken),
             Title = title.Trim(),
             Summary = summary.Trim(),
@@ -114,6 +115,7 @@ public sealed class RoadmapEditor(ApplicationDbContext db, ILogger<RoadmapEditor
         var checkpoint = new RoadmapNode
         {
             Id = await NextIdAsync(cancellationToken),
+            TrackId = subject.TrackId,
             Slug = await UniqueSlugAsync(title, cancellationToken),
             Title = title.Trim(),
             Summary = summary.Trim(),
@@ -180,7 +182,7 @@ public sealed class RoadmapEditor(ApplicationDbContext db, ILogger<RoadmapEditor
 
         if (node.Kind == NodeKind.Subject)
         {
-            return EditResult.Fail("As matérias vêm da Portaria Inep nº 169/2026 e não podem ser removidas. Edite o resumo ou os assuntos.");
+            return EditResult.Fail("As matérias vêm da matriz oficial da prova e não podem ser removidas. Edite o resumo ou os assuntos.");
         }
 
         db.RoadmapNodes.Remove(node);
@@ -191,7 +193,8 @@ public sealed class RoadmapEditor(ApplicationDbContext db, ILogger<RoadmapEditor
 
     private async Task<int> NextIdAsync(CancellationToken cancellationToken)
     {
-        var max = await db.RoadmapNodes.MaxAsync(n => (int?)n.Id, cancellationToken) ?? 0;
+        // O id é único entre todas as trilhas, então olha também os nós das outras.
+        var max = await db.RoadmapNodes.IgnoreQueryFilters().MaxAsync(n => (int?)n.Id, cancellationToken) ?? 0;
         return Math.Max(max + 1, FirstCustomId);
     }
 

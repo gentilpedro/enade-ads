@@ -84,6 +84,9 @@ namespace EnadeAds.Data.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("character varying(150)");
 
+                    b.Property<int?>("TrackId")
+                        .HasColumnType("integer");
+
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -97,6 +100,8 @@ namespace EnadeAds.Data.Migrations
 
                     b.HasIndex("Slug")
                         .IsUnique();
+
+                    b.HasIndex("TrackId");
 
                     b.ToTable("Posts");
                 });
@@ -234,9 +239,14 @@ namespace EnadeAds.Data.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("character varying(150)");
 
+                    b.Property<int>("TrackId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("TrackId");
 
                     b.ToTable("Challenges");
                 });
@@ -388,18 +398,23 @@ namespace EnadeAds.Data.Migrations
                     b.Property<bool>("SubmittedByTimeout")
                         .HasColumnType("boolean");
 
+                    b.Property<int>("TrackId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId")
+                    b.HasIndex("TrackId");
+
+                    b.HasIndex("UserId", "Id");
+
+                    b.HasIndex("UserId", "TrackId")
                         .IsUnique()
                         .HasDatabaseName("IX_MockExams_OpenPerUser")
                         .HasFilter("\"SubmittedAt\" IS NULL");
-
-                    b.HasIndex("UserId", "Id");
 
                     b.ToTable("MockExams");
                 });
@@ -1023,11 +1038,14 @@ namespace EnadeAds.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
 
+                    b.Property<int>("TrackId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ParentId");
 
-                    b.HasIndex("Slug")
+                    b.HasIndex("TrackId", "Slug")
                         .IsUnique();
 
                     b.ToTable("RoadmapNodes");
@@ -1041,7 +1059,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 1,
                             Slug = "logica-matematica",
                             Summary = "Base para ler enunciados formais, condições de algoritmos e consultas. Cai em questões de raciocínio e em pseudocódigo.",
-                            Title = "Lógica matemática e teoria dos conjuntos"
+                            Title = "Lógica matemática e teoria dos conjuntos",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1052,7 +1071,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 100,
                             Slug = "proposicoes-tabela-verdade",
                             Summary = "Conectivos (e, ou, não, se-então, se e somente se) e como montar a tabela-verdade de uma expressão.",
-                            Title = "Proposições e tabela-verdade"
+                            Title = "Proposições e tabela-verdade",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1063,7 +1083,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 100,
                             Slug = "equivalencias-logicas",
                             Summary = "Leis de De Morgan, contrapositiva e negação de condicionais, muito usadas para simplificar condições.",
-                            Title = "Equivalências lógicas"
+                            Title = "Equivalências lógicas",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1074,7 +1095,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 100,
                             Slug = "quantificadores",
                             Summary = "Para todo e existe: como negar frases com quantificadores.",
-                            Title = "Quantificadores"
+                            Title = "Quantificadores",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1085,7 +1107,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 100,
                             Slug = "conjuntos-operacoes",
                             Summary = "União, interseção, diferença, complemento, produto cartesiano e diagramas de Venn.",
-                            Title = "Conjuntos e operações"
+                            Title = "Conjuntos e operações",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1096,7 +1119,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 100,
                             Slug = "relacoes-funcoes",
                             Summary = "Domínio, imagem, funções injetoras, sobrejetoras e bijetoras.",
-                            Title = "Relações e funções"
+                            Title = "Relações e funções",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1106,7 +1130,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 2,
                             Slug = "arquitetura-computadores",
                             Summary = "Como o computador representa e processa dados. Conversão de bases é ponto garantido com treino.",
-                            Title = "Princípios de arquitetura e organização de computadores"
+                            Title = "Princípios de arquitetura e organização de computadores",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1117,7 +1142,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 200,
                             Slug = "conversao-bases",
                             Summary = "Decimal, binário, octal e hexadecimal nas duas direções, sem calculadora.",
-                            Title = "Sistemas de numeração e conversão de bases"
+                            Title = "Sistemas de numeração e conversão de bases",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1128,7 +1154,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 200,
                             Slug = "aritmetica-binaria",
                             Summary = "Soma e subtração em binário, complemento de dois e overflow.",
-                            Title = "Aritmética binária"
+                            Title = "Aritmética binária",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1139,7 +1166,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 200,
                             Slug = "representacao-dados",
                             Summary = "Bits, bytes, KB x KiB, caracteres (ASCII, Unicode) e ponto flutuante.",
-                            Title = "Representação de dados"
+                            Title = "Representação de dados",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1150,7 +1178,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 200,
                             Slug = "cpu-memoria-barramentos",
                             Summary = "Ciclo de busca e execução, registradores, ULA e unidade de controle.",
-                            Title = "CPU, memória e barramentos"
+                            Title = "CPU, memória e barramentos",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1161,7 +1190,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 200,
                             Slug = "hierarquia-memoria",
                             Summary = "Registradores, cache, RAM e armazenamento: velocidade, custo e localidade.",
-                            Title = "Hierarquia de memória"
+                            Title = "Hierarquia de memória",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1171,7 +1201,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 3,
                             Slug = "algoritmos-programacao",
                             Summary = "Ler e escrever algoritmos. A questão clássica do ENADE é descobrir o que um pseudocódigo imprime.",
-                            Title = "Algoritmos e programação"
+                            Title = "Algoritmos e programação",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1182,7 +1213,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 300,
                             Slug = "variaveis-tipos",
                             Summary = "Tipos primitivos, precedência de operadores e divisão inteira x real.",
-                            Title = "Variáveis, tipos e operadores"
+                            Title = "Variáveis, tipos e operadores",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1193,7 +1225,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 300,
                             Slug = "estruturas-controle",
                             Summary = "Condicionais e laços (enquanto, para, repita) e suas condições de parada.",
-                            Title = "Estruturas de controle"
+                            Title = "Estruturas de controle",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1204,7 +1237,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 300,
                             Slug = "funcoes-recursao",
                             Summary = "Parâmetros por valor e por referência, caso base e pilha de chamadas.",
-                            Title = "Funções e recursão"
+                            Title = "Funções e recursão",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1215,7 +1249,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 300,
                             Slug = "vetores-matrizes",
                             Summary = "Índices, percursos e operações comuns em arrays.",
-                            Title = "Vetores e matrizes"
+                            Title = "Vetores e matrizes",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1226,7 +1261,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 300,
                             Slug = "rastreamento-pseudocodigo",
                             Summary = "Simular a execução linha a linha anotando o valor de cada variável.",
-                            Title = "Rastreamento de pseudocódigo"
+                            Title = "Rastreamento de pseudocódigo",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1236,7 +1272,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 4,
                             Slug = "estruturas-dados",
                             Summary = "Como organizar dados para cada problema e quanto custa cada operação.",
-                            Title = "Estruturas de dados"
+                            Title = "Estruturas de dados",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1247,7 +1284,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 400,
                             Slug = "pilhas",
                             Summary = "LIFO: push e pop, usos em desfazer, chamadas de função e avaliação de expressões.",
-                            Title = "Pilhas"
+                            Title = "Pilhas",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1258,7 +1296,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 400,
                             Slug = "filas",
                             Summary = "FIFO: enqueue e dequeue, filas circulares e de prioridade.",
-                            Title = "Filas"
+                            Title = "Filas",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1269,7 +1308,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 400,
                             Slug = "listas-encadeadas",
                             Summary = "Simples, duplas e circulares; inserção e remoção sem deslocar elementos.",
-                            Title = "Listas encadeadas"
+                            Title = "Listas encadeadas",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1280,7 +1320,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 400,
                             Slug = "arvores",
                             Summary = "Percursos (pré, em e pós-ordem), inserção e busca em BST, balanceamento.",
-                            Title = "Árvores binárias e de busca"
+                            Title = "Árvores binárias e de busca",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1291,7 +1332,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 400,
                             Slug = "tabelas-hash",
                             Summary = "Função de hash, colisões e custo médio de busca.",
-                            Title = "Tabelas hash"
+                            Title = "Tabelas hash",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1302,7 +1344,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 400,
                             Slug = "grafos",
                             Summary = "Representações, busca em largura e em profundidade, caminho mínimo.",
-                            Title = "Grafos"
+                            Title = "Grafos",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1313,7 +1356,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 400,
                             Slug = "complexidade",
                             Summary = "Notação Big-O e comparação entre O(1), O(log n), O(n), O(n log n) e O(n²).",
-                            Title = "Complexidade de algoritmos"
+                            Title = "Complexidade de algoritmos",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1324,7 +1368,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 400,
                             Slug = "ordenacao-busca",
                             Summary = "Bubble, insertion, merge e quick sort; busca linear x binária.",
-                            Title = "Ordenação e busca"
+                            Title = "Ordenação e busca",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1334,7 +1379,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 5,
                             Slug = "orientacao-objetos",
                             Summary = "Modelar sistemas com classes e objetos. Cai muito como código que imprime algo com herança e polimorfismo.",
-                            Title = "Orientação a objetos"
+                            Title = "Orientação a objetos",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1345,7 +1391,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 500,
                             Slug = "classes-objetos",
                             Summary = "Estado, comportamento, instância e construtor da superclasse.",
-                            Title = "Classes, objetos e construtores"
+                            Title = "Classes, objetos e construtores",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1356,7 +1403,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 500,
                             Slug = "encapsulamento",
                             Summary = "Modificadores de acesso e por que esconder o estado interno.",
-                            Title = "Encapsulamento"
+                            Title = "Encapsulamento",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1367,7 +1415,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 500,
                             Slug = "heranca",
                             Summary = "Reuso e especialização; quando preferir composição.",
-                            Title = "Herança"
+                            Title = "Herança",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1378,7 +1427,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 500,
                             Slug = "polimorfismo",
                             Summary = "Sobrescrita x sobrecarga e ligação dinâmica.",
-                            Title = "Polimorfismo"
+                            Title = "Polimorfismo",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1389,7 +1439,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 500,
                             Slug = "abstrata-interface",
                             Summary = "O que cada uma pode ter e quando usar.",
-                            Title = "Classe abstrata x interface"
+                            Title = "Classe abstrata x interface",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1400,7 +1451,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 500,
                             Slug = "solid",
                             Summary = "Responsabilidade única, aberto/fechado, Liskov, segregação de interfaces e inversão de dependência.",
-                            Title = "Princípios SOLID"
+                            Title = "Princípios SOLID",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1411,7 +1463,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 500,
                             Slug = "padroes-projeto",
                             Summary = "Singleton, Factory, Strategy, Observer e Adapter.",
-                            Title = "Padrões de projeto"
+                            Title = "Padrões de projeto",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1421,7 +1474,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 6,
                             Slug = "checkpoint-fundamentos",
                             Summary = "Antes de seguir, resolva questões de lógica, conversão de bases, pseudocódigo, estruturas de dados e orientação a objetos. Anote os erros no caderno de erros.",
-                            Title = "Checkpoint: questões de fundamentos"
+                            Title = "Checkpoint: questões de fundamentos",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1431,7 +1485,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 7,
                             Slug = "banco-de-dados",
                             Summary = "Modelagem e consultas. SQL aparece quase sempre: ler uma consulta e dizer o resultado.",
-                            Title = "Banco de dados"
+                            Title = "Banco de dados",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1442,7 +1497,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 600,
                             Slug = "modelo-er",
                             Summary = "Entidades, atributos, relacionamentos e cardinalidade.",
-                            Title = "Modelo entidade-relacionamento"
+                            Title = "Modelo entidade-relacionamento",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1453,7 +1509,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 600,
                             Slug = "modelo-relacional",
                             Summary = "Tabelas, chave primária, chave estrangeira e integridade referencial.",
-                            Title = "Modelo relacional e chaves"
+                            Title = "Modelo relacional e chaves",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1464,7 +1521,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 600,
                             Slug = "normalizacao",
                             Summary = "1FN, 2FN e 3FN: dependências funcionais e como eliminar redundância.",
-                            Title = "Normalização"
+                            Title = "Normalização",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1475,7 +1533,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 600,
                             Slug = "sql-consultas",
                             Summary = "SELECT, WHERE, ORDER BY, funções de agregação e subconsultas.",
-                            Title = "SQL: consultas"
+                            Title = "SQL: consultas",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1486,7 +1545,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 600,
                             Slug = "sql-join-group",
                             Summary = "INNER e LEFT JOIN, GROUP BY com HAVING.",
-                            Title = "SQL: JOIN e GROUP BY"
+                            Title = "SQL: JOIN e GROUP BY",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1497,7 +1557,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 600,
                             Slug = "transacoes-acid",
                             Summary = "Atomicidade, consistência, isolamento, durabilidade e controle de concorrência.",
-                            Title = "Transações e ACID"
+                            Title = "Transações e ACID",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1508,7 +1569,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 600,
                             Slug = "nosql",
                             Summary = "Documento, chave-valor, coluna e grafo; quando cada um faz sentido.",
-                            Title = "NoSQL"
+                            Title = "NoSQL",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1518,7 +1580,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 8,
                             Slug = "sistemas-operacionais",
                             Summary = "Como o sistema operacional divide CPU, memória e arquivos entre os programas.",
-                            Title = "Princípios de sistemas operacionais"
+                            Title = "Princípios de sistemas operacionais",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1529,7 +1592,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 700,
                             Slug = "processos-threads",
                             Summary = "Estados de um processo, troca de contexto e diferença entre processo e thread.",
-                            Title = "Processos e threads"
+                            Title = "Processos e threads",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1540,7 +1604,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 700,
                             Slug = "escalonamento",
                             Summary = "FIFO, SJF, Round Robin e prioridade; tempo de espera e de resposta.",
-                            Title = "Escalonamento"
+                            Title = "Escalonamento",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1551,7 +1616,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 700,
                             Slug = "sincronizacao-deadlock",
                             Summary = "Condição de corrida, semáforos, as quatro condições do deadlock e como evitá-lo.",
-                            Title = "Sincronização e deadlock"
+                            Title = "Sincronização e deadlock",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1562,7 +1628,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 700,
                             Slug = "memoria-virtual",
                             Summary = "Paginação, segmentação e substituição de páginas.",
-                            Title = "Memória virtual"
+                            Title = "Memória virtual",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1573,7 +1640,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 700,
                             Slug = "sistemas-arquivos",
                             Summary = "Diretórios, permissões e alocação de blocos.",
-                            Title = "Sistemas de arquivos"
+                            Title = "Sistemas de arquivos",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1583,7 +1651,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 9,
                             Slug = "redes-sistemas-distribuidos",
                             Summary = "Como os sistemas se comunicam. Endereçamento IP e sub-redes são conta: treine à mão.",
-                            Title = "Princípios de redes de computadores e de sistemas distribuídos"
+                            Title = "Princípios de redes de computadores e de sistemas distribuídos",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1594,7 +1663,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 800,
                             Slug = "modelos-osi-tcpip",
                             Summary = "As camadas, o que cada uma faz e onde ficam os protocolos.",
-                            Title = "Modelos OSI e TCP/IP"
+                            Title = "Modelos OSI e TCP/IP",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1605,7 +1675,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 800,
                             Slug = "enderecamento-ipv4",
                             Summary = "Notação /N, máscara decimal, faixas privadas.",
-                            Title = "Endereçamento IPv4 e máscara"
+                            Title = "Endereçamento IPv4 e máscara",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1616,7 +1687,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 800,
                             Slug = "sub-redes-gateway",
                             Summary = "Endereço de rede, broadcast, número de hosts e quando o pacote vai para o gateway.",
-                            Title = "Sub-redes e gateway"
+                            Title = "Sub-redes e gateway",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1627,7 +1699,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 800,
                             Slug = "protocolos",
                             Summary = "Para que serve cada um, portas comuns e diferença entre TCP e UDP.",
-                            Title = "HTTP, DNS, TCP e UDP"
+                            Title = "HTTP, DNS, TCP e UDP",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1638,7 +1711,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 800,
                             Slug = "cliente-servidor-rest",
                             Summary = "Métodos HTTP, códigos de status e APIs REST.",
-                            Title = "Cliente-servidor e REST"
+                            Title = "Cliente-servidor e REST",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1649,7 +1723,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 800,
                             Slug = "sistemas-distribuidos",
                             Summary = "Escalabilidade, tolerância a falhas e o teorema CAP.",
-                            Title = "Sistemas distribuídos e microsserviços"
+                            Title = "Sistemas distribuídos e microsserviços",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1659,7 +1734,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 10,
                             Slug = "seguranca-cibernetica",
                             Summary = "Proteger dados e sistemas. Liga com redes, banco de dados e LGPD.",
-                            Title = "Princípios de segurança cibernética"
+                            Title = "Princípios de segurança cibernética",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1670,7 +1746,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 900,
                             Slug = "triade-cid",
                             Summary = "A tríade CID e exemplos de ataque a cada pilar.",
-                            Title = "Confidencialidade, integridade e disponibilidade"
+                            Title = "Confidencialidade, integridade e disponibilidade",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1681,7 +1758,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 900,
                             Slug = "criptografia",
                             Summary = "Chave única x par de chaves, onde cada uma é usada (ex.: TLS).",
-                            Title = "Criptografia simétrica e assimétrica"
+                            Title = "Criptografia simétrica e assimétrica",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1692,7 +1770,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 900,
                             Slug = "hash-assinatura",
                             Summary = "Integridade, armazenamento de senhas e certificados.",
-                            Title = "Hash e assinatura digital"
+                            Title = "Hash e assinatura digital",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1703,7 +1782,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 900,
                             Slug = "owasp",
                             Summary = "Injeção de SQL, XSS, quebra de autenticação e outras falhas comuns.",
-                            Title = "OWASP Top 10"
+                            Title = "OWASP Top 10",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1714,7 +1794,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 900,
                             Slug = "autenticacao-autorizacao",
                             Summary = "Diferença entre as duas, MFA e menor privilégio.",
-                            Title = "Autenticação e autorização"
+                            Title = "Autenticação e autorização",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1724,7 +1805,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 11,
                             Slug = "estatistica-analise-dados",
                             Summary = "Ler números e gráficos com segurança. Aparece também na Formação Geral.",
-                            Title = "Princípios de estatística e análise de dados"
+                            Title = "Princípios de estatística e análise de dados",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1735,7 +1817,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1000,
                             Slug = "tendencia-central",
                             Summary = "Quando cada medida representa melhor os dados.",
-                            Title = "Média, mediana e moda"
+                            Title = "Média, mediana e moda",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1746,7 +1829,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1000,
                             Slug = "dispersao",
                             Summary = "O quanto os dados se espalham em torno da média.",
-                            Title = "Variância e desvio-padrão"
+                            Title = "Variância e desvio-padrão",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1757,7 +1841,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1000,
                             Slug = "probabilidade",
                             Summary = "Eventos, probabilidade condicional e independência.",
-                            Title = "Probabilidade"
+                            Title = "Probabilidade",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1768,7 +1853,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1000,
                             Slug = "leitura-graficos",
                             Summary = "Barras, linhas, setores e histogramas; armadilhas de escala.",
-                            Title = "Leitura de gráficos"
+                            Title = "Leitura de gráficos",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1779,7 +1865,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1000,
                             Slug = "analise-dados",
                             Summary = "Amostra x população, correlação x causalidade.",
-                            Title = "Noções de análise de dados"
+                            Title = "Noções de análise de dados",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1789,7 +1876,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 12,
                             Slug = "checkpoint-dados-infra",
                             Summary = "Resolva questões de SQL, sub-redes, sistemas operacionais e segurança. Refaça as que errou depois de uma semana.",
-                            Title = "Checkpoint: questões de dados e infraestrutura"
+                            Title = "Checkpoint: questões de dados e infraestrutura",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1799,7 +1887,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 13,
                             Slug = "processo-software",
                             Summary = "Como as equipes organizam o desenvolvimento, do cascata ao ágil.",
-                            Title = "Processo de software"
+                            Title = "Processo de software",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1810,7 +1899,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1100,
                             Slug = "modelos-processo",
                             Summary = "Cascata, incremental, iterativo e espiral: vantagens e riscos.",
-                            Title = "Modelos de processo"
+                            Title = "Modelos de processo",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1821,7 +1911,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1100,
                             Slug = "scrum",
                             Summary = "Papéis, eventos e artefatos.",
-                            Title = "Scrum"
+                            Title = "Scrum",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1832,7 +1923,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1100,
                             Slug = "kanban",
                             Summary = "Quadro, limite de trabalho em progresso e fluxo contínuo.",
-                            Title = "Kanban"
+                            Title = "Kanban",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1843,7 +1935,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1100,
                             Slug = "devops",
                             Summary = "Cultura, automação e entrega contínua.",
-                            Title = "DevOps"
+                            Title = "DevOps",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1853,7 +1946,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 14,
                             Slug = "engenharia-requisitos",
                             Summary = "Descobrir e registrar o que o sistema deve fazer. A questão clássica é classificar requisitos.",
-                            Title = "Engenharia de requisitos"
+                            Title = "Engenharia de requisitos",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1864,7 +1958,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1200,
                             Slug = "funcionais-nao-funcionais",
                             Summary = "O que o sistema faz x como ele deve se comportar (desempenho, segurança, usabilidade).",
-                            Title = "Requisitos funcionais x não funcionais"
+                            Title = "Requisitos funcionais x não funcionais",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1875,7 +1970,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1200,
                             Slug = "levantamento",
                             Summary = "Entrevista, questionário, workshop, observação e prototipação.",
-                            Title = "Técnicas de levantamento"
+                            Title = "Técnicas de levantamento",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1886,7 +1982,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1200,
                             Slug = "historias-usuario",
                             Summary = "Formato \"como… quero… para…\" e critérios de aceite.",
-                            Title = "Histórias de usuário"
+                            Title = "Histórias de usuário",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1897,7 +1994,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1200,
                             Slug = "validacao-rastreabilidade",
                             Summary = "Revisões, protótipos e matriz de rastreabilidade.",
-                            Title = "Validação e rastreabilidade"
+                            Title = "Validação e rastreabilidade",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1907,7 +2005,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 15,
                             Slug = "analise-arquitetura-sistemas",
                             Summary = "Modelar o sistema antes de construir. UML aparece como diagrama para julgar afirmações.",
-                            Title = "Análise e arquitetura de sistemas computacionais"
+                            Title = "Análise e arquitetura de sistemas computacionais",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1918,7 +2017,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1300,
                             Slug = "uml-casos-uso",
                             Summary = "Ator, include x extend, generalização.",
-                            Title = "UML: casos de uso"
+                            Title = "UML: casos de uso",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1929,7 +2029,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1300,
                             Slug = "uml-classes",
                             Summary = "Associação, agregação, composição, herança e multiplicidade.",
-                            Title = "UML: diagrama de classes"
+                            Title = "UML: diagrama de classes",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1940,7 +2041,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1300,
                             Slug = "uml-sequencia",
                             Summary = "Linhas de vida, mensagens síncronas e assíncronas.",
-                            Title = "UML: diagrama de sequência"
+                            Title = "UML: diagrama de sequência",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1951,7 +2053,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1300,
                             Slug = "arquitetura-camadas",
                             Summary = "Separação de responsabilidades entre apresentação, negócio e dados.",
-                            Title = "Arquitetura em camadas e MVC"
+                            Title = "Arquitetura em camadas e MVC",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1962,7 +2065,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1300,
                             Slug = "estilos-arquiteturais",
                             Summary = "Monólito, cliente-servidor, microsserviços e orientação a eventos.",
-                            Title = "Estilos arquiteturais"
+                            Title = "Estilos arquiteturais",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1972,7 +2076,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 16,
                             Slug = "interacao-humano-computador",
                             Summary = "Projetar interfaces fáceis de usar e acessíveis.",
-                            Title = "Interação humano-computador"
+                            Title = "Interação humano-computador",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1983,7 +2088,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1400,
                             Slug = "heuristicas-nielsen",
                             Summary = "As 10 heurísticas de usabilidade e exemplos de violação.",
-                            Title = "Heurísticas de Nielsen"
+                            Title = "Heurísticas de Nielsen",
+                            TrackId = 1
                         },
                         new
                         {
@@ -1994,7 +2100,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1400,
                             Slug = "usabilidade",
                             Summary = "Testes com usuários, avaliação heurística e métricas.",
-                            Title = "Usabilidade e avaliação"
+                            Title = "Usabilidade e avaliação",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2005,7 +2112,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1400,
                             Slug = "acessibilidade",
                             Summary = "WCAG, leitores de tela, contraste e navegação por teclado.",
-                            Title = "Acessibilidade"
+                            Title = "Acessibilidade",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2016,7 +2124,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1400,
                             Slug = "prototipacao",
                             Summary = "Baixa e alta fidelidade e quando usar cada uma.",
-                            Title = "Prototipação"
+                            Title = "Prototipação",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2026,7 +2135,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 17,
                             Slug = "qualidade-testes",
                             Summary = "Garantir que o software faz o que deve. Valor-limite e partição de equivalência são contas que caem.",
-                            Title = "Qualidade, verificação e validação de software"
+                            Title = "Qualidade, verificação e validação de software",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2037,7 +2147,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1500,
                             Slug = "niveis-teste",
                             Summary = "Unidade, integração, sistema e aceitação.",
-                            Title = "Níveis de teste"
+                            Title = "Níveis de teste",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2048,7 +2159,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1500,
                             Slug = "caixa-preta-branca",
                             Summary = "Testar pela especificação x pelo código (cobertura de caminhos).",
-                            Title = "Caixa-preta x caixa-branca"
+                            Title = "Caixa-preta x caixa-branca",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2059,7 +2171,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1500,
                             Slug = "particao-valor-limite",
                             Summary = "Quantos casos de teste são necessários para uma regra.",
-                            Title = "Partição de equivalência e valor-limite"
+                            Title = "Partição de equivalência e valor-limite",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2070,7 +2183,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1500,
                             Slug = "tdd",
                             Summary = "Ciclo vermelho-verde-refatorar e testes de regressão.",
-                            Title = "TDD e testes automatizados"
+                            Title = "TDD e testes automatizados",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2081,7 +2195,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1500,
                             Slug = "verificacao-validacao",
                             Summary = "Construir o produto certo x construir o produto do jeito certo.",
-                            Title = "Verificação x validação"
+                            Title = "Verificação x validação",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2092,7 +2207,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1500,
                             Slug = "modelos-qualidade",
                             Summary = "ISO/IEC 25010 e métricas de qualidade.",
-                            Title = "Modelos de qualidade"
+                            Title = "Modelos de qualidade",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2102,7 +2218,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 18,
                             Slug = "gerencia-configuracao",
                             Summary = "Controlar versões e mudanças do software com segurança.",
-                            Title = "Gerência de configuração"
+                            Title = "Gerência de configuração",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2113,7 +2230,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1600,
                             Slug = "controle-versao",
                             Summary = "Commit, branch, merge, rebase e conflitos.",
-                            Title = "Controle de versão com Git"
+                            Title = "Controle de versão com Git",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2124,7 +2242,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1600,
                             Slug = "estrategias-branch",
                             Summary = "Git flow, trunk-based e pull requests.",
-                            Title = "Estratégias de branch"
+                            Title = "Estratégias de branch",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2135,7 +2254,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1600,
                             Slug = "ci-cd",
                             Summary = "Pipeline de build, teste e deploy automatizados.",
-                            Title = "Integração e entrega contínuas"
+                            Title = "Integração e entrega contínuas",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2146,7 +2266,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1600,
                             Slug = "gestao-mudancas",
                             Summary = "Itens de configuração, baselines e controle de mudanças.",
-                            Title = "Gestão de mudanças e baseline"
+                            Title = "Gestão de mudanças e baseline",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2156,7 +2277,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 19,
                             Slug = "operacoes-manutencao",
                             Summary = "O software depois de entrar em produção.",
-                            Title = "Operações e manutenção de software"
+                            Title = "Operações e manutenção de software",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2167,7 +2289,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1700,
                             Slug = "tipos-manutencao",
                             Summary = "Corretiva, adaptativa, perfectiva e preventiva.",
-                            Title = "Tipos de manutenção"
+                            Title = "Tipos de manutenção",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2178,7 +2301,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1700,
                             Slug = "implantacao",
                             Summary = "Ambientes, deploy, rollback e containers.",
-                            Title = "Implantação"
+                            Title = "Implantação",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2189,7 +2313,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1700,
                             Slug = "monitoramento",
                             Summary = "Logs, métricas, alertas e resposta a incidentes.",
-                            Title = "Monitoramento e incidentes"
+                            Title = "Monitoramento e incidentes",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2200,7 +2325,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1700,
                             Slug = "refatoracao-divida",
                             Summary = "Melhorar o código sem mudar o comportamento.",
-                            Title = "Refatoração e dívida técnica"
+                            Title = "Refatoração e dívida técnica",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2210,7 +2336,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 20,
                             Slug = "gerencia-projetos",
                             Summary = "Planejar e acompanhar projetos de software.",
-                            Title = "Gerência de projetos"
+                            Title = "Gerência de projetos",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2221,7 +2348,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1800,
                             Slug = "escopo-cronograma-custo",
                             Summary = "EAP, estimativas e a restrição tripla.",
-                            Title = "Escopo, cronograma e custo"
+                            Title = "Escopo, cronograma e custo",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2232,7 +2360,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1800,
                             Slug = "caminho-critico",
                             Summary = "Rede de atividades, folga e o caminho que define a duração do projeto.",
-                            Title = "Caminho crítico"
+                            Title = "Caminho crítico",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2243,7 +2372,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1800,
                             Slug = "riscos",
                             Summary = "Identificar, analisar e responder a riscos.",
-                            Title = "Gestão de riscos"
+                            Title = "Gestão de riscos",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2254,7 +2384,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1800,
                             Slug = "pmbok",
                             Summary = "Áreas de conhecimento e comunicação com stakeholders.",
-                            Title = "PMBOK e partes interessadas"
+                            Title = "PMBOK e partes interessadas",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2264,7 +2395,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 21,
                             Slug = "checkpoint-engenharia",
                             Summary = "Resolva questões de requisitos, UML, testes e Scrum. Escreva uma resposta discursiva sobre uma decisão de arquitetura.",
-                            Title = "Checkpoint: questões de engenharia de software"
+                            Title = "Checkpoint: questões de engenharia de software",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2274,7 +2406,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 22,
                             Slug = "legislacao-etica",
                             Summary = "O profissional de TI e a sociedade. Costuma vir em situações-problema contextualizadas.",
-                            Title = "Legislação, normas técnicas, ética e responsabilidade socioambiental"
+                            Title = "Legislação, normas técnicas, ética e responsabilidade socioambiental",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2285,7 +2418,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1900,
                             Slug = "lgpd",
                             Summary = "Bases legais, dados sensíveis, controlador, operador e direitos do titular.",
-                            Title = "LGPD"
+                            Title = "LGPD",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2296,7 +2430,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1900,
                             Slug = "marco-civil",
                             Summary = "Neutralidade de rede, guarda de registros e responsabilidade de provedores.",
-                            Title = "Marco Civil da Internet"
+                            Title = "Marco Civil da Internet",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2307,7 +2442,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1900,
                             Slug = "propriedade-intelectual",
                             Summary = "Lei de software, direito autoral e licenças livres.",
-                            Title = "Propriedade intelectual e licenças"
+                            Title = "Propriedade intelectual e licenças",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2318,7 +2454,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1900,
                             Slug = "etica-profissional",
                             Summary = "Responsabilidade sobre o que se constrói e vieses em algoritmos.",
-                            Title = "Ética profissional"
+                            Title = "Ética profissional",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2329,7 +2466,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 1900,
                             Slug = "ti-sustentavel",
                             Summary = "Consumo de energia, lixo eletrônico e inclusão digital.",
-                            Title = "TI e sustentabilidade"
+                            Title = "TI e sustentabilidade",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2339,7 +2477,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 23,
                             Slug = "empreendedorismo",
                             Summary = "Transformar ideias em produtos e negócios.",
-                            Title = "Empreendedorismo"
+                            Title = "Empreendedorismo",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2350,7 +2489,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 2000,
                             Slug = "modelo-negocio",
                             Summary = "Os nove blocos do Business Model Canvas.",
-                            Title = "Modelo de negócio e Canvas"
+                            Title = "Modelo de negócio e Canvas",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2361,7 +2501,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 2000,
                             Slug = "mvp-startups",
                             Summary = "Produto mínimo viável, validação e pivotar.",
-                            Title = "MVP e startups"
+                            Title = "MVP e startups",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2372,7 +2513,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 2000,
                             Slug = "inovacao",
                             Summary = "Inovação incremental x disruptiva e ecossistemas de inovação.",
-                            Title = "Inovação"
+                            Title = "Inovação",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2382,7 +2524,8 @@ namespace EnadeAds.Data.Migrations
                             Order = 24,
                             Slug = "formacao-geral",
                             Summary = "As 15 questões comuns aos cursos de tecnologia: interpretação, dados e temas da atualidade.",
-                            Title = "Formação geral tecnológica"
+                            Title = "Formação geral tecnológica",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2393,7 +2536,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 2100,
                             Slug = "interpretacao-texto",
                             Summary = "Identificar tese, argumentos e a afirmação que o texto sustenta.",
-                            Title = "Interpretação de texto"
+                            Title = "Interpretação de texto",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2404,7 +2548,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 2100,
                             Slug = "graficos-tabelas",
                             Summary = "Tirar conclusões corretas de dados apresentados visualmente.",
-                            Title = "Gráficos e tabelas"
+                            Title = "Gráficos e tabelas",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2415,7 +2560,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 2100,
                             Slug = "atualidades",
                             Summary = "Tecnologia e sociedade, inteligência artificial, meio ambiente, inclusão e direitos humanos.",
-                            Title = "Temas da atualidade"
+                            Title = "Temas da atualidade",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2426,7 +2572,8 @@ namespace EnadeAds.Data.Migrations
                             ParentId = 2100,
                             Slug = "discursiva",
                             Summary = "Estrutura problema → proposta → justificativa em cerca de 15 linhas.",
-                            Title = "Escrita da resposta discursiva"
+                            Title = "Escrita da resposta discursiva",
+                            TrackId = 1
                         },
                         new
                         {
@@ -2436,7 +2583,1089 @@ namespace EnadeAds.Data.Migrations
                             Order = 25,
                             Slug = "checkpoint-simulado",
                             Summary = "Faça um simulado de 4 horas no mesmo horário da prova. Depois, revise só o caderno de erros até o dia do ENADE.",
-                            Title = "Checkpoint final: simulado completo"
+                            Title = "Checkpoint final: simulado completo",
+                            TrackId = 1
+                        },
+                        new
+                        {
+                            Id = 100100,
+                            Block = 5,
+                            Kind = 0,
+                            Order = 1,
+                            Slug = "interpretacao-generos",
+                            Summary = "A base de Linguagens e de toda a prova: quase toda questão começa com um texto, um gráfico ou uma imagem.",
+                            Title = "Leitura, interpretação e gêneros textuais",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100101,
+                            Block = 5,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 100100,
+                            Slug = "generos-textuais",
+                            Summary = "Reconhecer o gênero (notícia, crônica, charge, propaganda, artigo de opinião) e a função dele.",
+                            Title = "Gêneros textuais",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100102,
+                            Block = 5,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 100100,
+                            Slug = "coesao-coerencia",
+                            Summary = "Conectivos, retomadas e o que mantém o texto com sentido.",
+                            Title = "Coesão e coerência",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100103,
+                            Block = 5,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 100100,
+                            Slug = "intertextualidade",
+                            Summary = "Paródia, paráfrase, citação e alusão entre textos.",
+                            Title = "Intertextualidade",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100104,
+                            Block = 5,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 100100,
+                            Slug = "variacao-linguistica",
+                            Summary = "Variedades regionais, sociais e de registro, sem preconceito linguístico.",
+                            Title = "Variação linguística",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100105,
+                            Block = 5,
+                            Kind = 1,
+                            Order = 5,
+                            ParentId = 100100,
+                            Slug = "funcoes-linguagem",
+                            Summary = "Referencial, emotiva, apelativa, poética, fática e metalinguística.",
+                            Title = "Funções da linguagem",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100200,
+                            Block = 5,
+                            Kind = 0,
+                            Order = 2,
+                            Slug = "gramatica-uso",
+                            Summary = "O ENEM não pede regra decorada: pede o efeito de sentido de uma escolha gramatical no texto.",
+                            Title = "Gramática em uso",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100201,
+                            Block = 5,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 100200,
+                            Slug = "classes-palavras",
+                            Summary = "Adjetivos, advérbios e pronomes como escolhas de quem escreve.",
+                            Title = "Classes de palavras e efeitos de sentido",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100202,
+                            Block = 5,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 100200,
+                            Slug = "pontuacao",
+                            Summary = "Vírgula, aspas, travessão e o que cada uma muda no sentido.",
+                            Title = "Pontuação",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100203,
+                            Block = 5,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 100200,
+                            Slug = "figuras-linguagem",
+                            Summary = "Metáfora, metonímia, ironia, hipérbole e antítese.",
+                            Title = "Figuras de linguagem",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100204,
+                            Block = 5,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 100200,
+                            Slug = "concordancia-regencia",
+                            Summary = "Os casos que mais aparecem em textos formais.",
+                            Title = "Concordância, regência e crase",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100300,
+                            Block = 5,
+                            Kind = 0,
+                            Order = 3,
+                            Slug = "literatura",
+                            Summary = "Escolas literárias lidas a partir de trechos: o que o texto mostra do contexto em que foi escrito.",
+                            Title = "Literatura",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100301,
+                            Block = 5,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 100300,
+                            Slug = "escolas-literarias",
+                            Summary = "Do Barroco ao Realismo: características e autores que caem.",
+                            Title = "Escolas literárias",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100302,
+                            Block = 5,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 100300,
+                            Slug = "modernismo",
+                            Summary = "Semana de 22, as gerações modernistas e a ruptura com a tradição.",
+                            Title = "Modernismo",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100303,
+                            Block = 5,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 100300,
+                            Slug = "literatura-contemporanea",
+                            Summary = "Autores atuais, literatura indígena, afro-brasileira e periférica.",
+                            Title = "Literatura contemporânea",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100400,
+                            Block = 5,
+                            Kind = 0,
+                            Order = 4,
+                            Slug = "artes-corpo-tecnologia",
+                            Summary = "A parte de Linguagens que vai além do texto verbal.",
+                            Title = "Artes, educação física e tecnologias da comunicação",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100401,
+                            Block = 5,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 100400,
+                            Slug = "artes-visuais",
+                            Summary = "Ler obras, performances e arte urbana dentro do contexto delas.",
+                            Title = "Artes visuais e movimentos artísticos",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100402,
+                            Block = 5,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 100400,
+                            Slug = "praticas-corporais",
+                            Summary = "Esporte, dança, lutas e saúde como fenômenos culturais.",
+                            Title = "Práticas corporais",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100403,
+                            Block = 5,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 100400,
+                            Slug = "midias-digitais",
+                            Summary = "Redes sociais, fake news e linguagem da internet.",
+                            Title = "Mídias e tecnologias digitais",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100500,
+                            Block = 5,
+                            Kind = 0,
+                            Order = 5,
+                            Slug = "lingua-estrangeira",
+                            Summary = "Cinco questões, escolhidas na inscrição. É leitura, não gramática: entender a ideia geral e o propósito do texto.",
+                            Title = "Língua estrangeira (inglês ou espanhol)",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100501,
+                            Block = 5,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 100500,
+                            Slug = "leitura-estrategica",
+                            Summary = "Palavras cognatas, falsos cognatos e pistas do contexto.",
+                            Title = "Leitura estratégica",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100502,
+                            Block = 5,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 100500,
+                            Slug = "generos-lingua-estrangeira",
+                            Summary = "Tirinhas, anúncios, letras de música e notícias.",
+                            Title = "Gêneros em língua estrangeira",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 110001,
+                            Block = 5,
+                            Kind = 2,
+                            Order = 6,
+                            Slug = "checkpoint-linguagens",
+                            Summary = "Resolva questões de interpretação, gramática em uso e literatura com o relógio ligado: cerca de 3 minutos por questão.",
+                            Title = "Checkpoint: questões de Linguagens",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100600,
+                            Block = 6,
+                            Kind = 0,
+                            Order = 7,
+                            Slug = "historia-brasil",
+                            Summary = "Da colonização à Nova República, sempre ligando o passado a permanências de hoje.",
+                            Title = "História do Brasil",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100601,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 100600,
+                            Slug = "brasil-colonia",
+                            Summary = "Economia açucareira, escravidão e resistência, mineração.",
+                            Title = "Brasil Colônia",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100602,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 100600,
+                            Slug = "brasil-imperio",
+                            Summary = "Independência, Primeiro e Segundo Reinado, abolição.",
+                            Title = "Brasil Império",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100603,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 100600,
+                            Slug = "republica",
+                            Summary = "Coronelismo, revoltas, trabalhismo e Estado Novo.",
+                            Title = "Primeira República e Era Vargas",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100604,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 100600,
+                            Slug = "ditadura-redemocratizacao",
+                            Summary = "Golpe de 1964, AI-5, Diretas Já e a Constituição de 1988.",
+                            Title = "Ditadura militar e redemocratização",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100700,
+                            Block = 6,
+                            Kind = 0,
+                            Order = 8,
+                            Slug = "historia-geral",
+                            Summary = "Os grandes processos que explicam o mundo atual.",
+                            Title = "História geral",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100701,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 100700,
+                            Slug = "antiguidade-medieval",
+                            Summary = "Grécia, Roma, feudalismo e a Igreja medieval.",
+                            Title = "Antiguidade e Idade Média",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100702,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 100700,
+                            Slug = "idade-moderna",
+                            Summary = "Grandes navegações, Reforma, absolutismo e Iluminismo.",
+                            Title = "Idade Moderna",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100703,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 100700,
+                            Slug = "revolucoes",
+                            Summary = "Revolução Francesa, Revolução Industrial e as ideias do século XIX.",
+                            Title = "Revoluções e industrialização",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100704,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 100700,
+                            Slug = "seculo-xx",
+                            Summary = "Guerras mundiais, Guerra Fria, descolonização e globalização.",
+                            Title = "Século XX",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100800,
+                            Block = 6,
+                            Kind = 0,
+                            Order = 9,
+                            Slug = "geografia-fisica-ambiental",
+                            Summary = "Natureza e sociedade: clima, relevo e os impactos da ação humana.",
+                            Title = "Geografia física e questões ambientais",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100801,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 100800,
+                            Slug = "cartografia",
+                            Summary = "Escala, projeções, coordenadas e leitura de mapas.",
+                            Title = "Cartografia",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100802,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 100800,
+                            Slug = "clima-biomas",
+                            Summary = "Tipos de clima, fenômenos climáticos e os biomas do Brasil.",
+                            Title = "Clima e biomas brasileiros",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100803,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 100800,
+                            Slug = "relevo-hidrografia",
+                            Summary = "Formação do relevo, erosão e bacias hidrográficas.",
+                            Title = "Relevo, solo e hidrografia",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100804,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 100800,
+                            Slug = "questoes-ambientais",
+                            Summary = "Desmatamento, mudanças climáticas, acordos internacionais e sustentabilidade.",
+                            Title = "Questões ambientais",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100900,
+                            Block = 6,
+                            Kind = 0,
+                            Order = 10,
+                            Slug = "geografia-humana",
+                            Summary = "População, cidades, campo e economia no Brasil e no mundo.",
+                            Title = "Geografia humana e econômica",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100901,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 100900,
+                            Slug = "populacao",
+                            Summary = "Pirâmides etárias, transição demográfica e fluxos migratórios.",
+                            Title = "População e migrações",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100902,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 100900,
+                            Slug = "urbanizacao",
+                            Summary = "Metropolização, segregação socioespacial e problemas urbanos.",
+                            Title = "Urbanização",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100903,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 100900,
+                            Slug = "espaco-agrario",
+                            Summary = "Agronegócio, agricultura familiar, conflitos no campo e reforma agrária.",
+                            Title = "Espaço agrário",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 100904,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 100900,
+                            Slug = "globalizacao-industria",
+                            Summary = "Fluxos globais, blocos econômicos e matriz energética.",
+                            Title = "Globalização, indústria e energia",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101000,
+                            Block = 6,
+                            Kind = 0,
+                            Order = 11,
+                            Slug = "filosofia-sociologia",
+                            Summary = "Conceitos que aparecem em trechos de autores: identificar a ideia e aplicá-la a uma situação.",
+                            Title = "Filosofia e sociologia",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101001,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 101000,
+                            Slug = "filosofia-antiga",
+                            Summary = "Pré-socráticos, Sócrates, Platão e Aristóteles.",
+                            Title = "Filosofia antiga",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101002,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 101000,
+                            Slug = "filosofia-moderna-etica",
+                            Summary = "Racionalismo, empirismo, contratualistas e Kant.",
+                            Title = "Filosofia moderna e ética",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101003,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 101000,
+                            Slug = "sociologia-classica",
+                            Summary = "Durkheim, Weber e Marx: fato social, ação social e classes.",
+                            Title = "Sociologia clássica",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101004,
+                            Block = 6,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 101000,
+                            Slug = "cidadania-movimentos",
+                            Summary = "Direitos humanos, democracia, cultura e indústria cultural.",
+                            Title = "Cidadania e movimentos sociais",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 110002,
+                            Block = 6,
+                            Kind = 2,
+                            Order = 12,
+                            Slug = "checkpoint-humanas",
+                            Summary = "Resolva questões de História, Geografia, Filosofia e Sociologia. Anote no caderno de erros os conceitos que confundiu.",
+                            Title = "Checkpoint: questões de Ciências Humanas",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101100,
+                            Block = 9,
+                            Kind = 0,
+                            Order = 13,
+                            Slug = "redacao",
+                            Summary = "Um texto de até 30 linhas sobre um tema social, avaliado em cinco competências de 200 pontos cada.",
+                            Title = "Redação dissertativo-argumentativa",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101101,
+                            Block = 9,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 101100,
+                            Slug = "competencias-redacao",
+                            Summary = "Norma culta, tema e tipo textual, argumentação, coesão e proposta de intervenção.",
+                            Title = "As cinco competências",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101102,
+                            Block = 9,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 101100,
+                            Slug = "estrutura-texto",
+                            Summary = "Introdução com tese, dois parágrafos de desenvolvimento e conclusão.",
+                            Title = "Estrutura do texto",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101103,
+                            Block = 9,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 101100,
+                            Slug = "repertorio",
+                            Summary = "Dados, leis, obras e fatos históricos usados a favor da tese, não só citados.",
+                            Title = "Repertório sociocultural",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101104,
+                            Block = 9,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 101100,
+                            Slug = "proposta-intervencao",
+                            Summary = "Agente, ação, meio, finalidade e detalhamento, respeitando os direitos humanos.",
+                            Title = "Proposta de intervenção",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101105,
+                            Block = 9,
+                            Kind = 1,
+                            Order = 5,
+                            ParentId = 101100,
+                            Slug = "erros-zeram",
+                            Summary = "Fuga ao tema, texto com menos de 7 linhas, parte desconectada e outros casos do edital.",
+                            Title = "O que zera a redação",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 110003,
+                            Block = 9,
+                            Kind = 2,
+                            Order = 14,
+                            Slug = "checkpoint-redacao",
+                            Summary = "Escreva uma redação sobre um tema de prova anterior em até 1 hora e confira cada competência.",
+                            Title = "Checkpoint: uma redação completa",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101200,
+                            Block = 7,
+                            Kind = 0,
+                            Order = 15,
+                            Slug = "biologia",
+                            Summary = "A disciplina com mais questões em Natureza, quase sempre ligada a saúde e meio ambiente.",
+                            Title = "Biologia",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101201,
+                            Block = 7,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 101200,
+                            Slug = "ecologia",
+                            Summary = "Cadeias alimentares, ciclos biogeoquímicos, relações ecológicas e impactos ambientais.",
+                            Title = "Ecologia",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101202,
+                            Block = 7,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 101200,
+                            Slug = "genetica",
+                            Summary = "Leis de Mendel, heredogramas, DNA e biotecnologia.",
+                            Title = "Genética",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101203,
+                            Block = 7,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 101200,
+                            Slug = "fisiologia-humana",
+                            Summary = "Sistemas do corpo, vacinas, doenças e saneamento.",
+                            Title = "Fisiologia humana e saúde",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101204,
+                            Block = 7,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 101200,
+                            Slug = "citologia",
+                            Summary = "Célula, organelas, membrana e divisão celular.",
+                            Title = "Citologia",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101205,
+                            Block = 7,
+                            Kind = 1,
+                            Order = 5,
+                            ParentId = 101200,
+                            Slug = "evolucao",
+                            Summary = "Darwin, seleção natural e especiação.",
+                            Title = "Evolução",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101300,
+                            Block = 7,
+                            Kind = 0,
+                            Order = 16,
+                            Slug = "quimica",
+                            Summary = "Contas e conceitos aplicados ao cotidiano: combustíveis, alimentos, poluição.",
+                            Title = "Química",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101301,
+                            Block = 7,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 101300,
+                            Slug = "estequiometria",
+                            Summary = "Mol, massa molar e proporções numa reação.",
+                            Title = "Estequiometria",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101302,
+                            Block = 7,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 101300,
+                            Slug = "solucoes",
+                            Summary = "Concentração comum, molaridade, diluição e mistura.",
+                            Title = "Soluções e concentração",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101303,
+                            Block = 7,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 101300,
+                            Slug = "quimica-organica",
+                            Summary = "Funções orgânicas, polímeros e combustíveis.",
+                            Title = "Química orgânica",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101304,
+                            Block = 7,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 101300,
+                            Slug = "fisico-quimica",
+                            Summary = "Energia das reações, velocidade e pH.",
+                            Title = "Termoquímica, cinética e equilíbrio",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101305,
+                            Block = 7,
+                            Kind = 1,
+                            Order = 5,
+                            ParentId = 101300,
+                            Slug = "quimica-ambiental",
+                            Summary = "Chuva ácida, efeito estufa, tratamento de água e reciclagem.",
+                            Title = "Química ambiental",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101400,
+                            Block = 7,
+                            Kind = 0,
+                            Order = 17,
+                            Slug = "fisica",
+                            Summary = "Fenômenos do dia a dia: energia em casa, movimento, ondas e eletricidade.",
+                            Title = "Física",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101401,
+                            Block = 7,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 101400,
+                            Slug = "mecanica",
+                            Summary = "Velocidade, aceleração, leis de Newton, trabalho e energia.",
+                            Title = "Mecânica",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101402,
+                            Block = 7,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 101400,
+                            Slug = "eletricidade",
+                            Summary = "Circuitos, potência, consumo de energia e conta de luz.",
+                            Title = "Eletricidade",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101403,
+                            Block = 7,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 101400,
+                            Slug = "ondas-optica",
+                            Summary = "Som, luz, espelhos, lentes e fenômenos ondulatórios.",
+                            Title = "Ondas e óptica",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101404,
+                            Block = 7,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 101400,
+                            Slug = "termologia",
+                            Summary = "Calor, temperatura, dilatação e máquinas térmicas.",
+                            Title = "Termologia",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 110004,
+                            Block = 7,
+                            Kind = 2,
+                            Order = 18,
+                            Slug = "checkpoint-natureza",
+                            Summary = "Resolva questões de Biologia, Química e Física. Refaça as contas que errou sem olhar a resolução.",
+                            Title = "Checkpoint: questões de Ciências da Natureza",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101500,
+                            Block = 8,
+                            Kind = 0,
+                            Order = 19,
+                            Slug = "matematica-basica",
+                            Summary = "O que mais cai em Matemática: razão, proporção e porcentagem em situações do cotidiano.",
+                            Title = "Matemática básica e proporcionalidade",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101501,
+                            Block = 8,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 101500,
+                            Slug = "razao-proporcao",
+                            Summary = "Grandezas direta e inversamente proporcionais, escalas.",
+                            Title = "Razão, proporção e regra de três",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101502,
+                            Block = 8,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 101500,
+                            Slug = "porcentagem",
+                            Summary = "Aumentos, descontos sucessivos e juros simples e compostos.",
+                            Title = "Porcentagem e juros",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101503,
+                            Block = 8,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 101500,
+                            Slug = "unidades-medida",
+                            Summary = "Conversões de comprimento, área, volume e tempo.",
+                            Title = "Unidades de medida",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101600,
+                            Block = 8,
+                            Kind = 0,
+                            Order = 20,
+                            Slug = "estatistica-probabilidade",
+                            Summary = "Ler gráficos e tabelas e calcular medidas: presença garantida na prova.",
+                            Title = "Estatística e probabilidade",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101601,
+                            Block = 8,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 101600,
+                            Slug = "medidas-tendencia",
+                            Summary = "Quando usar cada medida e como calcular com tabelas de frequência.",
+                            Title = "Média, mediana e moda",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101602,
+                            Block = 8,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 101600,
+                            Slug = "graficos-tabelas-enem",
+                            Summary = "Barras, linhas, setores e o que cada gráfico permite concluir.",
+                            Title = "Gráficos e tabelas",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101603,
+                            Block = 8,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 101600,
+                            Slug = "probabilidade-enem",
+                            Summary = "Casos favoráveis sobre possíveis, eventos independentes e complementares.",
+                            Title = "Probabilidade",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101604,
+                            Block = 8,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 101600,
+                            Slug = "analise-combinatoria",
+                            Summary = "Princípio fundamental da contagem, arranjos e combinações.",
+                            Title = "Análise combinatória",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101700,
+                            Block = 8,
+                            Kind = 0,
+                            Order = 21,
+                            Slug = "geometria",
+                            Summary = "Áreas, volumes e formas em embalagens, terrenos e construções.",
+                            Title = "Geometria",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101701,
+                            Block = 8,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 101700,
+                            Slug = "geometria-plana",
+                            Summary = "Áreas e perímetros, semelhança de triângulos e Pitágoras.",
+                            Title = "Geometria plana",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101702,
+                            Block = 8,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 101700,
+                            Slug = "geometria-espacial",
+                            Summary = "Volumes de prismas, cilindros, cones e esferas; planificações.",
+                            Title = "Geometria espacial",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101703,
+                            Block = 8,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 101700,
+                            Slug = "trigonometria",
+                            Summary = "Seno, cosseno e tangente no triângulo retângulo.",
+                            Title = "Trigonometria",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101800,
+                            Block = 8,
+                            Kind = 0,
+                            Order = 22,
+                            Slug = "funcoes-algebra",
+                            Summary = "Modelar situações com funções e ler o gráfico delas.",
+                            Title = "Funções e álgebra",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101801,
+                            Block = 8,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 101800,
+                            Slug = "funcao-afim-quadratica",
+                            Summary = "Gráfico, raízes, vértice e problemas de máximo e mínimo.",
+                            Title = "Funções do 1º e do 2º grau",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101802,
+                            Block = 8,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 101800,
+                            Slug = "exponencial-logaritmo",
+                            Summary = "Crescimento, decaimento e escalas logarítmicas.",
+                            Title = "Exponencial e logaritmo",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 101803,
+                            Block = 8,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 101800,
+                            Slug = "sequencias",
+                            Summary = "Termo geral e soma dos termos.",
+                            Title = "Progressões aritmética e geométrica",
+                            TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 110005,
+                            Block = 8,
+                            Kind = 2,
+                            Order = 23,
+                            Slug = "checkpoint-simulado-enem",
+                            Summary = "Faça um simulado completo no horário da prova (início às 13h30). Depois, revise o caderno de erros até o dia do ENEM.",
+                            Title = "Checkpoint final: simulado de um dia de prova",
+                            TrackId = 2
                         });
                 });
 
@@ -2478,6 +3707,88 @@ namespace EnadeAds.Data.Migrations
                     b.HasKey("Key");
 
                     b.ToTable("SiteSettings");
+                });
+
+            modelBuilder.Entity("EnadeAds.Study.Track", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Basis")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.Property<DateOnly>("ExamDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("ExamName")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.Property<int>("Level")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MockExamStyle")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("integer");
+
+                    b.Property<DateOnly?>("SecondExamDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.ToTable("Tracks");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Basis = "Os conteúdos de Análise e Desenvolvimento de Sistemas da Portaria Inep nº 169/2026 e a Formação Geral, na ordem sugerida de estudo.",
+                            ExamDate = new DateOnly(2026, 11, 29),
+                            ExamName = "ENADE",
+                            Label = "ENADE ADS",
+                            Level = 2,
+                            MockExamStyle = 0,
+                            Name = "ENADE 2026 · ADS",
+                            Order = 1,
+                            Slug = "enade-ads"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Basis = "As quatro áreas e a redação da Matriz de Referência do ENEM, na ordem dos dias de prova.",
+                            ExamDate = new DateOnly(2026, 11, 8),
+                            ExamName = "ENEM",
+                            Label = "ENEM",
+                            Level = 1,
+                            MockExamStyle = 1,
+                            Name = "ENEM 2026",
+                            Order = 2,
+                            SecondExamDate = new DateOnly(2026, 11, 15),
+                            Slug = "enem"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -2644,6 +3955,11 @@ namespace EnadeAds.Data.Migrations
                         .WithMany()
                         .HasForeignKey("RemovedById")
                         .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("EnadeAds.Study.Track", null)
+                        .WithMany()
+                        .HasForeignKey("TrackId")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("EnadeAds.Blog.PostComment", b =>
@@ -2705,6 +4021,12 @@ namespace EnadeAds.Data.Migrations
                         .WithMany()
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("EnadeAds.Study.Track", null)
+                        .WithMany()
+                        .HasForeignKey("TrackId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EnadeAds.Challenges.ChallengeQuestion", b =>
@@ -2741,6 +4063,12 @@ namespace EnadeAds.Data.Migrations
 
             modelBuilder.Entity("EnadeAds.MockExams.MockExam", b =>
                 {
+                    b.HasOne("EnadeAds.Study.Track", null)
+                        .WithMany()
+                        .HasForeignKey("TrackId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("EnadeAds.Data.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
@@ -2842,6 +4170,12 @@ namespace EnadeAds.Data.Migrations
                         .WithMany("Topics")
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("EnadeAds.Study.Track", null)
+                        .WithMany()
+                        .HasForeignKey("TrackId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Parent");
                 });

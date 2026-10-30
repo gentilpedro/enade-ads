@@ -1,0 +1,186 @@
+{
+  "year": 2026,
+  "track": "enem",
+  "questions": [
+    {
+      "key": "rumo-enem-ap-001",
+      "source": "Autoria própria – Rumo ENEM",
+      "kind": "Objective",
+      "subject": "interpretacao-generos",
+      "statement": "Em um anúncio de rádio, um personagem do interior de Minas Gerais convida os ouvintes para a festa da cidade:\n\n\"Ocê num sabe o que tá perdendo, sô! Vem pra festa que o trem tá bão demais!\"\n\nO uso dessa variedade linguística no anúncio",
+      "options": [
+        { "text": "mostra um erro de português que deveria ter sido corrigido antes de ir ao ar.", "explanation": "Variedades regionais não são erro. Elas seguem regras próprias e são adequadas a muitas situações, como a deste anúncio." },
+        { "text": "caracteriza o personagem e aproxima o anúncio do público, sem que a variedade seja um erro.", "explanation": "Correta. A fala regional dá identidade ao personagem e cria proximidade com o ouvinte. O ENEM cobra o reconhecimento da variação linguística sem preconceito." },
+        { "text": "torna a mensagem incompreensível para quem não é da região.", "explanation": "A mensagem continua clara para qualquer falante de português. A variedade marca a origem do personagem, não impede a compreensão." },
+        { "text": "indica que o anúncio é dirigido apenas a pessoas sem escolaridade.", "explanation": "Associar a variedade regional à falta de escolaridade é preconceito linguístico. A escolha é estilística." },
+        { "text": "substitui a norma-padrão, que passa a ser proibida em anúncios.", "explanation": "Não há substituição nem proibição. Cada variedade é usada conforme a situação de comunicação." }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "rumo-enem-ap-002",
+      "source": "Autoria própria – Rumo ENEM",
+      "kind": "Objective",
+      "subject": "interpretacao-generos",
+      "statement": "Leia o texto de uma campanha de saúde pública:\n\n\"Vacine-se. Proteja quem você ama. A vacina é gratuita em todos os postos de saúde.\"\n\nA função da linguagem que predomina no texto é a",
+      "options": [
+        { "text": "referencial, porque o texto só informa onde a vacina está disponível.", "explanation": "Há uma informação (a vacina é gratuita), mas ela serve ao objetivo principal: convencer o leitor a agir." },
+        { "text": "emotiva, porque o texto expressa os sentimentos de quem escreveu.", "explanation": "A função emotiva centra-se no emissor (\"eu sinto\"). Aqui o foco está no leitor." },
+        { "text": "apelativa, porque o texto procura convencer o leitor a agir, com verbos no imperativo.", "explanation": "Correta. Os verbos \"vacine-se\" e \"proteja\" se dirigem ao leitor para levá-lo a uma ação: é a função apelativa (ou conativa), típica de campanhas e propagandas." },
+        { "text": "metalinguística, porque o texto explica o significado da palavra vacina.", "explanation": "A função metalinguística usa a linguagem para falar da própria linguagem, o que não ocorre aqui." },
+        { "text": "fática, porque o texto apenas testa se o canal de comunicação funciona.", "explanation": "A função fática aparece em expressões como \"alô?\" ou \"tá me ouvindo?\", que testam o contato." }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "rumo-enem-ap-003",
+      "source": "Autoria própria – Rumo ENEM",
+      "kind": "Objective",
+      "subject": "gramatica-uso",
+      "statement": "\"O número de leitores de livros digitais cresceu nos últimos anos; no entanto, o livro impresso ainda é o formato preferido da maioria dos brasileiros.\"\n\nNo trecho, a expressão \"no entanto\" estabelece entre as duas partes uma relação de",
+      "options": [
+        { "text": "causa.", "explanation": "Uma relação de causa seria marcada por \"porque\" ou \"já que\". O crescimento do digital não causa a preferência pelo impresso." },
+        { "text": "conclusão.", "explanation": "Conclusão seria marcada por \"portanto\" ou \"logo\". A segunda parte não é consequência da primeira." },
+        { "text": "oposição.", "explanation": "Correta. \"No entanto\" é conjunção adversativa: a segunda parte contrasta com a expectativa criada pela primeira (o digital cresceu, mas o impresso continua na frente)." },
+        { "text": "tempo.", "explanation": "Não há marcação de momento ou sequência temporal entre as partes." },
+        { "text": "adição.", "explanation": "Adição seria marcada por \"e\" ou \"além disso\". Aqui a segunda ideia se opõe à primeira." }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "rumo-enem-ap-004",
+      "source": "Autoria própria – Rumo ENEM",
+      "kind": "Objective",
+      "subject": "historia-brasil",
+      "statement": "A Constituição Federal de 1988 ficou conhecida como \"Constituição Cidadã\". Esse nome se deve ao fato de que ela",
+      "options": [
+        { "text": "instituiu o voto censitário, restrito a quem tinha renda mínima.", "explanation": "O voto censitário existiu no Império. A Constituição de 1988 fez o oposto: ampliou o direito de voto." },
+        { "text": "ampliou direitos civis, políticos e sociais e restabeleceu a democracia depois do regime militar.", "explanation": "Correta. Promulgada após a ditadura, ela garantiu eleições diretas, estendeu o voto aos analfabetos (facultativo) e aos maiores de 16 anos e ampliou direitos sociais, como saúde pelo SUS." },
+        { "text": "criou o Ato Institucional nº 5, que fortaleceu o Poder Executivo.", "explanation": "O AI-5 é de 1968, do regime militar, e suspendeu direitos. É o oposto do espírito de 1988." },
+        { "text": "restaurou a monarquia parlamentarista no Brasil.", "explanation": "O plebiscito de 1993, previsto pela Constituição, manteve a república presidencialista." },
+        { "text": "proibiu a organização de sindicatos e o direito de greve.", "explanation": "A Constituição de 1988 garantiu a liberdade sindical e o direito de greve." }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "rumo-enem-ap-005",
+      "source": "Autoria própria – Rumo ENEM",
+      "kind": "Objective",
+      "subject": "geografia-humana",
+      "statement": "Em muitas cidades brasileiras, os bairros com melhor infraestrutura (saneamento, transporte e áreas de lazer) concentram a população de maior renda, enquanto a população mais pobre ocupa áreas periféricas, distantes do trabalho e com serviços precários.\n\nO fenômeno descrito é conhecido como",
+      "options": [
+        { "text": "conurbação.", "explanation": "Conurbação é o encontro das manchas urbanas de duas ou mais cidades, que passam a funcionar como uma só." },
+        { "text": "êxodo rural.", "explanation": "Êxodo rural é a migração do campo para a cidade. Ele ajuda a explicar o crescimento das periferias, mas não é o fenômeno descrito." },
+        { "text": "segregação socioespacial.", "explanation": "Correta. É a separação dos grupos sociais no espaço da cidade conforme a renda, com acesso desigual a infraestrutura e serviços." },
+        { "text": "gentrificação.", "explanation": "Gentrificação é a valorização de uma área que expulsa os moradores antigos. Ela pode reforçar a segregação, mas descreve outro processo." },
+        { "text": "desmetropolização.", "explanation": "Desmetropolização é o crescimento das cidades médias em ritmo maior que o das metrópoles." }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "rumo-enem-ap-006",
+      "source": "Autoria própria – Rumo ENEM",
+      "kind": "Objective",
+      "subject": "filosofia-sociologia",
+      "statement": "Para um sociólogo clássico, existem maneiras de agir, pensar e sentir que são exteriores ao indivíduo, que valem para a sociedade em geral e que se impõem às pessoas, mesmo contra a vontade delas. Um exemplo é a língua que aprendemos ao nascer.\n\nO conceito descrito é o de",
+      "options": [
+        { "text": "ação social, de Max Weber.", "explanation": "Para Weber, a ação social parte do sentido que o próprio indivíduo dá à sua conduta. O texto descreve algo exterior e coercitivo." },
+        { "text": "fato social, de Émile Durkheim.", "explanation": "Correta. Exterioridade, generalidade e coercitividade são as três características do fato social em Durkheim." },
+        { "text": "luta de classes, de Karl Marx.", "explanation": "A luta de classes é o conflito entre grupos com interesses opostos na produção, não um modo de agir que se impõe a todos." },
+        { "text": "mais-valia, de Karl Marx.", "explanation": "Mais-valia é o valor produzido pelo trabalhador e apropriado pelo capitalista." },
+        { "text": "indústria cultural, de Adorno e Horkheimer.", "explanation": "Indústria cultural é a produção de cultura em massa como mercadoria." }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "rumo-enem-ap-007",
+      "source": "Autoria própria – Rumo ENEM",
+      "kind": "Objective",
+      "subject": "biologia",
+      "statement": "Em um campo, observa-se a cadeia alimentar:\n\ncapim → gafanhoto → sapo → cobra\n\nSe uma doença eliminar quase todos os sapos da região, a consequência mais imediata será",
+      "options": [
+        { "text": "o aumento da população de gafanhotos.", "explanation": "Correta. Sem o predador, os gafanhotos se reproduzem com menos controle e a população cresce. Depois, isso pode reduzir o capim." },
+        { "text": "o aumento da população de cobras.", "explanation": "As cobras perdem uma fonte de alimento, então a tendência é diminuir, não aumentar." },
+        { "text": "o aumento imediato da quantidade de capim.", "explanation": "Com mais gafanhotos comendo o capim, a quantidade de capim tende a cair." },
+        { "text": "nenhuma mudança, porque cada população é independente das outras.", "explanation": "Numa cadeia alimentar as populações dependem umas das outras: mudar um elo afeta os demais." },
+        { "text": "a extinção imediata do capim e das cobras.", "explanation": "Os efeitos existem, mas não são extinções imediatas. A consequência mais direta é o crescimento dos gafanhotos." }
+      ],
+      "correct": "A"
+    },
+    {
+      "key": "rumo-enem-ap-008",
+      "source": "Autoria própria – Rumo ENEM",
+      "kind": "Objective",
+      "subject": "quimica",
+      "statement": "Uma pessoa dissolve 20 g de açúcar em água até completar 500 mL de suco.\n\nA concentração de açúcar no suco, em gramas por litro, é",
+      "options": [
+        { "text": "10 g/L.", "explanation": "Esse valor sairia de dividir 20 g por 2 L. O volume é 500 mL, ou seja, 0,5 L." },
+        { "text": "20 g/L.", "explanation": "20 g é a massa total, mas o volume é só meio litro. Em 1 L de suco haveria o dobro." },
+        { "text": "40 g/L.", "explanation": "Correta. C = massa ÷ volume = 20 g ÷ 0,5 L = 40 g/L." },
+        { "text": "100 g/L.", "explanation": "Confira a conversão: 500 mL são 0,5 L, e 20 ÷ 0,5 = 40." },
+        { "text": "0,04 g/L.", "explanation": "Esse valor sairia de dividir 20 g por 500 L. A conta usa 500 mL convertidos para 0,5 L." }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "rumo-enem-ap-009",
+      "source": "Autoria própria – Rumo ENEM",
+      "kind": "Objective",
+      "subject": "fisica",
+      "statement": "Um chuveiro elétrico de 5.500 W é usado durante 20 minutos por dia, todos os dias de um mês de 30 dias.\n\nA energia elétrica consumida pelo chuveiro nesse mês é de",
+      "options": [
+        { "text": "5,5 kWh.", "explanation": "5,5 kW é a potência. Falta multiplicar pelo tempo total de uso no mês." },
+        { "text": "55 kWh.", "explanation": "Correta. Tempo total: 20 min × 30 = 600 min = 10 h. Energia = 5,5 kW × 10 h = 55 kWh." },
+        { "text": "110 kWh.", "explanation": "Esse resultado usaria 20 horas no mês. São 600 minutos, ou seja, 10 horas." },
+        { "text": "165 kWh.", "explanation": "Esse resultado usaria 30 horas no mês (1 hora por dia). O chuveiro fica ligado 20 minutos por dia." },
+        { "text": "3.300 kWh.", "explanation": "Esse valor mistura unidades (5.500 W × 600 min ÷ 1.000). É preciso converter os minutos para horas." }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "rumo-enem-ap-010",
+      "source": "Autoria própria – Rumo ENEM",
+      "kind": "Objective",
+      "subject": "matematica-basica",
+      "statement": "Uma loja aumentou em 20% o preço de um produto. Um mês depois, anunciou um desconto de 20% sobre o novo preço.\n\nEm relação ao preço original, o preço final do produto ficou",
+      "options": [
+        { "text": "igual.", "explanation": "Os 20% do desconto incidem sobre um valor maior que o original, então não anulam o aumento." },
+        { "text": "4% menor.", "explanation": "Correta. Um produto de R$ 100 passa a R$ 120 e, com 20% de desconto, a R$ 96. Em fatores: 1,20 × 0,80 = 0,96." },
+        { "text": "4% maior.", "explanation": "O sinal está trocado: 1,20 × 0,80 = 0,96, que é menor que 1." },
+        { "text": "2% menor.", "explanation": "A diferença é de 4 pontos: 1 − 0,96 = 0,04." },
+        { "text": "40% menor.", "explanation": "Aumentos e descontos sucessivos se multiplicam; não se somam assim." }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "rumo-enem-ap-011",
+      "source": "Autoria própria – Rumo ENEM",
+      "kind": "Objective",
+      "subject": "estatistica-probabilidade",
+      "statement": "Seis estudantes anotaram o tempo, em minutos, que levam de casa até a escola:\n\n10, 12, 15, 15, 18, 60\n\nUm dos estudantes mora em outra cidade. Para representar o tempo típico do grupo sem que esse valor distorça o resultado, deve-se usar a",
+      "options": [
+        { "text": "média, igual a cerca de 21,7 minutos.", "explanation": "A média está certa (130 ÷ 6), mas é puxada para cima pelo valor 60, que é muito diferente dos outros." },
+        { "text": "mediana, igual a 15 minutos.", "explanation": "Correta. Com os dados em ordem, os dois valores centrais são 15 e 15, então a mediana é 15. Ela não é afetada pelo valor extremo." },
+        { "text": "moda, igual a 60 minutos.", "explanation": "A moda é o valor que mais se repete: 15, não 60." },
+        { "text": "média, igual a 15 minutos.", "explanation": "15 é a mediana (e a moda). A média é 130 ÷ 6 ≈ 21,7." },
+        { "text": "mediana, igual a 16,5 minutos.", "explanation": "A mediana é a média dos dois valores centrais, 15 e 15, que dá 15." }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "rumo-enem-ap-012",
+      "source": "Autoria própria – Rumo ENEM",
+      "kind": "Objective",
+      "subject": "geometria",
+      "statement": "Uma caixa-d'água tem a forma de um cilindro com raio da base de 1 m e altura de 2 m. Use π = 3 e lembre que 1 m³ equivale a 1.000 litros.\n\nA capacidade da caixa-d'água é de",
+      "options": [
+        { "text": "600 litros.", "explanation": "O volume é 6 m³. Cada metro cúbico tem 1.000 litros, não 100." },
+        { "text": "2.000 litros.", "explanation": "Esse valor considera só a altura. O volume do cilindro é área da base × altura." },
+        { "text": "6.000 litros.", "explanation": "Correta. V = π × r² × h = 3 × 1² × 2 = 6 m³ = 6.000 litros." },
+        { "text": "12.000 litros.", "explanation": "Esse valor usa o diâmetro (2 m) sem elevar ao quadrado: 3 × 2 × 2 = 12 m³. A fórmula pede o raio ao quadrado: 3 × 1² × 2." },
+        { "text": "60.000 litros.", "explanation": "Confira a conversão: 6 m³ são 6.000 litros." }
+      ],
+      "correct": "C"
+    }
+  ]
+}
