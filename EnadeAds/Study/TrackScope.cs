@@ -5,19 +5,33 @@ namespace EnadeAds.Study;
 
 /// <summary>
 /// A trilha ativa de quem está navegando, guardada num cookie. O <see cref="ApplicationDbContext"/> filtra
-/// roadmap, questões, desafios e simulados por ela. Fora de uma requisição (importação na subida, testes)
-/// vale a trilha padrão.
+/// roadmap, questões, desafios e simulados por ela. Fora de uma requisição (importação na subida) vale a
+/// trilha padrão.
+///
+/// Quem ainda não escolheu nenhuma prova não fica numa trilha por omissão: o início mostra a escolha e as
+/// seções de estudo mandam para lá (<see cref="TrackEndpoints.UseTrackChoice"/>). A configuração
+/// <c>Tracks:Default</c> (slug) dispensa a escolha; os testes usam isso.
 /// </summary>
-public sealed class TrackScope(IHttpContextAccessor http)
+public sealed class TrackScope(IHttpContextAccessor http, IConfiguration configuration)
 {
     public const string CookieName = "trilha";
 
     private int? id;
+    private bool chosen;
 
-    public int Id => id ??= Tracks.IdOf(http.HttpContext?.Request.Cookies[CookieName]) ?? Tracks.Default;
+    private int? Chosen => Tracks.IdOf(http.HttpContext?.Request.Cookies[CookieName]) ?? Tracks.IdOf(configuration["Tracks:Default"]);
+
+    public int Id => id ??= Chosen ?? Tracks.Default;
+
+    /// <summary>Se a pessoa já escolheu uma prova (ou a configuração escolheu por ela).</summary>
+    public bool HasChosen => chosen || Chosen is not null;
 
     /// <summary>Troca a trilha só nesta requisição (testes e tarefas de fundo).</summary>
-    public void Use(int trackId) => id = trackId;
+    public void Use(int trackId)
+    {
+        id = trackId;
+        chosen = true;
+    }
 }
 
 /// <summary>
@@ -73,6 +87,31 @@ public static class TrackEndpoints
             return Results.LocalRedirect(IsLocal(volta) ? volta! : "/");
         });
 
-    private static bool IsLocal(string? url) =>
+    /// <summary>Seções que só fazem sentido dentro de uma prova (primeiro trecho do caminho).</summary>
+    private static readonly HashSet<string> TrackSections = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "roadmap", "materias", "questoes", "desafios", "simulados", "meu-desempenho",
+    };
+
+    /// <summary>
+    /// Quem abre uma seção de estudo sem ter escolhido a prova vai para o início, que pede a escolha, e depois
+    /// volta para onde ia. Só GET: formulários vêm de páginas que já passaram por aqui.
+    /// </summary>
+    public static void UseTrackChoice(this IApplicationBuilder app) =>
+        app.Use(async (context, next) =>
+        {
+            var path = context.Request.Path.Value ?? "/";
+            var section = path.TrimStart('/').Split('/')[0];
+            if (HttpMethods.IsGet(context.Request.Method) && TrackSections.Contains(section)
+                && !context.RequestServices.GetRequiredService<TrackScope>().HasChosen)
+            {
+                context.Response.Redirect("/?volta=" + Uri.EscapeDataString(path + context.Request.QueryString));
+                return;
+            }
+
+            await next();
+        });
+
+    public static bool IsLocal(string? url) =>
         !string.IsNullOrEmpty(url) && url[0] == '/' && (url.Length == 1 || (url[1] != '/' && url[1] != '\\'));
 }

@@ -160,6 +160,7 @@ try
 
     app.UseRateLimiter();
     app.UseAntiforgery();
+    app.UseTrackChoice();
 
     app.MapStaticAssets();
     app.MapRazorComponents<App>()

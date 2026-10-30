@@ -3,6 +3,7 @@
 
 @inject NavigationManager Navigation
 @inject TrackCatalog Tracks
+@inject TrackScope TrackScope
 
 <header class="site-header">
     <div class="site-header-inner">
@@ -10,15 +11,15 @@
             <a class="brand" href="">Rumo</a>
             @* A trilha ativa ao lado da marca: "Rumo ENEM". Clicar troca de trilha, sem JavaScript. *@
             <details class="track-menu">
-                <summary aria-label="Trilha: @track?.Name. Trocar de trilha">
-                    <span class="track-label">@track?.Label</span>
+                <summary aria-label="@(TrackScope.HasChosen ? $"Prova: {track?.Name}. Trocar de prova" : "Escolher a prova")">
+                    <span class="track-label">@(TrackScope.HasChosen ? track?.Label : "Escolher prova")</span>
                     <svg class="chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4" /></svg>
                 </summary>
                 <div class="track-panel">
                     <p class="track-panel-title">Estudar para</p>
                     @foreach (var option in tracks)
                     {
-                        var isCurrent = option.Id == track?.Id;
+                        var isCurrent = TrackScope.HasChosen && option.Id == track?.Id;
                         <a href="@SwitchUrl(option)" aria-current="@(isCurrent ? "true" : null)" class="@(isCurrent ? "is-current" : null)">
                             <span class="track-option-name">@option.Name</span>
                             <span class="track-option-level">@option.Level.LevelName()</span>

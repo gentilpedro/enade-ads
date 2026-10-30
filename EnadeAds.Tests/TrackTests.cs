@@ -81,6 +81,29 @@ public class TrackTests(EnadeAdsFactory factory)
     }
 
     [Fact]
+    public async Task Visitor_WithoutAChoiceSeesTheChooserAndNoTrackIsPreselected()
+    {
+        // Host sem a trilha padrão dos testes: é o que acontece em produção para quem chega pela primeira vez.
+        using var fresh = factory.WithWebHostBuilder(builder => builder.UseSetting("Tracks:Default", ""));
+        var client = fresh.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
+
+        var home = WebUtility.HtmlDecode(await client.GetStringAsync("/"));
+        var roadmap = await client.GetAsync("/roadmap?topico=pilhas");
+        var chooser = WebUtility.HtmlDecode(await client.GetStringAsync(roadmap.Headers.Location!.ToString()));
+
+        Assert.Contains("Para qual prova você vai estudar?", home);
+        Assert.Contains("ENADE 2026 · ADS", home);
+        Assert.Contains("ENEM 2026", home);
+        Assert.Matches("class=\"track-label\"[^>]*>Escolher prova</span>", home);
+        Assert.DoesNotContain("Comunidade", home);
+        Assert.DoesNotContain("aria-current=\"true\"", home);
+
+        Assert.Equal(HttpStatusCode.Redirect, roadmap.StatusCode);
+        Assert.Equal("/?volta=%2Froadmap%3Ftopico%3Dpilhas", roadmap.Headers.Location?.ToString());
+        Assert.Contains("trilha/enem?volta=%2Froadmap%3Ftopico%3Dpilhas", chooser);
+    }
+
+    [Fact]
     public async Task Switch_SetsTheCookieAndOnlyReturnsToThisSite()
     {
         var client = NewClient();

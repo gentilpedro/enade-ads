@@ -14,18 +14,26 @@
 @inject BlogService Blog
 @inject SemesterPlan Semester
 @inject TrackCatalog Tracks
+@inject TrackScope TrackScope
 @inject PerformanceService Performance
 @inject LocalCalendar Calendar
 @inject TimeProvider Clock
 @inject UserManager<ApplicationUser> Users
 @inject NavigationManager Navigation
 
-<PageTitle>Rumo @track?.Label</PageTitle>
+<PageTitle>@(TrackScope.HasChosen ? $"Rumo {track?.Label}" : "Rumo: estude para a sua prova")</PageTitle>
 
 <HeadContent>
     <link rel="alternate" type="application/rss+xml" title="Rumo – avisos oficiais" href="@BlogFeed.Path.TrimStart('/')" />
 </HeadContent>
 
+@if (!TrackScope.HasChosen)
+{
+    <TrackChooser Volta="@SafeVolta" />
+}
+else
+{
+<text>
 @if (semester is not null)
 {
     <SemesterStrip View="semester" SignedIn="userId is not null" />
@@ -172,6 +180,8 @@
         </section>
     </aside>
 </div>
+</text>
+}
 
 @code {
     private Track? track;
@@ -205,12 +215,23 @@
     [SupplyParameterFromQuery(Name = "pagina")]
     private int? Pagina { get; set; }
 
+    /// <summary>Página que a pessoa tentou abrir antes de escolher a prova.</summary>
+    [SupplyParameterFromQuery(Name = "volta")]
+    private string? Volta { get; set; }
+
+    private string SafeVolta => TrackEndpoints.IsLocal(Volta) ? Volta! : "/";
+
     private string CurrentUrl => Url(tab, category, feed?.Page ?? Pagina ?? 1);
 
     private string LoginUrl => $"Account/Login?ReturnUrl={Uri.EscapeDataString("/" + CurrentUrl)}";
 
     protected override async Task OnInitializedAsync()
     {
+        if (!TrackScope.HasChosen)
+        {
+            return;
+        }
+
         track = await Tracks.CurrentAsync();
         category = PostCategoryNames.FromSlug(CategorySlug);
         tab = Order switch { "novos" => Tab.New, "oficiais" => Tab.Official, _ => Tab.Hot };
