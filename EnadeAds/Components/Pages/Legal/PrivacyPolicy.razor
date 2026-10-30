@@ -1,0 +1,80 @@
+@page "/privacidade"
+
+@using EnadeAds.Privacy
+@using Microsoft.Extensions.Options
+
+@inject IOptions<PrivacyOptions> Options
+
+<PageTitle>Política de privacidade</PageTitle>
+
+<article class="legal">
+    <h1>Política de privacidade</h1>
+    <p class="text-body-secondary small">Versão de @Version.ToString("dd/MM/yyyy")</p>
+
+    <p>
+        O ENADE ADS é uma plataforma de estudo aberta. Esta página explica, em linguagem simples, quais dados guardamos,
+        para quê, por quanto tempo e como você controla o que é seu, conforme a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).
+    </p>
+
+    <h2 class="h5">Quem cuida dos seus dados</h2>
+    <p>
+        O responsável (controlador) pelos dados desta instalação é <strong>@Controller</strong>.
+        Para qualquer pedido sobre seus dados, escreva para <strong>@Contact</strong>.
+    </p>
+
+    <h2 class="h5">O que coletamos</h2>
+    <ul>
+        <li><strong>Conta:</strong> nome, e-mail, senha (guardada só como hash, nunca em texto) e, se você marcar, o pedido de acesso de professor.</li>
+        <li><strong>Estudo:</strong> o que você marca no roadmap, as respostas às questões, simulados e desafios, e as respostas discursivas.</li>
+        <li><strong>Blog:</strong> os comentários que você publica.</li>
+        <li><strong>Segurança:</strong> registros técnicos de acesso (data, endereço IP e página), usados para investigar erros e ataques.</li>
+    </ul>
+    <p>Não usamos cookies de propaganda nem de rastreamento. Os únicos cookies são os de login e de proteção dos formulários.</p>
+
+    <h2 class="h5">Para que usamos e com que base legal</h2>
+    <ul>
+        <li><strong>Prestar o serviço que você pediu</strong> (conta, progresso, correção de questões, painel de desempenho): execução do serviço solicitado por você (art. 7º, V, da LGPD).</li>
+        <li><strong>Manter a plataforma segura</strong> (registros de acesso, limite de tentativas, bloqueio por senha errada): legítimo interesse (art. 7º, IX).</li>
+        <li><strong>Enviar e-mails da conta</strong> (confirmação de cadastro e redefinição de senha). Não enviamos propaganda.</li>
+    </ul>
+
+    <h2 class="h5">Quem vê o quê</h2>
+    <ul>
+        <li>Seu desempenho, suas respostas e seu progresso são vistos <strong>só por você</strong>.</li>
+        <li>Nos desafios, os professores e a turma veem só números agregados (quantos participaram e a taxa de acerto de cada questão), nunca o nome de quem acertou ou errou.</li>
+        <li>Seus comentários no blog são públicos, com o seu nome.</li>
+        <li>Administradores veem nome, e-mail e perfis das contas, para aprovar professores e bloquear abusos.</li>
+        <li>Não vendemos nem compartilhamos seus dados com terceiros. O e-mail é enviado por um provedor de e-mail contratado pela instalação apenas para entregar as mensagens.</li>
+    </ul>
+
+    <h2 class="h5">Por quanto tempo guardamos</h2>
+    <ul>
+        <li>Dados da conta e de estudo: enquanto a conta existir.</li>
+        <li>Registros técnicos de acesso: até 31 dias.</li>
+        <li>Cópias de segurança: até 30 dias, depois são sobrescritas.</li>
+    </ul>
+
+    <h2 class="h5">Seus direitos</h2>
+    <p>Você pode, a qualquer momento:</p>
+    <ul>
+        <li><strong>Acessar e levar seus dados:</strong> em <a href="Account/Manage/PersonalData">Minha conta → Dados pessoais</a>, baixe um arquivo com a conta e tudo o que você fez na plataforma.</li>
+        <li><strong>Corrigir</strong> nome e e-mail em <a href="Account/Manage">Minha conta</a>.</li>
+        <li>
+            <strong>Excluir a conta:</strong> em <a href="Account/Manage/DeletePersonalData">Minha conta → Dados pessoais → Excluir</a>.
+            Isso apaga a conta, o progresso, as respostas, os simulados e os envios de desafio. Seus comentários no blog
+            continuam, mas sem o seu nome, para a conversa não perder o sentido.
+        </li>
+        <li><strong>Pedir informações</strong> sobre o uso dos seus dados pelo e-mail acima.</li>
+    </ul>
+
+    <h2 class="h5">Mudanças nesta política</h2>
+    <p>Se esta política mudar, a data da versão no topo muda e avisamos no <a href="blog">blog</a>.</p>
+</article>
+
+@code {
+    private static readonly DateOnly Version = DateOnly.ParseExact(PrivacyOptions.TermsVersion, "yyyy-MM-dd");
+
+    private string Controller => string.IsNullOrWhiteSpace(Options.Value.ControllerName) ? "a equipe que mantém esta instalação" : Options.Value.ControllerName;
+
+    private string Contact => string.IsNullOrWhiteSpace(Options.Value.ContactEmail) ? "o administrador da plataforma" : Options.Value.ContactEmail;
+}

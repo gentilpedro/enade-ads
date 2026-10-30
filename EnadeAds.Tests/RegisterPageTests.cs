@@ -83,6 +83,7 @@ public class RegisterPageTests(EnadeAdsFactory factory)
             ["Input.Email"] = email,
             ["Input.Password"] = TestAccounts.Password,
             ["Input.ConfirmPassword"] = TestAccounts.Password,
+            ["Input.AcceptTerms"] = "true",
         };
         if (wantsTeacher)
         {

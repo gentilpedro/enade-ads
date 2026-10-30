@@ -210,10 +210,11 @@ public sealed class BlogService(ApplicationDbContext db, TimeProvider clock, ILo
         var rows = await db.PostComments.AsNoTracking()
             .Where(c => c.PostId == postId)
             .OrderBy(c => c.Id)
-            .Join(db.Users, c => c.UserId, u => u.Id, (c, u) => new { Comment = c, u.FullName })
+            .GroupJoin(db.Users, c => c.UserId, u => u.Id, (c, authors) => new { Comment = c, authors })
+            .SelectMany(x => x.authors.DefaultIfEmpty(), (x, u) => new { x.Comment, FullName = u == null ? null : u.FullName })
             .ToListAsync(cancellationToken);
 
-        return rows.Select(r => new CommentView(r.Comment, string.IsNullOrWhiteSpace(r.FullName) ? "Participante" : r.FullName)).ToList();
+        return rows.Select(r => new CommentView(r.Comment, AuthorLabel(r.Comment.UserId, r.FullName))).ToList();
     }
 
     /// <summary>Comentar exige conta e só vale em post publicado.</summary>
@@ -271,6 +272,9 @@ public sealed class BlogService(ApplicationDbContext db, TimeProvider clock, ILo
 
         return true;
     }
+
+    private static string AuthorLabel(string? userId, string? fullName) =>
+        userId is null ? "Participante que excluiu a conta" : string.IsNullOrWhiteSpace(fullName) ? "Participante" : fullName;
 
     public static bool CanModerate(Editor? editor) => editor is not null && (editor.IsAdmin || editor.IsTeacher);
 

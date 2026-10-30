@@ -128,8 +128,11 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             comment.Property(c => c.Text).HasMaxLength(BlogService.CommentMaxLength);
             comment.HasIndex(c => c.PostId);
             comment.HasOne<Post>().WithMany().HasForeignKey(c => c.PostId).OnDelete(DeleteBehavior.Cascade);
-            comment.HasOne<ApplicationUser>().WithMany().HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.Cascade);
+            // Excluir a conta mantém o comentário, sem autor: a conversa do post não perde o sentido.
+            comment.HasOne<ApplicationUser>().WithMany().HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.SetNull);
         });
+
+        builder.Entity<ApplicationUser>(user => user.Property(u => u.TermsVersion).HasMaxLength(20));
 
         builder.Entity<SiteSetting>(setting =>
         {

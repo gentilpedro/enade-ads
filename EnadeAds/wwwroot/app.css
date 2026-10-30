@@ -98,3 +98,16 @@ h1:focus {
     top: env(safe-area-inset-top, 0px);
     z-index: 1020;
 }
+
+/* Rodapé com os links legais. */
+.site-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    border-top: 1px solid var(--bs-border-color);
+}
+
+/* Páginas de texto longo (política e termos): linha confortável de ler. */
+.legal {
+    max-width: 70ch;
+}

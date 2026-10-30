@@ -8,6 +8,7 @@
 @using Microsoft.Extensions.Options
 @using EnadeAds.Accounts
 @using EnadeAds.Data
+@using EnadeAds.Privacy
 
 @inject UserManager<ApplicationUser> UserManager
 @inject IUserStore<ApplicationUser> UserStore
@@ -17,6 +18,7 @@
 @inject ILogger<Register> Logger
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
+@inject TimeProvider Clock
 
 <PageTitle>Criar conta</PageTitle>
 
@@ -57,6 +59,12 @@
                     Enquanto isso, você usa a plataforma como aluno.
                 </div>
             </div>
+            <div class="form-check mb-3">
+                <InputCheckbox @bind-Value="Input.AcceptTerms" id="Input.AcceptTerms" class="form-check-input" required />
+                <label class="form-check-label" for="Input.AcceptTerms">
+                    Li e aceito os <a href="termos" target="_blank">Termos de uso</a> e a <a href="privacidade" target="_blank">Política de privacidade</a>
+                </label>
+            </div>
             <button type="submit" class="w-100 btn btn-lg btn-primary">Criar conta</button>
         </EditForm>
         <p class="mt-3">Já tem conta? <a href="Account/Login">Entrar</a></p>
@@ -81,6 +89,13 @@
 
     public async Task RegisterUser(EditContext editContext)
     {
+        // O required do checkbox é só conforto: o servidor confere o aceite de novo.
+        if (!Input.AcceptTerms)
+        {
+            identityErrors = [new IdentityError { Description = "Para criar a conta, aceite os Termos de uso e a Política de privacidade." }];
+            return;
+        }
+
         IReadOnlyList<string> roles;
         try
         {
@@ -94,6 +109,8 @@
 
         var user = CreateUser();
         user.FullName = Input.FullName.Trim();
+        user.TermsAcceptedAt = Clock.GetUtcNow();
+        user.TermsVersion = PrivacyOptions.TermsVersion;
 
         await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
         var emailStore = GetEmailStore();
@@ -185,5 +202,7 @@
         public string ConfirmPassword { get; set; } = "";
 
         public bool WantsTeacherAccess { get; set; }
+
+        public bool AcceptTerms { get; set; }
     }
 }

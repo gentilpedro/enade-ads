@@ -6,6 +6,7 @@ using EnadeAds.Components.Account;
 using EnadeAds.Data;
 using EnadeAds.MockExams;
 using EnadeAds.Performance;
+using EnadeAds.Privacy;
 using EnadeAds.Questions;
 using EnadeAds.Security;
 using EnadeAds.Study;
@@ -105,6 +106,9 @@ try
             options.KnownIPNetworks.Add(System.Net.IPNetwork.Parse(network));
         }
     });
+
+    builder.Services.AddScoped<PersonalDataExport>();
+    builder.Services.Configure<PrivacyOptions>(builder.Configuration.GetSection(PrivacyOptions.SectionName));
 
     builder.Services.Configure<AdminOptions>(builder.Configuration.GetSection(AdminOptions.SectionName));
     builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection(SmtpOptions.SectionName));

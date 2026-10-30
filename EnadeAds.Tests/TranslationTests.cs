@@ -94,6 +94,7 @@ public partial class TranslationTests(EnadeAdsFactory factory)
             ["Input.Email"] = email,
             ["Input.Password"] = password,
             ["Input.ConfirmPassword"] = password,
+            ["Input.AcceptTerms"] = "true",
         });
         return WebUtility.HtmlDecode(await response.Content.ReadAsStringAsync());
     }
