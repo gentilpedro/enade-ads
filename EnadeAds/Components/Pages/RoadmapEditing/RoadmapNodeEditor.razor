@@ -1,0 +1,224 @@
+@page "/roadmap/editar/{Slug}"
+
+@using Microsoft.AspNetCore.Authorization
+@using EnadeAds.Accounts
+@using EnadeAds.Data
+@using EnadeAds.Questions
+@using EnadeAds.Study
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+
+@attribute [Authorize(Roles = Roles.Editors)]
+
+@inject RoadmapEditor RoadmapEditor
+@inject ApplicationDbContext Db
+@inject UserManager<ApplicationUser> Users
+@inject NavigationManager Navigation
+
+@if (node is not null)
+{
+    <PageTitle>Editar: @node.Title</PageTitle>
+
+    <nav aria-label="Trilha">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="roadmap">Roadmap</a></li>
+            @if (parent is not null)
+            {
+                <li class="breadcrumb-item"><a href="roadmap/editar/@parent.Slug">@parent.Title</a></li>
+            }
+            <li class="breadcrumb-item active" aria-current="page">Editar</li>
+        </ol>
+    </nav>
+
+    <p class="small text-body-secondary text-uppercase fw-semibold mb-1">@KindName(node.Kind) · @node.Block.Name()</p>
+    <h1 class="h3">Editar: @node.Title</h1>
+    <p><a href="roadmap?topico=@node.Slug#no-@node.Slug">Ver no roadmap</a></p>
+
+    @if (message is not null)
+    {
+        <div class="alert @(messageIsError ? "alert-danger" : "alert-success")" role="status">@message</div>
+    }
+
+    <EditForm Model="Input" method="post" FormName="node-form" OnSubmit="SaveAsync" class="mb-4">
+        <div class="mb-3">
+            <label for="Input.Title" class="form-label">Título</label>
+            <InputText @bind-Value="Input.Title" id="Input.Title" class="form-control" maxlength="@RoadmapEditor.TitleMaxLength" />
+        </div>
+        <div class="mb-3">
+            <label for="Input.Summary" class="form-label">Explicação (aparece no painel lateral do roadmap)</label>
+            <InputTextArea @bind-Value="Input.Summary" id="Input.Summary" class="form-control" rows="4" maxlength="@RoadmapEditor.SummaryMaxLength" />
+        </div>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </EditForm>
+
+    <section class="mb-4" aria-labelledby="order-title">
+        <h2 id="order-title" class="h6">Posição</h2>
+        <p class="small text-body-secondary">
+            @(node.ParentId is null ? "Troca de lugar com o vizinho dentro do mesmo bloco." : "Troca de lugar com o assunto vizinho dentro da matéria.")
+        </p>
+        <form method="post" @formname="node-move" @onsubmit="MoveAsync" class="d-flex gap-2">
+            <AntiforgeryToken />
+            <button type="submit" name="Direction" value="up" class="btn btn-sm btn-outline-secondary">↑ Subir</button>
+            <button type="submit" name="Direction" value="down" class="btn btn-sm btn-outline-secondary">↓ Descer</button>
+        </form>
+    </section>
+
+    @if (node.Kind == NodeKind.Subject)
+    {
+        <section class="mb-4" aria-labelledby="topics-title">
+            <h2 id="topics-title" class="h5">Assuntos</h2>
+            <ol>
+                @foreach (var topic in topics)
+                {
+                    <li><a href="roadmap/editar/@topic.Slug">@topic.Title</a></li>
+                }
+            </ol>
+
+            <form method="post" @formname="topic-add" @onsubmit="AddTopicAsync" class="card card-body mb-3">
+                <AntiforgeryToken />
+                <h3 class="h6">Adicionar assunto</h3>
+                <label for="NewTopicTitle" class="form-label small">Título</label>
+                <input id="NewTopicTitle" name="NewTitle" class="form-control mb-2" maxlength="@RoadmapEditor.TitleMaxLength" required />
+                <label for="NewTopicSummary" class="form-label small">Explicação</label>
+                <textarea id="NewTopicSummary" name="NewSummary" class="form-control mb-2" rows="2" maxlength="@RoadmapEditor.SummaryMaxLength" required></textarea>
+                <div><button type="submit" class="btn btn-sm btn-primary">Adicionar assunto</button></div>
+            </form>
+
+            <form method="post" @formname="checkpoint-add" @onsubmit="AddCheckpointAsync" class="card card-body">
+                <AntiforgeryToken />
+                <h3 class="h6">Adicionar checkpoint depois desta matéria</h3>
+                <label for="NewCheckpointTitle" class="form-label small">Título</label>
+                <input id="NewCheckpointTitle" name="NewTitle" class="form-control mb-2" maxlength="@RoadmapEditor.TitleMaxLength"
+                       placeholder="Checkpoint: questões de banco de dados" required />
+                <label for="NewCheckpointSummary" class="form-label small">O que o aluno deve fazer</label>
+                <textarea id="NewCheckpointSummary" name="NewSummary" class="form-control mb-2" rows="2" maxlength="@RoadmapEditor.SummaryMaxLength" required></textarea>
+                <div><button type="submit" class="btn btn-sm btn-outline-primary">Adicionar checkpoint</button></div>
+            </form>
+        </section>
+        <p class="small text-body-secondary">As matérias vêm da Portaria Inep nº 169/2026 e não podem ser removidas.</p>
+    }
+    else
+    {
+        <section aria-labelledby="remove-title">
+            <h2 id="remove-title" class="h6 text-danger">Remover</h2>
+            <p class="small text-body-secondary">Remove este @(node.Kind == NodeKind.Topic ? "assunto" : "checkpoint") do roadmap e o status que os alunos marcaram nele. O resto do progresso deles não muda.</p>
+            <form method="post" @formname="node-remove" @onsubmit="RemoveAsync">
+                <AntiforgeryToken />
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="checkbox" name="ConfirmRemove" value="true" id="ConfirmRemove" required />
+                    <label class="form-check-label" for="ConfirmRemove">Confirmo que quero remover</label>
+                </div>
+                <button type="submit" class="btn btn-outline-danger btn-sm">Remover</button>
+            </form>
+        </section>
+    }
+}
+
+@code {
+    private RoadmapNode? node;
+    private RoadmapNode? parent;
+    private List<RoadmapNode> topics = [];
+    private Editor? editor;
+    private string? message;
+    private bool messageIsError;
+
+    [Parameter]
+    public string Slug { get; set; } = "";
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromForm(FormName = "node-form")]
+    private NodeFormModel Input { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        editor = EditorFactory.From(HttpContext.User, Users.GetUserId(HttpContext.User));
+        await LoadAsync();
+        if (node is not null)
+        {
+            Input ??= new NodeFormModel { Title = node.Title, Summary = node.Summary };
+        }
+    }
+
+    private async Task LoadAsync()
+    {
+        node = await Db.RoadmapNodes.AsNoTracking().FirstOrDefaultAsync(n => n.Slug == Slug);
+        if (node is null)
+        {
+            Navigation.NotFound();
+            return;
+        }
+
+        parent = node.ParentId is null ? null : await Db.RoadmapNodes.AsNoTracking().FirstAsync(n => n.Id == node.ParentId);
+        topics = await Db.RoadmapNodes.AsNoTracking().Where(n => n.ParentId == node.Id).OrderBy(n => n.Order).ToListAsync();
+    }
+
+    private async Task SaveAsync()
+    {
+        var result = await RoadmapEditor.UpdateAsync(editor!, node!.Id, Input.Title, Input.Summary);
+        Show(result, "Alterações salvas.");
+        await LoadAsync();
+    }
+
+    private async Task MoveAsync()
+    {
+        var up = HttpContext.Request.Form["Direction"] == "up";
+        var result = await RoadmapEditor.MoveAsync(editor!, node!.Id, up);
+        Show(result, up ? "Subiu uma posição." : "Desceu uma posição.");
+    }
+
+    private async Task AddTopicAsync()
+    {
+        var result = await RoadmapEditor.AddTopicAsync(editor!, node!.Id, HttpContext.Request.Form["NewTitle"]!, HttpContext.Request.Form["NewSummary"]!);
+        Show(result, "Assunto adicionado no fim da lista.");
+        await LoadAsync();
+    }
+
+    private async Task AddCheckpointAsync()
+    {
+        var result = await RoadmapEditor.AddCheckpointAfterAsync(editor!, node!.Id, HttpContext.Request.Form["NewTitle"]!, HttpContext.Request.Form["NewSummary"]!);
+        Show(result, "Checkpoint adicionado depois desta matéria.");
+    }
+
+    private async Task RemoveAsync()
+    {
+        if (HttpContext.Request.Form["ConfirmRemove"] != "true")
+        {
+            Show(EditResult.Fail("Marque a confirmação para remover."), "");
+            return;
+        }
+
+        var result = await RoadmapEditor.RemoveAsync(editor!, node!.Id);
+        if (!result.Succeeded)
+        {
+            Show(result, "");
+            return;
+        }
+
+        Navigation.NavigateTo(parent is null ? "roadmap" : $"roadmap/editar/{parent.Slug}");
+    }
+
+    private void Show(EditResult result, string success)
+    {
+        messageIsError = !result.Succeeded;
+        message = result.Succeeded ? success : string.Join(" ", result.Errors);
+        if (messageIsError)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+        }
+    }
+
+    private static string KindName(NodeKind kind) => kind switch
+    {
+        NodeKind.Subject => "Matéria",
+        NodeKind.Topic => "Assunto",
+        _ => "Checkpoint",
+    };
+
+    private sealed class NodeFormModel
+    {
+        public string Title { get; set; } = "";
+        public string Summary { get; set; } = "";
+    }
+}

@@ -3,6 +3,9 @@ namespace EnadeAds.Study;
 /// <summary>
 /// Conteúdo inicial do roadmap: os 20 objetos de conhecimento da Portaria Inep nº 169/2026 (Art. 6º)
 /// mais a Formação Geral, na ordem sugerida de estudo. Os ids são fixos porque entram como seed da migration.
+///
+/// ATENÇÃO: desde a #14 os professores editam o roadmap pela tela. Mudar este arquivo gera uma migration
+/// com UpdateData que sobrescreve no banco o que eles editaram. Para mudar conteúdo, use a tela.
 /// </summary>
 public static class RoadmapSeed
 {

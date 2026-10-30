@@ -71,6 +71,8 @@ try
     builder.Services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromMinutes(1));
     builder.Services.AddScoped<TeacherApprovals>();
     builder.Services.AddScoped<RoadmapService>();
+    builder.Services.AddScoped<RoadmapEditor>();
+    builder.Services.AddScoped<ExamSettings>();
     builder.Services.AddScoped<SubjectCatalog>();
     builder.Services.AddScoped<QuestionBank>();
     builder.Services.AddScoped<QuestionEditor>();
