@@ -12,6 +12,8 @@ public static class QuestionSeed
 
     private sealed record Seed(int Id, int SubjectId, string Statement, (string Text, string Explanation)[] Options, char Correct);
 
+    private sealed record DiscursiveSeed(int Id, int SubjectId, string Statement, string ExpectedAnswer, int SuggestedLines);
+
     // Ids das matérias vêm da RoadmapSeed: n-ésima matéria = n × 100.
     private const int Architecture = 200;
     private const int DataStructures = 400;
@@ -133,14 +135,51 @@ public static class QuestionSeed
             ], 'A'),
     ];
 
+    private static readonly DiscursiveSeed[] DiscursiveSeeds =
+    [
+        new(8, Requirements,
+            """
+            Uma universidade vai lançar um aplicativo para os alunos fazerem a rematrícula pelo celular.
+            No último semestre, o sistema antigo ficou fora do ar no primeiro dia de rematrícula e houve
+            reclamações de alunos com deficiência visual que não conseguiam usar as telas.
+
+            Proponha **dois requisitos não funcionais** para o novo aplicativo, ligados aos problemas descritos.
+            Para cada um, explique como a equipe poderia **verificar** se ele foi atendido antes da entrega.
+            """,
+            """
+            Uma boa resposta traz dois requisitos não funcionais mensuráveis, ligados aos problemas do enunciado, e um jeito concreto de verificar cada um.
+
+            1. **Desempenho e disponibilidade:** por exemplo, "o aplicativo deve atender 5.000 alunos simultâneos com tempo de resposta de até 2 segundos em 95% das requisições, e ficar disponível 99,5% do tempo durante o período de rematrícula". Verificação: teste de carga simulando o pico do primeiro dia, com medição do tempo de resposta e da taxa de erros.
+
+            2. **Acessibilidade:** por exemplo, "as telas devem seguir as diretrizes WCAG 2.1 nível AA, funcionando com leitores de tela e navegação sem toque". Verificação: avaliação com ferramentas automáticas de acessibilidade, revisão pelos critérios da WCAG e teste com usuários que usam leitor de tela.
+
+            Perde pontos a resposta que:
+            - descreve funções do sistema ("o aluno deve escolher as disciplinas"), que são requisitos funcionais.
+            - usa termos vagos sem métrica ("o sistema deve ser rápido", "deve ser fácil de usar").
+            - não diz como verificar o requisito.
+            """,
+            15),
+    ];
+
     public static IReadOnlyList<Question> Questions { get; } = Seeds.Select(seed => new Question
     {
         Id = seed.Id,
+        Kind = QuestionKind.Objective,
         SubjectId = seed.SubjectId,
         Statement = Normalize(seed.Statement),
         Source = OwnWork,
         CreatedAt = SeedDate,
-    }).ToList();
+    }).Concat(DiscursiveSeeds.Select(seed => new Question
+    {
+        Id = seed.Id,
+        Kind = QuestionKind.Discursive,
+        SubjectId = seed.SubjectId,
+        Statement = Normalize(seed.Statement),
+        Source = OwnWork,
+        CreatedAt = SeedDate,
+        ExpectedAnswer = Normalize(seed.ExpectedAnswer),
+        SuggestedLines = seed.SuggestedLines,
+    })).ToList();
 
     public static IReadOnlyList<QuestionOption> Options { get; } = Seeds.SelectMany(seed => seed.Options.Select((option, index) =>
     {

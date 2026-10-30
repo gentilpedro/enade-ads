@@ -12,6 +12,7 @@
 @if (question is not null)
 {
     var subject = question.Subject!;
+    var discursive = question.Kind == QuestionKind.Discursive;
 
     <PageTitle>Questão @question.Id · @subject.Title</PageTitle>
 
@@ -24,7 +25,7 @@
     </nav>
 
     <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
-        <h1 class="h3">Questão @question.Id</h1>
+        <h1 class="h3">Questão @question.Id @if (discursive) { <span class="badge text-bg-secondary align-middle fs-6">Discursiva</span> }</h1>
         @if (editor?.CanEdit(question) == true)
         {
             <a class="btn btn-sm btn-outline-secondary" href="questoes/@question.Id/editar">Editar questão</a>
@@ -35,7 +36,58 @@
     @* HTML gerado pelo StatementFormatter: todo texto é escapado e só tags fixas são adicionadas. *@
     <div class="question-statement mb-4">@((MarkupString)StatementFormatter.ToHtml(question.Statement))</div>
 
-    @if (latest is not null && !Retry)
+    @if (discursive)
+    {
+        @if (discursiveAnswer is not null && !Retry)
+        {
+            <div class="alert alert-info" role="status">
+                Resposta enviada. Compare com o padrão de resposta e anote o que faltou no seu caderno de erros.
+            </div>
+
+            <div class="row g-3">
+                <section class="col-lg-6" aria-labelledby="my-answer">
+                    <h2 id="my-answer" class="h6">Sua resposta</h2>
+                    @* Texto do aluno renderizado como texto: o Blazor escapa, e as quebras de linha vêm do CSS. *@
+                    <div class="card"><div class="card-body discursive-text">@discursiveAnswer.Text</div></div>
+                </section>
+                <section class="col-lg-6" aria-labelledby="expected-answer">
+                    <h2 id="expected-answer" class="h6">Padrão de resposta</h2>
+                    <div class="card border-success">
+                        <div class="card-body question-statement">@((MarkupString)StatementFormatter.ToHtml(question.ExpectedAnswer ?? ""))</div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mt-3">
+                <a class="btn btn-outline-primary" href="questoes/@question.Id?refazer=1">Escrever de novo</a>
+                <a class="btn btn-link" href="questoes?materia=@subject.Slug">Mais questões de @subject.Title</a>
+            </div>
+        }
+        else if (userId is not null)
+        {
+            <form method="post" action="questoes/@question.Id" @formname="discursive-answer" @onsubmit="AnswerDiscursiveAsync">
+                <AntiforgeryToken />
+                <label for="AnswerText" class="form-label h6">Sua resposta</label>
+                @if (invalidChoice)
+                {
+                    <p class="text-danger" role="alert">Escreva sua resposta (até @QuestionBank.DiscursiveAnswerMaxLength caracteres) antes de enviar.</p>
+                }
+                <textarea id="AnswerText" name="AnswerText" class="form-control" rows="@(question.SuggestedLines ?? 15)"
+                          maxlength="@QuestionBank.DiscursiveAnswerMaxLength" required aria-describedby="answer-help">@AnswerText</textarea>
+                <div id="answer-help" class="form-text">
+                    Tamanho sugerido: cerca de @(question.SuggestedLines ?? 15) linhas. Depois de enviar, você vê o padrão de resposta. Só você vê o que escreveu.
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Enviar resposta</button>
+            </form>
+        }
+        else
+        {
+            <div class="alert alert-info" role="status">
+                <a href="@LoginUrl">Entre</a> ou <a href="Account/Register">crie sua conta</a> para escrever sua resposta e ver o padrão de resposta.
+            </div>
+        }
+    }
+    else if (latest is not null && !Retry)
     {
         var chosen = question.Options.First(o => o.Id == latest.OptionId);
 
@@ -116,6 +168,7 @@
 @code {
     private Question? question;
     private QuestionAttempt? latest;
+    private DiscursiveAnswer? discursiveAnswer;
     private string? userId;
     private Editor? editor;
     private bool invalidChoice;
@@ -132,6 +185,9 @@
     [SupplyParameterFromForm(FormName = "answer")]
     private string? Letter { get; set; }
 
+    [SupplyParameterFromForm(FormName = "discursive-answer")]
+    private string? AnswerText { get; set; }
+
     private bool Retry => RetryFlag == 1;
 
     private string LoginUrl => $"Account/Login?ReturnUrl={Uri.EscapeDataString($"/questoes/{Id}")}";
@@ -147,7 +203,16 @@
 
         userId = Users.GetUserId(HttpContext.User);
         editor = EditorFactory.From(HttpContext.User, userId);
-        if (userId is not null)
+        if (userId is null)
+        {
+            return;
+        }
+
+        if (question.Kind == QuestionKind.Discursive)
+        {
+            discursiveAnswer = await Bank.LatestDiscursiveAnswerAsync(userId, Id);
+        }
+        else
         {
             latest = await Bank.LatestAttemptAsync(userId, Id);
         }
@@ -171,6 +236,25 @@
         }
 
         latest = answer.Attempt;
+    }
+
+    private async Task AnswerDiscursiveAsync()
+    {
+        if (userId is null || question is null)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return;
+        }
+
+        var answer = await Bank.AnswerDiscursiveAsync(userId, question.Id, AnswerText);
+        if (answer is null)
+        {
+            invalidChoice = true;
+            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+            return;
+        }
+
+        discursiveAnswer = answer;
     }
 
     private static string OptionClass(QuestionOption option, QuestionOption chosen) =>

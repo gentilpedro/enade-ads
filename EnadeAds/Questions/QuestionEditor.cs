@@ -15,19 +15,27 @@ public sealed class QuestionDraft
 {
     public const int OptionCount = 5;
 
+    public QuestionKind Kind { get; set; }
     public int SubjectId { get; set; }
     public string Statement { get; set; } = "";
     public string Source { get; set; } = "";
     public char CorrectLetter { get; set; }
     public List<OptionDraft> Options { get; set; } = Enumerable.Range(0, OptionCount).Select(_ => new OptionDraft()).ToList();
+    public string ExpectedAnswer { get; set; } = "";
+    public int? SuggestedLines { get; set; }
 
     public static QuestionDraft From(Question question) => new()
     {
+        Kind = question.Kind,
         SubjectId = question.SubjectId,
+        ExpectedAnswer = question.ExpectedAnswer ?? "",
+        SuggestedLines = question.SuggestedLines,
         Statement = question.Statement,
         Source = question.Source,
         CorrectLetter = question.Options.FirstOrDefault(o => o.IsCorrect)?.Letter ?? 'A',
-        Options = question.Options.OrderBy(o => o.Letter).Select(o => new OptionDraft { Text = o.Text, Explanation = o.Explanation }).ToList(),
+        Options = question.Kind == QuestionKind.Objective
+            ? question.Options.OrderBy(o => o.Letter).Select(o => new OptionDraft { Text = o.Text, Explanation = o.Explanation }).ToList()
+            : new QuestionDraft().Options,
     };
 }
 
@@ -51,6 +59,8 @@ public sealed class QuestionEditor(ApplicationDbContext db, TimeProvider clock, 
     public const int StatementMaxLength = 8000;
     public const int SourceMaxLength = 200;
     public const int OptionMaxLength = 2000;
+    public const int ExpectedAnswerMaxLength = 5000;
+    public const int MaxSuggestedLines = 60;
 
     public async Task<EditResult> CreateAsync(Editor editor, QuestionDraft draft, CancellationToken cancellationToken = default)
     {
@@ -65,14 +75,18 @@ public sealed class QuestionEditor(ApplicationDbContext db, TimeProvider clock, 
             return new EditResult(null, errors);
         }
 
+        var objective = draft.Kind == QuestionKind.Objective;
         var question = new Question
         {
+            Kind = draft.Kind,
             SubjectId = draft.SubjectId,
             Statement = Normalize(draft.Statement),
             Source = draft.Source.Trim(),
             AuthorId = editor.UserId,
             CreatedAt = clock.GetUtcNow(),
-            Options = draft.Options.Select((option, index) => NewOption(draft, option, index)).ToList(),
+            ExpectedAnswer = objective ? null : Normalize(draft.ExpectedAnswer),
+            SuggestedLines = objective ? null : draft.SuggestedLines,
+            Options = objective ? draft.Options.Select((option, index) => NewOption(draft, option, index)).ToList() : [],
         };
 
         db.Questions.Add(question);
@@ -95,6 +109,12 @@ public sealed class QuestionEditor(ApplicationDbContext db, TimeProvider clock, 
             return EditResult.Fail("Só o autor da questão ou um administrador pode editá-la.");
         }
 
+        // O tipo fica fixo depois de publicada: as respostas já dadas dependem dele.
+        if (draft.Kind != question.Kind)
+        {
+            return EditResult.Fail("O tipo da questão (objetiva ou discursiva) não muda depois de publicada.");
+        }
+
         var errors = await ValidateAsync(draft, cancellationToken);
         if (errors.Count > 0)
         {
@@ -104,6 +124,12 @@ public sealed class QuestionEditor(ApplicationDbContext db, TimeProvider clock, 
         question.SubjectId = draft.SubjectId;
         question.Statement = Normalize(draft.Statement);
         question.Source = draft.Source.Trim();
+
+        if (question.Kind == QuestionKind.Discursive)
+        {
+            question.ExpectedAnswer = Normalize(draft.ExpectedAnswer);
+            question.SuggestedLines = draft.SuggestedLines;
+        }
 
         // Atualiza as alternativas no lugar (mesmo id por letra), para as tentativas antigas continuarem apontando para elas.
         foreach (var (option, index) in question.Options.OrderBy(o => o.Letter).Select((o, i) => (o, i)))
@@ -152,6 +178,23 @@ public sealed class QuestionEditor(ApplicationDbContext db, TimeProvider clock, 
 
         Require(draft.Statement, "o enunciado", StatementMaxLength, errors);
         Require(draft.Source, "a fonte", SourceMaxLength, errors);
+
+        if (draft.Kind == QuestionKind.Discursive)
+        {
+            Require(draft.ExpectedAnswer, "o padrão de resposta", ExpectedAnswerMaxLength, errors);
+            if (draft.SuggestedLines is < 1 or > MaxSuggestedLines)
+            {
+                errors.Add($"O tamanho sugerido precisa ficar entre 1 e {MaxSuggestedLines} linhas.");
+            }
+
+            return errors;
+        }
+
+        if (draft.Kind != QuestionKind.Objective)
+        {
+            errors.Add("Escolha se a questão é objetiva ou discursiva.");
+            return errors;
+        }
 
         if (draft.Options.Count != QuestionDraft.OptionCount)
         {

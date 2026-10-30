@@ -51,7 +51,31 @@
 
 @if (subjects is not null)
 {
-    <EditForm Model="Input" method="post" FormName="question-form" OnSubmit="SubmitAsync">
+    <EditForm Model="Input" method="post" FormName="question-form" OnSubmit="SubmitAsync" class="question-form">
+        @if (IsNew)
+        {
+            <fieldset class="mb-3">
+                <legend class="h6">Tipo</legend>
+                <InputRadioGroup @bind-Value="Input.Kind" Name="Input.Kind">
+                    <div class="form-check form-check-inline">
+                        <InputRadio Value="QuestionKind.Objective" id="kind-objective" class="form-check-input" />
+                        <label class="form-check-label" for="kind-objective">Objetiva (5 alternativas)</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <InputRadio Value="QuestionKind.Discursive" id="kind-discursive" class="form-check-input" />
+                        <label class="form-check-label" for="kind-discursive">Discursiva (padrão de resposta)</label>
+                    </div>
+                </InputRadioGroup>
+            </fieldset>
+        }
+        else
+        {
+            <input type="hidden" name="Input.Kind" value="@Input.Kind" />
+            <p class="small text-body-secondary">
+                Tipo: <strong>@(Input.Kind == QuestionKind.Discursive ? "Discursiva" : "Objetiva")</strong>. O tipo não muda depois de publicada.
+            </p>
+        }
+
         <div class="row g-3 mb-3">
             <div class="col-md-6">
                 <label for="Input.SubjectId" class="form-label">Matéria</label>
@@ -81,7 +105,23 @@
             </div>
         </div>
 
-        <fieldset class="mb-3">
+        @* Na edição o tipo é fixo: renderiza só a seção dele. Na criação, as duas, e o CSS esconde a outra. *@
+        @if (IsNew || Input.Kind == QuestionKind.Discursive)
+        {
+        <div class="discursive-fields mb-3">
+            <label for="Input.ExpectedAnswer" class="form-label">Padrão de resposta</label>
+            <InputTextArea @bind-Value="Input.ExpectedAnswer" id="Input.ExpectedAnswer" class="form-control" rows="8"
+                           maxlength="@QuestionEditor.ExpectedAnswerMaxLength" aria-describedby="expected-help" />
+            <div id="expected-help" class="form-text">O que uma boa resposta deve conter. O aluno só vê depois de enviar a dele. Aceita a mesma marcação do enunciado.</div>
+            <label for="Input.SuggestedLines" class="form-label mt-2">Tamanho sugerido (linhas)</label>
+            <InputNumber @bind-Value="Input.SuggestedLines" id="Input.SuggestedLines" class="form-control w-auto" min="1" max="@QuestionEditor.MaxSuggestedLines" />
+        </div>
+        }
+
+        @if (IsNew || Input.Kind == QuestionKind.Objective)
+        {
+
+        <fieldset class="objective-fields mb-3">
             <legend class="h6">Alternativas</legend>
             <InputRadioGroup @bind-Value="Input.CorrectLetter" Name="Input.CorrectLetter">
                 @for (var index = 0; index < QuestionDraft.OptionCount; index++)
@@ -108,6 +148,7 @@
                 }
             </InputRadioGroup>
         </fieldset>
+        }
 
         <div class="d-flex flex-wrap gap-2">
             <button type="submit" name="Command" value="@PreviewCommand" class="btn btn-outline-primary">Pré-visualizar</button>
@@ -122,6 +163,13 @@
             <div class="card">
                 <div class="card-body">
                     <div class="question-statement mb-3">@((MarkupString)StatementFormatter.ToHtml(Input.Statement))</div>
+                    @if (Input.Kind == QuestionKind.Discursive)
+                    {
+                        <h3 class="h6">Padrão de resposta</h3>
+                        <div class="question-statement">@((MarkupString)StatementFormatter.ToHtml(Input.ExpectedAnswer))</div>
+                    }
+                    else
+                    {
                     <ol class="list-unstyled mb-0">
                         @for (var index = 0; index < Input.Options.Count; index++)
                         {
@@ -137,6 +185,7 @@
                             </li>
                         }
                     </ol>
+                    }
                 </div>
             </div>
         </section>
@@ -194,6 +243,7 @@
         if (IsNew)
         {
             Input ??= new QuestionFormModel();
+            Input.EnsureOptions();
             return;
         }
 
@@ -214,6 +264,10 @@
 
         archived = question.ArchivedAt is not null;
         Input ??= QuestionFormModel.From(QuestionDraft.From(question));
+
+        // O tipo é fixo na edição; o que veio no POST não troca o tipo da questão.
+        Input.Kind = question.Kind;
+        Input.EnsureOptions();
     }
 
     private async Task SubmitAsync()
@@ -261,6 +315,9 @@
 
     private sealed class QuestionFormModel
     {
+        public QuestionKind Kind { get; set; } = QuestionKind.Objective;
+        public string ExpectedAnswer { get; set; } = "";
+        public int? SuggestedLines { get; set; } = 15;
         public int SubjectId { get; set; }
         public string Statement { get; set; } = "";
         public string Source { get; set; } = "";
@@ -269,6 +326,9 @@
 
         public static QuestionFormModel From(QuestionDraft draft) => new()
         {
+            Kind = draft.Kind,
+            ExpectedAnswer = draft.ExpectedAnswer,
+            SuggestedLines = draft.SuggestedLines,
             SubjectId = draft.SubjectId,
             Statement = draft.Statement,
             Source = draft.Source,
@@ -276,8 +336,24 @@
             Options = draft.Options,
         };
 
+        /// <summary>
+        /// Uma discursiva não envia alternativas (na edição a seção nem é renderizada), e o binding
+        /// deixa a lista vazia. Completa com alternativas em branco para a tela e o rascunho.
+        /// </summary>
+        public void EnsureOptions()
+        {
+            Options ??= [];
+            while (Options.Count < QuestionDraft.OptionCount)
+            {
+                Options.Add(new OptionDraft());
+            }
+        }
+
         public QuestionDraft ToDraft() => new()
         {
+            Kind = Kind,
+            ExpectedAnswer = ExpectedAnswer,
+            SuggestedLines = SuggestedLines,
             SubjectId = SubjectId,
             Statement = Statement,
             Source = Source,

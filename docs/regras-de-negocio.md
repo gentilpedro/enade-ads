@@ -56,10 +56,18 @@ Alunos também têm e-mail institucional, muitas vezes no mesmo domínio dos pro
 - Cada resposta fica registrada como uma tentativa. O aluno pode responder de novo quantas vezes quiser; a lista de questões mostra o resultado da tentativa mais recente.
 - Toda questão informa a fonte: prova e ano do Inep, ou autoria própria.
 
+### Questões discursivas
+
+- A discursiva tem enunciado, **padrão de resposta** (o que uma boa resposta deve conter) e um tamanho sugerido em linhas.
+- Visitante vê só o enunciado. O aluno logado escreve a resposta e **só depois de enviar** vê o padrão de resposta, lado a lado com o que escreveu.
+- A resposta não recebe nota automática: o aluno compara com o padrão. Na lista, a questão aparece como **Respondida**.
+- Só o próprio aluno vê o que escreveu. Ele pode escrever de novo quantas vezes quiser.
+
 ### Publicação de questões
 
 - **Professor** e **Admin** criam questões. Professor edita e arquiva só as que ele criou; Admin edita e arquiva qualquer uma.
-- Toda questão tem matéria, enunciado, fonte, 5 alternativas com texto e comentário, e exatamente uma correta. A validação acontece no servidor.
+- Toda questão tem matéria, enunciado e fonte. A objetiva tem 5 alternativas com texto e comentário, e exatamente uma correta; a discursiva tem padrão de resposta. A validação acontece no servidor.
+- O tipo (objetiva ou discursiva) é escolhido ao criar e não muda depois.
 - Antes de publicar, dá para pré-visualizar a questão como o aluno vai ver.
 - **Arquivar** tira a questão das listas e da página pública. As respostas que os alunos já deram continuam no histórico deles.
 - Editar uma questão não muda o resultado das respostas antigas: cada tentativa guarda se acertou no momento em que respondeu.
