@@ -11,7 +11,9 @@
     <link rel="stylesheet" href="@Assets["app.css"]" />
     <link rel="stylesheet" href="@Assets["EnadeAds.styles.css"]" />
     <ImportMap />
-    <link rel="icon" type="image/png" href="favicon.png" />
+    @* Pelo @Assets o endereço muda junto com a imagem, e o navegador não fica com o ícone antigo em cache. *@
+    <link rel="icon" type="image/png" sizes="64x64" href="@Assets["favicon.png"]" />
+    <link rel="apple-touch-icon" href="@Assets["apple-touch-icon.png"]" />
     <!-- Bloqueante de propósito: aplica o tema antes do primeiro paint. -->
     <script src="@Assets["js/theme.js"]"></script>
     <HeadOutlet />
