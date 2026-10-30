@@ -132,11 +132,11 @@ jobs:
           SMTP__USERNAME: ${{ secrets.SMTP__USERNAME }}
           SMTP__PASSWORD: ${{ secrets.SMTP__PASSWORD }}
           SMTP__FROMADDRESS: ${{ secrets.SMTP__FROMADDRESS }}
-          ADMIN__EMAILS__0: ${{ secrets.ADMIN__EMAILS__0 }}
+          Admin__Emails__0: ${{ secrets.ADMIN__EMAILS__0 }}
           PRIVACY__CONTROLLERNAME: ${{ secrets.PRIVACY__CONTROLLERNAME }}
           PRIVACY__CONTACTEMAIL: ${{ secrets.PRIVACY__CONTACTEMAIL }}
         run: |
-          for nome in SMTP__HOST SMTP__USERNAME SMTP__PASSWORD SMTP__FROMADDRESS ADMIN__EMAILS__0 PRIVACY__CONTROLLERNAME PRIVACY__CONTACTEMAIL; do
+          for nome in SMTP__HOST SMTP__USERNAME SMTP__PASSWORD SMTP__FROMADDRESS Admin__Emails__0 PRIVACY__CONTROLLERNAME PRIVACY__CONTACTEMAIL; do
             [ -n "${!nome}" ] || { echo "::error::secret $nome não cadastrado no repositório"; exit 1; }
             printf '%s=%s\n' "$nome" "${!nome}"
           done | ssh -o BatchMode=yes "deploy@${{ secrets.VPS_HOST }}" set-secrets
