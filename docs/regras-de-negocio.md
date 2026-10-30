@@ -48,8 +48,8 @@ Alunos também têm e-mail institucional, muitas vezes no mesmo domínio dos pro
 
 - O cadastro exige aceitar os **Termos de uso** e a **Política de privacidade**. A data e a versão aceitas ficam guardadas na conta.
 - Os textos ficam em `/termos` e `/privacidade`, com link no rodapé de todas as páginas. O responsável pelos dados e o e-mail de contato vêm da configuração (`Privacy:ControllerName`, `Privacy:ContactEmail`), porque cada instalação tem o seu responsável.
-- **Baixar meus dados** (Minha conta → Dados pessoais) entrega um arquivo com a conta, o progresso no roadmap, as respostas, os simulados, os desafios e os comentários.
-- **Excluir a conta** apaga a conta, o progresso, as respostas objetivas e discursivas, os simulados e os envios de desafio. Os **comentários no blog continuam, sem o nome** ("Participante que excluiu a conta"). Questões, desafios e posts que um professor publicou continuam, sem autor.
+- **Baixar meus dados** (Minha conta → Dados pessoais) entrega um arquivo com a conta, o progresso no roadmap, as respostas, os simulados, os desafios, os posts, os votos, as denúncias e os comentários.
+- **Excluir a conta** apaga a conta, o progresso, as respostas objetivas e discursivas, os simulados e os envios de desafio. Os votos saem junto. Os **posts e comentários da comunidade continuam, sem o nome** ("Participante que excluiu a conta"). Questões, desafios e avisos que um professor publicou continuam, assinados como "Equipe ENADE ADS".
 - Registros técnicos de acesso ficam até 31 dias; cópias de segurança, até 30 dias.
 - O conteúdo publicado por professores segue a licença Creative Commons BY-SA 4.0; o código, a licença MIT.
 
@@ -104,18 +104,37 @@ Alunos também têm e-mail institucional, muitas vezes no mesmo domínio dos pro
 - Discursivas não têm nota automática: o painel mostra só quantas o aluno respondeu.
 - O painel também mostra o progresso no roadmap e a nota de cada desafio de que o aluno participou.
 
-## Blog de atualizações
+## Comunidade (página inicial)
 
-- O blog reúne **atualizações sobre o ENADE** em quatro categorias: *Datas e prazos*, *Portarias e editais*, *Dicas de estudo* e *Avisos da turma*.
-- **Professor** e **Admin** escrevem posts com título, resumo, texto, categoria e, se houver, o link da **fonte oficial** (sempre https).
-- O post pode ficar como **rascunho** (só o autor e os admins veem) até ser publicado. Professor edita só os próprios posts; admin edita qualquer um.
+A página inicial é um feed no estilo Reddit, onde professores publicam avisos e a turma conversa.
+
+### Quem publica o quê
+
+- **Qualquer pessoa lê** o feed, os posts e os comentários, sem conta.
+- **Publicar, votar, comentar e denunciar exigem login.**
+- **Aluno** publica direto, sem aprovação, nas categorias *Dúvidas*, *Discussão* e *Dicas de estudo*.
+- **Professor** e **Admin** publicam também nas categorias de aviso oficial: *Datas e prazos*, *Portarias e editais* e *Avisos da turma*.
+- Post de professor ou admin é **aviso oficial**: leva o selo *Professor*, aparece na aba *Avisos oficiais* e no feed RSS (`/blog/feed.xml`, os 20 mais recentes).
+- Aluno publica no máximo **5 posts por hora** (contra spam). Professor e admin não têm limite.
+- O post tem título, texto e categoria; resumo e link (sempre https) são opcionais. Sem resumo, o feed mostra o começo do texto.
+- O post pode ficar como **rascunho** (só o autor vê) até ser publicado. O autor edita o próprio post; admin edita qualquer um.
 - O endereço do post (`/blog/titulo-do-post`) sai do título e **não muda depois de publicado**, para links compartilhados continuarem valendo.
-- **Fixar** coloca o post no topo do blog e da página inicial. Só um post fica fixado por vez.
-- **Arquivar** tira o post do blog, da página inicial e do feed. Publicar de novo traz ele de volta.
-- Qualquer pessoa lê posts e comentários. **Comentar exige login.**
-- O autor edita e exclui o próprio comentário; professor e admin excluem qualquer comentário (moderação).
+- **Arquivar** (autor ou admin) tira o post do feed; publicar de novo traz ele de volta.
+
+### Feed e votos
+
+- Abas: **Em alta** (padrão), **Novos** e **Avisos oficiais**, com filtro por categoria.
+- Cada pessoa dá **um voto** por post, a favor (+1) ou contra (-1). Clicar de novo no mesmo voto desfaz; clicar no outro troca.
+- *Em alta* combina pontuação e idade: `(pontos + 1) / (horas desde a publicação + 2)^1,5`. Um post bem votado sobe, mas não fica no topo para sempre.
+- **Fixar** (professor nos próprios posts, admin em qualquer um) coloca o post no topo do feed, em todas as abas. Só um post fica fixado por vez.
+
+### Moderação
+
+- **Professor e admin removem** qualquer post. Post removido some do feed e o autor não consegue editar nem publicar de novo; ele ainda vê o post com o aviso de remoção. Professor e admin podem **restaurar**.
+- O autor exclui o próprio comentário; professor e admin excluem qualquer comentário.
+- Qualquer pessoa logada pode **denunciar** um post (com motivo opcional) ou um comentário. Denunciar de novo o mesmo item não duplica.
+- A página **Moderação** (professor e admin) lista as denúncias abertas, agrupadas por item. *Remover* tira o conteúdo do ar; *Manter* encerra a denúncia sem mexer no conteúdo. Remover um post encerra também as denúncias dos comentários dele.
 - O texto do post aceita a marcação mínima (parágrafos, listas, negrito, links e imagens por https). Comentários são texto puro.
-- O feed RSS (`/blog/feed.xml`) traz os 20 posts publicados mais recentes.
 
 ## Desafios semanais
 
