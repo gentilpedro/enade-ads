@@ -11,6 +11,7 @@ using EnadeAds.Questions;
 using EnadeAds.Security;
 using EnadeAds.Study;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -109,6 +110,18 @@ try
         }
     });
 
+    // /health: o deploy só dá a versão como no ar quando ele responde (e volta a anterior se não responder).
+    builder.Services.AddHealthChecks();
+
+    // Em produção as chaves que protegem o cookie de login e os formulários ficam num volume
+    // (DataProtection:KeysPath): sem isso, cada deploy tiraria todo mundo da conta.
+    if (builder.Configuration["DataProtection:KeysPath"] is { Length: > 0 } keysPath)
+    {
+        builder.Services.AddDataProtection()
+            .SetApplicationName("Rumo")
+            .PersistKeysToFileSystem(new DirectoryInfo(keysPath));
+    }
+
     builder.Services.AddScoped<PersonalDataExport>();
     builder.Services.Configure<PrivacyOptions>(builder.Configuration.GetSection(PrivacyOptions.SectionName));
 
@@ -167,6 +180,10 @@ try
     // Add additional endpoints required by the Identity /Account Razor components.
     app.MapAdditionalIdentityEndpoints();
     app.MapBlogFeed();
+
+    // As migrations rodam antes do app começar a atender (DatabaseInitializer), então /health só
+    // responde com o banco atualizado.
+    app.MapHealthChecks("/health");
 
     app.Run();
 }
