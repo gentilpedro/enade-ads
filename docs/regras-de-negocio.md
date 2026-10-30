@@ -49,6 +49,16 @@ Alunos também têm e-mail institucional, muitas vezes no mesmo domínio dos pro
 - A porcentagem conta só matérias e assuntos concluídos; checkpoints são marcos e não entram na conta.
 - A contagem regressiva usa a data da prova configurada (`Enade:ExamDate`) e o fuso de São Paulo.
 
+## Painel de desempenho
+
+- A página **Meu desempenho** é só do próprio aluno; ninguém mais vê os números dele.
+- Em cada questão objetiva vale a **resposta mais recente**: errou e depois acertou, conta como acerto.
+- A taxa de acerto aparece no total, por bloco e por matéria. **Revise primeiro** lista as 3 matérias com menor acerto entre as que o aluno já respondeu.
+- O **caderno de erros** lista as questões em que a última resposta foi errada, com link para refazer. Ao acertar, a questão sai da lista. Questões arquivadas não aparecem.
+- Respostas de um desafio **ainda aberto** não entram no painel, para não revelar quais questões estão erradas antes do gabarito sair. Depois que o desafio encerra, elas passam a contar.
+- Discursivas não têm nota automática: o painel mostra só quantas o aluno respondeu.
+- O painel também mostra o progresso no roadmap e a nota de cada desafio de que o aluno participou.
+
 ## Blog de atualizações
 
 - O blog reúne **atualizações sobre o ENADE** em quatro categorias: *Datas e prazos*, *Portarias e editais*, *Dicas de estudo* e *Avisos da turma*.
