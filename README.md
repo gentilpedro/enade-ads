@@ -1,38 +1,61 @@
-# ENADE ADS
+# Rumo
 
-Plataforma aberta para estudantes de **Tecnologia em Análise e Desenvolvimento de Sistemas** se prepararem para o ENADE.
+**Plataforma de estudos gratuita e unificada para as provas que abrem portas.** Em vez de um site para cada exame, o Rumo reúne num lugar só o que o estudante precisa para chegar preparado: o que estudar, em que ordem, questões no formato da prova com gabarito comentado, simulados cronometrados e uma comunidade com professores de verdade.
 
-## O que a plataforma terá
+**Acesse: [rumo.aamora.com.br](https://rumo.aamora.com.br)**. Ler é livre, sem conta. Para responder, votar e publicar, basta se cadastrar.
 
-- **Roadmap de estudos** com os conteúdos da Portaria Inep nº 169/2026 e o progresso de cada aluno salvo na conta.
-- **Matérias** organizadas pelos objetos de conhecimento do ENADE.
-- **Banco de questões com gabarito** e comentário de cada alternativa.
-- **Desafios semanais** e questões novas publicados por professores a qualquer momento.
-- **Fórum de avisos** para centralizar comunicados da turma.
-- **Cadastro e login** com dois perfis:
-  - **Aluno:** todo cadastro entra como aluno.
-  - **Professor:** quem marca "Sou professor" e usa e-mail institucional (domínio com `.edu`) fica como *professor pendente* e usa a conta como aluno até um administrador aprovar.
+O código é aberto (MIT) e o conteúdo cresce com quem usa: professores propõem questões e ajustes no roadmap, e outro professor revisa antes de publicar.
 
-As regras de perfis e de acesso estão em [docs/regras-de-negocio.md](docs/regras-de-negocio.md).
+## Uma plataforma, várias provas
 
-## Questões das provas do Inep
+Cada prova é uma **trilha**. Ao entrar, o estudante escolhe a dele, e a marca passa a mostrar onde ele está: "Rumo ENEM", "Rumo ENADE ADS". Dá para trocar de trilha a qualquer momento, e cada uma tem roadmap, questões, desafios, simulados e datas próprios.
 
-O banco já vem com as questões de ADS do ENADE 2021 e 2017, em `EnadeAds/Data/Seed/inep/*.json`, importadas ao subir a aplicação
-(só entram as que ainda não existem; correções feitas pelos professores na tela não são sobrescritas). As figuras ficam em
-`EnadeAds/wwwroot/img/inep/`.
+| Trilha | Para quem | Situação |
+|---|---|---|
+| **ENEM 2026** | Quem está terminando o ensino médio. Provas em 08/11 e 15/11/2026 | No ar: roadmap pela Matriz de Referência (4 áreas e redação), questões de autoria própria e simulado no ritmo do ENEM |
+| **ENADE 2026 · ADS** | Estudantes de Tecnologia em Análise e Desenvolvimento de Sistemas. Prova em 29/11/2026 | No ar: roadmap pela Portaria Inep nº 169/2026, provas reais de 2017 e 2021 e simulado no formato do ENADE |
+| **Seletivos de IFs** (como o IFSul) | Quem vai entrar no ensino médio técnico | Próxima trilha |
 
-- **Fonte:** provas e gabaritos definitivos publicados em [download.inep.gov.br](https://download.inep.gov.br/enade/provas_e_gabaritos/).
-- **Licença:** o portal do Inep publica seu conteúdo sob [Creative Commons Atribuição-SemDerivações 3.0](https://creativecommons.org/licenses/by-nd/3.0/deed.pt_BR).
-  Por isso enunciados e alternativas são transcritos sem alterações e cada questão cita prova, ano e número.
-  Os comentários das alternativas e os padrões de resposta das discursivas são da plataforma (CC BY-SA 4.0); o Inep não publicou padrão de resposta acessível para essas provas.
-- **Anuladas:** a questão 15 de 2017 foi anulada pelo Inep e não entra.
+## O que tem em cada trilha
 
-## Stack
+- **Roadmap de estudos:** as matérias da prova em ordem, divididas em assuntos e checkpoints. O progresso fica salvo na conta.
+- **Questões com gabarito comentado:** cada alternativa explica por que está certa ou errada. As discursivas trazem um padrão de resposta.
+- **Simulados cronometrados** no formato da prova, com questões das várias áreas e correção ao final.
+- **Desafios semanais** publicados pelos professores.
+- **Meu desempenho:** acertos por matéria, para saber onde focar.
+- **Grade do semestre:** quantas semanas faltam, os desafios de cada semana e o dia da prova.
+- **Comunidade:** feed com avisos oficiais, dúvidas e votos, moderado por professores.
 
-- Blazor Web App .NET 10 (render mode `InteractiveAuto`), a partir do template [`GentilPedro.Templates.Blazor10`](https://github.com/gentilpedro/template-dotnet-blazor10)
-- Bootstrap, tema claro/escuro
-- Serilog
-- xUnit
+## Quem participa
+
+- **Estudantes:** todo cadastro começa como estudante. Só cria conta quem tem 13 anos ou mais; de 13 a 17 anos, com autorização do responsável legal.
+- **Professores:** quem se cadastra com e-mail institucional (`.edu`) e marca "Sou professor" vira professor depois da aprovação de um administrador. Professores criam e corrigem questões, mexem no roadmap e publicam desafios. **Cada edição passa por revisão:** ela só vale depois que outro professor ou um administrador aprova, na página *Revisões*.
+- **Administradores:** aprovam professores, cuidam das contas e definem as datas das provas.
+
+As regras completas estão em [docs/regras-de-negocio.md](docs/regras-de-negocio.md).
+
+## Privacidade
+
+O Rumo coleta o mínimo: nome, e-mail e a faixa de idade, sem data de nascimento, documento ou escola. Os termos de uso e a política de privacidade seguem a LGPD, incluindo o art. 14, sobre crianças e adolescentes. Cada pessoa pode baixar todos os seus dados ou excluir a conta pela própria página da conta.
+
+## De onde vêm as questões
+
+- **ENADE (Inep):** as questões de ADS das provas de 2021 e 2017 estão em `EnadeAds/Data/Seed/inep/*.json`. As figuras ficam em `EnadeAds/wwwroot/img/inep/`.
+  - **Fonte:** as provas e os gabaritos definitivos de [download.inep.gov.br](https://download.inep.gov.br/enade/provas_e_gabaritos/).
+  - **Licença:** o portal do Inep publica sob [CC BY-ND 3.0](https://creativecommons.org/licenses/by-nd/3.0/deed.pt_BR). Por isso enunciados e alternativas são transcritos sem alteração, e cada questão cita a prova, o ano e o número.
+  - **Anulada:** a questão 15 de 2017 foi anulada pelo Inep e não entra.
+- **ENEM:** as questões de `EnadeAds/Data/Seed/enem/` são de autoria própria. As provas oficiais do ENEM vão entrar numa próxima versão.
+- **Comentários e padrões de resposta** são da plataforma e ficam sob [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.pt_BR).
+
+As questões entram quando a aplicação sobe. Só são importadas as que ainda não existem, então as correções feitas pelos professores na tela não são sobrescritas.
+
+## Como funciona por dentro
+
+- Blazor Web App .NET 10, a partir do template [`GentilPedro.Templates.Blazor10`](https://github.com/gentilpedro/template-dotnet-blazor10). As páginas são renderizadas no servidor, com formulários, e funcionam sem JavaScript.
+- PostgreSQL com EF Core. Um filtro global recorta roadmap, questões, desafios, simulados e posts pela trilha ativa.
+- ASP.NET Core Identity com confirmação de e-mail, perfis e limite de tentativas por IP.
+- Bootstrap restilizado, tema claro e escuro.
+- Serilog e xUnit.
 
 ## Rodando localmente
 
@@ -41,11 +64,15 @@ Requer o [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) e o Do
 ```bash
 docker compose up -d          # PostgreSQL local
 dotnet tool restore           # dotnet-ef
-dotnet run --project EnadeAds # aplica as migrations ao subir
+dotnet run --project EnadeAds # aplica as migrations e importa as questões ao subir
 dotnet test                   # usa SQLite em memória, não precisa do Docker
 ```
 
 Em desenvolvimento, sem SMTP configurado, o link de confirmação de e-mail aparece na própria tela depois do cadastro.
+
+Migrations novas: `dotnet ef migrations add <Nome> --project EnadeAds --output-dir Data/Migrations`.
+
+O projeto e o namespace ainda se chamam `EnadeAds`, o nome de quando a plataforma era só do ENADE. A troca para `Rumo` fica para outra hora.
 
 ## Configuração em produção
 
@@ -55,19 +82,20 @@ Use variáveis de ambiente (o `__` separa as seções):
 |---|---|
 | `ConnectionStrings__DefaultConnection` | String de conexão do PostgreSQL |
 | `Admin__Emails__0`, `Admin__Emails__1`... | E-mails que recebem o perfil Admin ao se cadastrar |
-| `Smtp__Host`, `Smtp__Port`, `Smtp__UserName`, `Smtp__Password`, `Smtp__FromAddress` | Envio dos e-mails de confirmação e de senha |
+| `Smtp__Host`, `Smtp__Port`, `Smtp__EnableSsl`, `Smtp__UserName`, `Smtp__Password`, `Smtp__FromAddress` | Envio dos e-mails de confirmação e de senha |
 | `ReverseProxy__KnownNetworks__0` | Rede do proxy reverso (ex.: `172.18.0.0/16`), para ler o IP real do `X-Forwarded-For` |
 | `Privacy__ControllerName`, `Privacy__ContactEmail` | Quem responde pelos dados desta instalação e o e-mail para pedidos de titulares (LGPD), mostrados na política de privacidade |
 | `RateLimit__AccountPostsPerMinute` | Envios de formulários de conta por IP por minuto (padrão 10) |
+| `DataProtection__KeysPath` | Pasta das chaves de login. Num container, precisa ser um volume para ninguém perder a sessão a cada deploy |
 
-Fora de desenvolvimento a aplicação sobe sem SMTP, mas não envia e-mail nem mostra o link de confirmação na tela (isso deixaria confirmar qualquer endereço `.edu`). Até o SMTP ser configurado, ninguém consegue confirmar conta nova, e o log avisa a cada e-mail não enviado.
+Sem SMTP, a aplicação sobe fora de desenvolvimento, mas não envia e-mail nem mostra o link de confirmação na tela. Mostrar o link deixaria qualquer um confirmar um endereço `.edu` que não é seu. Até o SMTP ser configurado, ninguém confirma conta nova, e o log avisa a cada e-mail não enviado.
 
-Migrations novas: `dotnet ef migrations add <Nome> --project EnadeAds --output-dir Data/Migrations`.
+A instalação oficial roda numa VPS com Docker e Nginx, e cada tag `vX.Y.Z` publica uma versão nova. Os detalhes estão em [deploy/vps/README.md](deploy/vps/README.md).
 
 ## Contribuindo
 
-Veja [CONTRIBUTING.md](CONTRIBUTING.md).
+Questões, correções e trilhas novas são bem-vindas. Veja [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Licença
 
-[MIT](LICENSE)
+O código está sob a [MIT](LICENSE). O conteúdo próprio da plataforma está sob a CC BY-SA 4.0, e as provas do Inep, sob a CC BY-ND 3.0.
