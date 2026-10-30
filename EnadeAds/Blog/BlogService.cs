@@ -31,6 +31,9 @@ public sealed class PostDraft
     public string Body { get; set; } = "";
     public PostCategory Category { get; set; }
     public string SourceUrl { get; set; } = "";
+
+    /// <summary>Só para posts oficiais: aparece em todas as trilhas, não só na ativa.</summary>
+    public bool AllTracks { get; set; }
 }
 
 public enum PostAction
@@ -164,6 +167,8 @@ public sealed partial class BlogService(ApplicationDbContext db, TimeProvider cl
             SourceUrl = string.IsNullOrWhiteSpace(draft.SourceUrl) ? null : draft.SourceUrl.Trim(),
             AuthorId = editor.UserId,
             IsOfficial = editor.CanCreate,
+            // Aluno publica sempre na trilha ativa; professor pode falar com a plataforma inteira.
+            TrackId = editor.CanCreate && draft.AllTracks ? null : db.CurrentTrackId,
             CreatedAt = now,
             UpdatedAt = now,
             PublishedAt = action == PostAction.Publish ? now : null,
@@ -207,6 +212,11 @@ public sealed partial class BlogService(ApplicationDbContext db, TimeProvider cl
         post.Summary = SummaryOrExcerpt(draft);
         post.Body = Normalize(draft.Body);
         post.Category = draft.Category;
+        if (editor.CanCreate)
+        {
+            post.TrackId = draft.AllTracks ? null : post.TrackId ?? db.CurrentTrackId;
+        }
+
         post.SourceUrl = string.IsNullOrWhiteSpace(draft.SourceUrl) ? null : draft.SourceUrl.Trim();
         post.UpdatedAt = clock.GetUtcNow();
         if (action == PostAction.Publish)
@@ -528,7 +538,7 @@ public sealed partial class BlogService(ApplicationDbContext db, TimeProvider cl
 
     private static string PostAuthorLabel(Post post, string? fullName) =>
         post.AuthorId is null
-            ? post.IsOfficial ? "Equipe ENADE ADS" : "Participante que excluiu a conta"
+            ? post.IsOfficial ? "Equipe Rumo" : "Participante que excluiu a conta"
             : string.IsNullOrWhiteSpace(fullName) ? "Participante" : fullName;
 
     private static string CommentAuthorLabel(string? userId, string? fullName) =>

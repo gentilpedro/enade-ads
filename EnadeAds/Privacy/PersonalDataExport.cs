@@ -13,9 +13,11 @@ public sealed class PersonalDataExport(ApplicationDbContext db, UserManager<Appl
     {
         var userId = user.Id;
 
+        // A exportação cobre todas as trilhas, não só a ativa: por isso IgnoreQueryFilters.
+
         var roadmap = await db.RoadmapProgress.AsNoTracking()
             .Where(p => p.UserId == userId)
-            .Join(db.RoadmapNodes, p => p.NodeId, n => n.Id, (p, n) => new { Topico = n.Title, Status = p.Status.ToString(), Atualizado = p.UpdatedAt })
+            .Join(db.RoadmapNodes.IgnoreQueryFilters(), p => p.NodeId, n => n.Id, (p, n) => new { Topico = n.Title, Status = p.Status.ToString(), Atualizado = p.UpdatedAt })
             .ToListAsync(cancellationToken);
 
         var attempts = await db.QuestionAttempts.AsNoTracking()
@@ -34,29 +36,29 @@ public sealed class PersonalDataExport(ApplicationDbContext db, UserManager<Appl
             .Select(s => new { Desafio = s.ChallengeId, Acertos = s.CorrectCount, Questoes = s.QuestionCount, Em = s.SubmittedAt })
             .ToListAsync(cancellationToken);
 
-        var mockExams = await db.MockExams.AsNoTracking()
+        var mockExams = await db.MockExams.IgnoreQueryFilters().AsNoTracking()
             .Where(m => m.UserId == userId)
-            .Select(m => new { Tamanho = m.Size.ToString(), Inicio = m.StartedAt, Entrega = m.SubmittedAt, Acertos = m.CorrectCount, Objetivas = m.ObjectiveCount })
+            .Select(m => new { Trilha = m.TrackId, Tamanho = m.Size.ToString(), Inicio = m.StartedAt, Entrega = m.SubmittedAt, Acertos = m.CorrectCount, Objetivas = m.ObjectiveCount })
             .ToListAsync(cancellationToken);
 
         var comments = await db.PostComments.AsNoTracking()
             .Where(c => c.UserId == userId)
-            .Join(db.Posts, c => c.PostId, p => p.Id, (c, p) => new { Post = p.Title, Comentario = c.Text, Em = c.CreatedAt })
+            .Join(db.Posts.IgnoreQueryFilters(), c => c.PostId, p => p.Id, (c, p) => new { Post = p.Title, Comentario = c.Text, Em = c.CreatedAt })
             .ToListAsync(cancellationToken);
 
-        var posts = await db.Posts.AsNoTracking()
+        var posts = await db.Posts.IgnoreQueryFilters().AsNoTracking()
             .Where(p => p.AuthorId == userId)
             .Select(p => new { Titulo = p.Title, Texto = p.Body, Criado = p.CreatedAt, Publicado = p.PublishedAt, Removido = p.RemovedAt })
             .ToListAsync(cancellationToken);
 
         var votes = await db.PostVotes.AsNoTracking()
             .Where(v => v.UserId == userId)
-            .Join(db.Posts, v => v.PostId, p => p.Id, (v, p) => new { Post = p.Title, Voto = v.Value, Em = v.CreatedAt })
+            .Join(db.Posts.IgnoreQueryFilters(), v => v.PostId, p => p.Id, (v, p) => new { Post = p.Title, Voto = v.Value, Em = v.CreatedAt })
             .ToListAsync(cancellationToken);
 
         var reports = await db.PostReports.AsNoTracking()
             .Where(r => r.ReporterId == userId)
-            .Join(db.Posts, r => r.PostId, p => p.Id, (r, p) => new { Post = p.Title, Comentario = r.CommentId, Motivo = r.Reason, Em = r.CreatedAt })
+            .Join(db.Posts.IgnoreQueryFilters(), r => r.PostId, p => p.Id, (r, p) => new { Post = p.Title, Comentario = r.CommentId, Motivo = r.Reason, Em = r.CreatedAt })
             .ToListAsync(cancellationToken);
 
         return new
@@ -70,6 +72,8 @@ public sealed class PersonalDataExport(ApplicationDbContext db, UserManager<Appl
                 Perfis = await users.GetRolesAsync(user),
                 TermosAceitosEm = user.TermsAcceptedAt,
                 VersaoDosTermos = user.TermsVersion,
+                MenorDeIdade = user.IsMinor,
+                AutorizacaoDoResponsavelEm = user.GuardianConsentAt,
                 LoginsExternos = (await users.GetLoginsAsync(user)).Select(l => l.LoginProvider),
             },
             Roadmap = roadmap,

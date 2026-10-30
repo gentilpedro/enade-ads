@@ -46,8 +46,9 @@ public sealed class RoadmapService(ApplicationDbContext db, ExamSettings exam, L
             trackable.Count(s => s == NodeStatus.InProgress),
             trackable.Count(s => s == NodeStatus.Skipped));
 
-        var examDate = await exam.ExamDateAsync(cancellationToken);
-        return new RoadmapView(spine, counts, Math.Max(0, examDate.DayNumber - calendar.Today().DayNumber), examDate);
+        var today = calendar.Today();
+        var examDate = await exam.ExamDateAsync(today, cancellationToken);
+        return new RoadmapView(spine, counts, Math.Max(0, examDate.DayNumber - today.DayNumber), examDate);
     }
 
     /// <summary>Grava o status do nó para o aluno; <paramref name="status"/> nulo limpa o status.</summary>

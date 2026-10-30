@@ -90,7 +90,7 @@
             <div class="col-md-6">
                 <label for="Input.Source" class="form-label">Fonte</label>
                 <InputText @bind-Value="Input.Source" id="Input.Source" class="form-control" maxlength="@QuestionEditor.SourceMaxLength"
-                           placeholder="ENADE 2021 – questão 12, ou Autoria própria" aria-describedby="source-help" />
+                           placeholder="ENEM 2023 – questão 136, ou Autoria própria" aria-describedby="source-help" />
                 <div id="source-help" class="form-text">De onde vem a questão. Não publique material de terceiros sem permissão.</div>
             </div>
         </div>
@@ -292,7 +292,7 @@
             return;
         }
 
-        Navigation.NavigateTo($"questoes/{result.Id}");
+        Navigation.NavigateTo(result.IsQueued ? EnadeAds.Reviews.ReviewQueue.SentUrl(result) : $"questoes/{result.Id}");
     }
 
     private async Task ArchiveAsync()
@@ -310,7 +310,7 @@
             return;
         }
 
-        Navigation.NavigateTo("questoes");
+        Navigation.NavigateTo(result.IsQueued ? EnadeAds.Reviews.ReviewQueue.SentUrl(result) : "questoes");
     }
 
     private sealed class QuestionFormModel

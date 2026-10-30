@@ -5,16 +5,17 @@
 @using Microsoft.AspNetCore.Identity
 
 @inject RoadmapService RoadmapData
+@inject TrackCatalog Tracks
 @inject UserManager<ApplicationUser> Users
 
-<PageTitle>Roadmap ENADE ADS</PageTitle>
+<PageTitle>Roadmap @track?.Name</PageTitle>
 
 <div class="rm-page">
     <header class="rm-header">
         <div class="rm-title">
-            <h1>Roadmap ENADE ADS</h1>
+            <h1>Roadmap @track?.Name</h1>
             <p class="rm-lede">
-                Os conteúdos de Análise e Desenvolvimento de Sistemas da Portaria Inep nº 169/2026, na ordem sugerida de estudo.
+                @track?.Basis
                 Clique em qualquer caixa para ver o que estudar.
             </p>
         </div>
@@ -184,6 +185,8 @@
 @code {
     private const string ClearCommand = "Limpar";
 
+    private Track? track;
+
     private RoadmapView? view;
     private RoadmapItem? selected;
     private string? userId;
@@ -200,6 +203,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        track = await Tracks.CurrentAsync();
         userId = Users.GetUserId(HttpContext.User);
         canEditRoadmap = HttpContext.User.IsInRole(EnadeAds.Accounts.Roles.Teacher) || HttpContext.User.IsInRole(EnadeAds.Accounts.Roles.Admin);
         await LoadAsync();

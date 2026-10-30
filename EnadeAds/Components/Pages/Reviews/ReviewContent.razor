@@ -1,0 +1,75 @@
+@using EnadeAds.Questions
+@using EnadeAds.Reviews
+
+@* O conteúdo proposto, com o estado atual do item quando a proposta altera algo que já existe. *@
+@if (Item.TargetTitle is not null)
+{
+    <p class="small text-body-secondary mb-1">
+        @(Item.Review.Kind is ReviewKind.RoadmapAddTopic or ReviewKind.RoadmapAddCheckpoint ? "Matéria" : "Hoje"):
+        <span class="text-body">@Excerpt(Item.TargetTitle)</span>
+    </p>
+}
+
+@if (Item.Question is { } question)
+{
+    <div class="review-proposed">
+        <p class="small text-body-secondary mb-1">@(question.Kind == QuestionKind.Discursive ? "Discursiva" : "Objetiva") · fonte: @question.Source</p>
+        <div class="question-statement">@((MarkupString)StatementFormatter.ToHtml(question.Statement))</div>
+        @if (question.Kind == QuestionKind.Objective)
+        {
+            <ol class="review-options" type="A">
+                @for (var i = 0; i < question.Options.Count; i++)
+                {
+                    var letter = (char)('A' + i);
+                    var option = question.Options[i];
+                    <li class="@(letter == question.CorrectLetter ? "is-correct" : null)">
+                        @option.Text
+                        @if (letter == question.CorrectLetter)
+                        {
+                            <strong> (correta)</strong>
+                        }
+                        <span class="d-block small text-body-secondary">@option.Explanation</span>
+                    </li>
+                }
+            </ol>
+        }
+        else
+        {
+            <p class="small mb-1"><strong>Padrão de resposta:</strong></p>
+            <div class="question-statement small">@((MarkupString)StatementFormatter.ToHtml(question.ExpectedAnswer))</div>
+        }
+    </div>
+}
+else if (Item.Challenge is { } challenge)
+{
+    <div class="review-proposed">
+        <p class="mb-1"><strong>@challenge.Title</strong> · @challenge.StartsOn.ToString("dd/MM") a @challenge.EndsOn.ToString("dd/MM") · @challenge.QuestionIds.Count questões</p>
+        <p class="small mb-0">@challenge.Description</p>
+    </div>
+}
+else if (Item.Text is { } text)
+{
+    <div class="review-proposed">
+        <p class="mb-1"><strong>@text.Title</strong></p>
+        <p class="small mb-0">@text.Summary</p>
+    </div>
+}
+else if (Item.Move is { } move)
+{
+    <p class="review-proposed mb-0">@(move.Up ? "Subir" : "Descer") uma posição.</p>
+}
+else
+{
+    <p class="review-proposed mb-0">@Item.Review.Summary</p>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public ReviewItem Item { get; set; } = default!;
+
+    private static string Excerpt(string text)
+    {
+        var flat = string.Join(' ', text.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
+        return flat.Length <= 140 ? flat : $"{flat[..140].TrimEnd()}…";
+    }
+}

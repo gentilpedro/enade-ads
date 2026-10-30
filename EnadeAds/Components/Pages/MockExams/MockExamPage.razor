@@ -18,7 +18,7 @@
 
 @if (exam is not null)
 {
-    <PageTitle>Simulado @MockExamFormat.Of(exam.Size).Name</PageTitle>
+    <PageTitle>Simulado @MockExamFormat.Of(exam).Name</PageTitle>
 
     <nav aria-label="Trilha">
         <ol class="breadcrumb">
@@ -27,7 +27,7 @@
         </ol>
     </nav>
 
-    <h1 class="h3">Simulado @MockExamFormat.Of(exam.Size).Name.ToLowerInvariant()</h1>
+    <h1 class="h3">Simulado @MockExamFormat.Of(exam).Name.ToLowerInvariant()</h1>
 
     @if (message is not null)
     {
@@ -52,7 +52,7 @@
                     <div class="card-body">
                         <legend class="h6">
                             Questão @item.Order
-                            <span class="small text-body-secondary fw-normal">· @(item.IsGeneralEducation ? "Formação geral" : question.Kind == QuestionKind.Discursive ? "Discursiva" : "Componente específico")</span>
+                            <span class="small text-body-secondary fw-normal">· @PartName(item, question)</span>
                         </legend>
                         <div class="question-statement">@((MarkupString)StatementFormatter.ToHtml(question.Statement))</div>
                         @if (question.Kind == QuestionKind.Discursive)
@@ -158,6 +158,12 @@
 
     private MockExam? exam;
     private string? userId;
+
+    /// <summary>Parte da prova da questão: no ENADE, formação geral ou componente específico; no ENEM, a área.</summary>
+    private string PartName(MockExamQuestion item, Question question) =>
+        question.Kind == QuestionKind.Discursive ? "Discursiva"
+        : exam is not null && MockExamFormat.Of(exam).Style == MockExamStyle.Enem ? question.Subject?.Block.Name() ?? ""
+        : item.IsGeneralEducation ? "Formação geral" : "Componente específico";
     private string? message;
     private bool messageIsError;
 

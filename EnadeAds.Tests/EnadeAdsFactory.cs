@@ -26,6 +26,8 @@ public sealed class EnadeAdsFactory : WebApplicationFactory<Program>
         builder.UseEnvironment("Development");
         builder.UseSetting("ConnectionStrings:DefaultConnection", "Host=nao-usado");
         builder.UseSetting("Admin:Emails:0", AdminEmail);
+        // Quase todos os testes são da trilha original; os de escolha de prova usam um host sem isso.
+        builder.UseSetting("Tracks:Default", "enade-ads");
 
         // Os testes fazem centenas de logins pelo mesmo "IP"; o limite em si é testado direto em AccountRateLimitTests.
         builder.UseSetting("RateLimit:AccountPostsPerMinute", "100000");

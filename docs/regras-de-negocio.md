@@ -2,6 +2,18 @@
 
 Este documento reúne as decisões de produto da plataforma. Toda mudança de regra passa por aqui no mesmo PR que muda o código.
 
+## Trilhas
+
+O Rumo atende várias provas. Cada prova numa edição é uma **trilha**: hoje, **ENADE 2026 · ADS** e **ENEM 2026**.
+
+- **Ficam na trilha:** datas de prova, roadmap (matérias, assuntos e checkpoints), questões (pela matéria), desafios e simulados.
+- **Ficam na plataforma:** contas, papéis, moderação e o feed. No feed aparecem os posts da trilha ativa e os posts gerais.
+- **Trilha ativa:** fica num cookie (`trilha`) e se troca no topo, ao lado da marca ("Rumo ENEM"). Quem nunca escolheu fica no ENADE ADS, a primeira trilha. Trocar de trilha numa página de um item (uma matéria, uma questão) volta para a lista da seção, porque o item é da outra trilha.
+- **Datas:** cada trilha tem um ou dois dias de prova; o ENEM tem dois domingos (8 e 15/11/2026). A contagem regressiva vai até o próximo dia de prova. O admin muda as datas da trilha ativa em *Data da prova*.
+- **Posts:** aluno publica sempre na trilha ativa. Professor e admin podem marcar *Publicar para todas as trilhas*.
+- **Simulados:** um aberto por aluno em cada trilha. O formato segue a prova da trilha (ver *Simulados*).
+- **Dados da conta (LGPD):** a exportação traz os dados de todas as trilhas, não só da ativa.
+
 ## Perfis
 
 | Perfil | Quem é | O que pode fazer |
@@ -9,12 +21,29 @@ Este documento reúne as decisões de produto da plataforma. Toda mudança de re
 | Visitante | Quem não entrou na conta | Ver o roadmap, as matérias, as questões (sem gabarito), os desafios e os avisos |
 | Aluno | Toda conta cadastrada | Tudo do visitante, mais responder questões, ver o gabarito e salvar o progresso |
 | ProfessorPendente | Pediu acesso de professor e aguarda aprovação | O mesmo que o aluno |
-| Professor | Aprovado por um administrador | Tudo do aluno, mais publicar e editar questões, desafios semanais e avisos |
+| Professor | Aprovado por um administrador | Tudo do aluno, mais propor questões, desafios e mudanças no roadmap (que outro professor ou um admin revisa), publicar avisos e revisar propostas de colegas |
 | Admin | E-mail listado na configuração `Admin:Emails` | Tudo do professor, mais aprovar ou recusar professores |
 
 Uma conta pode ter mais de um perfil ao mesmo tempo. Por exemplo, um professor aprovado também é aluno.
 
+## Revisão das edições de professores
+
+Toda alteração de professor em **questões** (criar, editar, arquivar), **roadmap** (editar, criar assunto ou checkpoint, reordenar, remover) e **desafios** (criar, editar, encerrar) vai para a fila de *Revisões* e só vale depois de aprovada.
+
+- **Quem aprova:** outro professor ou um admin. Quem enviou nunca aprova a própria proposta, mas pode retirá-la.
+- **Admin** publica direto, sem fila.
+- **Na aprovação**, a alteração é aplicada como foi proposta, em nome do autor, na trilha em que foi proposta e com as mesmas validações da tela. Se o item mudou desde a proposta e ela não vale mais (por exemplo, um desafio cuja data de início já passou), a proposta fica como *aprovada, mas não aplicada*, com o motivo.
+- **Recusa** pode vir com um motivo, que o autor vê em *Minhas propostas*.
+- **Fora da fila:** posts da comunidade e moderação, que precisam valer na hora.
+- Excluir a conta apaga as propostas dela.
+
 ## Cadastro
+
+### Idade
+
+- Só cria conta quem tem **13 anos ou mais**. O cadastro pede a faixa de idade: "18 anos ou mais" ou "de 13 a 17 anos, com autorização do responsável legal".
+- Para quem tem de 13 a 17 anos, a conta guarda `IsMinor` e a data da declaração de autorização (`GuardianConsentAt`). Não pedimos data de nascimento, documento nem escola (minimização, LGPD art. 14).
+- O texto dos termos e da política sobre menores é provisório e passa pela revisão de um advogado.
 
 - Toda conta nova recebe o perfil **Aluno**.
 - O formulário tem a caixa **"Sou professor"**. Ao marcá-la, aparece um texto explicando que o acesso depende de aprovação.
@@ -71,18 +100,22 @@ Alunos também têm e-mail institucional, muitas vezes no mesmo domínio dos pro
 - O roadmap mostra as 20 matérias da portaria e a Formação Geral, com seus assuntos e um checkpoint ao fim de cada bloco.
 - Cada aluno marca matérias e assuntos como **Concluído**, **Estudando** ou **Pulei**, e pode limpar o status.
 - A porcentagem conta só matérias e assuntos concluídos; checkpoints são marcos e não entram na conta.
-- A contagem regressiva usa a data da prova definida pelo **admin** na tela *Data da prova* (se nunca foi definida, vale a configuração `Enade:ExamDate`) e o fuso de São Paulo. A data não pode estar no passado.
+- A contagem regressiva vai até o próximo dia de prova da trilha ativa, definido pelo **admin** na tela *Data da prova*, no fuso de São Paulo. A data não pode estar no passado.
 
 ### Edição do roadmap
 
 - **Professor** e **Admin** editam o roadmap pela tela (link *Editar* no painel lateral e na página da matéria). Diferente de questões e posts, o roadmap é de todos os professores: qualquer professor edita qualquer tópico.
-- Das **matérias** dá para editar título e explicação e reordenar dentro do bloco. Elas **não podem ser removidas**, porque vêm da Portaria Inep nº 169/2026.
+- Das **matérias** dá para editar título e explicação e reordenar dentro do bloco. Elas **não podem ser removidas**, porque vêm da matriz oficial da prova (no ENADE, a Portaria Inep nº 169/2026; no ENEM, a Matriz de Referência).
 - **Assuntos** podem ser criados (entram no fim da matéria), editados, reordenados dentro da matéria e removidos.
 - **Checkpoints** podem ser criados logo depois de uma matéria, editados, reordenados dentro do bloco e removidos.
 - O endereço de um tópico (`/roadmap?topico=...`) não muda quando o título é editado, para links compartilhados continuarem valendo.
 - Remover um assunto ou checkpoint apaga só o status que os alunos marcaram nele; o resto do progresso não muda.
 
 ## Simulados
+
+**ENEM:** só questões objetivas, revezando entre as quatro áreas (Linguagens, Humanas, Natureza e Matemática) para nenhuma ficar de fora. Curto: 20 questões; médio: 45; completo: 90, como um dia de prova. O tempo segue o segundo dia do ENEM (5 horas para 90 questões). A redação não entra no simulado: ela tem assuntos e checkpoint no roadmap.
+
+**ENADE:**
 
 - O aluno logado monta um simulado com questões do banco em três tamanhos, todos com a proporção da prova (Portaria Inep nº 169/2026): **Curto** (3 de formação geral + 7 específicas + 1 discursiva), **Médio** (7 + 15 + 1) e **Completo** (15 + 30 + 1).
 - O tempo é proporcional ao da prova: 4 horas para 46 questões (o curto fica com cerca de 57 minutos). Mínimo de 10 minutos.

@@ -24,9 +24,9 @@ public static class BlogFeed
                 xml.WriteStartElement("rss");
                 xml.WriteAttributeString("version", "2.0");
                 xml.WriteStartElement("channel");
-                xml.WriteElementString("title", "ENADE ADS – atualizações");
+                xml.WriteElementString("title", "Rumo – avisos oficiais");
                 xml.WriteElementString("link", $"{baseUrl}/blog");
-                xml.WriteElementString("description", "Datas, portarias, editais e dicas de estudo para o ENADE de Análise e Desenvolvimento de Sistemas.");
+                xml.WriteElementString("description", "Datas, editais, portarias e dicas de estudo para o ENEM, o ENADE e outras provas.");
                 xml.WriteElementString("language", "pt-BR");
 
                 foreach (var post in posts)

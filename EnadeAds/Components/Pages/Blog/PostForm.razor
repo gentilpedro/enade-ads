@@ -6,12 +6,14 @@
 @using EnadeAds.Blog
 @using EnadeAds.Data
 @using EnadeAds.Questions
+@using EnadeAds.Study
 @using Microsoft.AspNetCore.Identity
 
 @* Qualquer conta publica; as categorias de aviso oficial ficam só para professor e admin (regra no BlogService). *@
 @attribute [Authorize]
 
 @inject BlogService Blog
+@inject TrackCatalog Tracks
 @inject UserManager<ApplicationUser> Users
 @inject NavigationManager Navigation
 
@@ -58,7 +60,7 @@
     <div class="mb-3">
         <label for="Input.Title" class="form-label">Título</label>
         <InputText @bind-Value="Input.Title" id="Input.Title" class="form-control" maxlength="@BlogService.TitleMaxLength"
-                   placeholder="@(official ? "Inep divulga o local de prova do ENADE 2026" : "Como diferenciar pilha de fila na prova?")" />
+                   placeholder="@(official ? "Inep divulga o local de prova" : "Qual é o jeito mais rápido de resolver porcentagem?")" />
     </div>
     <div class="row g-3 mb-3">
         <div class="col-md-5">
@@ -76,6 +78,15 @@
                        placeholder="https://www.gov.br/inep/..." />
         </div>
     </div>
+    @if (official)
+    {
+        <div class="form-check mb-3">
+            <InputCheckbox @bind-Value="Input.AllTracks" id="Input.AllTracks" class="form-check-input" />
+            <label for="Input.AllTracks" class="form-check-label">
+                Publicar para todas as trilhas <span class="small text-body-secondary">(sem marcar, o post aparece só em @track?.Name)</span>
+            </label>
+        </div>
+    }
     <div class="mb-3">
         <label for="Input.Summary" class="form-label">Resumo <span class="small text-body-secondary">(opcional)</span></label>
         <InputTextArea @bind-Value="Input.Summary" id="Input.Summary" class="form-control" rows="2" maxlength="@BlogService.SummaryMaxLength"
@@ -154,6 +165,7 @@
 
     private Post? current;
     private Editor? editor;
+    private Track? track;
     private List<string> errors = [];
     private bool preview;
 
@@ -179,6 +191,7 @@
     protected override async Task OnInitializedAsync()
     {
         editor = EditorFactory.From(HttpContext.User, Users.GetUserId(HttpContext.User));
+        track = await Tracks.CurrentAsync();
         if (IsNew)
         {
             Input ??= new PostFormModel { Category = official ? PostCategory.DatesAndDeadlines : PostCategory.Doubts };
@@ -207,6 +220,7 @@
             Body = current.Body,
             Category = current.Category,
             SourceUrl = current.SourceUrl ?? "",
+            AllTracks = current.TrackId is null,
         };
     }
 
@@ -224,7 +238,7 @@
         }
 
         var action = Command == DraftCommand ? PostAction.SaveDraft : PostAction.Publish;
-        var draft = new PostDraft { Title = Input.Title, Summary = Input.Summary, Body = Input.Body, Category = Input.Category, SourceUrl = Input.SourceUrl };
+        var draft = new PostDraft { Title = Input.Title, Summary = Input.Summary, Body = Input.Body, Category = Input.Category, SourceUrl = Input.SourceUrl, AllTracks = Input.AllTracks };
         var result = IsNew ? await Blog.CreateAsync(editor, draft, action) : await Blog.UpdateAsync(editor, Id!.Value, draft, action);
         if (!result.Succeeded)
         {
@@ -279,5 +293,6 @@
         public string Body { get; set; } = "";
         public PostCategory Category { get; set; } = PostCategory.Doubts;
         public string SourceUrl { get; set; } = "";
+        public bool AllTracks { get; set; }
     }
 }

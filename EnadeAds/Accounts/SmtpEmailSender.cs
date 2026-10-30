@@ -11,18 +11,18 @@ public sealed class SmtpEmailSender(IOptions<SmtpOptions> options, ILogger<SmtpE
     private readonly SmtpOptions smtp = options.Value;
 
     public Task SendConfirmationLinkAsync(ApplicationUser user, string email, string confirmationLink) =>
-        SendAsync(email, "Confirme seu cadastro no ENADE ADS",
+        SendAsync(email, "Confirme seu cadastro no Rumo",
             $"<p>Olá, {WebUtility.HtmlEncode(user.FullName)}!</p>" +
             $"<p>Para ativar sua conta, <a href='{confirmationLink}'>clique aqui</a>.</p>" +
             "<p>Se você não se cadastrou, ignore este e-mail.</p>");
 
     public Task SendPasswordResetLinkAsync(ApplicationUser user, string email, string resetLink) =>
-        SendAsync(email, "Redefinição de senha do ENADE ADS",
+        SendAsync(email, "Redefinição de senha do Rumo",
             $"<p>Para criar uma nova senha, <a href='{resetLink}'>clique aqui</a>.</p>" +
             "<p>Se você não pediu a redefinição, ignore este e-mail.</p>");
 
     public Task SendPasswordResetCodeAsync(ApplicationUser user, string email, string resetCode) =>
-        SendAsync(email, "Código de redefinição de senha do ENADE ADS",
+        SendAsync(email, "Código de redefinição de senha do Rumo",
             $"<p>Seu código de redefinição de senha é: <strong>{WebUtility.HtmlEncode(resetCode)}</strong></p>");
 
     private async Task SendAsync(string to, string subject, string htmlBody)

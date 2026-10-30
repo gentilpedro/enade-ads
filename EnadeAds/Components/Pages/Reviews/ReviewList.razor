@@ -1,0 +1,161 @@
+@page "/revisoes"
+
+@using Microsoft.AspNetCore.Authorization
+@using EnadeAds.Accounts
+@using EnadeAds.Data
+@using EnadeAds.Questions
+@using EnadeAds.Reviews
+@using EnadeAds.Study
+@using Microsoft.AspNetCore.Identity
+
+@attribute [Authorize(Roles = Roles.Editors)]
+
+@inject ReviewDecisions Decisions
+@inject LocalCalendar Calendar
+@inject UserManager<ApplicationUser> Users
+
+<PageTitle>Revisões</PageTitle>
+
+<h1 class="h3">Revisões</h1>
+<p class="text-body-secondary review-intro">
+    Toda alteração de professor em questões, roadmap e desafios passa por aqui antes de valer. Aprova outro professor ou
+    um admin, nunca quem enviou. A alteração é aplicada como foi proposta, com as mesmas validações da tela de edição.
+</p>
+
+@if (Enviada is not null)
+{
+    <div class="alert alert-success" role="status">@ReviewQueue.QueuedMessage</div>
+}
+
+@if (message is not null)
+{
+    <div class="alert @(messageIsError ? "alert-danger" : "alert-success")" role="status">@message</div>
+}
+
+@if (pending is not null)
+{
+    <section class="module" aria-labelledby="pending-title">
+        <h2 id="pending-title" class="module-title">Aguardando revisão <span class="text-body-secondary">(@pending.Count)</span></h2>
+
+        @if (pending.Count == 0)
+        {
+            <p class="text-body-secondary">Nenhuma proposta aguardando. Tudo em dia.</p>
+        }
+        else
+        {
+            <form method="post" @formname="reviews" @onsubmit="DecideAsync">
+                <AntiforgeryToken />
+                <ol class="review-rows">
+                    @foreach (var item in pending)
+                    {
+                        var review = item.Review;
+                        var mine = review.AuthorId == editor?.UserId;
+                        <li class="review-row" id="proposta-@review.Id">
+                            <p class="review-meta">
+                                <span class="label-narrow">@review.Kind.Name()</span>
+                                <span>· @item.TrackName · de <strong>@item.AuthorName</strong> · @Calendar.ToLocal(review.CreatedAt).ToString("dd/MM HH:mm")</span>
+                            </p>
+                            <ReviewContent Item="item" />
+
+                            @if (editor is not null && ReviewDecisions.CanReview(editor, review))
+                            {
+                                <label class="form-label small mt-2" for="note-@review.Id">Motivo, se for recusar <span class="text-body-secondary">(opcional, o autor vê)</span></label>
+                                <textarea class="form-control form-control-sm mb-2" id="note-@review.Id" name="Note-@review.Id" rows="2"
+                                          maxlength="@ContentReview.NoteMaxLength"></textarea>
+                                <div class="d-flex gap-2">
+                                    <button type="submit" class="btn btn-primary btn-sm" name="Decision" value="aprovar:@review.Id">Aprovar e publicar</button>
+                                    <button type="submit" class="btn btn-outline-primary btn-sm" name="Decision" value="recusar:@review.Id">Recusar</button>
+                                </div>
+                            }
+                            else if (mine)
+                            {
+                                <p class="small text-body-secondary mt-2 mb-2">É sua: outro professor ou um admin precisa aprovar.</p>
+                                <button type="submit" class="btn btn-outline-primary btn-sm" name="Decision" value="recusar:@review.Id">Retirar a proposta</button>
+                            }
+                        </li>
+                    }
+                </ol>
+            </form>
+        }
+    </section>
+}
+
+@if (mine is { Count: > 0 })
+{
+    <section class="module" aria-labelledby="mine-title">
+        <h2 id="mine-title" class="module-title">Minhas propostas</h2>
+        <ol class="review-rows">
+            @foreach (var item in mine)
+            {
+                var review = item.Review;
+                <li class="review-row @(review.Id.ToString() == Enviada ? "is-new" : null)">
+                    <p class="review-meta">
+                        <span class="label-narrow">@review.Kind.Name()</span>
+                        <span>· @item.TrackName · @Calendar.ToLocal(review.CreatedAt).ToString("dd/MM HH:mm") ·</span>
+                        <strong class="review-status review-status-@review.Status.ToString().ToLowerInvariant()">@review.Status.Name()</strong>
+                    </p>
+                    <p class="mb-1">@review.Summary</p>
+                    @if (review.Note is not null)
+                    {
+                        <p class="small text-body-secondary mb-0">@review.Note</p>
+                    }
+                </li>
+            }
+        </ol>
+    </section>
+}
+
+@code {
+    private Editor? editor;
+    private IReadOnlyList<ReviewItem>? pending;
+    private IReadOnlyList<ReviewItem>? mine;
+    private string? message;
+    private bool messageIsError;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromQuery(Name = "enviada")]
+    private string? Enviada { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        editor = EditorFactory.From(HttpContext.User, Users.GetUserId(HttpContext.User));
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        pending = await Decisions.PendingAsync();
+        mine = editor is null ? [] : await Decisions.MineAsync(editor.UserId);
+    }
+
+    private async Task DecideAsync()
+    {
+        var decision = HttpContext.Request.Form["Decision"].ToString().Split(':');
+        if (editor is null || decision.Length != 2 || !int.TryParse(decision[1], out var reviewId))
+        {
+            Show(new DecisionResult(false, "Escolha aprovar ou recusar uma proposta."));
+            return;
+        }
+
+        var result = decision[0] switch
+        {
+            "aprovar" => await Decisions.ApproveAsync(editor, reviewId),
+            "recusar" => await Decisions.RejectAsync(editor, reviewId, HttpContext.Request.Form[$"Note-{reviewId}"]),
+            _ => new DecisionResult(false, "Escolha aprovar ou recusar uma proposta."),
+        };
+        Show(result);
+        await LoadAsync();
+    }
+
+    private void Show(DecisionResult result)
+    {
+        message = result.Message;
+        messageIsError = !result.Succeeded;
+        if (messageIsError)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+        }
+    }
+}

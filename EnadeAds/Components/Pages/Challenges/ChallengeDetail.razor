@@ -287,6 +287,12 @@
             return;
         }
 
+        if (result.IsQueued)
+        {
+            Navigation.NavigateTo(EnadeAds.Reviews.ReviewQueue.SentUrl(result));
+            return;
+        }
+
         challenge = await Challenges.FindAsync(Id);
         await LoadAsync();
     }

@@ -13,18 +13,27 @@
 
 @inject BlogService Blog
 @inject SemesterPlan Semester
+@inject TrackCatalog Tracks
+@inject TrackScope TrackScope
 @inject PerformanceService Performance
 @inject LocalCalendar Calendar
 @inject TimeProvider Clock
 @inject UserManager<ApplicationUser> Users
 @inject NavigationManager Navigation
 
-<PageTitle>ENADE ADS</PageTitle>
+<PageTitle>@(TrackScope.HasChosen ? $"Rumo {track?.Label}" : "Rumo: estude para a sua prova")</PageTitle>
 
 <HeadContent>
-    <link rel="alternate" type="application/rss+xml" title="ENADE ADS – avisos oficiais" href="@BlogFeed.Path.TrimStart('/')" />
+    <link rel="alternate" type="application/rss+xml" title="Rumo – avisos oficiais" href="@BlogFeed.Path.TrimStart('/')" />
 </HeadContent>
 
+@if (!TrackScope.HasChosen)
+{
+    <TrackChooser Volta="@SafeVolta" />
+}
+else
+{
+<text>
 @if (semester is not null)
 {
     <SemesterStrip View="semester" SignedIn="userId is not null" />
@@ -162,7 +171,7 @@
         <section class="module" aria-labelledby="rules-title">
             <h2 id="rules-title" class="module-title">Combinados da comunidade</h2>
             <ul class="rules-list">
-                <li>Dúvidas de matéria, dicas de estudo e discussão sobre o ENADE.</li>
+                <li>Dúvidas de matéria, dicas de estudo e discussão sobre a prova.</li>
                 <li>Respeito sempre: crítica é ao conteúdo, não à pessoa.</li>
                 <li>Nada de cola, gabarito vazado ou dado pessoal de colegas.</li>
                 <li>Viu algo errado? Use <strong>Denunciar</strong> no post. Professores removem o que fugir disso.</li>
@@ -171,8 +180,12 @@
         </section>
     </aside>
 </div>
+</text>
+}
 
 @code {
+    private Track? track;
+
     private enum Tab
     {
         Hot,
@@ -202,12 +215,24 @@
     [SupplyParameterFromQuery(Name = "pagina")]
     private int? Pagina { get; set; }
 
+    /// <summary>Página que a pessoa tentou abrir antes de escolher a prova.</summary>
+    [SupplyParameterFromQuery(Name = "volta")]
+    private string? Volta { get; set; }
+
+    private string SafeVolta => TrackEndpoints.IsLocal(Volta) ? Volta! : "/";
+
     private string CurrentUrl => Url(tab, category, feed?.Page ?? Pagina ?? 1);
 
     private string LoginUrl => $"Account/Login?ReturnUrl={Uri.EscapeDataString("/" + CurrentUrl)}";
 
     protected override async Task OnInitializedAsync()
     {
+        if (!TrackScope.HasChosen)
+        {
+            return;
+        }
+
+        track = await Tracks.CurrentAsync();
         category = PostCategoryNames.FromSlug(CategorySlug);
         tab = Order switch { "novos" => Tab.New, "oficiais" => Tab.Official, _ => Tab.Hot };
         userId = Users.GetUserId(HttpContext.User);

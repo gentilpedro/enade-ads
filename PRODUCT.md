@@ -8,14 +8,14 @@ web
 
 ## Users
 
-- **Alunos de Análise e Desenvolvimento de Sistemas (ADS)** que vão fazer o ENADE. Usam tanto no celular (feed, avisos, uma questão rápida entre aulas ou no ônibus) quanto no computador (sessões longas de questões, simulados e roadmap). Os dois contextos pesam igual.
+- **Estudantes que vão fazer uma prova**, cada um na sua trilha: o ENEM (ensino médio), o ENADE de Análise e Desenvolvimento de Sistemas (ADS) e, depois, seletivos de institutos federais como o IFSul (nível fundamental). Usam tanto no celular (feed, avisos, uma questão rápida entre aulas ou no ônibus) quanto no computador (sessões longas de questões, simulados e roadmap). Os dois contextos pesam igual.
 - **Professores** do curso: publicam avisos oficiais, questões, desafios semanais e moderam a comunidade. Entram como aluno e viram professor depois da aprovação de um administrador (e-mail institucional `.edu`).
 - **Administradores**: aprovam professores, gerenciam contas e definem a data da prova.
 - **Visitantes sem conta** leem tudo (roadmap, matérias, questões, feed); responder, votar, publicar e comentar exigem login.
 
 ## Product Purpose
 
-Plataforma aberta para a turma de ADS se preparar para o ENADE: estudar pelo roadmap das matérias da prova, resolver questões no formato do exame (incluindo as provas reais do Inep de 2017 e 2021) com gabarito comentado, fazer desafios semanais e simulados cronometrados, acompanhar o próprio desempenho e conversar na comunidade. Sucesso é o aluno chegar à prova sabendo onde está fraco e tendo praticado no formato real.
+**Rumo** é uma plataforma aberta para se preparar para provas como o ENEM e o ENADE. Cada prova é uma trilha, e a marca mostra a trilha ativa ("Rumo ENEM"). Em cada trilha, o estudante pode: estudar pelo roadmap das matérias da prova, resolver questões no formato do exame (incluindo as provas reais do Inep de 2017 e 2021) com gabarito comentado, fazer desafios semanais e simulados cronometrados, acompanhar o próprio desempenho e conversar na comunidade. Sucesso é o aluno chegar à prova sabendo onde está fraco e tendo praticado no formato real.
 
 ## Positioning
 

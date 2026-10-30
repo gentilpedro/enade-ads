@@ -95,6 +95,7 @@ public partial class TranslationTests(EnadeAdsFactory factory)
             ["Input.Password"] = password,
             ["Input.ConfirmPassword"] = password,
             ["Input.AcceptTerms"] = "true",
+            ["Input.AgeGroup"] = "18+",
         });
         return WebUtility.HtmlDecode(await response.Content.ReadAsStringAsync());
     }

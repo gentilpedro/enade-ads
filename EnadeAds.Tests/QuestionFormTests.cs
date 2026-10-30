@@ -38,8 +38,9 @@ public class QuestionFormTests(EnadeAdsFactory factory)
 
         var response = await SubmitAsync(client, "/questoes/nova", Fields("Qual comando lista tabelas no **PostgreSQL**?", 'B'), "publicar");
 
+        // Professor não publica direto: a questão vale depois que outro professor aprova.
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
-        var id = int.Parse(response.Headers.Location!.ToString().Split('/')[^1]);
+        var id = (await TestReviews.ApproveFromRedirectAsync(factory, response))!.Value;
         var question = await FindAsync(id);
         Assert.Equal(teacher.Id, question.AuthorId);
         Assert.Equal(SubjectId, question.SubjectId);
@@ -97,7 +98,7 @@ public class QuestionFormTests(EnadeAdsFactory factory)
 
         using var scope = factory.Services.CreateScope();
         var editor = scope.ServiceProvider.GetRequiredService<QuestionEditor>();
-        var forged = await editor.UpdateAsync(new Editor("qualquer", IsAdmin: false, IsTeacher: true), id, Draft("Trocado", 'A'));
+        var forged = await editor.UpdateAsync(new Editor("qualquer", IsAdmin: false, IsTeacher: true, Reviewed: true), id, Draft("Trocado", 'A'));
         Assert.False(forged.Succeeded);
     }
 
@@ -134,6 +135,8 @@ public class QuestionFormTests(EnadeAdsFactory factory)
         var response = await TestAccounts.SubmitFormAsync(client, $"/questoes/{id}/editar", "archive-form", new() { ["ConfirmArchive"] = "true" });
 
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        Assert.Null((await FindAsync(id)).ArchivedAt);
+        await TestReviews.ApproveFromRedirectAsync(factory, response);
         Assert.NotNull((await FindAsync(id)).ArchivedAt);
         Assert.Equal(HttpStatusCode.NotFound, (await NewClient().GetAsync($"/questoes/{id}")).StatusCode);
         Assert.Contains("está arquivada", WebUtility.HtmlDecode(await client.GetStringAsync($"/questoes/{id}/editar")));
@@ -186,7 +189,7 @@ public class QuestionFormTests(EnadeAdsFactory factory)
     {
         using var scope = factory.Services.CreateScope();
         var editor = scope.ServiceProvider.GetRequiredService<QuestionEditor>();
-        var result = await editor.CreateAsync(new Editor(authorId, IsAdmin: false, IsTeacher: true), Draft("Questão do autor", 'A'));
+        var result = await editor.CreateAsync(new Editor(authorId, IsAdmin: false, IsTeacher: true, Reviewed: true), Draft("Questão do autor", 'A'));
         return result.Id!.Value;
     }
 

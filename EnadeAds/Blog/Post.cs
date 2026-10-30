@@ -23,6 +23,9 @@ public class Post
 
     public PostCategory Category { get; set; }
 
+    /// <summary>Trilha do post; nulo é um post para toda a plataforma.</summary>
+    public int? TrackId { get; set; }
+
     /// <summary>Fonte oficial (portaria, edital, página do Inep), sempre https.</summary>
     public string? SourceUrl { get; set; }
 

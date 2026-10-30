@@ -96,8 +96,9 @@ public sealed class PerformanceService(ApplicationDbContext db, RoadmapService r
             .OrderBy(m => subjects.FindIndex(s => s.Slug == m.SubjectSlug)).ThenBy(m => m.QuestionId)
             .ToList();
 
+        // As questões passam pelo filtro da trilha; as respostas, não. O Any limita às questões da trilha ativa.
         var discursives = await db.DiscursiveAnswers.AsNoTracking()
-            .Where(a => a.UserId == userId)
+            .Where(a => a.UserId == userId && db.Questions.Any(q => q.Id == a.QuestionId))
             .Select(a => a.QuestionId)
             .Distinct()
             .CountAsync(cancellationToken);

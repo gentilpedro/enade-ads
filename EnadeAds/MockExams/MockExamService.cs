@@ -1,5 +1,6 @@
 using EnadeAds.Data;
 using EnadeAds.Questions;
+using EnadeAds.Study;
 using Microsoft.EntityFrameworkCore;
 
 namespace EnadeAds.MockExams;
@@ -7,7 +8,7 @@ namespace EnadeAds.MockExams;
 public sealed record MockExamPlan(MockExamFormat Format, int GeneralEducation, int Specific, int Discursive)
 {
     public int Total => GeneralEducation + Specific + Discursive;
-    public int Minutes => MockExamFormat.MinutesFor(Total);
+    public int Minutes => MockExamFormat.MinutesFor(Format.Style, Total);
     public bool IsShorterThanFormat => Total < Format.Total;
 }
 
@@ -30,6 +31,9 @@ public enum SaveOutcome
 
 public sealed class MockExamService(ApplicationDbContext db, TimeProvider clock, ILogger<MockExamService> logger)
 {
+    /// <summary>Estilo do simulado da trilha ativa.</summary>
+    public MockExamStyle Style => MockExamFormat.StyleOf(db.CurrentTrackId);
+
     public const string GeneralEducationSlug = "formacao-geral";
     public const int DiscursiveMaxLength = QuestionBank.DiscursiveAnswerMaxLength;
 
@@ -40,7 +44,7 @@ public sealed class MockExamService(ApplicationDbContext db, TimeProvider clock,
     public async Task<IReadOnlyList<MockExamPlan>> PlansAsync(CancellationToken cancellationToken = default)
     {
         var pools = await PoolsAsync(cancellationToken);
-        return MockExamFormat.All.Select(format => Plan(format, pools)).ToList();
+        return MockExamFormat.For(Style).Select(format => Plan(format, pools)).ToList();
     }
 
     /// <summary>Simulado em andamento do aluno, já entregando por tempo se o prazo passou.</summary>
@@ -70,7 +74,7 @@ public sealed class MockExamService(ApplicationDbContext db, TimeProvider clock,
         }
 
         var pools = await PoolsAsync(cancellationToken);
-        var plan = Plan(MockExamFormat.Of(size), pools);
+        var plan = Plan(MockExamFormat.Of(Style, size), pools);
         if (plan.Total == 0)
         {
             return new StartResult(StartOutcome.NoQuestions, null);
@@ -78,13 +82,14 @@ public sealed class MockExamService(ApplicationDbContext db, TimeProvider clock,
 
         // Ordem da prova: formação geral, específicas e, por último, a discursiva.
         var picked = Pick(pools.GeneralEducation, plan.GeneralEducation).Select(id => (id, general: true))
-            .Concat(Pick(pools.Specific, plan.Specific).Select(id => (id, general: false)))
+            .Concat(Pick(pools.Specific, plan.Specific, balanced: Style == MockExamStyle.Enem).Select(id => (id, general: false)))
             .Concat(Pick(pools.Discursive, plan.Discursive).Select(id => (id, general: false)))
             .ToList();
 
         var now = clock.GetUtcNow();
         var exam = new MockExam
         {
+            TrackId = db.CurrentTrackId,
             UserId = userId,
             Size = size,
             StartedAt = now,
@@ -210,19 +215,25 @@ public sealed class MockExamService(ApplicationDbContext db, TimeProvider clock,
             exam.Id, byTimeout ? "tempo esgotado" : "aluno", correct, exam.ObjectiveCount);
     }
 
-    private sealed record Pools(List<int> GeneralEducation, List<int> Specific, List<int> Discursive);
+    private sealed record PoolItem(int Id, StudyBlock Block);
+
+    private sealed record Pools(List<PoolItem> GeneralEducation, List<PoolItem> Specific, List<PoolItem> Discursive);
 
     private async Task<Pools> PoolsAsync(CancellationToken cancellationToken)
     {
         var questions = await db.Questions.AsNoTracking()
             .Where(q => q.ArchivedAt == null)
-            .Select(q => new { q.Id, q.Kind, Slug = q.Subject!.Slug })
+            .Select(q => new { q.Id, q.Kind, Slug = q.Subject!.Slug, q.Subject.Block })
             .ToListAsync(cancellationToken);
 
+        // Só o ENADE separa a formação geral; nas outras trilhas toda objetiva entra em Specific.
+        var separateGeneral = Style == MockExamStyle.Enade;
+        bool IsGeneral(string slug) => separateGeneral && slug == GeneralEducationSlug;
+
         return new Pools(
-            questions.Where(q => q.Kind == QuestionKind.Objective && q.Slug == GeneralEducationSlug).Select(q => q.Id).ToList(),
-            questions.Where(q => q.Kind == QuestionKind.Objective && q.Slug != GeneralEducationSlug).Select(q => q.Id).ToList(),
-            questions.Where(q => q.Kind == QuestionKind.Discursive).Select(q => q.Id).ToList());
+            questions.Where(q => q.Kind == QuestionKind.Objective && IsGeneral(q.Slug)).Select(q => new PoolItem(q.Id, q.Block)).ToList(),
+            questions.Where(q => q.Kind == QuestionKind.Objective && !IsGeneral(q.Slug)).Select(q => new PoolItem(q.Id, q.Block)).ToList(),
+            questions.Where(q => q.Kind == QuestionKind.Discursive).Select(q => new PoolItem(q.Id, q.Block)).ToList());
     }
 
     /// <summary>
@@ -243,5 +254,34 @@ public sealed class MockExamService(ApplicationDbContext db, TimeProvider clock,
         return new MockExamPlan(format, general, specific, Math.Min(format.Discursive, pools.Discursive.Count));
     }
 
-    private static IEnumerable<int> Pick(List<int> pool, int count) => pool.OrderBy(_ => Random.Shared.Next()).Take(count);
+    /// <summary>
+    /// Sorteia <paramref name="count"/> questões. Com <paramref name="balanced"/>, reveza entre as áreas (como as quatro
+    /// do ENEM) para nenhuma ficar de fora, e devolve agrupado por área, na ordem da prova.
+    /// </summary>
+    private static IEnumerable<int> Pick(List<PoolItem> pool, int count, bool balanced = false)
+    {
+        if (!balanced)
+        {
+            return pool.OrderBy(_ => Random.Shared.Next()).Take(count).Select(item => item.Id);
+        }
+
+        var byArea = pool.GroupBy(item => item.Block).OrderBy(g => g.Key)
+            .Select(g => new Queue<PoolItem>(g.OrderBy(_ => Random.Shared.Next())))
+            .ToList();
+        var picked = new List<PoolItem>();
+        while (picked.Count < count && byArea.Any(queue => queue.Count > 0))
+        {
+            foreach (var queue in byArea.Where(queue => queue.Count > 0))
+            {
+                if (picked.Count == count)
+                {
+                    break;
+                }
+
+                picked.Add(queue.Dequeue());
+            }
+        }
+
+        return picked.OrderBy(item => item.Block).Select(item => item.Id);
+    }
 }

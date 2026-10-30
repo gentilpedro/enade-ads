@@ -68,7 +68,7 @@ public class PerformanceTests(EnadeAdsFactory factory)
     {
         var student = await TestAccounts.CreateConfirmedAsync(factory, "desempenho.desafio@gmail.com", Roles.Student);
         var teacher = await TestAccounts.CreateConfirmedAsync(factory, "desempenho.prof@faculdade.edu.br", Roles.Student, Roles.Teacher);
-        var editor = new Editor(teacher.Id, IsAdmin: false, IsTeacher: true);
+        var editor = new Editor(teacher.Id, IsAdmin: false, IsTeacher: true, Reviewed: true);
 
         int challengeId;
         using (var scope = factory.Services.CreateScope())

@@ -1,5 +1,6 @@
 using EnadeAds.Accounts;
 using EnadeAds.Data;
+using EnadeAds.Reviews;
 using EnadeAds.Study;
 using Microsoft.EntityFrameworkCore;
 
@@ -39,22 +40,35 @@ public sealed class QuestionDraft
     };
 }
 
-/// <summary>Quem está editando: o id da conta e se ela pode mexer em questões de outros (Admin).</summary>
-public sealed record Editor(string UserId, bool IsAdmin, bool IsTeacher)
+/// <summary>
+/// Quem está editando: o id da conta e se ela pode mexer em questões de outros (Admin).
+/// <paramref name="Reviewed"/> marca uma alteração que outro professor ou um admin já aprovou (ver <see cref="Reviews.ReviewDecisions"/>).
+/// </summary>
+public sealed record Editor(string UserId, bool IsAdmin, bool IsTeacher, bool Reviewed = false)
 {
     public bool CanCreate => IsTeacher || IsAdmin;
 
     public bool CanEdit(Question question) => IsAdmin || (IsTeacher && question.AuthorId == UserId);
+
+    /// <summary>Professor (sem ser admin) não publica direto: a alteração vai para a fila de revisão.</summary>
+    public bool NeedsReview => IsTeacher && !IsAdmin && !Reviewed;
 }
 
+/// <summary>Resultado de uma edição. Com <see cref="QueuedReviewId"/>, a alteração foi para revisão e ainda não vale.</summary>
 public sealed record EditResult(int? Id, IReadOnlyList<string> Errors)
 {
+    public int? QueuedReviewId { get; init; }
+
     public bool Succeeded => Errors.Count == 0;
 
+    public bool IsQueued => QueuedReviewId is not null;
+
     public static EditResult Fail(params string[] errors) => new(null, errors);
+
+    public static EditResult Queued(int reviewId) => new(null, []) { QueuedReviewId = reviewId };
 }
 
-public sealed class QuestionEditor(ApplicationDbContext db, TimeProvider clock, ILogger<QuestionEditor> logger)
+public sealed class QuestionEditor(ApplicationDbContext db, ReviewQueue reviews, TimeProvider clock, ILogger<QuestionEditor> logger)
 {
     public const int StatementMaxLength = 8000;
     public const int SourceMaxLength = 200;
@@ -73,6 +87,11 @@ public sealed class QuestionEditor(ApplicationDbContext db, TimeProvider clock, 
         if (errors.Count > 0)
         {
             return new EditResult(null, errors);
+        }
+
+        if (editor.NeedsReview)
+        {
+            return await reviews.SubmitAsync(editor, ReviewKind.QuestionCreate, null, draft, draft.Statement, cancellationToken);
         }
 
         var objective = draft.Kind == QuestionKind.Objective;
@@ -121,6 +140,11 @@ public sealed class QuestionEditor(ApplicationDbContext db, TimeProvider clock, 
             return new EditResult(questionId, errors);
         }
 
+        if (editor.NeedsReview)
+        {
+            return await reviews.SubmitAsync(editor, ReviewKind.QuestionUpdate, questionId, draft, draft.Statement, cancellationToken);
+        }
+
         question.SubjectId = draft.SubjectId;
         question.Statement = Normalize(draft.Statement);
         question.Source = draft.Source.Trim();
@@ -157,6 +181,11 @@ public sealed class QuestionEditor(ApplicationDbContext db, TimeProvider clock, 
         if (!editor.CanEdit(question))
         {
             return EditResult.Fail("Só o autor da questão ou um administrador pode arquivá-la.");
+        }
+
+        if (editor.NeedsReview)
+        {
+            return await reviews.SubmitAsync(editor, ReviewKind.QuestionArchive, questionId, null, question.Statement, cancellationToken);
         }
 
         question.ArchivedAt ??= clock.GetUtcNow();

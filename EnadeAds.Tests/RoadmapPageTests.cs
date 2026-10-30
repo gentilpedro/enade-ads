@@ -116,7 +116,7 @@ public class RoadmapPageTests(EnadeAdsFactory factory)
         // 30/10/2026 01:00 UTC ainda é 29/10 em São Paulo: faltam 31 dias para 29/11.
         var clock = new FixedClock(new DateTimeOffset(2026, 10, 30, 1, 0, 0, TimeSpan.Zero));
         var db = services.GetRequiredService<ApplicationDbContext>();
-        var roadmap = new RoadmapService(db, new ExamSettings(db, exam, clock), new LocalCalendar(clock, exam), clock);
+        var roadmap = new RoadmapService(db, services.GetRequiredService<ExamSettings>(), new LocalCalendar(clock, exam), clock);
 
         var view = await roadmap.GetAsync(null);
 

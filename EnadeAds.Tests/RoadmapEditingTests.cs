@@ -44,7 +44,18 @@ public class RoadmapEditingTests(EnadeAdsFactory factory)
             ["Input.Summary"] = "Resumo revisado pelo professor.",
         });
 
-        Assert.Contains("Alterações salvas.", WebUtility.HtmlDecode(await response.Content.ReadAsStringAsync()));
+        // Professor não publica direto: a mudança vale depois que outro professor aprova.
+        Assert.Contains("Enviado para revisão", WebUtility.HtmlDecode(await response.Content.ReadAsStringAsync()));
+        Assert.NotEqual("Resumo revisado pelo professor.", (await NodeAsync(SubjectSlug)).Summary);
+        int reviewId;
+        using (var scope = factory.Services.CreateScope())
+        {
+            reviewId = await scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().ContentReviews
+                .Where(r => r.Kind == EnadeAds.Reviews.ReviewKind.RoadmapUpdate && r.Status == EnadeAds.Reviews.ReviewStatus.Pending)
+                .OrderByDescending(r => r.Id).Select(r => r.Id).FirstAsync();
+        }
+
+        await TestReviews.ApproveAsync(factory, reviewId);
         var node = await NodeAsync(SubjectSlug);
         Assert.Equal("Resumo revisado pelo professor.", node.Summary);
         Assert.Contains("Resumo revisado pelo professor.", await GetHtmlAsync(NewClient(), $"/roadmap?topico={SubjectSlug}"));
@@ -162,7 +173,7 @@ public class RoadmapEditingTests(EnadeAdsFactory factory)
         {
             // Volta para a data usada pelos outros testes (contagem regressiva do roadmap).
             using var scope = factory.Services.CreateScope();
-            await scope.ServiceProvider.GetRequiredService<ExamSettings>().SetExamDateAsync(new DateOnly(2026, 11, 29));
+            await scope.ServiceProvider.GetRequiredService<ExamSettings>().SetExamDatesAsync(new DateOnly(2026, 11, 29));
         }
     }
 
@@ -172,7 +183,7 @@ public class RoadmapEditingTests(EnadeAdsFactory factory)
     private async Task<Editor> EditorAsync(string email)
     {
         var user = await TestAccounts.CreateConfirmedAsync(factory, email, Roles.Student, Roles.Teacher);
-        return new Editor(user.Id, IsAdmin: false, IsTeacher: true);
+        return new Editor(user.Id, IsAdmin: false, IsTeacher: true, Reviewed: true);
     }
 
     private async Task<HttpClient> ClientAsync(string email, params string[] roles)

@@ -82,7 +82,12 @@ try
     builder.Services.AddScoped<AccountAdmin>();
     builder.Services.AddScoped<RoadmapService>();
     builder.Services.AddScoped<RoadmapEditor>();
+    builder.Services.AddHttpContextAccessor();
+    builder.Services.AddScoped<TrackScope>();
+    builder.Services.AddScoped<TrackCatalog>();
     builder.Services.AddScoped<ExamSettings>();
+    builder.Services.AddScoped<EnadeAds.Reviews.ReviewQueue>();
+    builder.Services.AddScoped<EnadeAds.Reviews.ReviewDecisions>();
     builder.Services.AddScoped<SemesterPlan>();
     builder.Services.AddScoped<SubjectCatalog>();
     builder.Services.AddScoped<QuestionBank>();
@@ -157,6 +162,7 @@ try
 
     app.UseRateLimiter();
     app.UseAntiforgery();
+    app.UseTrackChoice();
 
     app.MapStaticAssets();
     app.MapRazorComponents<App>()
@@ -167,6 +173,7 @@ try
     // Add additional endpoints required by the Identity /Account Razor components.
     app.MapAdditionalIdentityEndpoints();
     app.MapBlogFeed();
+    app.MapTrackSwitch();
 
     app.Run();
 }

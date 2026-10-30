@@ -1,6 +1,7 @@
 using EnadeAds.Blog;
 using EnadeAds.Data;
 using EnadeAds.Questions;
+using EnadeAds.Reviews;
 using Microsoft.EntityFrameworkCore;
 
 namespace EnadeAds.Study;
@@ -8,8 +9,9 @@ namespace EnadeAds.Study;
 /// <summary>
 /// Edição do roadmap por professores e admins. As 21 matérias (Portaria 169/2026 e Formação Geral) não
 /// podem ser removidas; assuntos e checkpoints podem ser criados, editados, reordenados e removidos.
+/// Alteração de professor vai para a fila de revisão (<see cref="ReviewQueue"/>) antes de valer.
 /// </summary>
-public sealed class RoadmapEditor(ApplicationDbContext db, ILogger<RoadmapEditor> logger)
+public sealed class RoadmapEditor(ApplicationDbContext db, ReviewQueue reviews, ILogger<RoadmapEditor> logger)
 {
     public const int TitleMaxLength = 200;
     public const int SummaryMaxLength = 2000;
@@ -36,6 +38,12 @@ public sealed class RoadmapEditor(ApplicationDbContext db, ILogger<RoadmapEditor
         if (errors.Count > 0)
         {
             return new EditResult(nodeId, errors);
+        }
+
+        if (editor.NeedsReview)
+        {
+            return await reviews.SubmitAsync(editor, ReviewKind.RoadmapUpdate, nodeId, new RoadmapTextPayload(title, summary),
+                $"{node.Title} → {title}", cancellationToken);
         }
 
         // O endereço (slug) não muda: links compartilhados para o tópico continuam valendo.
@@ -65,10 +73,17 @@ public sealed class RoadmapEditor(ApplicationDbContext db, ILogger<RoadmapEditor
             return new EditResult(null, errors);
         }
 
+        if (editor.NeedsReview)
+        {
+            return await reviews.SubmitAsync(editor, ReviewKind.RoadmapAddTopic, subjectId, new RoadmapTextPayload(title, summary),
+                $"{subject.Title}: {title}", cancellationToken);
+        }
+
         var lastOrder = await db.RoadmapNodes.Where(n => n.ParentId == subjectId).MaxAsync(n => (int?)n.Order, cancellationToken) ?? 0;
         var topic = new RoadmapNode
         {
             Id = await NextIdAsync(cancellationToken),
+            TrackId = subject.TrackId,
             Slug = await UniqueSlugAsync(title, cancellationToken),
             Title = title.Trim(),
             Summary = summary.Trim(),
@@ -104,6 +119,12 @@ public sealed class RoadmapEditor(ApplicationDbContext db, ILogger<RoadmapEditor
             return new EditResult(null, errors);
         }
 
+        if (editor.NeedsReview)
+        {
+            return await reviews.SubmitAsync(editor, ReviewKind.RoadmapAddCheckpoint, subjectId, new RoadmapTextPayload(title, summary),
+                $"Depois de {subject.Title}: {title}", cancellationToken);
+        }
+
         // Abre espaço na espinha: tudo depois da matéria anda uma posição.
         var after = await db.RoadmapNodes.Where(n => n.ParentId == null && n.Order > subject.Order).ToListAsync(cancellationToken);
         foreach (var node in after)
@@ -114,6 +135,7 @@ public sealed class RoadmapEditor(ApplicationDbContext db, ILogger<RoadmapEditor
         var checkpoint = new RoadmapNode
         {
             Id = await NextIdAsync(cancellationToken),
+            TrackId = subject.TrackId,
             Slug = await UniqueSlugAsync(title, cancellationToken),
             Title = title.Trim(),
             Summary = summary.Trim(),
@@ -159,6 +181,12 @@ public sealed class RoadmapEditor(ApplicationDbContext db, ILogger<RoadmapEditor
             return EditResult.Fail(up ? "Já é o primeiro." : "Já é o último.");
         }
 
+        if (editor.NeedsReview)
+        {
+            return await reviews.SubmitAsync(editor, ReviewKind.RoadmapMove, nodeId, new RoadmapMovePayload(up),
+                $"{node.Title}: {(up ? "subir" : "descer")} uma posição", cancellationToken);
+        }
+
         (node.Order, neighbor.Order) = (neighbor.Order, node.Order);
         await db.SaveChangesAsync(cancellationToken);
         return new EditResult(nodeId, []);
@@ -180,7 +208,12 @@ public sealed class RoadmapEditor(ApplicationDbContext db, ILogger<RoadmapEditor
 
         if (node.Kind == NodeKind.Subject)
         {
-            return EditResult.Fail("As matérias vêm da Portaria Inep nº 169/2026 e não podem ser removidas. Edite o resumo ou os assuntos.");
+            return EditResult.Fail("As matérias vêm da matriz oficial da prova e não podem ser removidas. Edite o resumo ou os assuntos.");
+        }
+
+        if (editor.NeedsReview)
+        {
+            return await reviews.SubmitAsync(editor, ReviewKind.RoadmapRemove, nodeId, null, node.Title, cancellationToken);
         }
 
         db.RoadmapNodes.Remove(node);
@@ -191,7 +224,8 @@ public sealed class RoadmapEditor(ApplicationDbContext db, ILogger<RoadmapEditor
 
     private async Task<int> NextIdAsync(CancellationToken cancellationToken)
     {
-        var max = await db.RoadmapNodes.MaxAsync(n => (int?)n.Id, cancellationToken) ?? 0;
+        // O id é único entre todas as trilhas, então olha também os nós das outras.
+        var max = await db.RoadmapNodes.IgnoreQueryFilters().MaxAsync(n => (int?)n.Id, cancellationToken) ?? 0;
         return Math.Max(max + 1, FirstCustomId);
     }
 
