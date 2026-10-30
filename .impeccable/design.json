@@ -1,0 +1,733 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-30T13:01:10+00:00",
+  "title": "Design System: ENADE ADS",
+  "extensions": {
+    "colorMeta": {
+      "ink": {
+        "role": "primary",
+        "displayName": "Azul-Tinta",
+        "canonical": "#14213D",
+        "oklch": "oklch(25.2% 0.056 264.0)",
+        "tonalRamp": [
+          "#030A1F",
+          "#172440",
+          "#36425A",
+          "#576175",
+          "#7B8391",
+          "#A1A5AE",
+          "#C6C9CF",
+          "#ECEEF4"
+        ],
+        "dark": "#0A1120"
+      },
+      "ink-hover": {
+        "role": "primary",
+        "displayName": "Tinta Clara",
+        "canonical": "#23335A",
+        "oklch": "oklch(32.8% 0.073 265.7)",
+        "tonalRamp": [
+          "#030921",
+          "#162344",
+          "#314166",
+          "#536180",
+          "#77829B",
+          "#9DA5B7",
+          "#C5C9D2",
+          "#EBEEF6"
+        ],
+        "note": "Hover do botão primário no claro; no escuro o hover é #FFFFFF sobre porcelana."
+      },
+      "ink-active": {
+        "role": "primary",
+        "displayName": "Tinta Funda",
+        "canonical": "#0D1730",
+        "oklch": "oklch(21.1% 0.052 265.7)",
+        "tonalRamp": [
+          "#04091F",
+          "#1A243C",
+          "#384257",
+          "#5A6172",
+          "#7D828E",
+          "#A2A5AB",
+          "#C7C9CE",
+          "#ECEEF4"
+        ],
+        "note": "Pressionado do botão primário no claro; no escuro é #C9D2E3."
+      },
+      "ink-text": {
+        "role": "neutral",
+        "displayName": "Texto da Casca",
+        "canonical": "#E9EDF5",
+        "oklch": "oklch(94.5% 0.012 264.5)",
+        "tonalRamp": [
+          "#0B0B0C",
+          "#252526",
+          "#414243",
+          "#606163",
+          "#818286",
+          "#A3A5AA",
+          "#C6C9D0",
+          "#EBEFF6"
+        ],
+        "dark": "#E6EAF2"
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Casca Apagada",
+        "canonical": "#AEB8CF",
+        "oklch": "oklch(78.2% 0.035 266.9)",
+        "tonalRamp": [
+          "#0A0B0D",
+          "#242528",
+          "#3F4249",
+          "#5C616C",
+          "#7B8292",
+          "#9CA5B9",
+          "#C0C9DF",
+          "#E7EEFF"
+        ],
+        "dark": "#A3AEC6"
+      },
+      "porcelain": {
+        "role": "primary",
+        "displayName": "Porcelana",
+        "canonical": "#E6EAF2",
+        "oklch": "oklch(93.6% 0.012 264.5)",
+        "tonalRamp": [
+          "#0B0B0C",
+          "#252526",
+          "#414243",
+          "#606163",
+          "#818286",
+          "#A3A5AA",
+          "#C6C9D0",
+          "#EBEFF6"
+        ],
+        "note": "Fundo do botão primário, da paginação ativa e do bloco da prova no tema escuro (texto #0A1120). Não é token CSS nomeado em app.css; o valor está literal nas regras [data-bs-theme=dark]."
+      },
+      "you": {
+        "role": "secondary",
+        "displayName": "Coral Você",
+        "canonical": "#C23D1C",
+        "oklch": "oklch(55.0% 0.175 34.6)",
+        "tonalRamp": [
+          "#1F0000",
+          "#490A00",
+          "#771E06",
+          "#A83215",
+          "#D0573B",
+          "#E9866E",
+          "#FFB3A0",
+          "#FFE0D3"
+        ],
+        "dark": "#FF8A65"
+      },
+      "you-tint": {
+        "role": "secondary",
+        "displayName": "Coral Tingido",
+        "canonical": "#FCECE6",
+        "oklch": "oklch(95.4% 0.019 41.8)",
+        "tonalRamp": [
+          "#0C0B0A",
+          "#262524",
+          "#434141",
+          "#64605F",
+          "#87817E",
+          "#ACA39F",
+          "#D3C6C1",
+          "#FBEBE5"
+        ],
+        "dark": "#3B231C"
+      },
+      "you-on-ink": {
+        "role": "secondary",
+        "displayName": "Coral sobre Tinta",
+        "canonical": "#FF8A65",
+        "oklch": "oklch(75.5% 0.151 38.3)",
+        "tonalRamp": [
+          "#130805",
+          "#331F19",
+          "#5D362A",
+          "#8B4E3B",
+          "#BC684D",
+          "#F08260",
+          "#FFAA89",
+          "#FFD7BC"
+        ],
+        "dark": "#FF8A65"
+      },
+      "link": {
+        "role": "neutral",
+        "displayName": "Link",
+        "canonical": "#1D4FA3",
+        "oklch": "oklch(44.5% 0.146 260.3)",
+        "tonalRamp": [
+          "#00062B",
+          "#022156",
+          "#123D86",
+          "#305EAD",
+          "#5C82C3",
+          "#87A6D9",
+          "#B5CAEE",
+          "#E4EFFF"
+        ],
+        "dark": "#8DB4FF"
+      },
+      "ground": {
+        "role": "neutral",
+        "displayName": "Chão",
+        "canonical": "#FFFFFF",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0B0B0B",
+          "#252525",
+          "#424242",
+          "#616161",
+          "#828282",
+          "#A5A5A5",
+          "#C9C9C9",
+          "#EEEEEE"
+        ],
+        "dark": "#121A2B"
+      },
+      "ground-alt": {
+        "role": "neutral",
+        "displayName": "Chão Alternado",
+        "canonical": "#F4F6F9",
+        "oklch": "oklch(97.2% 0.005 258.3)",
+        "tonalRamp": [
+          "#0A0B0D",
+          "#242527",
+          "#404244",
+          "#606164",
+          "#818285",
+          "#A3A5A8",
+          "#C7C9CC",
+          "#EDEFF1"
+        ],
+        "dark": "#18223A"
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Fio",
+        "canonical": "#D9DEE7",
+        "oklch": "oklch(89.9% 0.013 262.4)",
+        "tonalRamp": [
+          "#0B0B0C",
+          "#242526",
+          "#414243",
+          "#606164",
+          "#808287",
+          "#A2A5AB",
+          "#C5C9D1",
+          "#EAEFF7"
+        ],
+        "dark": "#2A3652"
+      },
+      "rule-strong": {
+        "role": "neutral",
+        "displayName": "Fio Forte",
+        "canonical": "#9AA3B5",
+        "oklch": "oklch(71.4% 0.028 264.4)",
+        "tonalRamp": [
+          "#0A0B0D",
+          "#232529",
+          "#3E4249",
+          "#5C616C",
+          "#7B8291",
+          "#9CA5B7",
+          "#C2C9D8",
+          "#E9EFFB"
+        ],
+        "dark": "#4A5878"
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Texto",
+        "canonical": "#1A2335",
+        "oklch": "oklch(25.7% 0.037 263.6)",
+        "tonalRamp": [
+          "#050B18",
+          "#1C2537",
+          "#3A4252",
+          "#5B616F",
+          "#7D828C",
+          "#A2A5AB",
+          "#C7C9CD",
+          "#ECEEF2"
+        ],
+        "dark": "#E4E8F0"
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Texto Apagado",
+        "canonical": "#556075",
+        "oklch": "oklch(48.8% 0.037 263.3)",
+        "tonalRamp": [
+          "#080B12",
+          "#1F2531",
+          "#3A4252",
+          "#576176",
+          "#798395",
+          "#9EA5B4",
+          "#C4C9D4",
+          "#EBEFF5"
+        ],
+        "dark": "#9EA9BE"
+      },
+      "block-fund": {
+        "role": "tertiary",
+        "displayName": "Verde-Azulado Fundamentos",
+        "canonical": "#0B7F70",
+        "oklch": "oklch(53.6% 0.095 180.5)",
+        "tonalRamp": [
+          "#00100C",
+          "#002D26",
+          "#004E44",
+          "#047164",
+          "#409385",
+          "#75B3A7",
+          "#A7D4CB",
+          "#D9F6EF"
+        ],
+        "dark": "#4CC7B3"
+      },
+      "block-fund-tint": {
+        "role": "tertiary",
+        "displayName": "Verde-Azulado Tingido",
+        "canonical": "#E0F2EF",
+        "oklch": "oklch(94.7% 0.019 184.9)",
+        "tonalRamp": [
+          "#0A0C0B",
+          "#242525",
+          "#404242",
+          "#5E6261",
+          "#7D8483",
+          "#9DA8A6",
+          "#BECDCA",
+          "#E1F3F0"
+        ],
+        "dark": "#123430"
+      },
+      "block-data": {
+        "role": "tertiary",
+        "displayName": "Índigo Dados",
+        "canonical": "#4646BE",
+        "oklch": "oklch(47.0% 0.183 276.7)",
+        "tonalRamp": [
+          "#07012F",
+          "#1A165E",
+          "#323092",
+          "#4C4FC2",
+          "#6E78D6",
+          "#939FE9",
+          "#BCC5FB",
+          "#E7EDFF"
+        ],
+        "dark": "#A3A3FF"
+      },
+      "block-data-tint": {
+        "role": "tertiary",
+        "displayName": "Índigo Tingido",
+        "canonical": "#ECECFB",
+        "oklch": "oklch(94.7% 0.020 286.0)",
+        "tonalRamp": [
+          "#0B0B0C",
+          "#252526",
+          "#424243",
+          "#616164",
+          "#828288",
+          "#A4A4AD",
+          "#C8C8D4",
+          "#EDEDFC"
+        ],
+        "dark": "#23234A"
+      },
+      "block-soft": {
+        "role": "tertiary",
+        "displayName": "Verde Engenharia",
+        "canonical": "#2A7739",
+        "oklch": "oklch(50.6% 0.121 147.2)",
+        "tonalRamp": [
+          "#001001",
+          "#032E0D",
+          "#144F21",
+          "#287336",
+          "#56935E",
+          "#84B388",
+          "#B1D4B4",
+          "#E0F5E1"
+        ],
+        "dark": "#6CC77E"
+      },
+      "block-soft-tint": {
+        "role": "tertiary",
+        "displayName": "Verde Tingido",
+        "canonical": "#E4F1E6",
+        "oklch": "oklch(94.5% 0.020 150.1)",
+        "tonalRamp": [
+          "#0A0B0A",
+          "#242524",
+          "#414241",
+          "#5F625F",
+          "#7F847F",
+          "#A0A7A1",
+          "#C2CCC4",
+          "#E6F3E8"
+        ],
+        "dark": "#173320"
+      },
+      "block-prof": {
+        "role": "tertiary",
+        "displayName": "Âmbar Profissional",
+        "canonical": "#93570E",
+        "oklch": "oklch(51.4% 0.111 63.5)",
+        "tonalRamp": [
+          "#180600",
+          "#3B1C00",
+          "#613600",
+          "#8B520B",
+          "#AA7542",
+          "#C79B74",
+          "#E3C2A5",
+          "#FFEAD8"
+        ],
+        "dark": "#E8AE5C"
+      },
+      "block-prof-tint": {
+        "role": "tertiary",
+        "displayName": "Âmbar Tingido",
+        "canonical": "#FAEFDD",
+        "oklch": "oklch(95.6% 0.027 80.3)",
+        "tonalRamp": [
+          "#0C0B09",
+          "#262523",
+          "#434240",
+          "#63615D",
+          "#86827B",
+          "#ABA49A",
+          "#D1C8BA",
+          "#F8EDDB"
+        ],
+        "dark": "#3A2A12"
+      },
+      "block-gen": {
+        "role": "tertiary",
+        "displayName": "Ameixa Formação Geral",
+        "canonical": "#8A3883",
+        "oklch": "oklch(48.1% 0.146 331.0)",
+        "tonalRamp": [
+          "#1A0018",
+          "#3D0D3A",
+          "#64235F",
+          "#8D3D86",
+          "#AA67A2",
+          "#C690BF",
+          "#E2BBDC",
+          "#FEE6FA"
+        ],
+        "dark": "#E58AD9"
+      },
+      "block-gen-tint": {
+        "role": "tertiary",
+        "displayName": "Ameixa Tingida",
+        "canonical": "#F5E7F3",
+        "oklch": "oklch(94.2% 0.022 330.3)",
+        "tonalRamp": [
+          "#0C0B0C",
+          "#262426",
+          "#434143",
+          "#636063",
+          "#868085",
+          "#AAA2A9",
+          "#D0C5CF",
+          "#F7EAF5"
+        ],
+        "dark": "#3A1C36"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Contagem de dias até a prova na faixa do semestre (1.75rem no celular)."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Título de página no feed; demais h1 seguem a escala do Bootstrap com 700 e -0.012em."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Título de post e de item de lista."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Texto corrido, limitado a 66–75ch."
+      },
+      "body-sm": {
+        "displayName": "Body pequeno",
+        "purpose": "Metadados, datas, lateral, rodapé (0.8125–0.875rem)."
+      },
+      "module-title": {
+        "displayName": "Título de módulo",
+        "purpose": "Título real da seção (h2) em aba estreita, caixa alta.",
+        "textTransform": "uppercase",
+        "fontStretch": "75%"
+      },
+      "label": {
+        "displayName": "Label estreita",
+        "purpose": "Códigos de semana e questão, chips de filtro, contagem de comentários.",
+        "textTransform": "uppercase",
+        "fontStretch": "75%"
+      },
+      "label-tag": {
+        "displayName": "Etiqueta",
+        "purpose": "Etiquetas de categoria e matéria, selo de professor.",
+        "textTransform": "uppercase",
+        "fontStretch": "75%"
+      }
+    },
+    "shadows": [
+      {
+        "name": "rule-top-inset",
+        "value": "inset 0 2px 0 var(--text)",
+        "purpose": "Post fixado; com var(--you), o próximo passo."
+      },
+      {
+        "name": "meter-track",
+        "value": "inset 0 0 0 1px var(--rule)",
+        "purpose": "Contorno do trilho do medidor por matéria."
+      },
+      {
+        "name": "focus-ring",
+        "value": "0 0 0 0.2rem rgba(var(--bs-link-color-rgb), 0.3)",
+        "purpose": "Foco de botão, campo, select, checkbox e paginação."
+      },
+      {
+        "name": "dropdown-panel",
+        "value": "0 0.5rem 1.5rem rgba(11, 18, 34, 0.18)",
+        "purpose": "Menu da conta; única sombra projetada do sistema."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-nav",
+        "value": "0.15s ease-out",
+        "purpose": "Cor e borda dos itens da navegação e giro do chevron do menu da conta."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "md",
+        "value": "767.98px",
+        "purpose": "Abaixo: navegação vai para a barra de abas fixa embaixo; calha cai para 1rem."
+      },
+      {
+        "name": "lg",
+        "value": "991.98px",
+        "purpose": "Abaixo: a faixa do semestre empilha a cabeça e rola as semanas na horizontal; feed e lateral empilham."
+      }
+    ],
+    "layout": {
+      "pageMax": "82rem",
+      "headerHeight": "3.5rem",
+      "semesterHeadColumn": "11rem",
+      "weekColumn": "minmax(9rem, 1fr)",
+      "weekColumnMobile": "minmax(10.5rem, 46%)",
+      "homeGrid": "Bootstrap col-lg-8 / col-lg-4, g-5"
+    },
+    "themes": {
+      "switch": "data-bs-theme no <html>; claro e escuro obrigatórios",
+      "darkButtonPrimary": {
+        "backgroundColor": "#E6EAF2",
+        "textColor": "#0A1120",
+        "hover": "#FFFFFF",
+        "active": "#C9D2E3"
+      },
+      "darkButtonOutline": {
+        "borderColor": "#8B97B0",
+        "textColor": "#E6EAF2",
+        "hoverBackground": "#E6EAF2",
+        "hoverText": "#0A1120"
+      },
+      "darkHeaderBorder": "1px solid var(--rule)",
+      "darkSlotExam": {
+        "backgroundColor": "#E6EAF2",
+        "textColor": "#0A1120",
+        "smallColor": "#3A4560"
+      }
+    },
+    "localExceptions": [
+      {
+        "scope": "EnadeAds/Components/Pages/Roadmap.razor.css (.rm-page)",
+        "reason": "Formato do roadmap.sh mantido por pedido explícito do usuário.",
+        "tokens": {
+          "--rm-subject": "#fdff00",
+          "--rm-topic": "#ffe599",
+          "--rm-node-ink": "#111111",
+          "--rm-node-border": "#111111",
+          "--rm-spine": "#2b78e4",
+          "--rm-checkpoint": "#4136d4",
+          "--rm-done": "#b6e3b6",
+          "--rm-in-progress": "#cfe2ff",
+          "--rm-skipped": "#d9d9d9"
+        },
+        "notInherited": "Paleta amarela, bordas pretas de 2px e sombra dura de 3px no hover não se aplicam fora do Roadmap."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botão primário",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ação principal da tela: tinta no claro, porcelana no escuro.",
+      "html": "<button class=\"ds-btn-primary\">Criar post</button>",
+      "css": ":host{--ink:#14213D;--ink-text:#E9EDF5;--ink-muted:#AEB8CF;--ground:#FFFFFF;--ground-alt:#F4F6F9;--rule:#D9DEE7;--rule-strong:#9AA3B5;--text:#1A2335;--muted:#556075;--link:#1D4FA3;--you:#C23D1C;--you-tint:#FCECE6;--block-fund:#0B7F70;--block-fund-tint:#E0F2EF;--block-data:#4646BE;--block-data-tint:#ECECFB;--block-prof:#93570E;--block-prof-tint:#FAEFDD;--narrow:75%;font-family:Archivo,system-ui,sans-serif;color:var(--text)} .ds-btn-primary{background:var(--ink);color:#fff;border:1px solid var(--ink);border-radius:0.25rem;padding:0.375rem 0.75rem;font:600 1rem/1.5 Archivo,system-ui,sans-serif;cursor:pointer;transition:background-color .15s ease-out} .ds-btn-primary:hover{background:#23335A;border-color:#23335A} .ds-btn-primary:active{background:#0D1730;border-color:#0D1730} .ds-btn-primary:focus-visible{outline:none;border-color:var(--link);box-shadow:0 0 0 0.2rem rgba(29,79,163,.3)}"
+    },
+    {
+      "name": "Botão de contorno",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Ação secundária: contorno em tinta, enche de tinta no hover.",
+      "html": "<button class=\"ds-btn-outline\">Entre para publicar</button>",
+      "css": ":host{--ink:#14213D;--ink-text:#E9EDF5;--ink-muted:#AEB8CF;--ground:#FFFFFF;--ground-alt:#F4F6F9;--rule:#D9DEE7;--rule-strong:#9AA3B5;--text:#1A2335;--muted:#556075;--link:#1D4FA3;--you:#C23D1C;--you-tint:#FCECE6;--block-fund:#0B7F70;--block-fund-tint:#E0F2EF;--block-data:#4646BE;--block-data-tint:#ECECFB;--block-prof:#93570E;--block-prof-tint:#FAEFDD;--narrow:75%;font-family:Archivo,system-ui,sans-serif;color:var(--text)} .ds-btn-outline{background:transparent;color:var(--ink);border:1px solid var(--ink);border-radius:0.25rem;padding:0.375rem 0.75rem;font:600 1rem/1.5 Archivo,system-ui,sans-serif;cursor:pointer;transition:background-color .15s ease-out,color .15s ease-out} .ds-btn-outline:hover,.ds-btn-outline:active{background:var(--ink);color:#fff} .ds-btn-outline:focus-visible{outline:none;border-color:var(--link);box-shadow:0 0 0 0.2rem rgba(29,79,163,.3)}"
+    },
+    {
+      "name": "Cabeçalho (casca)",
+      "kind": "nav",
+      "refersTo": "site-header",
+      "description": "Casca azul-tinta de 56px com marca, seções e CTA; seção ativa com fio branco de 3px embaixo.",
+      "html": "<header class=\"ds-header\"><a class=\"ds-brand\" href=\"#\">ENADE<span>·</span>ADS</a><nav class=\"ds-nav\"><a class=\"is-active\" href=\"#\">Início</a><a href=\"#\">Roadmap</a><a href=\"#\">Questões</a></nav><a class=\"ds-cta\" href=\"#\">Criar conta</a></header>",
+      "css": ":host{--ink:#14213D;--ink-text:#E9EDF5;--ink-muted:#AEB8CF;--ground:#FFFFFF;--ground-alt:#F4F6F9;--rule:#D9DEE7;--rule-strong:#9AA3B5;--text:#1A2335;--muted:#556075;--link:#1D4FA3;--you:#C23D1C;--you-tint:#FCECE6;--block-fund:#0B7F70;--block-fund-tint:#E0F2EF;--block-data:#4646BE;--block-data-tint:#ECECFB;--block-prof:#93570E;--block-prof-tint:#FAEFDD;--narrow:75%;font-family:Archivo,system-ui,sans-serif;color:var(--text)} .ds-header{display:flex;align-items:center;gap:2rem;height:3.5rem;padding:0 1rem;background:var(--ink);color:var(--ink-text)} .ds-brand{font-size:1.125rem;font-weight:800;letter-spacing:-0.01em;color:#fff;text-decoration:none} .ds-brand span{color:var(--ink-muted);padding:0 .1em} .ds-nav{display:flex;align-self:stretch;gap:.25rem} .ds-nav a{display:flex;align-items:center;padding:0 .75rem;border-top:3px solid transparent;border-bottom:3px solid transparent;font-size:.9375rem;font-weight:600;color:var(--ink-muted);text-decoration:none;transition:color .15s ease-out,border-color .15s ease-out} .ds-nav a:hover{color:#fff} .ds-nav a.is-active{color:#fff;border-bottom-color:#fff} .ds-nav a:focus-visible,.ds-cta:focus-visible,.ds-brand:focus-visible{outline:2px solid #fff;outline-offset:-2px} .ds-cta{margin-left:auto;padding:.375rem .875rem;border-radius:.25rem;background:#fff;color:var(--ink);font-size:.9375rem;font-weight:700;text-decoration:none} .ds-cta:hover{background:var(--ink-text)}"
+    },
+    {
+      "name": "Chips de filtro",
+      "kind": "chip",
+      "refersTo": "filter-chip",
+      "description": "Filtro de categoria do feed em Archivo estreita; o ativo inverte para chão sobre texto.",
+      "html": "<nav class=\"ds-filters\"><a href=\"#\" aria-current=\"page\">Todas</a><a href=\"#\">Datas e prazos</a><a href=\"#\">Dúvidas</a></nav>",
+      "css": ":host{--ink:#14213D;--ink-text:#E9EDF5;--ink-muted:#AEB8CF;--ground:#FFFFFF;--ground-alt:#F4F6F9;--rule:#D9DEE7;--rule-strong:#9AA3B5;--text:#1A2335;--muted:#556075;--link:#1D4FA3;--you:#C23D1C;--you-tint:#FCECE6;--block-fund:#0B7F70;--block-fund-tint:#E0F2EF;--block-data:#4646BE;--block-data-tint:#ECECFB;--block-prof:#93570E;--block-prof-tint:#FAEFDD;--narrow:75%;font-family:Archivo,system-ui,sans-serif;color:var(--text)} .ds-filters{display:flex;flex-wrap:wrap;gap:.375rem} .ds-filters a{padding:.1875rem .5rem;border:1px solid var(--rule);border-radius:.1875rem;color:var(--muted);font-size:.75rem;letter-spacing:.04em;text-decoration:none;font-stretch:var(--narrow);font-weight:700;text-transform:uppercase;} .ds-filters a:hover{border-color:var(--text);color:var(--text)} .ds-filters a:focus-visible{outline:2px solid var(--link);outline-offset:2px} .ds-filters a[aria-current=page]{background:var(--text);border-color:var(--text);color:var(--ground)}"
+    },
+    {
+      "name": "Etiquetas de categoria",
+      "kind": "chip",
+      "refersTo": "tag-official",
+      "description": "Etiquetas do feed: oficial em chão sobre texto, conversa da turma nas cores de bloco; selo de professor só em contorno.",
+      "html": "<span class=\"ds-tag ds-tag-official\">Datas e prazos</span> <span class=\"ds-tag ds-tag-doubt\">Dúvidas</span> <span class=\"ds-tag ds-tag-tip\">Dicas de estudo</span> <span class=\"ds-tag ds-tag-discussion\">Discussão</span> <span class=\"ds-badge-teacher\">Professor</span>",
+      "css": ":host{--ink:#14213D;--ink-text:#E9EDF5;--ink-muted:#AEB8CF;--ground:#FFFFFF;--ground-alt:#F4F6F9;--rule:#D9DEE7;--rule-strong:#9AA3B5;--text:#1A2335;--muted:#556075;--link:#1D4FA3;--you:#C23D1C;--you-tint:#FCECE6;--block-fund:#0B7F70;--block-fund-tint:#E0F2EF;--block-data:#4646BE;--block-data-tint:#ECECFB;--block-prof:#93570E;--block-prof-tint:#FAEFDD;--narrow:75%;font-family:Archivo,system-ui,sans-serif;color:var(--text)} .ds-tag,.ds-badge-teacher{display:inline-block;padding:.0625rem .375rem;border-radius:.125rem;font-size:.6875rem;letter-spacing:.05em;line-height:1.5;font-stretch:var(--narrow);font-weight:700;text-transform:uppercase;} .ds-tag-official{background:var(--text);color:var(--ground)} .ds-tag-doubt{background:var(--block-data-tint);color:var(--block-data)} .ds-tag-tip{background:var(--block-fund-tint);color:var(--block-fund)} .ds-tag-discussion{background:var(--block-prof-tint);color:var(--block-prof)} .ds-badge-teacher{padding:0 .3125rem;border:1px solid currentColor;color:var(--text)}"
+    },
+    {
+      "name": "Módulo",
+      "kind": "card",
+      "refersTo": "module-title",
+      "description": "Agrupamento sem cartão: fio de 2px no topo e título de seção em aba estreita.",
+      "html": "<section class=\"ds-module\"><h2>Combinados da comunidade</h2><p>Respeito sempre: crítica é ao conteúdo, não à pessoa.</p></section>",
+      "css": ":host{--ink:#14213D;--ink-text:#E9EDF5;--ink-muted:#AEB8CF;--ground:#FFFFFF;--ground-alt:#F4F6F9;--rule:#D9DEE7;--rule-strong:#9AA3B5;--text:#1A2335;--muted:#556075;--link:#1D4FA3;--you:#C23D1C;--you-tint:#FCECE6;--block-fund:#0B7F70;--block-fund-tint:#E0F2EF;--block-data:#4646BE;--block-data-tint:#ECECFB;--block-prof:#93570E;--block-prof-tint:#FAEFDD;--narrow:75%;font-family:Archivo,system-ui,sans-serif;color:var(--text)} .ds-module{border-top:2px solid var(--text);padding-top:.625rem;margin-bottom:1.75rem;font-size:.875rem;line-height:1.55} .ds-module h2{margin:0 0 .75rem;font-size:.8125rem;letter-spacing:.045em;font-stretch:var(--narrow);font-weight:700;text-transform:uppercase;} .ds-module p{margin:0}"
+    },
+    {
+      "name": "Faixa do semestre",
+      "kind": "custom",
+      "refersTo": "week-current",
+      "description": "Assinatura: semanas até a prova como colunas; semana atual em coral, estado do desafio pela borda.",
+      "html": "<ol class=\"ds-weeks\"><li class=\"ds-week is-current\"><p class=\"ds-code\"><b>Esta semana</b> · 26/10–01/11</p><a class=\"ds-slot ds-fund\" href=\"#\">Desafio: Estruturas de dados<small>Pendente</small></a></li><li class=\"ds-week\"><p class=\"ds-code\"><b>Sem 45</b> · 02/11–08/11</p><a class=\"ds-slot ds-fund is-done\" href=\"#\">Desafio: Grafos<small>Entregue</small></a></li><li class=\"ds-week\"><p class=\"ds-code\"><b>Sem 48</b> · 23/11–29/11</p><p class=\"ds-slot ds-exam\">ENADE 2026<small>domingo, 29/11</small></p></li></ol>",
+      "css": ":host{--ink:#14213D;--ink-text:#E9EDF5;--ink-muted:#AEB8CF;--ground:#FFFFFF;--ground-alt:#F4F6F9;--rule:#D9DEE7;--rule-strong:#9AA3B5;--text:#1A2335;--muted:#556075;--link:#1D4FA3;--you:#C23D1C;--you-tint:#FCECE6;--block-fund:#0B7F70;--block-fund-tint:#E0F2EF;--block-data:#4646BE;--block-data-tint:#ECECFB;--block-prof:#93570E;--block-prof-tint:#FAEFDD;--narrow:75%;font-family:Archivo,system-ui,sans-serif;color:var(--text)} .ds-weeks{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(9rem,1fr);margin:0;padding:0;list-style:none;border-top:2px solid var(--text);border-bottom:1px solid var(--rule)} .ds-week{position:relative;padding:.75rem .75rem .875rem;border-left:1px solid var(--rule)} .ds-week.is-current{background:var(--you-tint)} .ds-week.is-current::before{content:\"\";position:absolute;left:-1px;right:0;top:-2px;height:4px;background:var(--you)} .ds-code{margin:0 0 .5rem;color:var(--muted);font-size:.75rem;white-space:nowrap} .ds-code b{color:var(--text);letter-spacing:.045em;font-stretch:var(--narrow);font-weight:700;text-transform:uppercase;} .ds-week.is-current .ds-code b{color:var(--you)} .ds-slot{display:block;margin:.375rem 0 0;padding:.375rem .5rem;border:1px dashed var(--rule-strong);border-radius:.1875rem;font-size:.8125rem;font-weight:600;line-height:1.3;color:var(--text);text-decoration:none;background:var(--ground)} .ds-slot small{display:block;font-weight:500;color:var(--muted)} .ds-fund{border-color:var(--block-fund);background:var(--block-fund-tint)} .ds-fund small{color:var(--block-fund)} .ds-slot.is-done{border-style:solid} a.ds-slot:hover{border-color:var(--text)} a.ds-slot:focus-visible{outline:2px solid var(--link);outline-offset:2px} .ds-exam{border:0;background:var(--ink);color:#fff;padding:.5rem} .ds-exam small{color:var(--ink-muted)}"
+    },
+    {
+      "name": "Linha do feed com voto",
+      "kind": "custom",
+      "refersTo": "tag-doubt",
+      "description": "Linha de lista separada por fio, com voto à esquerda; voto dado em coral.",
+      "html": "<article class=\"ds-post\"><div class=\"ds-vote\"><button class=\"ds-vbtn is-on\" aria-pressed=\"true\" aria-label=\"Votar a favor\"><svg viewBox=\"0 0 16 16\"><path d=\"M8 3.5 13.5 10h-11z\"/></svg></button><span class=\"ds-score\">6</span><button class=\"ds-vbtn\" aria-pressed=\"false\" aria-label=\"Votar contra\"><svg viewBox=\"0 0 16 16\"><path d=\"M8 12.5 2.5 6h11z\"/></svg></button></div><div><p class=\"ds-meta\"><span class=\"ds-tag\">Dúvidas</span> Aluna de Exemplo · há 2 h</p><h2 class=\"ds-title\"><a href=\"#\">Alguém tem um resumo bom de normalização?</a></h2><p class=\"ds-excerpt\">Estou revisando banco de dados e sempre confundo dependência parcial com transitiva.</p></div></article>",
+      "css": ":host{--ink:#14213D;--ink-text:#E9EDF5;--ink-muted:#AEB8CF;--ground:#FFFFFF;--ground-alt:#F4F6F9;--rule:#D9DEE7;--rule-strong:#9AA3B5;--text:#1A2335;--muted:#556075;--link:#1D4FA3;--you:#C23D1C;--you-tint:#FCECE6;--block-fund:#0B7F70;--block-fund-tint:#E0F2EF;--block-data:#4646BE;--block-data-tint:#ECECFB;--block-prof:#93570E;--block-prof-tint:#FAEFDD;--narrow:75%;font-family:Archivo,system-ui,sans-serif;color:var(--text)} .ds-post{display:grid;grid-template-columns:2.5rem 1fr;gap:.75rem;padding:.875rem .25rem .875rem 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)} .ds-vote{display:flex;flex-direction:column;align-items:center} .ds-vbtn{display:inline-flex;align-items:center;justify-content:center;width:2rem;height:1.75rem;padding:0;border:0;border-radius:.1875rem;background:none;color:var(--muted);cursor:pointer} .ds-vbtn svg{width:1rem;height:1rem;fill:currentColor} .ds-vbtn:hover{background:var(--ground-alt);color:var(--text)} .ds-vbtn:focus-visible{outline:2px solid var(--link);outline-offset:0} .ds-vbtn.is-on{color:var(--you)} .ds-score{font-size:.875rem;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.2} .ds-meta{display:flex;flex-wrap:wrap;align-items:center;gap:.25rem .5rem;margin:0 0 .25rem;font-size:.8125rem;color:var(--muted)} .ds-tag{padding:.0625rem .375rem;border-radius:.125rem;background:var(--block-data-tint);color:var(--block-data);font-size:.6875rem;letter-spacing:.05em;font-stretch:var(--narrow);font-weight:700;text-transform:uppercase;} .ds-title{margin:0 0 .25rem;font-size:1.0625rem;font-weight:700;line-height:1.35} .ds-title a{color:var(--text);text-decoration:none} .ds-title a:hover{text-decoration:underline} .ds-title a:focus-visible{outline:2px solid var(--link);outline-offset:2px} .ds-excerpt{margin:0;max-width:72ch;font-size:.9375rem;color:var(--muted)}"
+    },
+    {
+      "name": "Próximo passo",
+      "kind": "card",
+      "refersTo": "next-step",
+      "description": "O único bloco com fundo: coral tingido e fio coral de 2px, apontando a matéria mais fraca.",
+      "html": "<div class=\"ds-next\"><h3>Banco de dados</h3><p>Sua matéria mais fraca: 40% de acerto em 5 questões.</p><a class=\"ds-btn\" href=\"#\">Praticar Banco de dados</a></div>",
+      "css": ":host{--ink:#14213D;--ink-text:#E9EDF5;--ink-muted:#AEB8CF;--ground:#FFFFFF;--ground-alt:#F4F6F9;--rule:#D9DEE7;--rule-strong:#9AA3B5;--text:#1A2335;--muted:#556075;--link:#1D4FA3;--you:#C23D1C;--you-tint:#FCECE6;--block-fund:#0B7F70;--block-fund-tint:#E0F2EF;--block-data:#4646BE;--block-data-tint:#ECECFB;--block-prof:#93570E;--block-prof-tint:#FAEFDD;--narrow:75%;font-family:Archivo,system-ui,sans-serif;color:var(--text)} .ds-next{padding:.75rem .875rem;background:var(--you-tint);box-shadow:inset 0 2px 0 var(--you)} .ds-next h3{margin:0 0 .25rem;font-size:1rem;font-weight:700} .ds-next p{margin:0 0 .625rem;font-size:.875rem;color:var(--muted)} .ds-btn{display:inline-block;padding:.25rem .5rem;border-radius:.1875rem;background:var(--ink);color:#fff;font-size:.875rem;font-weight:600;text-decoration:none} .ds-btn:hover{background:#23335A} .ds-btn:focus-visible{outline:2px solid var(--link);outline-offset:2px}"
+    },
+    {
+      "name": "Campo de seleção",
+      "kind": "input",
+      "refersTo": "button-outline",
+      "description": "Select do Bootstrap com borda em fio e foco no azul do link.",
+      "html": "<label class=\"ds-label\" for=\"m\">Matéria</label><select id=\"m\" class=\"ds-select\"><option>Todas as matérias</option></select>",
+      "css": ":host{--ink:#14213D;--ink-text:#E9EDF5;--ink-muted:#AEB8CF;--ground:#FFFFFF;--ground-alt:#F4F6F9;--rule:#D9DEE7;--rule-strong:#9AA3B5;--text:#1A2335;--muted:#556075;--link:#1D4FA3;--you:#C23D1C;--you-tint:#FCECE6;--block-fund:#0B7F70;--block-fund-tint:#E0F2EF;--block-data:#4646BE;--block-data-tint:#ECECFB;--block-prof:#93570E;--block-prof-tint:#FAEFDD;--narrow:75%;font-family:Archivo,system-ui,sans-serif;color:var(--text)} .ds-label{display:block;margin-bottom:.5rem;font-size:1rem} .ds-select{width:100%;padding:.375rem .75rem;border:1px solid var(--rule);border-radius:.25rem;background:var(--ground);color:var(--text);font:400 1rem/1.5 Archivo,system-ui,sans-serif} .ds-select:focus{outline:none;border-color:var(--link);box-shadow:0 0 0 0.2rem rgba(29,79,163,.3)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "A Grade do Semestre",
+    "overview": "O app é desenhado como a grade horária impressa de uma faculdade: um cabeçalho azul-tinta, um chão claro dividido por fios finos e colunas por semana até a prova. Cada matéria tem sua cor, e essa cor só aparece onde há matéria ou categoria. Uma única cor quente, o coral, é reservada para \"você\": sua semana, seu voto, seu próximo passo. O resto é neutro, denso e legível, para o aluno que abre no celular entre aulas e para quem estuda horas no computador.\n\nA densidade é de documento de trabalho, não de app de comunidade genérico. Em vez de cartões flutuantes, módulos com um fio grosso em cima e uma aba de título estreita; em vez de listas em cartões, linhas separadas por fios de 1px, como as linhas da grade. Estado se lê pela forma da linha (sólida entregue, tracejada pendente), não só pela cor. Todo item tem um código legível em letra estreita: \"Sem 44\", \"2021·Q12\".\n\nArchivo é a única família, e o eixo de largura faz o trabalho de uma segunda fonte: largura normal para ler, estreita (75%) em caixa alta para rótulos, códigos e cabeçalhos de coluna. Claro e escuro são obrigatórios e trocados por `data-bs-theme` no `<html>`; a casca azul-tinta continua nos dois temas. A base é Bootstrap 5.3, restilizado só pelas variáveis, sem forkar componentes. A página do Roadmap é uma exceção local deliberada (ver Colors).",
+    "keyCharacteristics": [
+      "Casca azul-tinta de 56px nos dois temas; chão branco (claro) ou azul-noite (escuro).",
+      "Fios no lugar de cartões: 2px no topo do módulo, 1px entre linhas.",
+      "Cinco cores de matéria, cada uma com seu tom tingido; coral só para \"você\".",
+      "Uma família, dois corpos: Archivo normal e Archivo estreita em caixa alta.",
+      "Estado pela forma da borda: sólida, tracejada, apagada com risco.",
+      "Código legível em todo item, em numerais tabulares."
+    ],
+    "rules": [
+      {
+        "name": "The Coral Is You Rule",
+        "body": "Coral marca só o que pertence ao usuário: a semana atual, o voto dado, o próximo passo, o avatar. Nunca em botão genérico, ícone decorativo ou destaque de marketing.",
+        "section": "colors"
+      },
+      {
+        "name": "The Color Means Subject Rule",
+        "body": "Cor de bloco só aparece onde há uma matéria ou uma categoria do feed: bloco da semana, etiqueta, medidor, linha de questão. Sem matéria, o elemento fica neutro (tinta, texto ou fio).",
+        "section": "colors"
+      },
+      {
+        "name": "The Ink Shell Rule",
+        "body": "O cabeçalho é azul-tinta nos dois temas. O botão primário é tinta no claro e porcelana no escuro; o tema escuro nunca usa o azul do Bootstrap como fundo de botão.",
+        "section": "colors"
+      },
+      {
+        "name": "The Roadmap Exception Rule",
+        "body": "A página do Roadmap mantém a paleta do roadmap.sh (matéria em amarelo `#fdff00`, assunto em bege `#ffe599`, espinha azul `#2b78e4`, checkpoint índigo `#4136d4`, caixas com borda preta de 2px e sombra dura de 3px no hover) por pedido explícito do usuário. Esses valores vivem só em `Roadmap.razor.css` sob `--rm-*` e não se estendem a nenhuma outra página.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Family Rule",
+        "body": "Archivo é a única família. Hierarquia vem de peso, tamanho e largura; nunca carregar uma segunda fonte nem usar fonte do sistema para títulos.",
+        "section": "typography"
+      },
+      {
+        "name": "The Readable Code Rule",
+        "body": "Todo item que se repete numa lista leva um código curto em Label estreita e numerais tabulares: \"Sem 44\", \"2021·Q12\", \"nº 13\". O código é texto real que identifica o item, não ornamento.",
+        "section": "typography"
+      },
+      {
+        "name": "The Rules Not Cards Rule",
+        "body": "Agrupamento se faz com fio, não com cartão: módulo com 2px de texto no topo, listas com 1px de fio entre linhas. Sombra projetada só em painel que se sobrepõe ao conteúdo (menu suspenso).",
+        "section": "elevation"
+      },
+      {
+        "name": "The State By Line Rule",
+        "body": "O estado de um bloco se lê pela borda antes da cor: tracejada pendente, sólida entregue, apagada e riscada perdida. Cor sozinha nunca carrega estado.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "**Do** usar os tokens (`--ink`, `--ground`, `--rule`, `--text`, `--muted`, `--link`, `--you`, `--block-*`) e as variáveis do Bootstrap mapeadas a eles; nunca hex solto em componente novo.",
+      "**Do** definir todo valor novo de cor nos dois temas, em `[data-bs-theme=\"light\"]` e `[data-bs-theme=\"dark\"]`.",
+      "**Do** dar a uma matéria a cor do bloco dela via `StudyBlock.ColorClass()` e `.block-*`, consumindo `--block` e `--block-tint`.",
+      "**Do** agrupar com módulo (fio de 2px e título estreito) e separar linhas com fio de 1px.",
+      "**Do** marcar estado pela borda (tracejada pendente, sólida feito) e acompanhar com texto (\"Pendente\", \"Entregue\").",
+      "**Do** usar o componente `Icon` (traço SVG de 1.75px, `currentColor`) para ícones novos.",
+      "**Do** limitar texto corrido a 66–75ch e usar numerais tabulares em contagens, porcentagens e códigos."
+    ],
+    "donts": [
+      "**Don't** usar coral fora do que pertence ao usuário (semana atual, voto dado, próximo passo, avatar).",
+      "**Don't** pôr cor de bloco em elemento sem matéria ou categoria.",
+      "**Don't** criar cartões flutuantes com sombra para conteúdo; sombra projetada só em painel suspenso.",
+      "**Don't** usar o azul padrão do Bootstrap (`#0d6efd`) nem o ciano de `alert-info` sem restilizar pelos tokens.",
+      "**Don't** carregar outra família de fonte, nem Google Fonts ou fonte de terceiros (a CSP só aceita `'self'`).",
+      "**Don't** usar caracteres como ✓, ↷ ou emoji no lugar de ícone.",
+      "**Don't** levar a paleta amarela, as bordas pretas ou a sombra dura do Roadmap para outras páginas."
+    ]
+  }
+}
