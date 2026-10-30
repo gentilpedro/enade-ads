@@ -2,10 +2,20 @@ using EnadeAds.Study;
 
 namespace EnadeAds.Questions;
 
-/// <summary>Questão objetiva no formato do ENADE: enunciado e cinco alternativas, uma correta.</summary>
+public enum QuestionKind
+{
+    /// <summary>Cinco alternativas, uma correta.</summary>
+    Objective = 0,
+
+    /// <summary>Resposta escrita, comparada com um padrão de resposta.</summary>
+    Discursive = 1,
+}
+
+/// <summary>Questão no formato do ENADE: objetiva (cinco alternativas) ou discursiva (padrão de resposta).</summary>
 public class Question
 {
     public int Id { get; set; }
+    public QuestionKind Kind { get; set; }
     public int SubjectId { get; set; }
     public RoadmapNode? Subject { get; set; }
 
@@ -19,6 +29,12 @@ public class Question
     public string? AuthorId { get; set; }
 
     public DateTimeOffset CreatedAt { get; set; }
+
+    /// <summary>Discursiva: o que uma boa resposta deve conter. Só aparece depois que o aluno envia a dele.</summary>
+    public string? ExpectedAnswer { get; set; }
+
+    /// <summary>Discursiva: tamanho sugerido da resposta, em linhas (a prova costuma pedir cerca de 15).</summary>
+    public int? SuggestedLines { get; set; }
 
     /// <summary>Questão arquivada some das listas e da página pública; as tentativas dos alunos ficam.</summary>
     public DateTimeOffset? ArchivedAt { get; set; }
@@ -45,5 +61,15 @@ public class QuestionAttempt
     public required string UserId { get; set; }
     public int OptionId { get; set; }
     public bool IsCorrect { get; set; }
+    public DateTimeOffset AnsweredAt { get; set; }
+}
+
+/// <summary>Resposta de um aluno a uma questão discursiva. Só o próprio aluno vê.</summary>
+public class DiscursiveAnswer
+{
+    public long Id { get; set; }
+    public int QuestionId { get; set; }
+    public required string UserId { get; set; }
+    public required string Text { get; set; }
     public DateTimeOffset AnsweredAt { get; set; }
 }

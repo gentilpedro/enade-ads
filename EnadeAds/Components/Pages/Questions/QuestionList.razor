@@ -58,7 +58,13 @@
                 <li class="card">
                     <div class="card-body">
                         <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
-                            <span class="small text-body-secondary">@question.SubjectTitle · @question.Source</span>
+                            <span class="small text-body-secondary">
+                                @if (question.Kind == QuestionKind.Discursive)
+                                {
+                                    <span class="badge text-bg-secondary me-1">Discursiva</span>
+                                }
+                                @question.SubjectTitle · @question.Source
+                            </span>
                             <OutcomeBadge Outcome="question.Outcome" />
                         </div>
                         <p class="mb-2">@question.Excerpt</p>

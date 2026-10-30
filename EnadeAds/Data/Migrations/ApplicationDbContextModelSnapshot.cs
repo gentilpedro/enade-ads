@@ -91,6 +91,38 @@ namespace EnadeAds.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("EnadeAds.Questions.DiscursiveAnswer", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTimeOffset>("AnsweredAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("QuestionId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Text")
+                        .IsRequired()
+                        .HasMaxLength(5000)
+                        .HasColumnType("character varying(5000)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("UserId", "QuestionId");
+
+                    b.ToTable("DiscursiveAnswers");
+                });
+
             modelBuilder.Entity("EnadeAds.Questions.Question", b =>
                 {
                     b.Property<int>("Id")
@@ -108,6 +140,13 @@ namespace EnadeAds.Data.Migrations
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("ExpectedAnswer")
+                        .HasMaxLength(5000)
+                        .HasColumnType("character varying(5000)");
+
+                    b.Property<int>("Kind")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Source")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -119,6 +158,9 @@ namespace EnadeAds.Data.Migrations
                         .HasColumnType("character varying(8000)");
 
                     b.Property<int>("SubjectId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("SuggestedLines")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -134,6 +176,7 @@ namespace EnadeAds.Data.Migrations
                         {
                             Id = 1,
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 10, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Kind = 0,
                             Source = "Autoria própria – ENADE ADS",
                             Statement = "Uma pilha começa vazia e recebe, nesta ordem, as operações:\n\npush(1), push(2), pop(), push(3), push(4), pop(), push(5)\n\nQual é o conteúdo da pilha ao final, da base para o topo?",
                             SubjectId = 400
@@ -142,6 +185,7 @@ namespace EnadeAds.Data.Migrations
                         {
                             Id = 2,
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 10, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Kind = 0,
                             Source = "Autoria própria – ENADE ADS",
                             Statement = "O número 45, em decimal, corresponde a quais valores em binário e em hexadecimal, respectivamente?",
                             SubjectId = 200
@@ -150,6 +194,7 @@ namespace EnadeAds.Data.Migrations
                         {
                             Id = 3,
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 10, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Kind = 0,
                             Source = "Autoria própria – ENADE ADS",
                             Statement = "Um computador tem o endereço IPv4 192.168.10.70 com máscara /26. Qual é o endereço da sub-rede, o endereço de broadcast e a quantidade de hosts utilizáveis nessa sub-rede?",
                             SubjectId = 800
@@ -158,6 +203,7 @@ namespace EnadeAds.Data.Migrations
                         {
                             Id = 4,
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 10, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Kind = 0,
                             Source = "Autoria própria – ENADE ADS",
                             Statement = "Considere as tabelas:\n\nCurso                 Aluno\nid | nome             id | nome  | curso_id\n---+------            ---+-------+---------\n 1 | ADS               1 | Ana   | 1\n 2 | Redes             2 | Bruno | 1\n 3 | Jogos             3 | Carla | 2\n                       4 | Davi  | NULL\n\nE a consulta:\n\nSELECT c.nome, COUNT(a.id)\nFROM Curso c\nLEFT JOIN Aluno a ON a.curso_id = c.id\nGROUP BY c.nome\nORDER BY c.nome;\n\nQual é o resultado?",
                             SubjectId = 600
@@ -166,6 +212,7 @@ namespace EnadeAds.Data.Migrations
                         {
                             Id = 5,
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 10, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Kind = 0,
                             Source = "Autoria própria – ENADE ADS",
                             Statement = "Na especificação de um sistema acadêmico, qual dos itens abaixo é um requisito NÃO funcional?",
                             SubjectId = 1200
@@ -174,6 +221,7 @@ namespace EnadeAds.Data.Migrations
                         {
                             Id = 6,
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 10, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Kind = 0,
                             Source = "Autoria própria – ENADE ADS",
                             Statement = "Um formulário aceita idades de 18 a 60 anos, inclusive. Pela técnica de análise de valor-limite, qual conjunto de valores de teste cobre os limites da regra?",
                             SubjectId = 1500
@@ -182,9 +230,21 @@ namespace EnadeAds.Data.Migrations
                         {
                             Id = 7,
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 10, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            Kind = 0,
                             Source = "Autoria própria – ENADE ADS",
                             Statement = "Considere o código Java:\n\nclass Animal { String som() { return \"...\"; } }\nclass Cachorro extends Animal { String som() { return \"Au\"; } }\nclass Gato extends Animal { String som() { return \"Miau\"; } }\n\nAnimal[] lista = { new Cachorro(), new Gato(), new Animal() };\nfor (Animal a : lista) {\n    System.out.print(a.som() + \" \");\n}\n\nO que é impresso?",
                             SubjectId = 500
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CreatedAt = new DateTimeOffset(new DateTime(2026, 10, 29, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
+                            ExpectedAnswer = "Uma boa resposta traz dois requisitos não funcionais mensuráveis, ligados aos problemas do enunciado, e um jeito concreto de verificar cada um.\n\n1. **Desempenho e disponibilidade:** por exemplo, \"o aplicativo deve atender 5.000 alunos simultâneos com tempo de resposta de até 2 segundos em 95% das requisições, e ficar disponível 99,5% do tempo durante o período de rematrícula\". Verificação: teste de carga simulando o pico do primeiro dia, com medição do tempo de resposta e da taxa de erros.\n\n2. **Acessibilidade:** por exemplo, \"as telas devem seguir as diretrizes WCAG 2.1 nível AA, funcionando com leitores de tela e navegação sem toque\". Verificação: avaliação com ferramentas automáticas de acessibilidade, revisão pelos critérios da WCAG e teste com usuários que usam leitor de tela.\n\nPerde pontos a resposta que:\n- descreve funções do sistema (\"o aluno deve escolher as disciplinas\"), que são requisitos funcionais.\n- usa termos vagos sem métrica (\"o sistema deve ser rápido\", \"deve ser fácil de usar\").\n- não diz como verificar o requisito.",
+                            Kind = 1,
+                            Source = "Autoria própria – ENADE ADS",
+                            Statement = "Uma universidade vai lançar um aplicativo para os alunos fazerem a rematrícula pelo celular.\nNo último semestre, o sistema antigo ficou fora do ar no primeiro dia de rematrícula e houve\nreclamações de alunos com deficiência visual que não conseguiam usar as telas.\n\nProponha **dois requisitos não funcionais** para o novo aplicativo, ligados aos problemas descritos.\nPara cada um, explique como a equipe poderia **verificar** se ele foi atendido antes da entrega.",
+                            SubjectId = 1200,
+                            SuggestedLines = 15
                         });
                 });
 
@@ -2196,6 +2256,21 @@ namespace EnadeAds.Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("EnadeAds.Questions.DiscursiveAnswer", b =>
+                {
+                    b.HasOne("EnadeAds.Questions.Question", null)
+                        .WithMany()
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EnadeAds.Data.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EnadeAds.Questions.Question", b =>

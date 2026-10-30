@@ -12,6 +12,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Question> Questions => Set<Question>();
     public DbSet<QuestionOption> QuestionOptions => Set<QuestionOption>();
     public DbSet<QuestionAttempt> QuestionAttempts => Set<QuestionAttempt>();
+    public DbSet<DiscursiveAnswer> DiscursiveAnswers => Set<DiscursiveAnswer>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -46,12 +47,14 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         {
             question.Property(q => q.Statement).HasMaxLength(8000);
             question.Property(q => q.Source).HasMaxLength(200);
+            question.Property(q => q.ExpectedAnswer).HasMaxLength(QuestionEditor.ExpectedAnswerMaxLength);
             question.HasOne(q => q.Subject).WithMany().HasForeignKey(q => q.SubjectId).OnDelete(DeleteBehavior.Restrict);
             question.HasOne<ApplicationUser>().WithMany().HasForeignKey(q => q.AuthorId).OnDelete(DeleteBehavior.SetNull);
             question.HasMany(q => q.Options).WithOne().HasForeignKey(o => o.QuestionId).OnDelete(DeleteBehavior.Cascade);
             question.HasData(QuestionSeed.Questions.Select(q => new Question
             {
-                Id = q.Id, SubjectId = q.SubjectId, Statement = q.Statement, Source = q.Source, CreatedAt = q.CreatedAt,
+                Id = q.Id, Kind = q.Kind, SubjectId = q.SubjectId, Statement = q.Statement, Source = q.Source, CreatedAt = q.CreatedAt,
+                ExpectedAnswer = q.ExpectedAnswer, SuggestedLines = q.SuggestedLines,
             }));
         });
 
@@ -69,6 +72,14 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
             attempt.HasOne<ApplicationUser>().WithMany().HasForeignKey(a => a.UserId).OnDelete(DeleteBehavior.Cascade);
             attempt.HasOne<Question>().WithMany().HasForeignKey(a => a.QuestionId).OnDelete(DeleteBehavior.Cascade);
             attempt.HasOne<QuestionOption>().WithMany().HasForeignKey(a => a.OptionId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        builder.Entity<DiscursiveAnswer>(answer =>
+        {
+            answer.Property(a => a.Text).HasMaxLength(QuestionBank.DiscursiveAnswerMaxLength);
+            answer.HasIndex(a => new { a.UserId, a.QuestionId });
+            answer.HasOne<ApplicationUser>().WithMany().HasForeignKey(a => a.UserId).OnDelete(DeleteBehavior.Cascade);
+            answer.HasOne<Question>().WithMany().HasForeignKey(a => a.QuestionId).OnDelete(DeleteBehavior.Cascade);
         });
     }
 }

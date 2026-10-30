@@ -79,3 +79,16 @@ h1:focus {
     border: 1px solid var(--bs-border-color);
     border-radius: 0.375rem;
 }
+
+/* Resposta discursiva do aluno: texto puro, respeitando as quebras de linha que ele digitou. */
+.discursive-text {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* Nova questão: mostra só os campos do tipo escolhido no radio (CSS :has, sem JavaScript).
+   Navegador sem :has mostra as duas seções, e o servidor ignora a que não é do tipo. */
+.question-form:has(#kind-objective:checked) .discursive-fields,
+.question-form:has(#kind-discursive:checked) .objective-fields {
+    display: none;
+}
