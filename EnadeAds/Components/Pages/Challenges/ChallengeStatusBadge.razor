@@ -1,0 +1,19 @@
+@using EnadeAds.Challenges
+
+@switch (Status)
+{
+    case ChallengeStatus.Active:
+        <span class="badge text-bg-success">Aberto</span>
+        break;
+    case ChallengeStatus.Upcoming:
+        <span class="badge text-bg-warning">Agendado</span>
+        break;
+    default:
+        <span class="badge text-bg-secondary">Encerrado</span>
+        break;
+}
+
+@code {
+    [Parameter]
+    public ChallengeStatus Status { get; set; }
+}

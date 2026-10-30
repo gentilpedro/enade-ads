@@ -159,7 +159,7 @@ public class DiscursiveQuestionTests(EnadeAdsFactory factory)
         {
             var created = await scope.ServiceProvider.GetRequiredService<QuestionEditor>()
                 .CreateAsync(new Editor(teacher.Id, IsAdmin: false, IsTeacher: true), Discursive(expectedAnswer: "Padrão antigo"));
-            id = created.QuestionId!.Value;
+            id = created.Id!.Value;
         }
 
         var client = NewClient();
@@ -200,7 +200,7 @@ public class DiscursiveQuestionTests(EnadeAdsFactory factory)
         var created = await questions.CreateAsync(editor, Discursive(expectedAnswer: "Padrão"));
         var objectiveVersion = Discursive(expectedAnswer: "Padrão");
         objectiveVersion.Kind = QuestionKind.Objective;
-        var changedKind = await questions.UpdateAsync(editor, created.QuestionId!.Value, objectiveVersion);
+        var changedKind = await questions.UpdateAsync(editor, created.Id!.Value, objectiveVersion);
 
         Assert.Contains("Preencha o padrão de resposta.", missing.Errors);
         Assert.True(created.Succeeded);

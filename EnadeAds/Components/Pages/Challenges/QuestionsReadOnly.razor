@@ -1,0 +1,35 @@
+@using EnadeAds.Challenges
+@using EnadeAds.Questions
+
+@* Questões do desafio sem gabarito: só enunciado e alternativas, com a escolha do aluno marcada se houver. *@
+@foreach (var item in Challenge.Questions)
+{
+    var question = item.Question!;
+    Chosen.TryGetValue(question.Id, out var chosenOptionId);
+    <article class="card mb-3">
+        <div class="card-body">
+            <h3 class="h6">Questão @item.Order</h3>
+            <div class="question-statement">@((MarkupString)StatementFormatter.ToHtml(question.Statement))</div>
+            <ol class="list-unstyled mb-0">
+                @foreach (var option in question.Options)
+                {
+                    <li class="mb-1">
+                        <strong>@option.Letter)</strong> @option.Text
+                        @if (option.Id == chosenOptionId)
+                        {
+                            <span class="badge text-bg-primary ms-1">Sua resposta</span>
+                        }
+                    </li>
+                }
+            </ol>
+        </div>
+    </article>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public Challenge Challenge { get; set; } = default!;
+
+    [Parameter]
+    public IReadOnlyDictionary<int, int> Chosen { get; set; } = new Dictionary<int, int>();
+}

@@ -1,0 +1,23 @@
+@using EnadeAds.Challenges
+
+<a class="card mb-2 text-decoration-none @(Highlight ? "border-primary border-2" : "")" href="desafios/@Item.Challenge.Id">
+    <div class="card-body">
+        <div class="d-flex flex-wrap justify-content-between gap-2">
+            <h3 class="h6 card-title mb-1">@Item.Challenge.Title</h3>
+            <ChallengeStatusBadge Status="Item.Status" />
+        </div>
+        <p class="small text-body-secondary mb-0">
+            @Item.Challenge.StartsOn.ToString("dd/MM") a @Item.Challenge.EndsOn.ToString("dd/MM/yyyy")
+            · @Item.QuestionCount @(Item.QuestionCount == 1 ? "questão" : "questões")
+            · @Item.Participants @(Item.Participants == 1 ? "participante" : "participantes")
+        </p>
+    </div>
+</a>
+
+@code {
+    [Parameter, EditorRequired]
+    public ChallengeOverview Item { get; set; } = default!;
+
+    [Parameter]
+    public bool Highlight { get; set; }
+}

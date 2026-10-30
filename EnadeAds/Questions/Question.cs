@@ -62,6 +62,9 @@ public class QuestionAttempt
     public int OptionId { get; set; }
     public bool IsCorrect { get; set; }
     public DateTimeOffset AnsweredAt { get; set; }
+
+    /// <summary>Preenchido quando a resposta foi dada dentro de um desafio semanal.</summary>
+    public int? ChallengeId { get; set; }
 }
 
 /// <summary>Resposta de um aluno a uma questão discursiva. Só o próprio aluno vê.</summary>

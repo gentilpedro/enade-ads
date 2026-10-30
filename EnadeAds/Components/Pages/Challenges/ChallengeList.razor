@@ -1,0 +1,75 @@
+@page "/desafios"
+
+@using EnadeAds.Accounts
+@using EnadeAds.Challenges
+
+@inject ChallengeService Challenges
+
+<PageTitle>Desafios semanais</PageTitle>
+
+<div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+    <h1>Desafios semanais</h1>
+    <AuthorizeView Roles="@Roles.Editors">
+        <a class="btn btn-primary" href="desafios/novo">Novo desafio</a>
+    </AuthorizeView>
+</div>
+
+<p class="text-body-secondary">
+    Um conjunto de questões proposto pelos professores para a turma resolver no prazo.
+    O gabarito e o desempenho da turma aparecem quando o desafio encerra.
+</p>
+
+@if (challenges is not null)
+{
+    var active = challenges.Where(c => c.Status == ChallengeStatus.Active).ToList();
+    var upcoming = challenges.Where(c => c.Status == ChallengeStatus.Upcoming).ToList();
+    var ended = challenges.Where(c => c.Status == ChallengeStatus.Ended).ToList();
+
+    <section class="mb-4" aria-labelledby="active-title">
+        <h2 id="active-title" class="h4">Desafio da semana</h2>
+        @if (active.Count == 0)
+        {
+            <p>Nenhum desafio aberto agora. Enquanto isso, pratique no <a href="questoes">banco de questões</a>.</p>
+        }
+        @foreach (var item in active)
+        {
+            <ChallengeCard Item="item" Highlight="true" />
+        }
+    </section>
+
+    @if (upcoming.Count > 0)
+    {
+        <section class="mb-4" aria-labelledby="upcoming-title">
+            <h2 id="upcoming-title" class="h5">Agendados <span class="small text-body-secondary fw-normal">(só professores veem)</span></h2>
+            @foreach (var item in upcoming)
+            {
+                <ChallengeCard Item="item" />
+            }
+        </section>
+    }
+
+    <section aria-labelledby="ended-title">
+        <h2 id="ended-title" class="h5">Anteriores</h2>
+        @if (ended.Count == 0)
+        {
+            <p class="text-body-secondary">Nenhum desafio encerrado ainda.</p>
+        }
+        @foreach (var item in ended)
+        {
+            <ChallengeCard Item="item" />
+        }
+    </section>
+}
+
+@code {
+    private IReadOnlyList<ChallengeOverview>? challenges;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var canSeeUpcoming = HttpContext.User.IsInRole(Roles.Teacher) || HttpContext.User.IsInRole(Roles.Admin);
+        challenges = await Challenges.ListAsync(canSeeUpcoming);
+    }
+}
