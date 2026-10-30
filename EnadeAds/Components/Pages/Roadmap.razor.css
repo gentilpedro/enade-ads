@@ -209,7 +209,7 @@
     text-decoration: none;
     border: 2px solid var(--rm-node-border);
     border-radius: 6px;
-    line-height: 1.25;
+    line-height: 1.35;
     transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
