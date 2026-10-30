@@ -63,6 +63,16 @@ public static class StudyBlockNames
         StudyBlock.GeneralEducation => "Formação geral",
         _ => block.ToString(),
     };
+
+    /// <summary>Classe CSS da cor do bloco (app.css): a cor de uma matéria é a do bloco dela, em todo o app.</summary>
+    public static string ColorClass(this StudyBlock block) => block switch
+    {
+        StudyBlock.Fundamentals => "block-fund",
+        StudyBlock.DataAndInfrastructure => "block-data",
+        StudyBlock.SoftwareEngineering => "block-soft",
+        StudyBlock.ProfessionalContext => "block-prof",
+        _ => "block-gen",
+    };
 }
 
 public static class NodeStatusNames

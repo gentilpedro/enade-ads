@@ -52,24 +52,22 @@
     }
     else
     {
-        <ol class="list-unstyled d-flex flex-column gap-3">
+        <ol class="question-rows">
             @foreach (var question in result.Items)
             {
-                <li class="card">
-                    <div class="card-body">
-                        <div class="d-flex flex-wrap justify-content-between gap-2 mb-2">
-                            <span class="small text-body-secondary">
-                                @if (question.Kind == QuestionKind.Discursive)
-                                {
-                                    <span class="badge text-bg-secondary me-1">Discursiva</span>
-                                }
-                                @question.SubjectTitle · @question.Source
-                            </span>
-                            <OutcomeBadge Outcome="question.Outcome" />
-                        </div>
-                        <p class="mb-2">@question.Excerpt</p>
-                        <a href="questoes/@question.Id" class="stretched-link">Abrir a questão @question.Id</a>
+                <li class="question-row @question.Block.ColorClass()">
+                    <div class="question-row-meta">
+                        <span class="label-narrow tabular text-body">@(question.Code ?? $"nº {question.Id}")</span>
+                        <span class="subject-tag">@question.SubjectTitle</span>
+                        @if (question.Kind == QuestionKind.Discursive)
+                        {
+                            <span class="badge-teacher">Discursiva</span>
+                        }
+                        <span>@question.Source</span>
+                        <OutcomeBadge Outcome="question.Outcome" />
                     </div>
+                    <p class="question-row-text">@question.Excerpt</p>
+                    <a href="questoes/@question.Id" class="question-row-link">Abrir a questão @(question.Code ?? $"nº {question.Id}")</a>
                 </li>
             }
         </ol>

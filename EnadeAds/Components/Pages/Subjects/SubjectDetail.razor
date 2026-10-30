@@ -17,8 +17,8 @@
         </ol>
     </nav>
 
-    <p class="text-body-secondary small text-uppercase fw-semibold mb-1">@subject.Block.Name()</p>
     <h1>@subject.Title</h1>
+    <p class="mb-2"><span class="subject-tag @subject.Block.ColorClass()">@subject.Block.Name()</span></p>
     <p class="lead">@subject.Summary</p>
     <div class="d-flex flex-wrap gap-2 mb-3">
         <a class="btn btn-primary" href="questoes?materia=@subject.Slug">Praticar questões (@questionCount)</a>

@@ -2,7 +2,7 @@
 
 @if (Status is { } status)
 {
-    <span class="rm-mark" aria-hidden="true">@Symbol(status)</span><span class="visually-hidden">@status.Name(): </span>
+    <span class="rm-mark" aria-hidden="true"><Icon Name="@Symbol(status)" /></span><span class="visually-hidden">@status.Name(): </span>
 }
 
 @code {
@@ -11,8 +11,8 @@
 
     private static string Symbol(NodeStatus status) => status switch
     {
-        NodeStatus.Done => "✓",
-        NodeStatus.InProgress => "◐",
-        _ => "↷",
+        NodeStatus.Done => "check",
+        NodeStatus.InProgress => "half",
+        _ => "skip",
     };
 }

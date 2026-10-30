@@ -14,7 +14,7 @@ public enum AttemptOutcome
     Answered,
 }
 
-public sealed record QuestionSummary(int Id, QuestionKind Kind, string Excerpt, string SubjectTitle, string SubjectSlug, string Source, AttemptOutcome Outcome);
+public sealed record QuestionSummary(int Id, QuestionKind Kind, string Excerpt, string SubjectTitle, string SubjectSlug, string Source, AttemptOutcome Outcome, StudyBlock Block = StudyBlock.Fundamentals, string? Code = null);
 
 public sealed record QuestionPage(IReadOnlyList<QuestionSummary> Items, int Page, int TotalPages, int TotalCount);
 
@@ -47,7 +47,7 @@ public sealed class QuestionBank(ApplicationDbContext db, TimeProvider clock)
 
         var items = questions.Select(q => new QuestionSummary(
             q.Id, q.Kind, Excerpt(q.Statement), q.Subject!.Title, q.Subject.Slug, q.Source,
-            outcomes.GetValueOrDefault(q.Id, AttemptOutcome.NotAnswered))).ToList();
+            outcomes.GetValueOrDefault(q.Id, AttemptOutcome.NotAnswered), q.Subject.Block, QuestionCode.From(q.ExternalKey))).ToList();
 
         return new QuestionPage(items, page, totalPages, total);
     }

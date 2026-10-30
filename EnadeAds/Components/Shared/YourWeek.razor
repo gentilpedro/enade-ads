@@ -1,0 +1,71 @@
+@using EnadeAds.Performance
+@using EnadeAds.Study
+
+@* Lateral do Início: desempenho por matéria e o próximo passo (a matéria mais fraca). *@
+@if (Report is null)
+{
+    <section class="module" aria-labelledby="your-week-title">
+        <h2 id="your-week-title" class="module-title">Sua semana</h2>
+        <p class="small">Plataforma aberta para a turma de Análise e Desenvolvimento de Sistemas se preparar para o ENADE.</p>
+        <p class="small text-body-secondary">Com uma conta você vê seu desempenho por matéria e qual atacar primeiro.</p>
+        <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-sm btn-primary" href="Account/Register">Criar conta</a>
+            <a class="btn btn-sm btn-outline-primary" href="roadmap">Abrir o roadmap</a>
+        </div>
+    </section>
+}
+else if (answered.Count == 0)
+{
+    <section class="module" aria-labelledby="your-week-title">
+        <h2 id="your-week-title" class="module-title">Sua semana</h2>
+        <div class="next-step">
+            <h3>Comece pelas questões do Inep</h3>
+            <p>Responda algumas questões e aqui aparece seu desempenho por matéria e a matéria mais fraca.</p>
+            <a class="btn btn-sm btn-primary" href="questoes">Ver questões</a>
+        </div>
+    </section>
+}
+else
+{
+    <section class="module" aria-labelledby="your-week-title">
+        <h2 id="your-week-title" class="module-title">Sua semana · acertos por matéria</h2>
+        <ul class="your-week">
+            @foreach (var subject in answered)
+            {
+                <li class="@subject.Block.ColorClass()">
+                    <a href="materias/@subject.Slug">@subject.Title</a>
+                    <span class="pct">@subject.Score.Percent%</span>
+                    <span class="meter" role="img" aria-label="@subject.Score.Correct de @subject.Score.Answered certas"><span style="width:@(subject.Score.Percent)%"></span></span>
+                </li>
+            }
+        </ul>
+        <a class="small" href="meu-desempenho">Ver desempenho completo</a>
+    </section>
+
+    @if (next is not null)
+    {
+        <section class="module" aria-labelledby="next-step-title">
+            <h2 id="next-step-title" class="module-title">Próximo passo</h2>
+            <div class="next-step">
+                <h3>@next.Title</h3>
+                <p>Sua matéria mais fraca: @next.Score.Percent% de acerto em @next.Score.Answered @(next.Score.Answered == 1 ? "questão" : "questões"). @next.TotalQuestions no banco.</p>
+                <a class="btn btn-sm btn-primary" href="questoes?materia=@Uri.EscapeDataString(next.Slug)">Praticar @next.Title</a>
+            </div>
+        </section>
+    }
+}
+
+@code {
+    private IReadOnlyList<SubjectScore> answered = [];
+    private SubjectScore? next;
+
+    /// <summary>Nulo para quem não entrou.</summary>
+    [Parameter]
+    public PerformanceReport? Report { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        answered = Report?.Subjects.Where(s => s.Score.Answered > 0).OrderBy(s => s.Score.Percent).Take(5).ToList() ?? [];
+        next = Report?.Weakest.FirstOrDefault();
+    }
+}

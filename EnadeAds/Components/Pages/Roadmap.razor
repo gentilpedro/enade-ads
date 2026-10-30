@@ -12,10 +12,9 @@
 <div class="rm-page">
     <header class="rm-header">
         <div class="rm-title">
-            <p class="rm-eyebrow">Tecnologia em Análise e Desenvolvimento de Sistemas</p>
             <h1>Roadmap ENADE ADS</h1>
             <p class="rm-lede">
-                Os conteúdos da Portaria Inep nº 169/2026 na ordem sugerida de estudo.
+                Os conteúdos de Análise e Desenvolvimento de Sistemas da Portaria Inep nº 169/2026, na ordem sugerida de estudo.
                 Clique em qualquer caixa para ver o que estudar.
             </p>
         </div>
@@ -57,9 +56,9 @@
             <li><span class="rm-swatch rm-swatch-subject"></span> Matéria</li>
             <li><span class="rm-swatch rm-swatch-topic"></span> Assunto</li>
             <li><span class="rm-swatch rm-swatch-checkpoint"></span> Checkpoint</li>
-            <li><span class="rm-mark" aria-hidden="true">✓</span> Concluído</li>
-            <li><span class="rm-mark" aria-hidden="true">◐</span> Estudando</li>
-            <li><span class="rm-mark" aria-hidden="true">↷</span> Pulei</li>
+            <li><span class="rm-mark" aria-hidden="true"><Icon Name="check" /></span> Concluído</li>
+            <li><span class="rm-mark" aria-hidden="true"><Icon Name="half" /></span> Estudando</li>
+            <li><span class="rm-mark" aria-hidden="true"><Icon Name="skip" /></span> Pulei</li>
         </ul>
 
         <div class="rm-diagram">
@@ -117,11 +116,11 @@
             <a class="rm-overlay" href="@CloseUrl(node)" aria-label="Fechar painel"></a>
             <aside class="rm-drawer" role="dialog" aria-modal="true" aria-labelledby="rm-drawer-title">
                 <div class="rm-drawer-top">
-                    <span class="rm-eyebrow">@KindName(node) · @node.Block.Name()</span>
-                    <a class="btn-close" href="@CloseUrl(node)" aria-label="Fechar"></a>
+                    <a class="btn-close ms-auto" href="@CloseUrl(node)" aria-label="Fechar"></a>
                 </div>
 
                 <h2 id="rm-drawer-title">@node.Title</h2>
+                <p class="rm-drawer-meta">@KindName(node) · @node.Block.Name()</p>
 
                 @if (selected.Status is { } status)
                 {
@@ -163,9 +162,9 @@
                         <AntiforgeryToken />
                         <p class="h6">Meu status</p>
                         <div class="d-flex flex-wrap gap-2">
-                            <button type="submit" name="StatusCommand" value="@NodeStatus.Done" class="btn btn-sm btn-success">✓ Concluído</button>
-                            <button type="submit" name="StatusCommand" value="@NodeStatus.InProgress" class="btn btn-sm btn-primary">◐ Estudando</button>
-                            <button type="submit" name="StatusCommand" value="@NodeStatus.Skipped" class="btn btn-sm btn-secondary">↷ Pulei</button>
+                            <button type="submit" name="StatusCommand" value="@NodeStatus.Done" class="btn btn-sm btn-success"><Icon Name="check" /> Concluído</button>
+                            <button type="submit" name="StatusCommand" value="@NodeStatus.InProgress" class="btn btn-sm btn-primary"><Icon Name="half" /> Estudando</button>
+                            <button type="submit" name="StatusCommand" value="@NodeStatus.Skipped" class="btn btn-sm btn-secondary"><Icon Name="skip" /> Pulei</button>
                             @if (selected.Status is not null)
                             {
                                 <button type="submit" name="StatusCommand" value="@ClearCommand" class="btn btn-sm btn-outline-secondary">Limpar</button>
