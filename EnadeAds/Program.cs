@@ -4,6 +4,7 @@ using EnadeAds.Challenges;
 using EnadeAds.Components;
 using EnadeAds.Components.Account;
 using EnadeAds.Data;
+using EnadeAds.Performance;
 using EnadeAds.Questions;
 using EnadeAds.Study;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -74,6 +75,7 @@ try
     builder.Services.AddScoped<QuestionEditor>();
     builder.Services.AddScoped<ChallengeService>();
     builder.Services.AddScoped<BlogService>();
+    builder.Services.AddScoped<PerformanceService>();
     builder.Services.AddSingleton<LocalCalendar>();
     builder.Services.AddSingleton(TimeProvider.System);
     builder.Services.Configure<ExamOptions>(builder.Configuration.GetSection(ExamOptions.SectionName));

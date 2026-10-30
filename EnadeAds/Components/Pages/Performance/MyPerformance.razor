@@ -1,0 +1,184 @@
+@page "/meu-desempenho"
+
+@using Microsoft.AspNetCore.Authorization
+@using EnadeAds.Challenges
+@using EnadeAds.Data
+@using EnadeAds.Performance
+@using EnadeAds.Study
+@using Microsoft.AspNetCore.Identity
+
+@attribute [Authorize]
+
+@inject PerformanceService Performance
+@inject LocalCalendar Calendar
+@inject UserManager<ApplicationUser> Users
+
+<PageTitle>Meu desempenho</PageTitle>
+
+<h1>Meu desempenho</h1>
+<p class="text-body-secondary">Só você vê esta página. Em cada questão vale a sua resposta mais recente.</p>
+
+@if (report is not null)
+{
+    <section class="row row-cols-2 row-cols-lg-4 g-3 mb-4" aria-label="Resumo">
+        <div class="col">
+            <div class="card h-100"><div class="card-body">
+                <p class="small text-body-secondary mb-1">Acerto nas objetivas</p>
+                <p class="h3 mb-0 font-monospace">@(report.Overall.Answered == 0 ? "—" : $"{report.Overall.Percent}%")</p>
+                <p class="small text-body-secondary mb-0">@report.Overall.Correct de @report.Overall.Answered questões</p>
+            </div></div>
+        </div>
+        <div class="col">
+            <div class="card h-100"><div class="card-body">
+                <p class="small text-body-secondary mb-1">Caderno de erros</p>
+                <p class="h3 mb-0 font-monospace">@report.Mistakes.Count</p>
+                <p class="small text-body-secondary mb-0">@(report.Mistakes.Count == 1 ? "questão para refazer" : "questões para refazer")</p>
+            </div></div>
+        </div>
+        <div class="col">
+            <div class="card h-100"><div class="card-body">
+                <p class="small text-body-secondary mb-1">Roadmap</p>
+                <p class="h3 mb-0 font-monospace">@report.Roadmap.Percent%</p>
+                <p class="small text-body-secondary mb-0">@report.Roadmap.Done de @report.Roadmap.Total concluídos</p>
+            </div></div>
+        </div>
+        <div class="col">
+            <div class="card h-100"><div class="card-body">
+                <p class="small text-body-secondary mb-1">Discursivas</p>
+                <p class="h3 mb-0 font-monospace">@report.DiscursivesAnswered</p>
+                <p class="small text-body-secondary mb-0">@(report.DiscursivesAnswered == 1 ? "respondida" : "respondidas")</p>
+            </div></div>
+        </div>
+    </section>
+
+    @if (report.Overall.Answered == 0)
+    {
+        <div class="alert alert-info" role="status">
+            Você ainda não respondeu nenhuma questão objetiva. Comece pelo <a href="questoes">banco de questões</a> ou pelo <a href="desafios">desafio da semana</a>.
+        </div>
+    }
+
+    @if (report.Weakest.Count > 0)
+    {
+        <section class="mb-4" aria-labelledby="weakest-title">
+            <h2 id="weakest-title" class="h5">Revise primeiro</h2>
+            <ol class="mb-0">
+                @foreach (var subject in report.Weakest)
+                {
+                    <li>
+                        <a href="materias/@subject.Slug">@subject.Title</a>:
+                        <span class="font-monospace">@subject.Score.Percent%</span> de acerto
+                        (@subject.Score.Correct de @subject.Score.Answered)
+                        · <a href="questoes?materia=@subject.Slug">praticar</a>
+                    </li>
+                }
+            </ol>
+        </section>
+    }
+
+    <section class="mb-4" aria-labelledby="subjects-title">
+        <h2 id="subjects-title" class="h5">Acerto por matéria</h2>
+        @foreach (var block in report.Blocks)
+        {
+            <h3 class="h6 mt-3">
+                @block.Block.Name()
+                <span class="small text-body-secondary fw-normal">
+                    · @(block.Score.Answered == 0 ? "sem respostas" : $"{block.Score.Percent}% ({block.Score.Correct} de {block.Score.Answered})")
+                </span>
+            </h3>
+            <div class="table-responsive">
+                <table class="table table-sm align-middle mb-2">
+                    <thead class="visually-hidden">
+                        <tr><th scope="col">Matéria</th><th scope="col">Acerto</th><th scope="col">Respondidas</th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var subject in report.Subjects.Where(s => s.Block == block.Block))
+                        {
+                            <tr>
+                                <td style="min-width: 14rem"><a href="materias/@subject.Slug">@subject.Title</a></td>
+                                <td style="width: 45%">
+                                    @if (subject.Score.Answered == 0)
+                                    {
+                                        <span class="small text-body-secondary">—</span>
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex align-items-center gap-2">
+                                            <div class="progress flex-grow-1" role="progressbar" aria-label="Acerto em @subject.Title"
+                                                 aria-valuenow="@subject.Score.Percent" aria-valuemin="0" aria-valuemax="100">
+                                                <div class="progress-bar @BarClass(subject.Score.Percent)" style="width: @(subject.Score.Percent)%"></div>
+                                            </div>
+                                            <span class="font-monospace small" style="min-width: 3rem">@subject.Score.Percent%</span>
+                                        </div>
+                                    }
+                                </td>
+                                <td class="small text-body-secondary text-nowrap">@subject.Score.Answered de @subject.TotalQuestions</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+
+    <section class="mb-4" aria-labelledby="mistakes-title">
+        <h2 id="mistakes-title" class="h5">Caderno de erros</h2>
+        @if (report.Mistakes.Count == 0)
+        {
+            <p class="text-body-secondary">Nenhuma questão errada para refazer. Quando você errar uma questão, ela aparece aqui até você acertar.</p>
+        }
+        else
+        {
+            <p class="small text-body-secondary">Questões em que sua última resposta foi errada. Ao acertar, ela sai da lista.</p>
+            <ol class="list-unstyled d-flex flex-column gap-2">
+                @foreach (var mistake in report.Mistakes)
+                {
+                    <li class="card">
+                        <div class="card-body py-2">
+                            <p class="small text-body-secondary mb-1">
+                                @mistake.SubjectTitle · errada em @Calendar.ToLocal(mistake.AnsweredAt).ToString("dd/MM/yyyy")
+                            </p>
+                            <p class="mb-1">@mistake.Excerpt</p>
+                            <a href="questoes/@mistake.QuestionId?refazer=1">Refazer a questão @mistake.QuestionId</a>
+                        </div>
+                    </li>
+                }
+            </ol>
+        }
+    </section>
+
+    @if (report.Challenges.Count > 0)
+    {
+        <section aria-labelledby="challenges-title">
+            <h2 id="challenges-title" class="h5">Desafios</h2>
+            <ul>
+                @foreach (var challenge in report.Challenges)
+                {
+                    <li>
+                        <a href="desafios/@challenge.ChallengeId">@challenge.Title</a>:
+                        @challenge.Correct de @challenge.Total
+                        @if (challenge.Status != ChallengeStatus.Ended)
+                        {
+                            <span class="small text-body-secondary">(gabarito sai em @challenge.EndsOn.ToString("dd/MM"))</span>
+                        }
+                    </li>
+                }
+            </ul>
+        </section>
+    }
+}
+
+@code {
+    private PerformanceReport? report;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        report = await Performance.GetAsync(Users.GetUserId(HttpContext.User)!);
+    }
+
+    // A cor acompanha o número ao lado, então a informação não depende só da cor.
+    private static string BarClass(int percent) => percent >= 70 ? "bg-success" : percent >= 40 ? "bg-warning" : "bg-danger";
+}
