@@ -36,7 +36,7 @@ public sealed class EnadeAdsFactory : WebApplicationFactory<Program>
         {
             services.RemoveAll<DbContextOptions<ApplicationDbContext>>();
             services.RemoveAll<IDbContextOptionsConfiguration<ApplicationDbContext>>();
-            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connection));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlite(connection).AddInterceptors(new AsyncDatabaseInterceptor()));
         });
     }
 

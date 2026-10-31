@@ -56,64 +56,68 @@
     </div>
 }
 
-<EditForm Model="Input" method="post" FormName="post-form" OnSubmit="SaveAsync">
-    <div class="mb-3">
-        <label for="Input.Title" class="form-label">Título</label>
-        <InputText @bind-Value="Input.Title" id="Input.Title" class="form-control" maxlength="@BlogService.TitleMaxLength"
-                   placeholder="@(official ? "Inep divulga o local de prova" : "Qual é o jeito mais rápido de resolver porcentagem?")" />
-    </div>
-    <div class="row g-3 mb-3">
-        <div class="col-md-5">
-            <label for="Input.Category" class="form-label">Categoria</label>
-            <InputSelect @bind-Value="Input.Category" id="Input.Category" class="form-select">
-                @foreach (var category in PostCategoryNames.AvailableTo(official))
-                {
-                    <option value="@category">@category.Name()</option>
-                }
-            </InputSelect>
+@* O modelo nasce depois de consultar o banco; no PostgreSQL a página renderiza antes disso, com ele ainda vazio. *@
+@if (Input is not null)
+{
+    <EditForm Model="Input" method="post" FormName="post-form" OnSubmit="SaveAsync">
+        <div class="mb-3">
+            <label for="Input.Title" class="form-label">Título</label>
+            <InputText @bind-Value="Input.Title" id="Input.Title" class="form-control" maxlength="@BlogService.TitleMaxLength"
+                       placeholder="@(official ? "Inep divulga o local de prova" : "Qual é o jeito mais rápido de resolver porcentagem?")" />
         </div>
-        <div class="col-md-7">
-            <label for="Input.SourceUrl" class="form-label">@(official ? "Fonte oficial" : "Link") <span class="small text-body-secondary">(opcional)</span></label>
-            <InputText @bind-Value="Input.SourceUrl" id="Input.SourceUrl" class="form-control" type="url" maxlength="@BlogService.SourceMaxLength"
-                       placeholder="https://www.gov.br/inep/..." />
+        <div class="row g-3 mb-3">
+            <div class="col-md-5">
+                <label for="Input.Category" class="form-label">Categoria</label>
+                <InputSelect @bind-Value="Input.Category" id="Input.Category" class="form-select">
+                    @foreach (var category in PostCategoryNames.AvailableTo(official))
+                    {
+                        <option value="@category">@category.Name()</option>
+                    }
+                </InputSelect>
+            </div>
+            <div class="col-md-7">
+                <label for="Input.SourceUrl" class="form-label">@(official ? "Fonte oficial" : "Link") <span class="small text-body-secondary">(opcional)</span></label>
+                <InputText @bind-Value="Input.SourceUrl" id="Input.SourceUrl" class="form-control" type="url" maxlength="@BlogService.SourceMaxLength"
+                           placeholder="https://www.gov.br/inep/..." />
+            </div>
         </div>
-    </div>
-    @if (official)
-    {
-        <div class="form-check mb-3">
-            <InputCheckbox @bind-Value="Input.AllTracks" id="Input.AllTracks" class="form-check-input" />
-            <label for="Input.AllTracks" class="form-check-label">
-                Publicar para todas as trilhas <span class="small text-body-secondary">(sem marcar, o post aparece só em @track?.Name)</span>
-            </label>
-        </div>
-    }
-    <div class="mb-3">
-        <label for="Input.Summary" class="form-label">Resumo <span class="small text-body-secondary">(opcional)</span></label>
-        <InputTextArea @bind-Value="Input.Summary" id="Input.Summary" class="form-control" rows="2" maxlength="@BlogService.SummaryMaxLength"
-                       aria-describedby="summary-help" />
-        <div id="summary-help" class="form-text">Aparece no feed. Sem resumo, o feed mostra o começo do texto.</div>
-    </div>
-    <div class="mb-3">
-        <label for="Input.Body" class="form-label">Texto</label>
-        <InputTextArea @bind-Value="Input.Body" id="Input.Body" class="form-control" rows="14" maxlength="@BlogService.BodyMaxLength"
-                       aria-describedby="body-help" />
-        <div id="body-help" class="form-text">
-            Linha em branco separa parágrafos. Linhas começando com <code>- </code> viram lista.
-            <code>**negrito**</code>, <code>[texto](https://…)</code> para links e <code>![descrição](https://…)</code> para imagens.
-        </div>
-    </div>
-
-    <div class="d-flex flex-wrap gap-2">
-        <button type="submit" name="Command" value="@PreviewCommand" class="btn btn-outline-primary">Pré-visualizar</button>
-        @if (current?.IsPublished != true)
+        @if (official)
         {
-            <button type="submit" name="Command" value="@DraftCommand" class="btn btn-outline-secondary">Salvar rascunho</button>
+            <div class="form-check mb-3">
+                <InputCheckbox @bind-Value="Input.AllTracks" id="Input.AllTracks" class="form-check-input" />
+                <label for="Input.AllTracks" class="form-check-label">
+                    Publicar para todas as trilhas <span class="small text-body-secondary">(sem marcar, o post aparece só em @track?.Name)</span>
+                </label>
+            </div>
         }
-        <button type="submit" name="Command" value="@PublishCommand" class="btn btn-primary">@(current?.IsPublished == true ? "Salvar alterações" : "Publicar")</button>
-    </div>
-</EditForm>
+        <div class="mb-3">
+            <label for="Input.Summary" class="form-label">Resumo <span class="small text-body-secondary">(opcional)</span></label>
+            <InputTextArea @bind-Value="Input.Summary" id="Input.Summary" class="form-control" rows="2" maxlength="@BlogService.SummaryMaxLength"
+                           aria-describedby="summary-help" />
+            <div id="summary-help" class="form-text">Aparece no feed. Sem resumo, o feed mostra o começo do texto.</div>
+        </div>
+        <div class="mb-3">
+            <label for="Input.Body" class="form-label">Texto</label>
+            <InputTextArea @bind-Value="Input.Body" id="Input.Body" class="form-control" rows="14" maxlength="@BlogService.BodyMaxLength"
+                           aria-describedby="body-help" />
+            <div id="body-help" class="form-text">
+                Linha em branco separa parágrafos. Linhas começando com <code>- </code> viram lista.
+                <code>**negrito**</code>, <code>[texto](https://…)</code> para links e <code>![descrição](https://…)</code> para imagens.
+            </div>
+        </div>
 
-@if (preview)
+        <div class="d-flex flex-wrap gap-2">
+            <button type="submit" name="Command" value="@PreviewCommand" class="btn btn-outline-primary">Pré-visualizar</button>
+            @if (current?.IsPublished != true)
+            {
+                <button type="submit" name="Command" value="@DraftCommand" class="btn btn-outline-secondary">Salvar rascunho</button>
+            }
+            <button type="submit" name="Command" value="@PublishCommand" class="btn btn-primary">@(current?.IsPublished == true ? "Salvar alterações" : "Publicar")</button>
+        </div>
+    </EditForm>
+}
+
+@if (preview && Input is not null)
 {
     <section class="mt-4" aria-labelledby="preview-title">
         <h2 id="preview-title" class="h5">Pré-visualização</h2>
