@@ -7,6 +7,7 @@
 - **Volumes no backup diário:** banco e `dpkeys` (chaves de login e formulários; sem elas, cada deploy tira todo mundo da conta)
 - **E-mail:** pelo relay da VPS (`/opt/smtp`, rede Docker `mail`): `smtp:25`, sem senha, remetente `nao-responda@aamora.com.br`. Fila: `docker exec smtp-smtp-1 postqueue -p`.
 - **Nginx do host:** `/etc/nginx/conf.d/rumo.conf` (cópia de `nginx.conf`), com timeout de 1h para o SignalR do Blazor
+- **Manutenção:** quando o app não responde (deploy, reinício, queda), o Nginx mostra `manutencao.html` com status 503, servido de `/var/www/rumo-manutencao/`. A página tenta de novo a cada 20 s. Mudou a página? Copie de novo: `scp deploy/vps/manutencao.html vps:/var/www/rumo-manutencao/ && ssh vps restorecon -R /var/www/rumo-manutencao`.
 - **Certificado:** o Let's Encrypt `aamora` da VPS lista cada domínio pelo nome; não é curinga. Domínio fora da lista dá erro 526 no Cloudflare. Para incluir um, repita todos os nomes de `certbot certificates` e acrescente o novo: `certbot certonly --webroot -w /var/www/letsencrypt --cert-name aamora -d aamora.com.br -d ... -d rumo.aamora.com.br`. Rode antes com `--dry-run`. A porta 80 do `nginx.conf` precisa responder em `/.well-known/acme-challenge/`.
 - **Deploy:** publicar uma tag `vX.Y.Z` dispara o job `deploy-vps` do `.github/workflows/ci-cd.yml`. Se `/health` não responder, o `app-deploy` volta para a versão anterior sozinho.
 
