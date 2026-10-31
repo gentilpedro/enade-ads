@@ -15,7 +15,8 @@
 @inject UserManager<ApplicationUser> Users
 @inject NavigationManager Navigation
 
-@if (node is not null)
+@* O modelo nasce depois de consultar o banco; no PostgreSQL a página renderiza antes disso, com ele ainda vazio. *@
+@if (node is not null && Input is not null)
 {
     <PageTitle>Editar: @node.Title</PageTitle>
 
