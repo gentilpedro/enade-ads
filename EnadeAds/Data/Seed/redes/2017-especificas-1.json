@@ -1,0 +1,393 @@
+{
+  "year": 2017,
+  "track": "enade-redes",
+  "questions": [
+    {
+      "key": "enade-2017-redes-d03",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão discursiva 3 (Inep)",
+      "kind": "Discursive",
+      "subject": "tcp-ip",
+      "statement": "O diagrama de rede apresentado é composto por três roteadores (B1, B2 e HQ), três switches não gerenciáveis (S1, S2 e S3) e pelo número de hosts indicado em cada segmento LAN. Os prefixos de sub-rede devem ser alocados de tal forma que segmentos com um maior número de hosts recebam endereços mais próximos do início do espaço de endereçamento disponível, conforme a ordem de atribuição indicada a seguir:\n\n- 1ª sub-rede alocada: LAN do roteador B1;\n- 2ª sub-rede alocada: LAN do roteador HQ;\n- 3ª sub-rede alocada: LAN do roteador B2;\n- 4ª sub-rede alocada: Link WAN entre B1 e HQ;\n- 5ª sub-rede alocada: Link WAN entre HQ e B2.\n\nA máscara de sub-rede adotada em cada prefixo deve atender à necessidade mínima de cada segmento, visando à economia dos endereços IP disponíveis. Deve ser utilizada a faixa de endereços: 172.16.10.0/26 e os prefixos devem ser informados por meio da notação Classless Inter-Domain Routing (CIDR). Os endereços IP necessários para a configuração dos dispositivos de rede apresentados devem ser incluídos nos requisitos de endereçamento.\n\n![Topologia: o roteador HQ fica no centro, ligado ao switch S2, que atende a LAN com 6 hosts (PC2). HQ tem um link WAN serial para o roteador B1 e outro para o roteador B2. B1 liga-se ao switch S1, com a LAN de 20 hosts (PC1). B2 liga-se ao switch S3, com a LAN de 4 hosts (PC3).](img/inep/redes/2017/d03-1.png)\n\nCom base nos requisitos de rede mostrados na topologia apresentada, crie um esquema de endereçamento IP apropriado para cada uma das cinco sub-redes, que contenha os endereços de sub-redes (ID), as faixas de endereços válidos e os endereços de broadcast. (valor: 10,0 pontos.)",
+      "expectedAnswer": "Padrão de resposta elaborado pela plataforma (não é o padrão oficial do Inep).\n\nUma boa resposta precisa:\n\n- Dimensionar cada LAN somando a interface do roteador aos hosts (switches não gerenciáveis não recebem IP): B1 precisa de 21 endereços, HQ de 7 e B2 de 5; cada link WAN precisa de 2.\n- Escolher a menor máscara que comporta cada necessidade (2^n − 2 ≥ endereços): /27 (30 válidos) para B1, /28 (14 válidos) para HQ, /29 (6 válidos) para B2 e /30 (2 válidos) para cada link WAN. Os 64 endereços do /26 bastam exatamente: 32 + 16 + 8 + 4 + 4.\n- Alocar na ordem pedida, a partir de 172.16.10.0, sem sobreposição:\n- 1ª, LAN de B1: ID 172.16.10.0/27; válidos 172.16.10.1 a 172.16.10.30; broadcast 172.16.10.31.\n- 2ª, LAN de HQ: ID 172.16.10.32/28; válidos 172.16.10.33 a 172.16.10.46; broadcast 172.16.10.47.\n- 3ª, LAN de B2: ID 172.16.10.48/29; válidos 172.16.10.49 a 172.16.10.54; broadcast 172.16.10.55.\n- 4ª, link B1–HQ: ID 172.16.10.56/30; válidos 172.16.10.57 e 172.16.10.58; broadcast 172.16.10.59.\n- 5ª, link HQ–B2: ID 172.16.10.60/30; válidos 172.16.10.61 e 172.16.10.62; broadcast 172.16.10.63.\n- Também é aceito usar /31 nos links ponto a ponto (RFC 3021): 172.16.10.56/31 (endereços .56 e .57) e 172.16.10.58/31 (.58 e .59), sem endereço de rede nem de broadcast.\n- Perde pontos quem esquece a interface do roteador e escolhe /28 para a LAN de B1 (20 hosts + gateway não cabem em 14 válidos), quem inverte a ordem de alocação, quem usa como host o ID ou o broadcast, ou quem extrapola a faixa 172.16.10.0/26.",
+      "suggestedLines": 15
+    },
+    {
+      "key": "enade-2017-redes-d04",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão discursiva 4 (Inep)",
+      "kind": "Discursive",
+      "subject": "gerenciamento-redes",
+      "statement": "Uma arquitetura de gerenciamento SNMP V2c está representada na figura a seguir, que abrange o gerenciador e mais dois equipamentos gerenciados — roteador (R1) e servidor (S1) —, além de duas tabelas auxiliares que contém os comandos SNMP e objetos gerenciáveis mantidos pelos agentes SNMP em cada dispositivo representado.\n\n![Arquitetura SNMP V2c, com comunidade de leitura SNMP_PUB e comunidade de leitura/escrita SNMP_PRIV. O Gerenciador SNMP faz polling a cada 5 minutos e troca mensagens nos dois sentidos com dois agentes SNMP: o servidor S1 e o roteador R1. A interface S0 de R1 liga o roteador à internet.](img/inep/redes/2017/d04-1.png)\n\n**Tabela 1**\n\n- **Get**: Acessa e recupera o valor atual de um ou mais objetos MIB em um agente SNMP.\n- **GetResponse**: Responde a uma operação Get, GetNext ou Set.\n- **GetNext**: Navega toda a árvore dos objetos MIB, lendo os valores das variáveis na MIB sequencialmente.\n- **GetBulk**: Recupera dados em unidades tão grandes quanto possível dentro das restrições dadas no tamanho da mensagem.\n- **Set**: Muda o valor atual de um objeto MIB. Para atualizar um valor MIB no agente SNMP, o gerenciador SNMP deve ter acesso de gravação ao objeto.\n- **Trap**: Notifica o gerenciador SNMP especificado (o destino do trap quando um evento inesperado ocorre localmente no host gerenciado.\n\n**Tabela 2**\n\n- **ifIndex**: Um valor único para cada interface.\n- **ifDescr**: Valor textual contendo a descrição da interface.\n- **ifType**: Tipo da interface, diferenciado pelo protocolo físico/link imediatamente abaixo da camada de rede na pilha de protocolos.\n- **ifMtu**: Limite máximo do datagrama que poderá ser enviado/recebido pela interface, em octetos.\n- **ifSpeed**: Uma estimativa da velocidade máxima da porta em bits por segundo.\n- **ifPhysAddress**: O endereço da interface na camada logo abaixo da camada de rede na pilha de protocolos.\n- **ifAdminStatus**: O status administrativo da interface. Pode ser configurado para 1 (up) ou 2 (down).\n- **ifOperStatus**: O status operacional da interface.\n- **ifIOctets**: Quantidade de octetos recebidos na interface, incluindo os cabeçalhos.\n- **ifIOutOctets**: Quantidade de octetos enviados pela interface, incluindo os cabeçalhos.\n\nDisponível em: <https://www.zabbix.com>. Acesso em: 24 jul. 2017 (adaptado).\n\nCom base nessas informações, faça o que se pede nos itens a seguir.\n\na) Explique a função de dois componentes quaisquer da arquitetura SNMP representada na figura. (valor: 4,0 pontos)\n\nb) Explicite o objetivo da função Trap, indicada na tabela 1. (valor: 2,0 pontos)\n\nc) Considerando a figura e a tabela 2, descreva os objetos que devem ser monitorados para a realização da análise de desempenho da internet, via interface serial 0 (S0) do roteador R1. (valor: 4,0 pontos)",
+      "expectedAnswer": "Padrão de resposta elaborado pela plataforma (não é o padrão oficial do Inep).\n\nUma boa resposta precisa:\n\n- a) Explicar a função de dois componentes, por exemplo: o **gerenciador SNMP** (NMS), estação que consulta os agentes periodicamente (polling de 5 minutos), recebe as notificações e consolida os dados para monitorar e controlar a rede; o **agente SNMP**, software que roda no dispositivo gerenciado (R1, S1), mantém os objetos da MIB local e responde às requisições do gerente; também valem a **MIB** (base de objetos identificados por OID) e as **comunidades** (SNMP_PUB para leitura e SNMP_PRIV para leitura/escrita, que funcionam como senha no SNMPv2c).\n- b) Dizer que o Trap é uma mensagem **não solicitada**, enviada por iniciativa do agente ao gerenciador, para avisar de imediato que ocorreu um evento (por exemplo linkDown, linkUp, coldStart, warmStart, authenticationFailure), sem esperar o próximo ciclo de polling.\n- c) Indicar, na interface S0 de R1, os contadores de tráfego **ifInOctets** e **ifOutOctets** (na tabela 2 grafados como ifIOctets e ifIOutOctets; a grafia da prova foi aceita) e o **ifSpeed**, que dá a capacidade do enlace.\n- c) Explicar como esses objetos medem o desempenho: lendo os contadores em duas coletas separadas por um intervalo t (5 minutos), a diferença de octetos × 8 dá os bits trafegados; dividindo por t obtém-se a vazão e, dividindo pela ifSpeed, a utilização do link: utilização de entrada (%) = (ΔifInOctets × 8) / (ifSpeed × t) × 100, e o mesmo para a saída com ifOutOctets.\n- Citar ifOperStatus/ifAdminStatus como complemento (saber se o link está ativo) é bem-vindo, mas não substitui os contadores de octetos e a velocidade.\n- Perde pontos quem confunde agente com gerenciador, descreve o Trap como uma consulta do gerente (isso é o Get) ou lista os objetos de S1 em vez dos da interface S0 de R1.",
+      "suggestedLines": 15
+    },
+    {
+      "key": "enade-2017-redes-d05",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão discursiva 5 (Inep)",
+      "kind": "Discursive",
+      "subject": "cabeamento-estruturado",
+      "statement": "Conforme a versão mais recente da norma NBR14565:2013, que define três subsistemas de cabeamento, observam-se, na figura a seguir, os subsistemas de backbone de campus, de backbone de edifício e de cabeamento horizontal. Os ensaios de desempenho de canal e enlace previstos para o subsistema de cabeamento horizontal podem, segundo a topologia instalada, dividir-se em desempenho de enlace permanente e enlace do ponto de consolidação.\n\n![Diagrama linear do cabeamento genérico: CD (distribuidor de campus) liga-se ao BD (distribuidor de edifício), que se liga ao FD (distribuidor de piso); do FD o cabo segue para o CP (ponto de consolidação) e daí para a TO (tomada de telecomunicações), de onde um cordão chega ao TE (equipamento terminal). Trecho CD–BD: subsistema de cabeamento de backbone de campus; BD–FD: subsistema de cabeamento de backbone de edifício; FD–TO: subsistema de cabeamento horizontal; TO–TE: cordão da área de trabalho. O trecho CD–TO forma o subsistema de cabeamento genérico.](img/inep/redes/2017/d05-1.png)\n\nASSOCIAÇÃO BRASILEIRA DE NORMAS TÉCNICAS. **NBR 14565**: cabeamento estruturado para edifícios comerciais e data centers. 4. ed. Rio de Janeiro, 2013 (adaptado).\n\nLegenda:\n\n- CD: Distribuidor de Campus (Campus Distributor)\n- BD: Distribuidor de Edifício (Building Distributor)\n- FD: Distribuidor de Piso (Floor Distributor)\n- CP: Ponto de Consolidação (Consolidation Point)\n- TO: Tomada de Telecomunicações (Telecommunications Outlet)\n- TE: Equipamento Terminal (Terminal Equipment)\n\nConsiderando que o subsistema de cabeamento horizontal tenha sido instalado com cabos balanceados de categoria 6, faça o que se pede nos itens a seguir.\n\na) Defina canal, enlace permanente e enlace do CP. (valor: 6,0 pontos)\n\nb) Calcule o comprimento máximo do canal e do enlace permanente. (valor: 3,0 pontos)\n\nc) Calcule o comprimento mínimo do enlace do CP. (valor: 1,0 ponto)",
+      "expectedAnswer": "Padrão de resposta elaborado pela plataforma (não é o padrão oficial do Inep).\n\nUma boa resposta precisa:\n\n- a) Definir **canal** como o caminho de transmissão completo entre o equipamento ativo no FD e o equipamento terminal (TE), incluindo o cabo horizontal, o hardware de conexão e os cordões (de equipamento, de manobra e da área de trabalho).\n- a) Definir **enlace permanente** como a parte fixa do cabeamento horizontal, do painel no FD até a TO, sem os cordões — é o trecho que fica instalado e é certificado pelo instalador.\n- a) Definir **enlace do CP** como o trecho fixo entre o FD e o ponto de consolidação (CP), quando a topologia tem CP.\n- b) Informar que o canal tem no máximo **100 m** e o enlace permanente no máximo **90 m**; a diferença (10 m) fica para os cordões nas duas pontas.\n- c) Informar que o enlace do CP deve ter no mínimo **15 m** entre o FD e o CP, distância exigida para limitar os efeitos de diafonia e perda de retorno causados por conexões muito próximas.\n- Perde pontos quem troca canal por enlace permanente (incluir os cordões no enlace permanente, por exemplo), põe o limite de 100 m no enlace permanente ou confunde o enlace do CP com o cabo entre o CP e a TO.",
+      "suggestedLines": 15
+    },
+    {
+      "key": "enade-2017-redes-q09",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 9 (Inep)",
+      "kind": "Objective",
+      "subject": "ieee-802",
+      "statement": "Durante o projeto da rede de uma empresa, muitas vezes é necessário limitar o domínio de broadcast, dividindo a rede em diversas LANs (Local Area Networks). Uma forma flexível de se realizar esse particionamento é por meio do uso de VLANs (virtual LANs). Nesse caso, diversas redes lógicas são criadas em um mesmo switch físico, o qual segrega o tráfego entre elas.\n\nNo que se refere às VLANs, avalie as afirmações a seguir.\n\nI. O padrão IEEE 802.1Q especifica como pode ser estabelecido o trunking, isto é, a ligação ponto a ponto entre dois switches que compartilham mais de uma VLAN.\n\nII. A interligação entre duas VLANs pode ser realizada sem a necessidade de um equipamento da camada de rede, uma vez que elas compartilham o mesmo switch.\n\nIII. É possível criar uma VLAN em função dos endereços MAC de seus membros, ou seja, um equipamento fará parte da VLAN independentemente da porta do switch onde ele seja conectado.\n\nIV. Equipamentos ligados em uma mesma VLAN, em switches diferentes que estejam ligados entre si, fazem parte de diferentes domínios de colisão.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e II.",
+          "explanation": "A afirmação II é falsa: cada VLAN é um domínio de broadcast separado, e o tráfego entre elas precisa ser roteado por um equipamento de camada 3 (roteador ou switch multicamada), mesmo que estejam no mesmo switch físico."
+        },
+        {
+          "text": "I e III.",
+          "explanation": "Correta pelo gabarito. O 802.1Q define a etiqueta (tag) que identifica a VLAN de cada quadro no tronco entre switches (I), e há VLANs dinâmicas por endereço MAC, em que a associação acompanha o equipamento e não a porta (III). A banca considerou a IV falsa."
+        },
+        {
+          "text": "III e IV.",
+          "explanation": "Deixa de fora a I, que é verdadeira, e inclui a IV, que a banca considerou falsa: a VLAN delimita um domínio de broadcast, e o item mistura esse conceito com domínio de colisão ao tratar membros da mesma VLAN como se fossem segmentos separados."
+        },
+        {
+          "text": "I, II e IV.",
+          "explanation": "Inclui a II, que é falsa: switch de camada 2 não encaminha quadros de uma VLAN para outra; a comunicação entre VLANs exige roteamento (router-on-a-stick ou interface SVI em switch de camada 3)."
+        },
+        {
+          "text": "II, III e IV.",
+          "explanation": "Inclui a II, falsa porque a interligação de VLANs depende de camada 3, e exclui a I, que descreve corretamente o papel do IEEE 802.1Q no trunking."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2017-redes-q10",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 10 (Inep)",
+      "kind": "Objective",
+      "subject": "virtualizacao",
+      "statement": "A virtualização, tecnologia que provê uma abstração dos recursos físicos e lógicos, permite que instâncias de um sistema operacional sejam executadas em hardware virtual, suportadas por um hipervisor que gerencia o acesso aos recursos do hardware físico.\n\nSTALLINGS, W.; BROWN, L. **Segurança de computadores**: princípios e práticas. 2. ed. Rio de Janeiro: Elsevier, 2014 (adaptado).\n\nConsiderando que, para a elaboração e implantação de projetos lógicos e físicos, a virtualização é considerada na manutenção, administração, segurança e gerenciamento de serviços de redes de computadores em um datacenter, avalie as afirmações a seguir.\n\nI. A virtualização faz com que um único recurso de hardware suporte várias instâncias simultâneas de sistemas, ou que vários recursos de hardware suportem uma instância única de sistema.\n\nII. Na virtualização, um drive de disco pode ser particionado e apresentado como vários drives de disco para um sistema computacional.\n\nIII. Na virtualização, vários drives de disco podem ser concatenados e apresentados como um único drive de disco para um sistema computacional.\n\nÉ correto o que se afirma em",
+      "options": [
+        {
+          "text": "I, apenas.",
+          "explanation": "Incompleta. A I descreve bem os dois sentidos da virtualização, mas II e III também estão certas: são exemplos de virtualização de armazenamento."
+        },
+        {
+          "text": "III, apenas.",
+          "explanation": "Incompleta. A concatenação de discos (III) é virtualização de armazenamento, mas o particionamento de um disco em vários discos lógicos (II) também é, e a definição geral da I está correta."
+        },
+        {
+          "text": "I e II, apenas.",
+          "explanation": "Deixa de fora a III. Juntar vários discos físicos num único volume lógico (LVM, RAID, pools de storage) é tão virtualização quanto dividir um disco em vários."
+        },
+        {
+          "text": "II e III, apenas.",
+          "explanation": "Deixa de fora a I, que é a própria definição: virtualizar é desacoplar o recurso lógico do físico, tanto dividindo um recurso entre várias instâncias quanto agregando vários recursos para uma só."
+        },
+        {
+          "text": "I, II e III.",
+          "explanation": "Correta. A virtualização separa a visão lógica dos recursos físicos nos dois sentidos: um hardware atende várias instâncias (hipervisor com várias VMs) ou vários hardwares formam uma instância. No armazenamento, isso aparece como particionar um disco em vários (II) e concatenar vários em um (III)."
+        }
+      ],
+      "correct": "E"
+    },
+    {
+      "key": "enade-2017-redes-q11",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 11 (Inep)",
+      "kind": "Objective",
+      "subject": "tcp-ip",
+      "statement": "Em uma rede de computadores baseada na arquitetura TCP/IP, a camada de transporte fornece o serviço de comunicação fim a fim entre os processos de aplicações executadas em cada um dos hospedeiros. Do ponto de vista das aplicações, a comunicação lógica fim a fim significa que tudo se passa como se os hospedeiros que rodam os pares de processos estivessem conectados diretamente. A figura a seguir mostra o recorte de uma rede com três hospedeiros e quatro processos. Observe a existência de uma comunicação lógica entre os processos **P1** e **P3** e entre os processos **P2** e **P4**.\n\n![Três hospedeiros, cada um com a pilha Aplicação, Transporte, Rede, Enlace de dados e Física, ligados por uma nuvem de rede. O hospedeiro da esquerda roda o processo P3; o do meio roda P1 e P2; o da direita roda P4. Cada processo usa um socket na fronteira entre aplicação e transporte. Uma linha liga P3 a P1 e outra liga P2 a P4. Legenda: elipse = processo; retângulo cinza = socket.](img/inep/redes/2017/q11-1.png)\n\nKUROSE, J. F.; ROSS, K. W. **Redes de computadores e a internet**: uma abordagem top-down. 5. ed. São Paulo: Addison Wesley, 2010 (adaptado).\n\nCom base na figura apresentada, assinale a opção correta.",
+      "options": [
+        {
+          "text": "O processo **P3** se conecta a **P1** por meio de um número de porta UDP, que é um identificador exclusivo entre 0 e 1023.",
+          "explanation": "A figura não diz qual protocolo de transporte é usado, e as portas vão de 0 a 65535; a faixa 0–1023 é só a das portas bem conhecidas, normalmente usada pelo lado servidor."
+        },
+        {
+          "text": "No hospedeiro do meio, o serviço de multiplexação/demultiplexação fornecido pela camada de transporte garante a entrega dos dados ao processo de aplicação apropriado.",
+          "explanation": "Correta. O hospedeiro do meio roda dois processos (P1 e P2). Ao receber um segmento, a camada de transporte lê a porta de destino (e, no TCP, também origem e IPs) e entrega os dados ao socket certo; ao enviar, ela multiplexa os dados dos dois processos."
+        },
+        {
+          "text": "O endereço IP de destino contido no cabeçalho do protocolo TCP identifica o hospedeiro para o qual o segmento está sendo enviado e garante a comunicação fim a fim.",
+          "explanation": "O cabeçalho TCP não tem endereço IP, só portas de origem e destino. O IP de destino fica no cabeçalho do datagrama IP, na camada de rede."
+        },
+        {
+          "text": "O protocolo de camada de transporte usado na comunicação entre os pares de processos é o TCP, que utiliza uma apresentação de três vias para estabelecer a comunicação fim a fim.",
+          "explanation": "Nada na figura permite afirmar que o transporte é TCP; a comunicação lógica fim a fim existe tanto com TCP quanto com UDP. O three-way handshake só vale se o protocolo for TCP."
+        },
+        {
+          "text": "No protocolo de camada de transporte utilizado na comunicação entre os processos **P2** e **P4**, cada segmento de dados enviado entre esses dois processos obterá uma confirmação de recebimento.",
+          "explanation": "A figura não indica o protocolo. Se for UDP, não há confirmação nenhuma; e mesmo no TCP as confirmações são cumulativas, não necessariamente uma por segmento."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2017-redes-q12",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 12 (Inep)",
+      "kind": "Objective",
+      "subject": "projeto-redes",
+      "statement": "Desenvolver um projeto de redes de computadores é uma atividade complexa, pois envolve componentes com características distintas, como os observados nos elementos físicos, além de uma gama extensa de protocolos necessários para o seu funcionamento lógico. Por essa razão, é necessária a aplicação de uma metodologia que permita a um projeto atender aos requisitos determinados.\n\nSabendo que a abordagem Top-Down é uma das metodologias adotadas para construção de projetos, assinale a alternativa correta.",
+      "options": [
+        {
+          "text": "A metodologia Top-Down consiste de três fases: projeto de rede lógica, projeto de rede física e documentação da rede.",
+          "explanation": "Falta a primeira e mais importante fase: a identificação das necessidades e metas do cliente (análise de requisitos). O ciclo de Oppenheimer tem quatro fases: análise de requisitos, projeto lógico, projeto físico e teste, otimização e documentação."
+        },
+        {
+          "text": "A metodologia Top-Down restringe as alterações de projeto ao longo da execução, pois cada fase da metodologia é bem definida.",
+          "explanation": "O top-down é iterativo: à medida que se conhecem melhor os requisitos e as restrições, o projeto é revisto e ajustado. Ele não congela o projeto."
+        },
+        {
+          "text": "A metodologia Top-Down consiste em realizar uma estrutura analítica de projeto (EAP) definindo os projetos físico e lógico antes de sua execução.",
+          "explanation": "EAP é ferramenta de gerenciamento de projetos (PMBOK) para decompor entregas, não a essência do top-down, que é partir dos objetivos de negócio e das aplicações para só depois chegar à tecnologia."
+        },
+        {
+          "text": "A metodologia Top-Down considera para sua análise de requisitos as políticas e normas em uso no cliente, sendo as restrições orçamentárias e de pessoal tratadas em outras esferas de planejamento corporativo.",
+          "explanation": "Orçamento, pessoal e prazo são restrições de negócio analisadas justamente na fase de requisitos do top-down; ignorá-las levaria a um projeto inviável."
+        },
+        {
+          "text": "A metodologia Top-Down inspira-se no modelo RM-OSI, em que há um foco nas metas do negócio do cliente, analisando os aplicativos, as sessões e o transporte de dados para que sejam selecionados os equipamentos e a mídia utilizada nas camadas mais baixas.",
+          "explanation": "Correta. O projeto começa nas camadas superiores do modelo OSI (aplicação, sessão, transporte), guiado pelas metas do negócio, e só depois define roteadores, switches e meios físicos das camadas inferiores."
+        }
+      ],
+      "correct": "E"
+    },
+    {
+      "key": "enade-2017-redes-q13",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 13 (Inep)",
+      "kind": "Objective",
+      "subject": "tcp-ip",
+      "statement": "O protocolo IPv6 foi desenvolvido para substituir o IPv4, tendo sua implementação ocasionado várias mudanças importantes, como a capacidade de endereçamento expandida, o cabeçalho aprimorado de 40 bytes e a rotulação de fluxo e prioridade.\n\nConsiderando essas informações, avalie as afirmações a seguir, relativas à descrição dos campos do cabeçalho IPv6.\n\nI. Em \"endereço de origem\" e \"endereço de destino\" cada campo possui 64 bits, tendo sido expandidos os 32 bits usados no IPv4.\n\nII. Em se tratando do cabeçalho IPv6, insere-se o valor 32 no campo \"versão\", de 4 bits que é usado para identificar a versão do protocolo IP.\n\nIII. O campo \"próximo cabeçalho\" identifica o protocolo ao qual os dados presentes no datagrama serão entregues, por exemplo, TCP ou UDP.\n\nIV. No IPv6, o campo \"classe de tráfego\", de 8 bits, é semelhante ao campo \"tipo de serviço\" do IPv4, ambos utilizados para diferenciar os tipos de pacotes IP.\n\nV. O valor do campo \"limite de saltos\" é decrementado em um para cada roteador que repassa o pacote; caso a contagem do limite de salto chegue a zero, o pacote será descartado.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "II e IV.",
+          "explanation": "A II é falsa: o campo versão do IPv6 vale 6; além disso, 32 nem caberia em 4 bits (máximo 15). Faltam também a III e a V, que estão corretas."
+        },
+        {
+          "text": "I, II e III.",
+          "explanation": "I e II são falsas. Os endereços IPv6 têm 128 bits, não 64, e o campo versão contém 6."
+        },
+        {
+          "text": "I, III e V.",
+          "explanation": "Inclui a I, que é falsa: cada endereço IPv6 tem 128 bits (16 bytes), o que explica boa parte dos 40 bytes do cabeçalho (32 só para os dois endereços)."
+        },
+        {
+          "text": "III, IV e V.",
+          "explanation": "Correta. O próximo cabeçalho indica o protocolo seguinte (TCP = 6, UDP = 17 ou um cabeçalho de extensão); a classe de tráfego, de 8 bits, faz o papel do ToS/DSCP do IPv4; e o limite de saltos equivale ao TTL, decrementado a cada roteador e descartado ao chegar a zero."
+        },
+        {
+          "text": "I, II, IV e V.",
+          "explanation": "I e II são falsas: endereços de 128 bits e versão igual a 6. E a III, verdadeira, ficou de fora."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2017-redes-q14",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 14 (Inep)",
+      "kind": "Objective",
+      "subject": "roteamento",
+      "statement": "O OSPF (Open Shortest Path First), protocolo de roteamento do tipo estado do enlace (LS), usa o algoritmo de Dijkstra para computar suas rotas. A figura a seguir apresenta uma rede OSPF de área simples, com os custos associados a cada link.\n\n![Rede OSPF com seis roteadores e os custos dos links: A–B 1, A–C 3, A–E 5, C–B 2, C–E 3, B–E 3, B–D 5, E–D 1, E–F 5, D–F 2. A rede 172.16.10.0/24 está ligada ao roteador A, a rede 172.16.30.0/24 ao roteador E e a rede 172.16.20.0/24 ao roteador F.](img/inep/redes/2017/q14-1.png)\n\nKUROSE, J. F.; ROSS, K. W. **Redes de computadores e a internet**: uma abordagem top-down. 5. ed. São Paulo: Addison Wesley, 2010 (adaptado).\n\nCom base na topologia apresentada na figura acima, avalie as afirmações a seguir.\n\nI. Para o tráfego entre a rede 172.16.10.0/24 e a rede 172.16.20.0/24, o OSPF irá escolher a rota ABDF.\n\nII. Para o tráfego entre a rede 172.16.30.0/24 e a rede 172.16.20.0/24, o OSPF irá escolher a rota EF.\n\nIII. Caso o roteador D esteja indisponível , a nova rota escolhida entre a rede 172.16.10.0/24 e a rede 172.16.20.0/24, após a convergência da rede, será ABEF.\n\nIV. Uma falha no roteador D, com consequente reconfiguração de rotas, alterará a rota corrente entre a rede 172.16.20.0/24 e a rede 172.16.30.0/24.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e II.",
+          "explanation": "As duas são falsas. De A até F, ABDF custa 1 + 5 + 2 = 8, mas ABEDF custa 1 + 3 + 1 + 2 = 7. De E até F, o link direto custa 5, enquanto EDF custa 1 + 2 = 3."
+        },
+        {
+          "text": "II e III.",
+          "explanation": "A III está certa, mas a II não: o OSPF escolhe o menor custo total, e E→D→F (3) vence o link direto E→F (5)."
+        },
+        {
+          "text": "III e IV.",
+          "explanation": "Correta. Sem D, os caminhos de A a F passam por E–F: ABEF custa 1 + 3 + 5 = 9, menor que AEF (10) ou ACEF (11), então III é verdadeira. Hoje o tráfego entre E e F usa EDF (custo 3); com D fora, passa a usar EF (custo 5), então IV também é."
+        },
+        {
+          "text": "I, II e IV.",
+          "explanation": "I e II são falsas. A rota mais curta de A a F é ABEDF (7), não ABDF (8), e de E a F é EDF (3), não EF (5)."
+        },
+        {
+          "text": "I, III e IV.",
+          "explanation": "III e IV estão certas, mas a I não: ABDF custa 8, e o Dijkstra encontra ABEDF, com custo 7."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2017-redes-q15",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 15 (Inep)",
+      "kind": "Objective",
+      "subject": "redes-sem-fio",
+      "statement": "Uma residência tem, em média, mais de oito dispositivos conectados à internet – programas de TV transmitidos em HD; conversas por vídeo com amigos e familiares, jogos de videogames contra adversários em todo o mundo, muitas vezes ao mesmo tempo. Para acompanhar o crescente uso da internet, os roteadores wi-fi domésticos modernos aumentaram sua velocidade e alcance sem fio: eram 11 Mbps em 2000, atualmente são 1,3 gigabits por segundo.\n\nContudo, com o objetivo de obter maior velocidade, muitas vezes o usuário enfrenta problemas de compatibilidade com dispositivos antigos e questões de segurança em razão do maior alcance de seus dispositivos.\n\nDisponível em: <http://www.linksys.com>. Acesso em: 10 jul. 2017 (adaptado).\n\nA figura a seguir representa os diversos equipamentos, com seus respectivos padrões IEEE 802.11, a serem conectados em uma rede sem fio de uma residência hipotética.\n\n![Equipamentos por cômodo e padrões suportados. Sala: TV 802.11g/n e impressora 802.11b/g. Quarto 1: TV 802.11b/g/n/ac, celular 802.11a/b/g/n e notebook 802.11n/ac. Quarto 2: notebook 802.11a/b/g/n, celular 802.11g/n/ac e celular 802.11b/g/n.](img/inep/redes/2017/q15-1.png)\n\nConsiderando a necessidade de escolha dos equipamentos sem fio a serem utilizados na residência, as questões de compatibilidade de padrões e segurança, e, ainda, o objetivo de garantir alta velocidade à internet, assinale a opção correta em relação à aquisição dos dispositivos.",
+      "options": [
+        {
+          "text": "A escolha de dispositivos no padrão IEEE 802.11n, com o protocolo WPA2, permitirá velocidades máximas para alguns dispositivos e a manutenção da segurança.",
+          "explanation": "Correta. Quase todos os equipamentos da casa suportam 802.11n, que chega a centenas de Mbps; os que suportam n tiram proveito máximo, e o WPA2 (AES-CCMP) mantém a rede protegida. Só a impressora (b/g) fica no modo legado."
+        },
+        {
+          "text": "A opção pelo padrão IEEE 802.11g implicará benefícios, pois aumentará a segurança em relação aos padrões anteriores devido à incorporação do uso do protocolo WEP.",
+          "explanation": "O 802.11g é um padrão de camada física (54 Mbps em 2,4 GHz) e não trouxe segurança nova. O WEP é anterior e está quebrado; usá-lo reduz a segurança."
+        },
+        {
+          "text": "A publicação do nome da rede (SSID) e a manutenção das configurações do fabricante são algumas recomendações de segurança em redes sem fio.",
+          "explanation": "É o contrário: recomenda-se trocar senhas e configurações de fábrica do roteador e, como medida complementar, não divulgar um SSID que identifique o dono ou o modelo do equipamento."
+        },
+        {
+          "text": "A utilização do padrão IEEE 802.11b configurado com o padrão de segurança WPA2 é recomendável, dada a garantia de mais velocidade e segurança, e de manutenção da compatibilidade com os diversos equipamentos.",
+          "explanation": "O 802.11b é o mais lento dos padrões (11 Mbps). Forçar a rede a operar em b sacrifica a velocidade de todos os dispositivos, o oposto do objetivo."
+        },
+        {
+          "text": "O padrão IEEE 802.11ac, sucessor do 802.11n, poderá ser utilizado na arquitetura proposta, visto que mantém compatibilidade de velocidade e segurança com os padrões IEEE 802.11b/g/n e proporciona também maior velocidade.",
+          "explanation": "O 802.11ac opera só em 5 GHz, enquanto b e g operam em 2,4 GHz; não há compatibilidade direta com eles, e vários equipamentos da casa não suportam ac. Compatibilidade, quando existe, não é \"de velocidade\": o legado continua lento."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "key": "enade-2017-redes-q16",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 16 (Inep)",
+      "kind": "Objective",
+      "subject": "servicos-rede",
+      "statement": "Em uma rede local de uma instituição bancária, foi implantado um sistema gerenciador de banco de dados (SGBD), tendo o administrador efetuado um comando `GRANT` para a realização das configurações de acesso ao SGBD na rede.\n\nCom o objetivo de realizar autenticação por aplicações para acesso ao banco de dados, de forma segura, devem ser enviados ao servidor",
+      "options": [
+        {
+          "text": "o IP do servidor e a senha.",
+          "explanation": "Falta indicar qual banco será acessado. Um mesmo SGBD hospeda vários bancos, e as permissões do GRANT são dadas por banco ou objeto."
+        },
+        {
+          "text": "a senha e o endereço MAC.",
+          "explanation": "Sem o endereço do servidor, a aplicação nem consegue se conectar. E o MAC é um endereço de enlace que não atravessa roteadores nem serve de credencial para o SGBD."
+        },
+        {
+          "text": "o IP do servidor e o endereço MAC.",
+          "explanation": "Não há credencial nenhuma (senha) nem o nome do banco. O MAC não participa da autenticação no SGBD."
+        },
+        {
+          "text": "o IP do servidor, o nome físico do banco e a senha.",
+          "explanation": "Correta. A conexão de uma aplicação ao SGBD precisa do endereço do servidor (host), do banco a acessar e da credencial (usuário e senha) a que o GRANT concedeu privilégios."
+        },
+        {
+          "text": "o IP do cliente, o nome físico do banco, a senha e o endereço MAC.",
+          "explanation": "O IP do cliente já vai no próprio pacote, mas o que a aplicação precisa saber é o IP do servidor. O MAC não tem papel na autenticação de banco de dados."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2017-redes-q17",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 17 (Inep)",
+      "kind": "Objective",
+      "subject": "redes-wan",
+      "statement": "A principal alternativa segura para acesso remoto consiste nas redes privadas virtuais, ou VPN (Virtual Private Network). Uma VPN permite que usuários geograficamente remotos troquem dados por meio de uma rede existente — mais comumente a internet — de forma segura. A técnica básica fornece um caminho seguro de transmissão, conhecido como um túnel que pode conectar dois sistemas ou duas redes. Duas técnicas populares de implementação de VPNs são a que utiliza o IPSec (Internet Protocol Security) e a que utiliza o SSL (Secure Sockets Layer).\n\nHARRINGTON J. L. **Network security**: a practical approach. San Francisco: Morgan Kaufmann, 2005 (adaptado).\n\nEm relação às técnicas de VPNs IPSec e VPNs SSL, avalie as asserções a seguir e a relação proposta entre elas.\n\nI. Na definição de uma VPN ponto a ponto, onde se exige alto volume de transações e baixa latência, é mais indicado o uso do IPSec do que o uso do SSL.\n\n**PORQUE**\n\nII. Tanto o IPSec como o SSL normalmente usam a técnica de sequenciamento de pacotes para detectar ataques de replay (repetição de mensagens), sendo o IPSec mais eficiente que o SSL nesse caso.\n\nA respeito dessas asserções, assinale a opção correta.",
+      "options": [
+        {
+          "text": "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
+          "explanation": "Correta pelo gabarito. I é verdadeira: num túnel ponto a ponto entre redes com muito tráfego, o IPSec, que atua na camada de rede, é o indicado. II também é: os dois usam número de sequência contra replay, e no IPSec essa verificação é feita por pacote, na própria camada IP, com janela deslizante e sem depender de sessão TCP. A banca entendeu que essa eficiência maior justifica a preferência pelo IPSec."
+        },
+        {
+          "text": "As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.",
+          "explanation": "A banca considerou que existe relação de causa: a proteção anti-replay mais eficiente do IPSec, feita pacote a pacote na camada de rede, é apresentada como motivo para preferi-lo quando há alto volume de transações e se exige baixa latência."
+        },
+        {
+          "text": "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.",
+          "explanation": "A II não é falsa: o IPSec tem janela anti-replay com número de sequência no cabeçalho ESP/AH, e o SSL/TLS inclui um número de sequência implícito no cálculo do MAC de cada registro."
+        },
+        {
+          "text": "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.",
+          "explanation": "A I não é falsa: em VPN entre redes com alto volume, o IPSec é a escolha usual, porque atende qualquer aplicação IP sem depender de cliente ou portal web, que é o cenário típico da VPN SSL (acesso remoto de usuários)."
+        },
+        {
+          "text": "As asserções I e II são proposições falsas.",
+          "explanation": "As duas asserções são verdadeiras: o IPSec é o indicado para túneis ponto a ponto de alto volume, e ambos os protocolos usam sequenciamento contra replay."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "key": "enade-2017-redes-q18",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 18 (Inep)",
+      "kind": "Objective",
+      "subject": "fundamentos-redes",
+      "statement": "Os dispositivos de interconexão de rede são usados nas mais diversas aplicações, seja em uma LAN (Local Area Network) ou em grandes redes como a internet. Entre os mais comuns, estão concentradores, repetidores, pontes, switches, roteadores e gateways. Estes últimos podem ser um hardware, um software ou a combinação de ambos. O gateway pode traduzir endereços e formatos de mensagens, tornando possível a comunicação entre redes heterogêneas, isto é, redes que utilizam tecnologias diferentes. O gateway pode estar associado a um simples roteador doméstico e atuar como um servidor proxy, entre outras aplicações.\n\nDisponível em: <http://www.hardware.com.br>. Acesso em: 18 jul. 2017 (adaptado).\n\nConsiderando as informações apresentadas, avalie as ações a seguir, em relação ao que o gateway permite.\n\nI. Interligar redes que utilizam protocolos diferentes.\n\nII. Implementar VLANs (Virtual LANs) para melhorar o desempenho e segurança da rede.\n\nIII. Traduzir pacotes originários da rede local para que estes possam atingir o destinatário.\n\nIV. Atuar como firewall, pois serve de intermediário entre a estação (o utilizador) e a rede (a internet, por exemplo).\n\nV. Compartilhar a conexão com a internet entre várias estações, desde que o endereço do gateway esteja definido nas propriedades de rede, não sendo possível a alocação automática de endereços.\n\nÉ correto apenas o que se menciona em",
+      "options": [
+        {
+          "text": "I e II.",
+          "explanation": "A II é falsa: VLANs são configuradas nos switches (camada 2, IEEE 802.1Q), e não são uma função do gateway descrito no texto. Faltam ainda III e IV."
+        },
+        {
+          "text": "I, II e V.",
+          "explanation": "II e V são falsas. VLAN é recurso de switch, e o compartilhamento de conexão funciona com endereçamento automático: o DHCP entrega o IP do gateway às estações."
+        },
+        {
+          "text": "I, III e IV.",
+          "explanation": "Correta. O gateway liga redes com protocolos diferentes (I), traduz endereços e formatos, como no NAT do roteador doméstico (III), e, por ficar entre as estações e a internet, pode filtrar tráfego como firewall ou proxy (IV)."
+        },
+        {
+          "text": "III, IV e V.",
+          "explanation": "Inclui a V, que é falsa: a alocação automática é possível e é o usual; o servidor DHCP informa IP, máscara e gateway padrão às estações. E deixa de fora a I, que é a função básica de um gateway."
+        },
+        {
+          "text": "II, III, IV e V.",
+          "explanation": "II e V são falsas: VLAN é função de switch, e o gateway não impede a configuração automática por DHCP."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2017-redes-q19",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 19 (Inep)",
+      "kind": "Objective",
+      "subject": "redes-sem-fio",
+      "statement": "Na elaboração e implantação de projetos lógicos e físicos é necessário considerar a segurança de redes de computadores. Os padrões para redes sem fio definem a frequência de operação, taxa máxima de transmissão, área de cobertura aproximada e as técnicas de transmissão utilizadas.\n\nAcerca da segurança de redes sem fio, avalie as afirmações a seguir.\n\nI. O WPA2 (Wi-Fi Protected Access 2) fornece segurança na transmissão de dados em uma rede sem fio.\n\nII. O WPA2 é um protocolo seguro, pois implementa técnicas de segurança que não eram suportadas pela primeira versão do WPA.\n\nIII. O WPA2 utiliza o sistema de criptografia AES (Advanced Encryption Standard), com uso de chaves de 256 a 512 bits.\n\nIV. O WPA2 oferece integridade, pois utiliza o protocolo CCMP (CMM Mode Protocol).\n\nV. O WPA2 fornece um nível aceitável de segurança para autenticação nas redes sem fio e usa o algoritmo de criptografia RC4 para garantir confidencialidade dos dados trocados na rede.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I, II e III.",
+          "explanation": "A III é falsa: o AES no CCMP do WPA2 usa chave de 128 bits, e o AES em geral admite 128, 192 ou 256 bits; não existe AES de 512 bits."
+        },
+        {
+          "text": "I, II e IV.",
+          "explanation": "Correta. O WPA2 protege o tráfego sem fio (I), trouxe o AES-CCMP obrigatório, que o WPA original, baseado em TKIP/RC4, não exigia (II), e o CCMP (Counter Mode with CBC-MAC Protocol) garante integridade com o CBC-MAC (IV)."
+        },
+        {
+          "text": "I, III e V.",
+          "explanation": "III e V são falsas. A chave do AES no WPA2 é de 128 bits, e o RC4 é o algoritmo do WEP e do TKIP, não o do WPA2."
+        },
+        {
+          "text": "II, IV e V.",
+          "explanation": "A V é falsa: o WPA2 substituiu o RC4 pelo AES no CCMP. E a I, verdadeira, ficou de fora."
+        },
+        {
+          "text": "III, IV e V.",
+          "explanation": "III e V são falsas: não há chave AES de 256 a 512 bits no WPA2, e a confidencialidade vem do AES, não do RC4."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2017-redes-q20",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 20 (Inep)",
+      "kind": "Objective",
+      "subject": "redes-wan",
+      "statement": "As redes virtuais privadas (VPN) representadas na figura a seguir foram implementadas por meio da tecnologia de encaminhamento de pacotes baseados em rótulos (MPLS). Esse modelo utiliza a infraestrutura de rede IP pública para a formação de VPNs de camada 3, garantindo, dessa forma, o mesmo nível de segurança dos circuitos virtuais privados (PVC) de camada 2 do frame-relay. Outra importante contribuição desse modelo foi a introdução do conceito de roteadores virtuais (VRF), que reduziu consideravelmente a necessidade de equipamentos para cada cliente dentro da operadora.\n\n![Backbone MPLS da operadora com Roteador de borda MPLS-1 e Roteador de borda MPLS-2 interligados por três roteadores de núcleo (MPLS-1, MPLS-2 e MPLS-3), formando um anel com malha. À borda MPLS-1 ligam-se o CE-1 do VPN1 – site A e o CE-2 do VPN2 – Site A; à borda MPLS-2 ligam-se o CE-1 do VPN1 – site B e o CE-2 do VPN2 – Site B. Cada CE atende um computador do site.](img/inep/redes/2017/q20-1.png)\n\nA respeito do funcionamento da VPN MPLS representada na figura acima, assinale a opção correta.",
+      "options": [
+        {
+          "text": "O protocolo MPLS é implementado em todos os roteadores dos clientes (CE-1 e CE-2).",
+          "explanation": "Os CEs são roteadores IP comuns e não precisam rodar MPLS; os rótulos são impostos e retirados pelos roteadores de borda da operadora (PE) e comutados pelos de núcleo (P)."
+        },
+        {
+          "text": "Somente é possível um roteador VRF para cada site, mas um site pode estar associado a uma ou a mais de uma VPN.",
+          "explanation": "Correta pelo gabarito. No modelo BGP/MPLS VPN (RFC 4364), a interface do PE que atende um site é associada a uma única VRF, mas, pelos route targets, essa VRF pode importar rotas de mais de uma VPN, como numa extranet."
+        },
+        {
+          "text": "Os roteadores virtuais (VRF) são implementados em todos os roteadores de núcleo MPLS (MPLS-1, MPLS-2 e MPLS-3).",
+          "explanation": "As VRFs ficam nos roteadores de borda (PE). Os de núcleo (P) só comutam rótulos e não conhecem as rotas dos clientes."
+        },
+        {
+          "text": "Os roteadores dos clientes (CE-1 e CE-2) divulgam suas rotas para todos os roteadores de borda da operadora, que, por sua vez, as divulgam para todos os outros clientes de sua rede VPN MPLS.",
+          "explanation": "Cada CE troca rotas só com o PE ao qual está ligado, e o PE distribui essas rotas, via MP-BGP, apenas para as VRFs da mesma VPN. Divulgar para todos os clientes quebraria o isolamento entre VPNs."
+        },
+        {
+          "text": "É estabelecida uma VPN ponto a ponto entre os roteadores do cliente (CE-1) do site A e do site B por meio da troca direta de informações de roteamento entre esses roteadores.",
+          "explanation": "Na VPN MPLS de camada 3 (modelo peer), os CEs dos dois sites não trocam rotas diretamente; cada um fala com seu PE, e os PEs propagam as rotas entre si."
+        }
+      ],
+      "correct": "B"
+    }
+  ]
+}

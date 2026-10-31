@@ -1,0 +1,426 @@
+{
+  "year": 2017,
+  "track": "enade-redes",
+  "questions": [
+    {
+      "key": "enade-2017-redes-q22",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 22 (Inep)",
+      "kind": "Objective",
+      "subject": "servicos-rede",
+      "statement": "Um serviço de diretório, em uma descrição simplificada, constitui uma base de dados que armazena e organiza informações de um grupo de usuários e permite aos administradores gerenciar o acesso destes aos sistemas e recursos computacionais.\n\nDisponível em: <https://www.docs.oracle.com>. Acesso em: 11 ago. 2017 (adaptado).\n\nA partir dessa informação, é correto afirmar que a autenticação no serviço de diretório",
+      "options": [
+        {
+          "text": "impede o compartilhamento de privilégios em diferentes bases de dados.",
+          "explanation": "A ideia do diretório (LDAP, Active Directory) é o oposto: centralizar identidades para que a mesma conta e seus privilégios valham em vários sistemas e servidores."
+        },
+        {
+          "text": "fornece acesso e privilégio de superusuário a todos os serviços disponibilizados.",
+          "explanation": "Autenticar só confirma quem é o usuário; os privilégios dependem dos grupos e permissões atribuídos a ele, e o princípio do menor privilégio é a regra, não o superusuário."
+        },
+        {
+          "text": "elimina a necessidade de aplicação de criptografias e de uso de protocolos de autenticação.",
+          "explanation": "O diretório depende justamente desses mecanismos: Kerberos, LDAPS ou StartTLS, hashes de senha. Sem eles, credenciais trafegariam e ficariam expostas."
+        },
+        {
+          "text": "valida a identificação do usuário junto à base de dados, porém não lida com fatores de limitação de acesso, ou com ações a que esse usuário esteja submetido.",
+          "explanation": "O texto diz que o diretório permite gerenciar o acesso; a autenticação nele já considera restrições como conta bloqueada ou expirada, horários permitidos e políticas de grupo que valem a partir do logon."
+        },
+        {
+          "text": "consiste em verificar a identidade de um usuário, um dispositivo ou uma entidade que deseja acessar dados, recursos ou aplicações, disponíveis em diferentes servidores.",
+          "explanation": "Correta. Autenticação é a verificação de identidade; no serviço de diretório ela é centralizada, e a mesma identidade (de pessoa, máquina ou serviço) passa a valer para recursos espalhados por vários servidores."
+        }
+      ],
+      "correct": "E"
+    },
+    {
+      "key": "enade-2017-redes-q23",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 23 (Inep)",
+      "kind": "Objective",
+      "subject": "gestao-governanca",
+      "statement": "A diretoria de uma empresa identificou os seguintes problemas, que têm afetado os seus negócios:\n\n- falta de métricas para controlar seus produtos;\n- processos escassos ou inexistentes;\n- falta de foco em seus negócios;\n- descontrole dos processos.\n\nNessa situação, o guia de boas práticas indicado para otimizar o investimento em tecnologia da informação, de forma a melhorar o retorno sobre o investimento e fornecer métricas para a avaliação dos resultados dessa empresa é o",
+      "options": [
+        {
+          "text": "ITIL.",
+          "explanation": "O ITIL trata do gerenciamento de serviços de TI (incidentes, mudanças, níveis de serviço). Não é o modelo de governança voltado a alinhar a TI ao negócio e medir o retorno do investimento."
+        },
+        {
+          "text": "COBIT.",
+          "explanation": "Correta. O COBIT é o framework de governança e controle de TI: define processos, objetivos de controle e métricas (indicadores e modelos de maturidade) para alinhar a TI às metas do negócio e otimizar o retorno dos investimentos."
+        },
+        {
+          "text": "CMMI.",
+          "explanation": "O CMMI avalia e melhora a maturidade de processos de desenvolvimento de produtos e software; não trata da governança do investimento em TI como um todo."
+        },
+        {
+          "text": "MPS-BR.",
+          "explanation": "O MPS.BR é o modelo brasileiro de melhoria de processo de software, inspirado no CMMI. Também é voltado ao desenvolvimento, não à governança de TI."
+        },
+        {
+          "text": "PMBOK.",
+          "explanation": "O PMBOK reúne boas práticas de gerenciamento de projetos. Ajuda a controlar projetos individuais, mas não fornece o modelo de governança e métricas de TI que o caso pede."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2017-redes-q24",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 24 (Inep)",
+      "kind": "Objective",
+      "subject": "tcp-ip",
+      "statement": "O IPv6 foi projetado para ser o sucessor do IPv4, superando as limitações do IPv4 e introduzindo aprimoramentos como o novo ICMPv6, que substitui o protocolo de resolução de endereços (Address Resolution Protocol - ARP) e o protocolo de resolução de endereço reverso (Reverse Address Resolution Protocol - RARP). Por esse motivo, a configuração da segurança da camada de rede exige atenção especial com o IPv6.\n\nConsiderando a arquitetura IPv6 e as funcionalidades do ICMPv6, avalie as afirmações a seguir.\n\nI. O ICMPv6 não pode ser completamente bloqueado em firewalls de borda.\n\nII. O IPv6 é mais seguro que o IPv4, já que o IPSec é integrado ao protocolo e habilitado por padrão.\n\nIII. O endereço MAC do dispositivo da rede interna pode ser descoberto quando se utiliza o recurso de autoconfiguração para a formação do endereço IPv6 roteável global.\n\nIV. Os dispositivos das redes locais com endereços IPv6 globais roteáveis necessitam de tradução de endereço de rede (NAT) para mascarar os endereços na internet.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e II.",
+          "explanation": "A II é falsa: o suporte a IPSec foi previsto no IPv6, mas ele não vem ativo por padrão; sem configuração de SAs e políticas, o tráfego IPv6 segue sem proteção, como no IPv4."
+        },
+        {
+          "text": "I e III.",
+          "explanation": "Correta. O IPv6 depende do ICMPv6 para funcionar (descoberta de vizinhos, Packet Too Big para o PMTUD), então o firewall precisa deixar passar parte dele (I). Na autoconfiguração SLAAC com EUI-64, o identificador da interface é derivado do MAC, que fica visível no endereço global (III)."
+        },
+        {
+          "text": "III e IV.",
+          "explanation": "A IV é falsa: com espaço de endereçamento abundante, o IPv6 foi pensado para comunicação fim a fim sem NAT; privacidade se obtém com endereços temporários (RFC 4941), e proteção com firewall."
+        },
+        {
+          "text": "I, II e IV.",
+          "explanation": "II e IV são falsas. O IPSec não é habilitado por padrão, e o IPv6 não precisa de NAT para que hosts com endereço global acessem a internet."
+        },
+        {
+          "text": "II, III e IV.",
+          "explanation": "II e IV são falsas, e a I, verdadeira, ficou de fora: bloquear todo o ICMPv6 quebra a descoberta de vizinhos e a descoberta de MTU."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2017-redes-q25",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 25 (Inep)",
+      "kind": "Objective",
+      "subject": "redes-wan",
+      "statement": "Um provedor de serviços de rede interliga as cidades A e B por meio de uma rede WAN de longa distância, e, em cada uma das cidades, o provedor opera uma rede Metro Ethernet para prover serviços a seus clientes.\n\nAs empresas X e Y contrataram do provedor serviços corporativos e possuem escritórios fisicamente presentes em cada uma das cidades mencionadas, conforme mostra a figura a seguir.\n\n![Na Cidade A, os roteadores da Empresa X e da Empresa Y ligam-se a uma rede Metro Ethernet, que se conecta por um roteador à WAN do provedor; do outro lado da WAN, outro roteador liga a rede Metro Ethernet da Cidade B, onde estão os roteadores da Empresa X e da Empresa Y. Setas indicam o tráfego da Empresa X entre as duas cidades e o da Empresa Y entre as duas cidades.](img/inep/redes/2017/q25-1.png)\n\nCada empresa possui várias VLANs (Virtual Local Area Networks) configuradas internamente e os dados dessas VLANs devem trafegar da cidade A para a cidade B, passando pelas redes Metro Ethernet e WAN do provedor, de forma segura e independente.\n\nNessa situação, os protocolos que devem ser configurados pelo provedor na rede Metro Ethernet e na rede WAN para ocorrer o tráfego dos dados das VLANs das empresas entre cidades diferentes são",
+      "options": [
+        {
+          "text": "IEEE 802.1ad (QinQ) na rede Metro Ethernet e IEEE 802.1Q na rede WAN.",
+          "explanation": "O 802.1Q, com uma única tag de 12 bits, não preserva as VLANs dos clientes nem isola X de Y numa WAN de longa distância; para transportar LANs entre cidades sobre o núcleo do provedor usa-se VPLS."
+        },
+        {
+          "text": "IEEE 802.1Q na rede Metro Ethernet e VPLS (Virtual Private Lan Services) na rede WAN.",
+          "explanation": "Com 802.1Q simples na Metro Ethernet, as VLANs de X e Y poderiam ter IDs iguais e se misturar. É preciso empilhar uma tag do provedor sobre a do cliente, o que faz o 802.1ad."
+        },
+        {
+          "text": "VPLS (Virtual Private Lan Services) na rede Metro Ethernet e IEEE 802.1Q na rede WAN.",
+          "explanation": "Inverte os papéis: o VPLS é o serviço de LAN virtual multiponto sobre MPLS no núcleo/WAN, e o 802.1Q sozinho não dá isolamento entre clientes que usam as mesmas VLANs."
+        },
+        {
+          "text": "IEEE 802.1ad (QinQ) na rede Metro Ethernet e VPLS (Virtual Private Lan Services) na rede WAN.",
+          "explanation": "Correta. Na Metro Ethernet, o QinQ acrescenta uma tag de serviço (S-VLAN) por cliente, preservando as VLANs internas de X e Y. Na WAN, o VPLS emula uma LAN multiponto sobre MPLS, ligando os segmentos das duas cidades de forma isolada por cliente."
+        },
+        {
+          "text": "VPLS (Virtual Private Lan Services) na rede Metro Ethernet e IEEE 802.1ad (QinQ) na rede WAN.",
+          "explanation": "Inverte as tecnologias: o QinQ é técnica de acesso/metro em camada 2, e o VPLS é que estende a LAN pelo núcleo MPLS de longa distância."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2017-redes-q26",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 26 (Inep)",
+      "kind": "Objective",
+      "subject": "gestao-governanca",
+      "statement": "A função da auditoria de sistemas é promover adequação, revisão, avaliação e recomendações para o aprimoramento dos controles internos em qualquer um dos sistemas de informação da empresa, bem como avaliar a utilização dos recursos humanos, materiais e tecnológicos envolvidos no processamento desses sistemas.\n\nCom base nessas informações, avalie as afirmações a seguir.\n\nI. A auditoria de sistemas permite detectar, de forma automática, o uso dos recursos e dos fluxos de informação em uma empresa, embora não identifique qual informação é crítica para o cumprimento da missão e objetivos empresariais.\n\nII. As ferramentas de auditoria classificadas como generalistas apresentam softwares com a capacidade de processar, analisar e simular amostras e apontar possíveis duplicidades.\n\nIII. As ferramentas de auditoria classificadas como de utilidade geral apresentam softwares próprios para a execução de funções muito comuns de processamento, como sortear arquivos, concatenar, sumarizar e gerar relatórios.\n\nÉ correto o que se afirma em",
+      "options": [
+        {
+          "text": "I, apenas.",
+          "explanation": "A I é falsa: a auditoria de sistemas não é um mecanismo automático e justamente avalia quais informações e controles são críticos para a missão da empresa. II e III, verdadeiras, ficaram de fora."
+        },
+        {
+          "text": "III, apenas.",
+          "explanation": "Incompleta. A II também está certa: softwares generalistas de auditoria (como ACL e IDEA) processam arquivos, extraem e simulam amostras e apontam duplicidades."
+        },
+        {
+          "text": "I e II, apenas.",
+          "explanation": "Inclui a I, falsa, porque identificar a informação crítica para o negócio é parte central do trabalho de auditoria, e omite a III, verdadeira."
+        },
+        {
+          "text": "II e III, apenas.",
+          "explanation": "Correta. Os softwares generalistas são pacotes de auditoria que processam dados, fazem amostragem, simulações e detectam duplicidades (II); os de utilidade geral são utilitários para tarefas comuns como ordenar, concatenar, sumarizar e emitir relatórios (III)."
+        },
+        {
+          "text": "I, II e III.",
+          "explanation": "A I é falsa: a auditoria não detecta o uso de recursos de forma automática e deve, sim, apontar quais informações são críticas para os objetivos da empresa."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2017-redes-q27",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 27 (Inep)",
+      "kind": "Objective",
+      "subject": "ieee-802",
+      "statement": "O Instituto de Engenheiros Eletricistas e Eletrônicos (IEEE) padronizou as redes locais e metropolitanas com o nome IEEE 802. Entre os mais conhecidos padrões de redes locais, citam-se o Ethernet 802.3, que padroniza propriedades físicas para as redes cabeadas, e o padrão 802.11, que define redes sem fio.\n\nConsiderando a diferença entre padrões de rede, assinale a opção correta.",
+      "options": [
+        {
+          "text": "Redes sem fio oferecem um caminho com menor probabilidade de interferência ou perda de dados quando comparadas às redes cabeadas.",
+          "explanation": "É o contrário: o meio sem fio é compartilhado e aberto, sujeito a interferência de outras redes e aparelhos, atenuação por obstáculos e colisões, com taxa de erro bem maior que a do cabo."
+        },
+        {
+          "text": "O método de acesso para o padrão 802.3 é o CSMA/CD, ao passo que, para o padrão 802.11, o método de acesso é o CSMA/CA.",
+          "explanation": "Correta. No Ethernet a estação detecta a colisão durante a transmissão (CSMA/CD). No 802.11 o rádio não consegue ouvir enquanto transmite, então o protocolo tenta evitar colisões com espera aleatória, ACKs e, opcionalmente, RTS/CTS (CSMA/CA)."
+        },
+        {
+          "text": "Os padrões 802.11a, 802.11b e 802.11g operam na mesma faixa de frequência e, assim, podem comunicar-se entre si.",
+          "explanation": "O 802.11a opera em 5 GHz, enquanto b e g operam em 2,4 GHz. Só b e g são compatíveis entre si."
+        },
+        {
+          "text": "Em redes sem fio, a qualidade de serviço não é comprometida pela associação ou desassociação de estações móveis.",
+          "explanation": "A entrada e saída de estações e o roaming entre pontos de acesso causam reautenticação e handoff, com atrasos e perdas que afetam a QoS, sobretudo em voz e vídeo."
+        },
+        {
+          "text": "Os padrões 802.3 e 802.11 não podem coexistir na mesma rede local.",
+          "explanation": "Coexistem o tempo todo: o ponto de acesso faz a ponte entre o segmento sem fio 802.11 e a LAN cabeada 802.3, e ambos compartilham o mesmo endereçamento MAC."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2017-redes-q28",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 28 (Inep)",
+      "kind": "Objective",
+      "subject": "projeto-redes",
+      "statement": "Uma organização planeja implantar VoIP (voz sobre IP) para realizar ligações corporativas entre duas localidades e, ainda, manter sua rede de telefonia fixa ligada. A figura a seguir apresenta o projeto de telefonia VoIP dessa organização.\n\n![Projeto VoIP: no topo, o Elemento Y (um servidor) ligado à Rede IP. Em cada localidade (I e II), telefones IP ligam-se a um switch IP conectado à Rede IP, e telefones analógicos ligam-se a um Elemento X, que se conecta tanto à Rede IP quanto à STFC (rede de telefonia fixa).](img/inep/redes/2017/q28-1.png)\n\nConsiderados o projeto de VoIP da organização e os requisitos da rede IP para prover um serviço de qualidade para a voz, é correto afirmar que, na rede IP com uma VPN IP MPLS configurada entre as localidades I e II, a marcação DiffServ para os pacotes de voz e os elementos a serem implantados como gateway de acesso e softswitch, são, respectivamente:",
+      "options": [
+        {
+          "text": "DiffServ EF (Expedited Forwarding), elemento X e elemento Y.",
+          "explanation": "Correta. Voz exige baixo atraso, jitter e perda, e recebe a classe EF (DSCP 46), de encaminhamento prioritário. O Elemento X faz a ponte entre telefones analógicos/STFC e a rede IP (gateway de acesso), e o Elemento Y, servidor central na rede IP, controla o estabelecimento das chamadas (softswitch)."
+        },
+        {
+          "text": "DiffServ EF (Expedited Forwarding), elemento Y e elemento X.",
+          "explanation": "A marcação está certa, mas os papéis estão trocados: quem converte entre a telefonia analógica/STFC e o IP é o Elemento X, ligado às duas redes; o Y é o servidor de controle de chamadas."
+        },
+        {
+          "text": "DiffServ AF31 (Assured Forwarding Classe 3), elemento X e elemento Y.",
+          "explanation": "AF31 dá entrega assegurada com prioridade intermediária, usada em geral para sinalização ou dados críticos, não para o fluxo de voz, que pede EF."
+        },
+        {
+          "text": "DiffServ AF31 (Assured Forwarding Classe 3), elemento Y e elemento X.",
+          "explanation": "Erra duas vezes: AF31 não é a classe para o tráfego de voz, que usa EF, e os papéis de gateway (X) e softswitch (Y) estão invertidos."
+        },
+        {
+          "text": "DiffServ AF21 (Assured Forwarding Classe 2), elemento Y e elemento X.",
+          "explanation": "AF21 é tipicamente usada para dados transacionais, sem garantia de atraso baixo para voz. Os papéis dos elementos também estão invertidos."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "key": "enade-2017-redes-q29",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 29 (Inep)",
+      "kind": "Objective",
+      "subject": "tcp-ip",
+      "statement": "Com a convergência das redes cada vez mais presente em nosso dia a dia, diversos canais de televisão vêm disponibilizando sua programação na internet. A grande vantagem dessa abordagem é a possibilidade de personalizar o acesso do espectador, permitindo que os programas sejam vistos sob demanda, ou seja, na hora e no local que seja mais conveniente ao cliente.\n\nPara a transmissão desse tipo de tráfego pela internet, as soluções de transporte devem ser desenvolvidas com base em",
+      "options": [
+        {
+          "text": "TCP, orientadas à conexão, pois a transmissão do vídeo deve ocorrer com a menor quantidade de erros possível, a fim de melhorar a experiência do usuário.",
+          "explanation": "Na lógica da questão, o que mais prejudica a mídia contínua é o atraso, não a perda ocasional de um quadro; as retransmissões do TCP geram atrasos e travamentos, por isso a banca preferiu o UDP."
+        },
+        {
+          "text": "TCP, por meio de um serviço sem estabelecimento de conexão, pois as possíveis retransmissões a que um fluxo de dados orientado à conexão está submetido, sempre que há problemas na transmissão, podem causar atrasos incompatíveis com um serviço multimídia.",
+          "explanation": "Contradição: o TCP é sempre orientado à conexão (three-way handshake). O serviço sem conexão da camada de transporte é o UDP."
+        },
+        {
+          "text": "ICMP, devido à leveza desse protocolo e ao fato de ele ser o mais adequado para o transporte de conexões multimídia, tais como a transmissão de programas de televisão pela internet.",
+          "explanation": "O ICMP não é protocolo de transporte de dados de aplicação; ele leva mensagens de erro e de controle da camada de rede, como as do ping e do traceroute."
+        },
+        {
+          "text": "UDP, orientadas à conexão, pois a transmissão do vídeo deve ocorrer com a menor quantidade de erros possível, a fim de melhorar a experiência do usuário.",
+          "explanation": "O UDP não é orientado à conexão nem garante entrega sem erros; ele não faz retransmissão nem controle de fluxo."
+        },
+        {
+          "text": "UDP, por meio de um serviço sem estabelecimento de conexão, pois as possíveis retransmissões a que um fluxo de dados orientado à conexão está submetido, sempre que há problemas na transmissão, podem causar atrasos incompatíveis com um serviço multimídia.",
+          "explanation": "Correta pelo gabarito. O UDP não abre conexão nem retransmite, então perdas viram pequenas falhas na imagem em vez de pausas, o que convém à mídia sensível a atraso (geralmente com RTP por cima). Na prática, o vídeo sob demanda atual também usa TCP/HTTP com buffer, mas a questão segue o raciocínio clássico."
+        }
+      ],
+      "correct": "E"
+    },
+    {
+      "key": "enade-2017-redes-q30",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 30 (Inep)",
+      "kind": "Objective",
+      "subject": "seguranca-informacao",
+      "statement": "Atualmente, o planejamento da segurança de informação de uma empresa é fundamental. Diversas normas internacionais são utilizadas para a implementação de um sistema completo de gestão de segurança da informação.\n\nA respeito dessas normas, avalie as afirmações a seguir.\n\nI. A ISO/IEC 27001:2013, norma internacional de gestão de segurança da informação, descreve as etapas para se colocar em prática, de forma independente, um sistema de gestão de segurança da informação avaliado e certificado.\n\nII. A ISO/IEC 27002:2013 tem como principal objetivo estabelecer diretrizes e princípios gerais para iniciar, implementar, manter e melhorar a gestão de segurança da informação em uma organização, o que também inclui a seleção, a implementação e o gerenciamento de controles, levando em conta os ambientes de risco encontrados na empresa.\n\nIII. O padrão internacional ISO/IEC 15408:2009 (Common Criteria - CC) para segurança de computadores é voltado para a segurança lógica das aplicações e para o desenvolvimento de aplicações seguras, e define um método para avaliação da segurança de ambientes de desenvolvimento de sistemas.\n\nIV. A NBR ISO/IEC 27007:2012 fornece diretrizes sobre como gerenciar um programa de auditoria de sistemas de gestão da segurança da informação (SGSI) e sobre como executar as auditorias e a competência de auditores de SGSI.\n\nÉ correto o que se afirma em",
+      "options": [
+        {
+          "text": "I, II e III, apenas.",
+          "explanation": "Deixa de fora a IV, que descreve corretamente a ISO/IEC 27007: diretrizes para gerenciar programas de auditoria de SGSI e para a competência dos auditores."
+        },
+        {
+          "text": "I, II e IV, apenas.",
+          "explanation": "Deixa de fora a III. A ISO/IEC 15408 (Common Criteria) define critérios e metodologia para avaliar a segurança de produtos e sistemas de TI, incluindo requisitos de garantia sobre o ambiente de desenvolvimento."
+        },
+        {
+          "text": "I, III e IV, apenas.",
+          "explanation": "Deixa de fora a II. A ISO/IEC 27002 é o código de prática que orienta a seleção, implementação e gestão de controles de segurança considerando os riscos da organização."
+        },
+        {
+          "text": "II, III e IV, apenas.",
+          "explanation": "Deixa de fora a I. A ISO/IEC 27001 traz os requisitos para estabelecer, implementar, manter e melhorar um SGSI, e é a norma usada na certificação por organismo independente."
+        },
+        {
+          "text": "I, II, III e IV.",
+          "explanation": "Correta. Cada item descreve bem a norma: 27001 com os requisitos certificáveis do SGSI; 27002 com as diretrizes e controles; 15408 (Common Criteria) para avaliar a segurança de produtos e do seu desenvolvimento; e 27007 para a auditoria de SGSI."
+        }
+      ],
+      "correct": "E"
+    },
+    {
+      "key": "enade-2017-redes-q31",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 31 (Inep)",
+      "kind": "Objective",
+      "subject": "cabeamento-estruturado",
+      "statement": "A empresa A foi contratada para fazer uma vistoria na infraestrutura de cabeamento da empresa B. Após a realização dos testes de diagnóstico e vistoria, foi emitido um laudo no qual relatou-se uma inconformidade e sua causa, de acordo com a norma 14565:2013.\n\nA figura a seguir exibe os resultados desse teste, realizado em um enlace de cabeamento horizontal.\n\n![Três telas de um certificador de cabos. Tela Summary, teste TIA Cat 6 Perm. Link, resultado FAIL: Wire Map aprovado; Resistance informativo; Length 14.3 m aprovado; Prop. Delay, Delay Skew, Insertion Loss (25.6 dB) e Return Loss (2.3 dB) aprovados; NEXT (-2.7 dB) reprovado. Tela NEXT at Remote, FAIL: curvas dos pares acima do limite em vermelho, NEXT 32.8 dB a 245.5 MHz, margem -2.7 dB. Tela NEXT Pair 3,6-4,5, FAIL: a curva do par 3,6-4,5 cruza o limite, NEXT 32.8 dB a 245.5 MHz, margem -2.7 dB.](img/inep/redes/2017/q31-1.png)\n\nDisponível em: <http://www.flukenetworks.com>. Acesso em: 26 set. 2017 (adaptado).\n\nConsiderando a situação apresentada, assinale a alternativa que corresponde à causa da inconformidade apresentada.",
+      "options": [
+        {
+          "text": "Inversão de pares no conector de uma das pontas.",
+          "explanation": "Inversão ou troca de pares aparece no teste de mapa de fios (Wire Map), que foi aprovado. O problema apontado é de diafonia (NEXT)."
+        },
+        {
+          "text": "Proximidade de trajeto do cabo a uma fonte eletromagnética.",
+          "explanation": "Interferência externa aparece como ruído, não como NEXT, que mede o acoplamento entre os próprios pares do cabo perto do transmissor."
+        },
+        {
+          "text": "Comprimento do cabo excedendo o valor máximo previsto na norma.",
+          "explanation": "O comprimento medido é 14,3 m e foi aprovado; o enlace permanente admite até 90 m."
+        },
+        {
+          "text": "Cabos de dados alocados em conduítes, junto com cabos da rede elétrica.",
+          "explanation": "A proximidade com cabos de energia causa interferência eletromagnética externa, não falha de NEXT entre pares do mesmo cabo; além disso, só o NEXT falhou."
+        },
+        {
+          "text": "Destrançamento excessivo do cabo próximo ao conector de uma das pontas.",
+          "explanation": "Correta. O trançamento é o que cancela o acoplamento entre pares; destrançar demais na terminação, num cabo curto como este, faz o par 3,6 interferir no 4,5 e o NEXT na extremidade remota fica abaixo do limite, com margem de -2,7 dB."
+        }
+      ],
+      "correct": "E"
+    },
+    {
+      "key": "enade-2017-redes-q32",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 32 (Inep)",
+      "kind": "Objective",
+      "subject": "virtualizacao",
+      "statement": "Pode-se considerar que as redes de computadores existentes hoje — as redes legadas — podem evoluir para as chamadas redes definidas por software ou SDN (Software Defined Networks). Essa abordagem de arquitetura de redes busca simplificar as operações, facilitando as tarefas de configuração e alteração do comportamento dos dispositivos de rede.\n\nGORANSSON P.; CHUCK B. **Software defined networks**: a comprehensive approach. San Francisco: Morgan Kaufmann, 2014 (adaptado).\n\nAs diferenças entre redes legadas (tradicionais) e redes SDN podem ser explicadas por meio dos conceitos de plano de controle e plano de dados. A respeito desses conceitos, assinale a opção correta.",
+      "options": [
+        {
+          "text": "As redes SDN são baseadas na união entre o plano de controle e o plano de dados, ou seja, os dois passam a ser um plano único em comparação com as redes legadas.",
+          "explanation": "É o contrário: a SDN separa os planos, levando o controle para um controlador de software centralizado, enquanto os switches ficam só com o encaminhamento."
+        },
+        {
+          "text": "O plano de dados nas redes SDN é determinado pelo fabricante do switch, ao passo que o plano de controle nas redes SDN pode ser alterado por meio de atualizações remotas do switch.",
+          "explanation": "Correta pelo gabarito. Na SDN o switch mantém o hardware de encaminhamento do fabricante (plano de dados), mas a lógica de controle deixa de ser fechada: ela é programada remotamente, pelo controlador, que instala regras nas tabelas de fluxo por interfaces abertas como o OpenFlow. A redação \"atualizações remotas do switch\" é imprecisa, mas é essa a ideia que a banca quis cobrar."
+        },
+        {
+          "text": "O plano de dados nas redes legadas é determinado pelo fabricante do switch, ao passo que o plano de controle nas redes legadas pode ser alterado por meio de atualizações remotas do switch.",
+          "explanation": "Na rede legada, os dois planos ficam presos ao equipamento e ao fabricante: o controle (protocolos de roteamento, STP) roda no sistema proprietário de cada switch, configurado caixa a caixa, sem programação remota e centralizada. Essa flexibilidade no plano de controle é justamente o que a SDN traz."
+        },
+        {
+          "text": "A funcionalidade do plano de controle das redes SDN é igual à do plano de controle das redes legadas, entretanto a funcionalidade do plano de dados difere nessas duas redes.",
+          "explanation": "A grande diferença está no plano de controle, que deixa de ser distribuído em cada equipamento e passa a ser centralizado e programável. O plano de dados continua encaminhando pacotes."
+        },
+        {
+          "text": "O plano de controle nas redes SDN controla a comutação e o repasse dos pacotes de rede, sendo o plano de dados o responsável pela atualização da tabela de encaminhamento e a manutenção das estatísticas do equipamento.",
+          "explanation": "Os papéis estão invertidos: o plano de dados comuta e repassa pacotes; o plano de controle decide as rotas e preenche as tabelas de encaminhamento."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2017-redes-q33",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 33 (Inep)",
+      "kind": "Objective",
+      "subject": "tecnologias-emergentes",
+      "statement": "Um erro comum que se observa nas abordagens da Internet das Coisas (Internet of Things – IoT) é o desenvolvimento de um produto sem uma visão clara de geração de valor. É comum os desenvolvedores não terem a clareza do real valor a ser gerado aos usuários finais, concebendo um produto sem o seu valor agregado.\n\nNesse sentido, para abertura de negócios inovadores, é essencial compreender o surgimento de novos negócios baseados em IoT e como esta revolução criará oportunidades.\n\nDisponível em: <http://www.convergenciadigital.com.br>. Acesso em: 27 jul. 2017 (adaptado).\n\nCom base nesse contexto, avalie as afirmações a seguir.\n\nI. Para que a IoT possa agregar valor aos negócios, é necessário considerar questões relacionadas a problemas da interoperabilidade de plataformas.\n\nII. O IoT permite uma independência da infraestrutura de telecomunicação e os seus projetos exigem o uso de novas tecnologias, como as impressoras 3D.\n\nIII. A tríade composta pela criação de novos mercados digitais, gestão de risco e melhorias de eficiência é a chave para a transformação dos modelos de negócios atuais a partir da revolução da IoT.\n\nÉ correto o que se afirma em",
+      "options": [
+        {
+          "text": "I, apenas.",
+          "explanation": "Incompleta. A III também é verdadeira: novos mercados digitais, gestão de risco e ganho de eficiência são as frentes em que a IoT transforma os modelos de negócio."
+        },
+        {
+          "text": "II, apenas.",
+          "explanation": "A II é falsa: a IoT depende da infraestrutura de telecomunicações para conectar os dispositivos, e impressão 3D não é requisito de projetos de IoT."
+        },
+        {
+          "text": "I e III, apenas.",
+          "explanation": "Correta. Sem interoperabilidade entre dispositivos e plataformas de fabricantes diferentes, os dados não se integram e o valor não aparece (I). E a geração de valor vem de novos mercados, de melhor gestão de risco e de eficiência operacional (III)."
+        },
+        {
+          "text": "II e III, apenas.",
+          "explanation": "Inclui a II, falsa, porque a IoT é justamente conectividade e não existe sem redes de telecomunicação, e deixa de fora a I, verdadeira."
+        },
+        {
+          "text": "I, II e III.",
+          "explanation": "A II é falsa: a IoT não é independente da infraestrutura de telecomunicações e não exige impressoras 3D."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2017-redes-q34",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 34 (Inep)",
+      "kind": "Objective",
+      "subject": "gestao-governanca",
+      "statement": "A unidade de Tecnologia da Informação (TI) de determinada empresa é avaliada negativamente por não produzir níveis de serviço adequados. Há alguns meses, após a fusão dessa empresa com outra do mesmo ramo, foi nomeado um novo executivo, cujo desafio é melhorar o desempenho da unidade. Constatou-se que uma prática comum é a introdução de novos produtos na empresa, sem que a equipe de TI seja preparada, demandando a construção de infraestrutura de serviços e elaboração de sistemas de suporte necessários. É caro e difícil satisfazer essa demanda para esse fim específico e os resultados alcançados têm gerado insatisfação contínua em relação à unidade de TI.\n\nHUNTER, R.; WESTERMAN, G. **O verdadeiro valor de TI.** São Paulo: M. Books, 2011 (adaptado).\n\nCom base nessa situação, avalie as seguintes asserções e a relação proposta entre elas.\n\nI. A empresa possui um arranjo decisório inadequado para suas expectativas; a pouca credibilidade da área de TI e a falta de envolvimento dessa área nas decisões compromete o alinhamento estratégico entre a TI e o negócio, problema relacionado à governança de TI.\n\n**PORQUE**\n\nII. Um dos objetivos da governança de TI é atender às expectativas organizacionais, além de definir quem pode tomar as decisões relacionadas à TI. Portanto, a criação de um comitê composto exclusivamente pelo pessoal da área de TI, com autonomia para tomar as decisões que afetam as demandas por serviços e infraestrutura de TI, seria uma opção acertada.\n\nA respeito dessas asserções, assinale a opção correta.",
+      "options": [
+        {
+          "text": "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
+          "explanation": "A II é falsa, então não pode justificar a I. Um comitê só de TI repetiria o problema do caso, que é a falta de decisão conjunta entre negócio e TI."
+        },
+        {
+          "text": "As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.",
+          "explanation": "A II não é verdadeira: governança de TI pressupõe que as decisões sobre TI envolvam executivos do negócio, e não que fiquem isoladas na área técnica."
+        },
+        {
+          "text": "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.",
+          "explanation": "Correta. A I descreve um problema típico de governança: produtos lançados sem envolver a TI, ou seja, quem decide e quem participa está mal definido, e isso quebra o alinhamento. A primeira parte da II até está certa, mas a conclusão é falsa: um comitê exclusivo de TI não alinha a TI ao negócio; o arranjo adequado reúne as duas áreas."
+        },
+        {
+          "text": "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.",
+          "explanation": "A I é verdadeira, pois o caso mostra exatamente um arranjo decisório que exclui a TI das decisões de negócio. A II é que é falsa, por propor um comitê só de TI."
+        },
+        {
+          "text": "As asserções I e II são proposições falsas.",
+          "explanation": "A I é verdadeira: a falta de envolvimento da TI nas decisões é um problema de governança e compromete o alinhamento estratégico."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2017-redes-q35",
+      "source": "ENADE 2017 – Tecnologia em Redes de Computadores, questão 35 (Inep)",
+      "kind": "Objective",
+      "subject": "sustentabilidade",
+      "statement": "A principal causa de ineficiência energética nos datacenters é a baixa taxa de utilização média dos recursos. Apesar de os recursos serem provisionados para lidar com as cargas máximas teóricas, é improvável que todos os servidores de um datacenter em larga escala sejam totalmente utilizados simultaneamente.\n\nBELOGLAZOV, A.; BUYYA, R.; LEE, Y. C.; ZOMAYA, A. A taxonomy and survey of energy-efficient data centers and cloud computing. In: MILEKOWITZ, M. V. (Ed.). **Advances in computers**. v. 82. Amsterdam: Elsevier, p. 47-111, 2011 (adaptado).\n\nConsiderando o texto apresentado e o conceito de virtualização, avalie as asserções a seguir e a relação proposta entre elas.\n\nI. A virtualização possibilita a concentração de máquinas virtuais no datacenter e, assim, contribui efetivamente para a implementação de uma estratégia de maior eficiência energética.\n\n**PORQUE**\n\nII. A virtualização permite alocar cargas de trabalho na mínima quantidade tecnicamente admissível de recursos físicos e, assim, mantê-los com a maior taxa de utilização possível.\n\nA respeito dessas asserções, assinale a opção correta.",
+      "options": [
+        {
+          "text": "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
+          "explanation": "Correta. Consolidar várias VMs em menos servidores (I) aumenta a eficiência energética justamente porque as cargas passam a ocupar o mínimo de máquinas físicas, que trabalham com alta utilização, e as ociosas podem ser desligadas (II). A II explica a I, atacando a baixa utilização apontada no texto."
+        },
+        {
+          "text": "As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.",
+          "explanation": "As duas são verdadeiras, mas há relação de causa: o ganho energético da consolidação (I) vem exatamente de concentrar as cargas no menor número de servidores e elevar sua utilização (II)."
+        },
+        {
+          "text": "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.",
+          "explanation": "A II é verdadeira: alocar cargas no mínimo de recursos físicos e mantê-los bem utilizados é o princípio da consolidação de servidores por virtualização."
+        },
+        {
+          "text": "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.",
+          "explanation": "A I é verdadeira: concentrar VMs reduz o número de servidores ligados e, com isso, o consumo de energia e de refrigeração."
+        },
+        {
+          "text": "As asserções I e II são proposições falsas",
+          "explanation": "As duas asserções são verdadeiras e descrevem a consolidação de servidores, a principal resposta à baixa utilização dos datacenters."
+        }
+      ],
+      "correct": "A"
+    }
+  ]
+}

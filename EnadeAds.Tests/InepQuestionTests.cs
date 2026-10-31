@@ -7,25 +7,51 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace EnadeAds.Tests;
 
-/// <summary>Confere os arquivos de Data/Seed/inep contra os gabaritos oficiais publicados pelo Inep.</summary>
+/// <summary>Confere os arquivos de Data/Seed/inep (ADS) e Data/Seed/redes contra os gabaritos oficiais publicados pelo Inep.</summary>
 public class InepSeedFileTests
 {
-    // Gabaritos definitivos do Inep (2021: 2021_GB_tecnologia_analise_desenvolvimento_sistemas.pdf;
-    // 2017: 41_CST_Analise_e_Desenvolvimento_de_Sistemas.pdf). '-' = anulada.
-    private static readonly Dictionary<int, string> AnswerKeys = new()
+    // Gabaritos definitivos do Inep, questões 1 a 35 ('-' = anulada). As 8 primeiras são da Formação Geral, igual nos dois cursos.
+    // ADS 2021: 2021_GB_tecnologia_analise_desenvolvimento_sistemas.pdf; ADS 2017: 41_CST_Analise_e_Desenvolvimento_de_Sistemas.pdf.
+    // Redes 2021: 2021_GB_tecnologia_redes_computadores.pdf; Redes 2017: 44_CST_em_Redes_de_Computadores.pdf.
+    private static readonly Dictionary<(string Track, int Year), string> AnswerKeys = new()
     {
-        [2021] = "ECBBAACDCDECCEBECAAEBABDEECBDCDBDAA",
-        [2017] = "CCBBCEADBCCDCC-ADACEDBBEAADEDABCDBC",
+        [("enade-ads", 2021)] = "ECBBAACDCDECCEBECAAEBABDEECBDCDBDAA",
+        [("enade-ads", 2017)] = "CCBBCEADBCCDCC-ADACEDBBEAADEDABCDBC",
+        [("enade-redes", 2021)] = "ECBBAACDCCBBBDBEBDDBAAECEADEACACADC",
+        [("enade-redes", 2017)] = "CCBBCEADBEBEDCADACBB-EBBDDBAEEEBCCA",
     };
 
-    private static string SeedFolder => Path.Combine(AppContext.BaseDirectory, "Data", "Seed", "inep");
+    private static readonly Dictionary<string, (string Course, IReadOnlyList<RoadmapNode> Roadmap)> Courses = new()
+    {
+        ["enade-ads"] = ("Análise e Desenvolvimento de Sistemas", RoadmapSeed.Nodes),
+        ["enade-redes"] = ("Tecnologia em Redes de Computadores", RedesRoadmapSeed.Nodes),
+    };
 
     private static string WwwRoot => Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "EnadeAds", "wwwroot"));
 
-    private static IEnumerable<(int Year, SeedQuestion Question)> AllQuestions() =>
-        Directory.EnumerateFiles(SeedFolder, "*.json")
+    private static IEnumerable<(string Track, int Year, SeedQuestion Question)> AllQuestions() =>
+        new[] { "inep", "redes" }
+            .SelectMany(folder => Directory.EnumerateFiles(Path.Combine(AppContext.BaseDirectory, "Data", "Seed", folder), "*.json"))
             .Select(file => JsonSerializer.Deserialize<SeedExam>(File.ReadAllText(file), InepQuestionImporter.JsonOptions)!)
-            .SelectMany(exam => exam.Questions.Select(q => (exam.Year, q)));
+            .SelectMany(exam => exam.Questions.Select(q => (exam.Track ?? "enade-ads", exam.Year, q)));
+
+    /// <summary>As trilhas que recebem a questão: a do arquivo e as que compartilham a Formação Geral.</summary>
+    private static IEnumerable<(string Track, int Year, SeedQuestion Question)> AsImported() =>
+        new[] { "inep", "redes" }
+            .SelectMany(folder => Directory.EnumerateFiles(Path.Combine(AppContext.BaseDirectory, "Data", "Seed", folder), "*.json"))
+            .Select(file => JsonSerializer.Deserialize<SeedExam>(File.ReadAllText(file), InepQuestionImporter.JsonOptions)!)
+            .SelectMany(exam => new[] { exam.Track ?? "enade-ads" }.Concat(exam.SharedWith ?? [])
+                .SelectMany(track => exam.Questions.Select(q => (track, exam.Year, q))));
+
+    [Fact]
+    public void EveryEnadeTrackHasBothEditions()
+    {
+        foreach (var track in Courses.Keys)
+        {
+            Assert.Contains(AllQuestions(), q => q.Track == track && q.Year == 2017);
+            Assert.Contains(AllQuestions(), q => q.Track == track && q.Year == 2021);
+        }
+    }
 
     [Fact]
     public void SeedFilesExistAndKeysAreUnique()
@@ -39,9 +65,12 @@ public class InepSeedFileTests
     [Fact]
     public void EveryQuestionIsValidForTheImporter()
     {
-        var subjects = RoadmapSeed.Nodes.Where(n => n.Kind == NodeKind.Subject).ToDictionary(n => n.Slug, n => n.Id);
-
-        Assert.All(AllQuestions(), item => Assert.Null(InepQuestionImporter.Validate(item.Question, subjects)));
+        // Inclusive a Formação Geral na trilha de Redes: a matéria precisa existir no roadmap de cada trilha que recebe a questão.
+        Assert.All(AsImported(), item =>
+        {
+            var subjects = Courses[item.Track].Roadmap.Where(n => n.Kind == NodeKind.Subject).ToDictionary(n => n.Slug, n => n.Id);
+            Assert.Null(InepQuestionImporter.Validate(item.Question, subjects));
+        });
     }
 
     [Fact]
@@ -50,7 +79,7 @@ public class InepSeedFileTests
         Assert.All(AllQuestions().Where(q => q.Question.Kind == QuestionKind.Objective), item =>
         {
             var number = int.Parse(item.Question.Key[^2..]);
-            var official = AnswerKeys[item.Year][number - 1];
+            var official = AnswerKeys[(item.Track, item.Year)][number - 1];
 
             Assert.NotEqual('-', official);
             Assert.Equal($"{official}", item.Question.Correct);
@@ -68,7 +97,7 @@ public class InepSeedFileTests
             var generalEducation = discursive ? number <= 2 : number <= 8;
 
             Assert.Equal(generalEducation, item.Question.Subject == "formacao-geral");
-            Assert.Contains(generalEducation ? "Formação Geral" : "Análise e Desenvolvimento de Sistemas", item.Question.Source);
+            Assert.Contains(generalEducation ? "Formação Geral" : Courses[item.Track].Course, item.Question.Source);
         });
     }
 

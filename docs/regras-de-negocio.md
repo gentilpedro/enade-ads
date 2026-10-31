@@ -4,7 +4,7 @@ Este documento reúne as decisões de produto da plataforma. Toda mudança de re
 
 ## Trilhas
 
-O Rumo atende várias provas. Cada prova numa edição é uma **trilha**: hoje, **ENADE 2026 · ADS** e **ENEM 2026**.
+O Rumo atende várias provas. Cada prova numa edição é uma **trilha**: hoje, **ENADE 2026 · ADS**, **ENADE 2026 · Redes de Computadores** e **ENEM 2026**.
 
 - **Ficam na trilha:** datas de prova, roadmap (matérias, assuntos e checkpoints), questões (pela matéria), desafios e simulados.
 - **Ficam na plataforma:** contas, papéis, moderação e o feed. No feed aparecem os posts da trilha ativa e os posts gerais.
@@ -97,7 +97,7 @@ Alunos também têm e-mail institucional, muitas vezes no mesmo domínio dos pro
 
 ## Roadmap
 
-- O roadmap mostra as 20 matérias da portaria e a Formação Geral, com seus assuntos e um checkpoint ao fim de cada bloco.
+- O roadmap mostra as matérias da portaria ou matriz da prova (20 em cada trilha do ENADE) e a Formação Geral, com seus assuntos e um checkpoint ao fim de cada bloco.
 - Cada aluno marca matérias e assuntos como **Concluído**, **Estudando** ou **Pulei**, e pode limpar o status.
 - A porcentagem conta só matérias e assuntos concluídos; checkpoints são marcos e não entram na conta.
 - A contagem regressiva vai até o próximo dia de prova da trilha ativa, definido pelo **admin** na tela *Data da prova*, no fuso de São Paulo. A data não pode estar no passado.
@@ -105,7 +105,7 @@ Alunos também têm e-mail institucional, muitas vezes no mesmo domínio dos pro
 ### Edição do roadmap
 
 - **Professor** e **Admin** editam o roadmap pela tela (link *Editar* no painel lateral e na página da matéria). Diferente de questões e posts, o roadmap é de todos os professores: qualquer professor edita qualquer tópico.
-- Das **matérias** dá para editar título e explicação e reordenar dentro do bloco. Elas **não podem ser removidas**, porque vêm da matriz oficial da prova (no ENADE, a Portaria Inep nº 169/2026; no ENEM, a Matriz de Referência).
+- Das **matérias** dá para editar título e explicação e reordenar dentro do bloco. Elas **não podem ser removidas**, porque vêm da matriz oficial da prova (no ENADE, as Portarias Inep nº 169/2026 para ADS e nº 172/2026 para Redes; no ENEM, a Matriz de Referência).
 - **Assuntos** podem ser criados (entram no fim da matéria), editados, reordenados dentro da matéria e removidos.
 - **Checkpoints** podem ser criados logo depois de uma matéria, editados, reordenados dentro do bloco e removidos.
 - O endereço de um tópico (`/roadmap?topico=...`) não muda quando o título é editado, para links compartilhados continuarem valendo.
@@ -117,7 +117,7 @@ Alunos também têm e-mail institucional, muitas vezes no mesmo domínio dos pro
 
 **ENADE:**
 
-- O aluno logado monta um simulado com questões do banco em três tamanhos, todos com a proporção da prova (Portaria Inep nº 169/2026): **Curto** (3 de formação geral + 7 específicas + 1 discursiva), **Médio** (7 + 15 + 1) e **Completo** (15 + 30 + 1).
+- O aluno logado monta um simulado com questões do banco em três tamanhos, todos com a proporção da prova do ENADE (Portarias Inep nº 169 e 172/2026): **Curto** (3 de formação geral + 7 específicas + 1 discursiva), **Médio** (7 + 15 + 1) e **Completo** (15 + 30 + 1).
 - O tempo é proporcional ao da prova: 4 horas para 46 questões (o curto fica com cerca de 57 minutos). Mínimo de 10 minutos.
 - Se o banco ainda não tem questões suficientes, o simulado usa as que existem (completando formação geral com específicas e vice-versa) e avisa antes de começar quantas questões e quanto tempo terá.
 - O **prazo é gravado no servidor** quando o simulado começa. Recarregar a página ou trocar de aparelho não reinicia o relógio.
@@ -189,7 +189,7 @@ A página inicial é um feed no estilo Reddit, onde professores publicam avisos 
 
 ### Questões das provas do Inep
 
-- O banco já vem com as questões de ADS do ENADE 2021 e 2017 (formação geral e componente específico), com o gabarito definitivo do Inep.
+- O banco já vem com as questões de ADS e de Redes de Computadores do ENADE 2021 e 2017 (formação geral e componente específico), com o gabarito definitivo do Inep. A formação geral é a mesma prova para os dois cursos, e cada trilha recebe a sua cópia das questões.
 - Enunciado e alternativas são transcritos sem alterações (licença CC BY-ND do Inep). Os comentários das alternativas são da plataforma.
 - As discursivas trazem um padrão de resposta escrito pela plataforma, marcado como não oficial.
 - Questões anuladas pelo Inep não entram.

@@ -21,6 +21,11 @@ public enum StudyBlock
     NaturalSciences = 7,
     Mathematics = 8,
     Essay = 9,
+
+    // ENADE Redes: os 20 objetos da Portaria Inep nº 172/2026 em três blocos, além de Fundamentos e Formação geral.
+    NetworkTechnologies = 10,
+    NetworkOperations = 11,
+    NetworkDesign = 12,
 }
 
 public enum NodeStatus
@@ -74,6 +79,9 @@ public static class StudyBlockNames
         StudyBlock.NaturalSciences => "Ciências da natureza",
         StudyBlock.Mathematics => "Matemática",
         StudyBlock.Essay => "Redação",
+        StudyBlock.NetworkTechnologies => "Tecnologias de rede",
+        StudyBlock.NetworkOperations => "Administração e serviços",
+        StudyBlock.NetworkDesign => "Projeto, segurança e gestão",
         _ => block.ToString(),
     };
 
@@ -84,9 +92,9 @@ public static class StudyBlockNames
     public static string ColorClass(this StudyBlock block) => block switch
     {
         StudyBlock.Fundamentals or StudyBlock.Essay => "block-fund",
-        StudyBlock.DataAndInfrastructure or StudyBlock.Mathematics => "block-data",
-        StudyBlock.SoftwareEngineering or StudyBlock.NaturalSciences => "block-soft",
-        StudyBlock.ProfessionalContext or StudyBlock.Languages => "block-prof",
+        StudyBlock.DataAndInfrastructure or StudyBlock.Mathematics or StudyBlock.NetworkTechnologies => "block-data",
+        StudyBlock.SoftwareEngineering or StudyBlock.NaturalSciences or StudyBlock.NetworkOperations => "block-soft",
+        StudyBlock.ProfessionalContext or StudyBlock.Languages or StudyBlock.NetworkDesign => "block-prof",
         _ => "block-gen",
     };
 }

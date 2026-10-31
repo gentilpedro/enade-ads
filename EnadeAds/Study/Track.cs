@@ -12,7 +12,7 @@ public enum TrackLevel
 /// <summary>Como o simulado da trilha é montado (ver <see cref="MockExams.MockExamFormat"/>).</summary>
 public enum MockExamStyle
 {
-    /// <summary>Formação geral + componente específico + discursiva (Portaria Inep nº 169/2026).</summary>
+    /// <summary>Formação geral + componente específico + discursiva (Portarias Inep nº 169 e 172/2026).</summary>
     Enade = 0,
 
     /// <summary>Questões objetivas distribuídas pelas quatro áreas, no ritmo de um dia de prova.</summary>
@@ -62,6 +62,7 @@ public static class Tracks
 {
     public const int EnadeAds = 1;
     public const int Enem = 2;
+    public const int EnadeRedes = 3;
 
     /// <summary>Trilha de quem ainda não escolheu nenhuma: a primeira que a plataforma teve.</summary>
     public const int Default = EnadeAds;
@@ -82,7 +83,15 @@ public static class Tracks
             Basis = "As quatro áreas e a redação da Matriz de Referência do ENEM, na ordem dos dias de prova.",
             Level = TrackLevel.HighSchool, MockExamStyle = MockExamStyle.Enem,
             // Linguagens, Ciências Humanas e Redação no primeiro domingo; Natureza e Matemática no segundo.
-            ExamDate = new(2026, 11, 8), SecondExamDate = new(2026, 11, 15), Order = 2,
+            ExamDate = new(2026, 11, 8), SecondExamDate = new(2026, 11, 15), Order = 3,
+        },
+        new()
+        {
+            Id = EnadeRedes, Slug = "enade-redes", Name = "ENADE 2026 · Redes de Computadores", ExamName = "ENADE", Label = "ENADE Redes",
+            Basis = "Os conteúdos de Tecnologia em Redes de Computadores da Portaria Inep nº 172/2026 e a Formação Geral, na ordem sugerida de estudo.",
+            Level = TrackLevel.HigherEducation, MockExamStyle = MockExamStyle.Enade,
+            // Mesmo dia do ENADE de ADS (Edital Inep nº 49/2026); as duas trilhas do ENADE ficam juntas na escolha.
+            ExamDate = new(2026, 11, 29), Order = 2,
         },
     ];
 

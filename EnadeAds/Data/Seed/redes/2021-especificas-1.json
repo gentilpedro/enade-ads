@@ -1,0 +1,393 @@
+{
+  "year": 2021,
+  "track": "enade-redes",
+  "questions": [
+    {
+      "key": "enade-2021-redes-d03",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão discursiva 3 (Inep)",
+      "kind": "Discursive",
+      "subject": "tcp-ip",
+      "statement": "Redes de computadores são constituídas para prover fluxo de dados entre dispositivos, entre eles computadores. Um projeto construído de forma indevida, ou utilizando-se de tecnologias consideradas ultrapassadas, pode comprometer a eficiência dessa rede, ou até promover seu colapso. Assim, o profissional da área de Tecnologia em Redes de Computadores deve se atualizar constantemente, para garantir o uso de soluções de estrutura de redes de melhor desempenho.\n\nA Figura a seguir representa um exemplo de redes de computadores. A troca de dados, no exemplo, só é possível devido à aplicação de diversos conhecimentos técnicos na concepção do projeto, incluindo a escolha dos equipamentos para esta proposição. Assim, é preciso escolher dentre as topologias de redes — barramento, anel ou estrela, definir o uso de dispositivos de camada 2 e 3 e fazer definições referentes ao projeto lógico com base no endereçamento IPv6.\n\n![Servidor com endereço 2001:db8:3003:2::100/64 ligado por linhas tracejadas a quatro computadores com endereços 2001:db8:3003:2::1/64, 2001:db8:3003:2::2/64, 2001:db8:3003:2::3/64 e 2001:db8:3003:2::4/64, todos na mesma rede /64](img/inep/redes/2021/d03-1.png)\n\nConsiderando o tema abordado no texto e que na topologia apresentada foi empregada a autoconfiguração stateless, faça o que se pede nos itens a seguir.\n\na) No IPv6 existem 3 tipos de endereços unicast, liste os 3 tipos e apresente o cenário adequado de aplicação para cada um deles. (valor: 4,0 pontos)\n\nb) Suponha que os usuários dessa rede estejam relatando que a resolução de nomes não está funcionando. Explique por que isso pode ocorrer na autoconfiguração stateless e descreva uma resolução automatizada e escalável para esse problema, mantendo a autoconfiguração stateless. (valor: 6,0 pontos)",
+      "expectedAnswer": "Padrão de resposta elaborado pela plataforma (não é o padrão oficial do Inep).\n\nUma boa resposta precisa:\n\n- no item a, citar os três tipos de unicast e onde cada um se aplica:\n  - global unicast (2000::/3): roteável na Internet, usado para publicar serviços e permitir que o dispositivo seja alcançado globalmente;\n  - link-local (fe80::/10): válido só dentro do enlace, gerado automaticamente em toda interface; usado na descoberta de vizinhos (NDP), na própria autoconfiguração e como próximo salto em protocolos de roteamento;\n  - unique local (fc00::/7, na prática fd00::/8): equivalente ao endereço privado, para comunicação interna da organização, não roteável na Internet e com alta probabilidade de ser único;\n- no item b, explicar que na autoconfiguração stateless (SLAAC) o host monta o próprio endereço a partir do prefixo anunciado nas mensagens Router Advertisement e aprende o gateway padrão, mas, no modo básico, não recebe o endereço de nenhum servidor DNS, por isso não consegue resolver nomes;\n- propor uma solução automática que mantenha o SLAAC, por exemplo:\n  - DHCPv6 stateless: o roteador anuncia o flag O (Other configuration) no RA e um servidor DHCPv6 entrega só os parâmetros extras (servidores DNS, domínio de busca), sem atribuir endereços;\n  - ou a opção RDNSS/DNSSL do RA (RFC 8106), em que o próprio roteador anuncia o DNS a todos os hosts;\n- destacar que essas soluções escalam porque a configuração fica centralizada no roteador ou no servidor, sem precisar configurar cada máquina à mão.\n\nO padrão oficial também aceita outra linha de raciocínio no item b: a falha de resolução pode não ter relação com o SLAAC e vir de erro de configuração no cliente ou no servidor DNS, de falha de comunicação entre eles ou de falha em um dos dois, desde que a resposta aponte a correção de cada caso.\n\nPerde pontos a resposta que confunde unique local com site-local (já depreciado), que cita anycast ou multicast como tipos de unicast, ou que resolve o problema configurando o DNS manualmente em cada host ou trocando o SLAAC por DHCPv6 stateful.",
+      "suggestedLines": 15
+    },
+    {
+      "key": "enade-2021-redes-d04",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão discursiva 4 (Inep)",
+      "kind": "Discursive",
+      "subject": "seguranca-informacao",
+      "statement": "TEXTO 1\n\nSeção I - Da Neutralidade de Rede\n\nArt. 9º. O responsável pela transmissão, comutação ou roteamento tem o dever de tratar de forma isonômica quaisquer pacotes de dados, sem distinção por conteúdo, origem e destino, serviço, terminal ou aplicação.\n\nBRASIL. Lei nº. 12.965, de 23 de abril de 2014. Marco Civil da Internet. Disponível em: http://www.planalto.gov.br/ccivil_03/_ato2011-2014/2014/lei/l12965.htm. Acesso em: 29 jun. 2020.\n\nTEXTO 2\n\nSeção I - Da Segurança e do Sigilo de Dados\n\nArt. 46º. Os agentes de tratamento devem adotar medidas de segurança, técnicas e administrativas aptas a proteger os dados pessoais de acessos não autorizados e de situações acidentais ou ilícitas de destruição, perda, alteração, comunicação ou qualquer forma de tratamento inadequado ou ilícito.\n\nBRASIL. Lei nº. 13.709, de 14 de agosto de 2018. Lei Geral de Proteção de Dados Pessoais (LGPD). Disponível em: http://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/L13709.htm. Acesso em: 29 jun. 2020.\n\nCom base no Marco Civil da Internet e na Lei Geral de Proteção de Dados Pessoais (LGPD), faça o que se pede nos itens a seguir.\n\na) Explique o que seria tratar de forma isonômica quaisquer pacotes de dados na rede. (valor: 2,0 pontos)\n\nb) Defina o conceito de confidencialidade que os agentes de tratamento devem considerar nas medidas de segurança para propor e implementar políticas de segurança para redes de computadores. (valor: 4,0 pontos)\n\nc) Defina o conceito de integridade que os agentes de tratamento devem adotar para proteger os dados pessoais de situações acidentais ou ilícitas de alteração. (valor: 4,0 pontos)",
+      "expectedAnswer": "Padrão de resposta elaborado pela plataforma (não é o padrão oficial do Inep).\n\nUma boa resposta precisa:\n\n- no item a, explicar que tratamento isonômico é a neutralidade de rede: todos os pacotes são encaminhados da mesma forma, sem privilegiar, degradar ou bloquear tráfego por causa do conteúdo, da origem, do destino, do serviço, do terminal ou da aplicação (por exemplo, o provedor não pode deixar um serviço de vídeo mais lento para favorecer o seu próprio);\n- se quiser ir além, mencionar que o próprio Marco Civil admite exceções limitadas (requisitos técnicos indispensáveis à prestação do serviço e serviços de emergência), mas sem discriminação comercial;\n- no item b, definir confidencialidade como a garantia de que o dado só é acessado ou revelado a pessoas, processos ou sistemas autorizados, mantendo o sigilo e impedindo a divulgação não autorizada;\n- ligar o conceito a medidas de rede, como controle de acesso e autenticação, criptografia em trânsito e em repouso (TLS, VPN), segmentação e regras de firewall e o princípio do menor privilégio;\n- no item c, definir integridade como a garantia de que o dado permanece completo e exato, na forma em que foi criado ou disponibilizado pelo titular, sem alteração indevida, acidental ou intencional, e de que qualquer alteração não autorizada possa ser detectada;\n- citar mecanismos que sustentam a integridade, como hashes e assinaturas digitais, códigos de autenticação de mensagem (MAC/HMAC), controle de versões, trilhas de auditoria e backups.\n\nPerde pontos a resposta que confunde confidencialidade com disponibilidade, que define integridade apenas como \"não perder o dado\" (isso é disponibilidade) ou que trata neutralidade de rede como proibição de qualquer gerência de tráfego técnica.",
+      "suggestedLines": 15
+    },
+    {
+      "key": "enade-2021-redes-d05",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão discursiva 5 (Inep)",
+      "kind": "Discursive",
+      "subject": "redes-wan",
+      "statement": "Uma PON (Passive Optical Network, ou Rede Óptica Passiva) é uma rede cuja ODN (Optical Distribution Network) utiliza exclusivamente componentes eletricamente passivos, como fibras ópticas, acopladores e conectores. As PONs surgiram em resposta ao desafio de reduzir custos para a utilização de fibras ópticas para acesso a residências e empresas, na arquitetura ponto multiponto (P2MP).\n\nENNE, A. J; WANDERLEY, B. L.; FERRAZ, C. H. **Novas tecnologias de redes Ethernet**. Rio de Janeiro: Elsevier, 2017 (adaptado).\n\nConsiderando as características das PONs, faça o que se pede nos itens a seguir.\n\na) Explique de que forma as PONs permitem a redução de custos, em relação as redes ópticas tradicionais. (valor: 2,0 pontos)\n\nb) Represente de forma visual uma PON. (valor: 4,0 pontos)\n\nc) Descreva a funcionalidade de, pelo menos, dois componentes ativos representados na imagem da PON desenhada no item b. (valor: 4,0 pontos)",
+      "expectedAnswer": "Padrão de resposta elaborado pela plataforma (não é o padrão oficial do Inep).\n\nUma boa resposta precisa:\n\n- no item a, explicar que a rede de distribuição da PON não usa equipamentos energizados entre a central e o cliente (só fibra, splitters, conectores e caixas de emenda), o que elimina alimentação elétrica, refrigeração e manutenção de ativos no campo;\n- acrescentar que a arquitetura ponto-multiponto permite que uma única fibra e uma única porta da OLT atendam muitos clientes por meio de divisores ópticos, reduzindo fibra lançada, portas ópticas e custos de implantação, operação e manutenção em relação a enlaces ponto a ponto;\n- no item b, desenhar no mínimo a OLT na central (ou no provedor), a fibra tronco, um ou mais divisores ópticos (splitters, por exemplo 1:8 ou 1:32) e várias ONU/ONT nos assinantes, mostrando o formato em árvore;\n- no item c, descrever ao menos dois componentes, por exemplo:\n  - OLT (Optical Line Terminal): equipamento ativo na central que conecta a PON ao restante da rede do provedor, gerencia as ONUs, controla o acesso ao meio no sentido de subida (alocação de tempo por TDMA) e transmite em broadcast no sentido de descida;\n  - ONU/ONT (Optical Network Unit/Terminal): equipamento ativo no cliente que converte o sinal óptico em elétrico (Ethernet, Wi-Fi, telefonia); ONT costuma designar o terminal na casa do assinante e ONU o equipamento que atende vários assinantes, como em um prédio;\n  - ODN (Optical Distribution Network): o conjunto passivo entre OLT e ONT (fibras, splitters, conectores, caixas de emenda e terminação), que o padrão oficial também aceita como componente descrito;\n- deixar claro que os componentes ativos ficam só nas pontas e que o splitter é passivo.\n\nPerde pontos a resposta que apresenta o splitter como equipamento ativo, que omite OLT ou ONU/ONT no desenho ou que justifica a economia apenas pela \"velocidade maior\" da fibra.",
+      "suggestedLines": 15
+    },
+    {
+      "key": "enade-2021-redes-q09",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 9 (Inep)",
+      "kind": "Objective",
+      "subject": "fundamentos-redes",
+      "statement": "Topologia é a forma como os dispositivos finais, intermediários e enlaces estão organizados na rede. Ela pode ser analisada tanto fisicamente como logicamente. Topologia física trata da forma como os dispositivos estão distribuídos fisicamente na rede, enquanto que a topologia lógica ilustra como os dados fluem dentro da rede.\n\nA figura a seguir apresenta 4 possíveis topologias utilizadas em rede de comunicação.\n\n![Quatro topologias com computadores: Barramento, com quatro computadores ligados a um único cabo; Anel, com quatro computadores ligados a um anel central; Totalmente conectada, com quatro computadores ligados cada um a todos os outros por enlaces diretos; Estrela, com quatro computadores ligados a um equipamento central](img/inep/redes/2021/q09-1.png)\n\nSobre as topologias de rede apresentadas na figura, avalie as afirmações a seguir.\n\nI. Em uma rede Totalmente Conectada são utilizados conexões ponto-multiponto para interligar seus nós, permitindo que todos fiquem interconectados.\n\nII. A topologia em Barramento segmenta o domínio de colisão, criando diferentes segmentos de LAN, enquanto mantém todos os dispositivos finais no mesmo segmento broadcast.\n\nIII. A topologia em Anel tem como vantagem o retardo de acesso determinístico, pois uma estação sabe qual a melhor e a pior oportunidade para iniciar a transmissão.\n\nIV. Na topologia em Estrela, toda a informação deve passar obrigatoriamente por uma estação central inteligente, que está conectada a cada estação e distribui o tráfego.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e III.",
+          "explanation": "A afirmação I está errada: na malha completa cada par de nós tem um enlace ponto a ponto dedicado, é isso que gera n(n-1)/2 ligações. Ponto-multiponto é característica do barramento."
+        },
+        {
+          "text": "II e IV.",
+          "explanation": "A afirmação II está errada: no barramento todos compartilham o mesmo meio, formando um único domínio de colisão. Quem segmenta domínios de colisão são bridges e switches."
+        },
+        {
+          "text": "III e IV.",
+          "explanation": "Correta. No anel o acesso é ordenado (por exemplo, por passagem de ficha), então o tempo máximo de espera é previsível; na estrela todo o tráfego passa pelo nó central que o distribui. I e II erram sobre o tipo de enlace da malha e sobre o domínio de colisão do barramento."
+        },
+        {
+          "text": "I, II e III.",
+          "explanation": "Inclui I e II, que estão erradas: a malha usa enlaces ponto a ponto e o barramento é um único domínio de colisão. Também deixa de fora a IV, que descreve corretamente a estrela."
+        },
+        {
+          "text": "I, II e IV.",
+          "explanation": "Inclui I e II, que estão erradas (malha usa ponto a ponto; barramento não segmenta colisão), e omite a III, que está correta sobre o retardo determinístico do anel."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2021-redes-q10",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 10 (Inep)",
+      "kind": "Objective",
+      "subject": "fundamentos-redes",
+      "statement": "Existem duas abordagens fundamentais para a construção do núcleo de uma rede: comutação de circuitos e comutação de pacotes. Nas redes comutadas por circuitos, os recursos necessários para fornecer comunicação entre os sistemas finais são reservados pela duração da sessão. Em redes comutadas por pacotes, esses recursos não são reservados; as mensagens de uma sessão usam os recursos sob demanda, sendo comutados em cada nó onde podem eventualmente precisar aguardar disponibilidade para uso de recurso. Atualmente, há um uso massivo de comutação de pacotes, como na internet e nas redes locais das empresas, entretanto, a comutação de circuito ainda é usada para aplicações específicas.\n\nKUROSE, J. F.; ROSS, K. - **Redes de Computadores e a Internet**: uma abordagem top-down. 5. ed., São Paulo: Pearson Addison Wesley, 2010 (adaptado).\n\nConsiderando as informações apresentadas sobre as tecnologias de comutação, assinale a opção correta.",
+      "options": [
+        {
+          "text": "A Internet, que é uma rede que usa comutação de pacotes, baseia-se em datagramas IP, em que todos os pacotes de uma transmissão percorrem um mesmo caminho até seu destino.",
+          "explanation": "Datagramas IP são roteados de forma independente, salto a salto; se as tabelas de roteamento mudarem, pacotes da mesma transmissão podem seguir caminhos diferentes e até chegar fora de ordem."
+        },
+        {
+          "text": "As antigas redes telefônicas são exemplo de comutação de pacotes, onde a sessão de comunicação é alcançada pelo uso de links de comunicação dedicados durante toda a sessão.",
+          "explanation": "Recurso dedicado durante toda a sessão é justamente a definição de comutação de circuitos, que é o modelo da telefonia tradicional, e não de pacotes."
+        },
+        {
+          "text": "As redes comutadas por pacotes utilizam endereçamento em cada pacote de dados para a tomada de decisão em cada nó, já que não existe um caminho pré-definido ao destinatário.",
+          "explanation": "Correta. Sem circuito reservado, cada pacote carrega o endereço de destino no cabeçalho e cada roteador decide, consultando sua tabela, para onde encaminhá-lo."
+        },
+        {
+          "text": "Nas redes comutadas por pacote, o fato do caminho da sessão estabelecida entre fonte e destinatário ser fixo implica que o atraso imposto aos dados, que por ele trafegam, seja o mesmo.",
+          "explanation": "Na comutação de pacotes não há caminho fixo reservado, e mesmo no mesmo caminho o atraso varia por causa das filas nos nós (o que gera jitter). Atraso constante é característica de circuitos."
+        },
+        {
+          "text": "Nas redes comutadas por circuito a entrega do dado não é garantida, assim para comunicações com necessidade de entrega garantida é mandatória a utilização de protocolos como o TCP.",
+          "explanation": "Na comutação de circuitos os recursos ficam reservados, garantindo banda e atraso constante. TCP é um protocolo de transporte da pilha TCP/IP, que opera sobre redes de pacotes, e não um requisito de redes de circuitos."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2021-redes-q11",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 11 (Inep)",
+      "kind": "Objective",
+      "subject": "fundamentos-redes",
+      "statement": "Um administrador de rede necessita interligar dois prédios dentro uma rede campus, separados por uma distância de 300 metros e operando a 1Gbps. Para implantar esta ligação, ele possui apenas um switch com porta SFP+ (Small Form-factor Pluggable plus) e quatro modelos de transceptores ópticos, conforme mostrado na figura a seguir.\n\n![Fotos de quatro transceptores ópticos, da esquerda para a direita: SFP, SFP+ (ambos pequenos e de formato parecido), XFP (um pouco maior) e GBIC (o maior deles)](img/inep/redes/2021/q11-1.png)\n\nDisponível em: https://www.optcore.net. Acesso em: 30 de mai. de 2020.\n\nEm relação as características dos transceptores ópticos apresentados e a compatibilidade com o switch disponível para implementar a ligação, avalie as afirmações a seguir.\n\nI. Os transceptores são considerados dispositivos de camada 1 do modelo OSI.\n\nII. A porta SFP+, com módulos SFP+, pode operar com velocidades de até 40 Gbps.\n\nIII. A porta SFP+, disponível no switch, é compatível com o módulo SFP para implantar a ligação.\n\nIV. A porta SFP+, com módulos XFP, pode operar com velocidades de até 4,25 Gbps.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e II.",
+          "explanation": "A I está correta, mas a II não: SFP+ trabalha tipicamente até 10 Gbps. Velocidades de 40 Gbps exigem módulos QSFP+."
+        },
+        {
+          "text": "I e III.",
+          "explanation": "Correta. O transceptor só converte sinal elétrico em óptico e vice-versa, função de camada física; e portas SFP+ costumam aceitar módulos SFP de 1 Gbps, que atendem os 300 m a 1 Gbps pedidos."
+        },
+        {
+          "text": "II e IV.",
+          "explanation": "As duas estão erradas: SFP+ vai até cerca de 10 Gbps (40 Gbps é QSFP+), e o XFP é um módulo de 10 Gbps com formato maior, que nem encaixa em uma porta SFP+."
+        },
+        {
+          "text": "I, III e IV.",
+          "explanation": "Inclui a IV, que está errada: o XFP tem formato físico diferente e não é usado em porta SFP+; além disso, é um padrão de 10 Gbps, não de 4,25 Gbps (valor típico de SFP para Fibre Channel de 4G)."
+        },
+        {
+          "text": "II, III e IV.",
+          "explanation": "Inclui a II e a IV, erradas (SFP+ chega a 10 Gbps; XFP não encaixa em porta SFP+), e deixa de fora a I, que está correta."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2021-redes-q12",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 12 (Inep)",
+      "kind": "Objective",
+      "subject": "tcp-ip",
+      "statement": "Considere que o PC1, localizado na rede 192.168.1.0/24, necessita estabelecer uma conexão com o Servidor Web, localizado na rede 192.168.2.0/24, conforme ilustrado na figura a seguir.\n\n![PC1 (IP 192.168.1.2, MAC AA-BB-CC-DD-EE-FF) ligado a um switch, que se liga à interface f0/0 de um roteador (IP 192.168.1.1, MAC 11-22-33-44-55-66). A interface f0/1 do roteador (IP 192.168.2.1, MAC 33-44-55-66-77-88) liga-se diretamente ao Servidor Web (IP 192.168.2.10, MAC 22-33-44-55-66-77)](img/inep/redes/2021/q12-1.png)\n\nConsidere, ainda, que o switch conhece todos os endereços MAC dos dispositivos ligados as suas respectivas interfaces e que o PC1 conhece os endereços de destino de camada 2 e camada 3.\n\nA partir das informações apresentadas, avalie as afirmações a seguir.\n\nI. O switch encaminhará o quadro ao roteador com base no endereço MAC de origem: AA-BB-CC-DD-EE-FF.\n\nII. O endereço de destino de camada 2 adicionado ao quadro pelo PC1 corresponde ao endereço MAC 11-22-33-44-55-66.\n\nIII. O roteador encaminha o pacote para sua interface de saída em direção ao destino com base no endereço de destino 192.168.2.10.\n\nIV. O processo de descoberta do endereço de destino de camada 2 pelo PC1 ocorre por meio de um broadcast encaminhado pelo roteador.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e IV.",
+          "explanation": "As duas estão erradas: o switch encaminha pelo MAC de destino (o de origem só serve para aprender a tabela), e o broadcast ARP é enviado pelo PC1 e nunca atravessa o roteador."
+        },
+        {
+          "text": "II e III.",
+          "explanation": "Correta. Como o servidor está em outra rede, o PC1 endereça o quadro ao MAC do gateway (f0/0, 11-22-33-44-55-66), e o roteador escolhe a interface de saída consultando a tabela de rotas com o IP de destino 192.168.2.10."
+        },
+        {
+          "text": "II e IV.",
+          "explanation": "A II está correta, mas a IV não: o ARP é um broadcast gerado pelo PC1 na própria rede local, e roteadores não encaminham broadcasts para outras redes."
+        },
+        {
+          "text": "I, II e III.",
+          "explanation": "Inclui a I, que está errada: switches decidem a porta de saída pelo endereço MAC de destino; o MAC de origem é usado apenas para popular a tabela de endereços."
+        },
+        {
+          "text": "I, III e IV.",
+          "explanation": "Inclui a I e a IV, erradas (encaminhamento é pelo MAC de destino; o broadcast ARP parte do PC1 e não é repassado pelo roteador), e omite a II, que está correta."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2021-redes-q13",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 13 (Inep)",
+      "kind": "Objective",
+      "subject": "tcp-ip",
+      "statement": "O protocolo de controle de transmissão, ou TCP (Transmission Control Protocol), foi projetado especificamente para oferecer um fluxo de bytes fim a fim confiável em uma rede interligada não confiável. O TCP foi projetado para se adaptar dinamicamente às propriedades da rede interligada e ser robusto diante dos muitos tipos de falhas que podem ocorrer.\n\nTANENBAUM, A. S.; WETHERALL, D. **Redes de Computadores**, 5. ed. São Paulo: Pearson, 2011 (adaptado).\n\nA respeito das características do protocolo TCP, assinale a opção correta.",
+      "options": [
+        {
+          "text": "Inicia e encerra conexões entre duas entidades por meio do handshake de três vias.",
+          "explanation": "O handshake de três vias (SYN, SYN-ACK, ACK) só abre a conexão. O encerramento é feito por troca de FIN e ACK em cada sentido, normalmente em quatro segmentos."
+        },
+        {
+          "text": "Possui controle de congestionamento, evitando assim a ocorrência de tráfego excessivo na rede.",
+          "explanation": "Correta. O TCP ajusta a janela de congestionamento (partida lenta, prevenção de congestionamento, retransmissão rápida) quando detecta perdas ou atrasos, reduzindo a taxa de envio para não sobrecarregar a rede."
+        },
+        {
+          "text": "Permite a comunicação entre entidades por meio de um serviço não orientado a conexões.",
+          "explanation": "O TCP é orientado a conexão: estabelece estado entre as pontas antes de enviar dados. O serviço não orientado a conexão da camada de transporte é o UDP."
+        },
+        {
+          "text": "Implementa o mecanismo de janela deslizante, permitindo o compartilhamento de uma mesma conexão.",
+          "explanation": "A janela deslizante existe, mas serve para controle de fluxo e envio de vários segmentos sem esperar cada confirmação. Ela não tem relação com compartilhar a conexão; cada conexão TCP é identificada por um par de sockets próprio."
+        },
+        {
+          "text": "Adapta o tamanho do segmento TCP ao tamanho do MTU da camada de enlace, evitando assim a sua fragmentação ao longo do caminho.",
+          "explanation": "O MSS anunciado no handshake considera apenas o MTU das interfaces das pontas; enlaces intermediários com MTU menor ainda podem exigir fragmentação. Evitá-la ao longo do caminho depende da descoberta de MTU do caminho (PMTUD), um mecanismo da camada IP/ICMP."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2021-redes-q14",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 14 (Inep)",
+      "kind": "Objective",
+      "subject": "tcp-ip",
+      "statement": "Uma empresa deseja expandir sua infraestrutura de Tecnologia da Informação e Comunicação (TIC) para o ambiente de nuvem computacional. A arquitetura a ser implantada deverá ser composta pelo site principal atual, no qual constam servidores locais e as estações móveis dos usuários, e 4 nuvens independentes, que abrigarão servidores dedicados às linhas de negócios específicos. Para o projeto foi contratado um tecnólogo em redes, que recebeu juntamente às especificações anteriores, a faixa de endereçamento IP 10.1.0.0/22 para uso no projeto.\n\nConsidere que o tecnólogo apresentou o projeto de uma topologia em rede e a proposta para endereçamento dos componentes, representados a seguir.\n\n**Tabela de endereços**\n\n- Principal Servidores: 10.1.0.0/24\n- Principal Estações Móveis: 10.1.1.0/24\n- Nuvem 1: 10.1.2.0/24\n- Nuvem 2: 10.1.3.0/25\n- Nuvem 3: 10.1.3.128/26\n- Nuvem 4: 10.1.3.192/26\n\n![Figura: Arquitetura Proposta. O roteador R0 fica no Site Principal, que tem 100 servidores e 400 estações moveis. R0 liga-se aos roteadores R1 (Nuvem 1, 150 servidores), R2 (Nuvem 2, 80 servidores), R3 (Nuvem 3, 40 servidores) e R4 (Nuvem 4, 10 servidores)](img/inep/redes/2021/q14-1.png)\n\nCom base nas informações apresentadas, avalie as afirmações a seguir.\n\nI. O endereço 10.1.3.191 é um endereço válido a ser usado por equipamento na Nuvem 3.\n\nII. A quantidade de endereços válidos nas Nuvens 2 e 3 são, respectivamente, 254 e 62.\n\nIII. As sub-redes propostas para as Nuvens 1 e 4 atendem às demandas de equipamentos destas localidades.\n\nIV. O plano de endereçamento proposto de acordo com a tabela não é suficiente para o atendimento da quantidade de equipamentos propostos no projeto.\n\nV. No site principal existe um erro de alocação das faixas, que pode ser corrigido utilizando uma faixa única 10.1.0.0/23.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "II e IV.",
+          "explanation": "A IV está correta, mas a II não: a Nuvem 2 usa /25, que tem 2^7 - 2 = 126 endereços válidos, e não 254. Só a Nuvem 3 (/26) tem 62."
+        },
+        {
+          "text": "I, II e III.",
+          "explanation": "I e II estão erradas: 10.1.3.191 é o broadcast da sub-rede 10.1.3.128/26 (faixa .128 a .191), e a Nuvem 2 (/25) tem 126 endereços válidos, não 254."
+        },
+        {
+          "text": "I, III e V.",
+          "explanation": "Inclui a I, que está errada: em 10.1.3.128/26 o último endereço, 10.1.3.191, é o de broadcast e não pode ser atribuído a um equipamento. Além disso, omite a IV."
+        },
+        {
+          "text": "III, IV e V",
+          "explanation": "Correta. Nuvem 1 (/24, 254 hosts para 150) e Nuvem 4 (/26, 62 hosts para 10) estão atendidas; as 400 estações não cabem em um /24 (254 hosts), então o plano falha; e unir o site principal em 10.1.0.0/23 dá 510 endereços válidos para os 500 equipamentos."
+        },
+        {
+          "text": "I, II, IV e V.",
+          "explanation": "I e II estão erradas: 10.1.3.191 é broadcast da Nuvem 3 e a Nuvem 2 (/25) tem 126 endereços válidos. Também falta a III, que está correta."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2021-redes-q15",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 15 (Inep)",
+      "kind": "Objective",
+      "subject": "roteamento",
+      "statement": "Para transferir pacotes entre nós de diferentes redes, os roteadores devem determinar o caminho ou rota que os pacotes devem seguir. Esta determinação é feita pelo uso de tabelas de rotas construídas a partir de algoritmos de roteamento. Os algoritmos de roteamento do tipo “estado do link” (Link State) são centralizados, isto é, a topologia da rede bem como todos os custos dos links são conhecidos e disponíveis como entrada para o cálculo das rotas. O Open Shortest Path First (OSPF) é um protocolo deste tipo, amplamente adotado em grandes redes corporativas. Já os algoritmos do tipo \"vetor de distância\" (Distance Vector) são descentralizados, em que cada nó recebe informações de distância, medida em saltos de seus vizinhos diretamente conectados. Esses algoritmos, executam um cálculo e distribuem de volta os resultados em um processo que prossegue até que haja convergência, ou seja, não haja mais novas informações. O Routing Information Protocol (RIP) é um protocolo deste tipo.\n\nKUROSE, J. F.; ROSS, K. **Redes de Computadores e a Internet**: uma abordagem top-down. 5. ed. São Paulo: Pearson Addison Wesley, 2010 (adaptado).\n\nSobre os algoritmos de roteamento OSPF e RIP, assinale a opção correta.",
+      "options": [
+        {
+          "text": "O uso do protocolo de roteamento do tipo Link State, como o OSPF, exige um conhecimento prévio das redes envolvidas.",
+          "explanation": "O OSPF descobre a topologia sozinho: os roteadores formam adjacências com Hellos e trocam LSAs até que todos tenham o mesmo banco de dados de estado de enlace. Basta indicar quais interfaces participam do processo."
+        },
+        {
+          "text": "O protocolo OSPF suporta mais de um tipo de métrica, como por exemplo, contagem de saltos, atraso da rede e custo do link.",
+          "explanation": "Correta. A métrica do OSPF é um custo por enlace que pode ser definido a partir de diferentes critérios (largura de banda, atraso, valor administrativo), e a especificação original previa métricas distintas por tipo de serviço (TOS). O RIP, por outro lado, só conta saltos."
+        },
+        {
+          "text": "O protocolo RIP utiliza a contagem de saltos e a largura de banda como métricas para decidir o melhor caminho para uma rede remota.",
+          "explanation": "O RIP usa apenas a contagem de saltos. Ele ignora largura de banda, por isso pode preferir um caminho com menos saltos mesmo que seja bem mais lento."
+        },
+        {
+          "text": "A distribuição periódica de toda a tabela de roteamento do OSPF consome uma grande quantidade de banda, sendo um problema em grandes redes.",
+          "explanation": "Enviar a tabela inteira periodicamente (a cada 30 segundos) é comportamento do RIP. O OSPF manda atualizações (LSAs) quando há mudança na topologia, além de um refresh espaçado, o que o torna adequado a redes grandes."
+        },
+        {
+          "text": "O limite de 15 hops (saltos) é característica de protocolos do tipo Link State como OSPF, assim uma rede com dimensão maior do que 15 hops é considerada inalcançável.",
+          "explanation": "O limite de 15 saltos (16 = infinito) é do RIP, um protocolo vetor de distância, e existe para conter a contagem ao infinito. O OSPF não tem esse limite."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2021-redes-q16",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 16 (Inep)",
+      "kind": "Objective",
+      "subject": "ieee-802",
+      "statement": "De acordo com o padrão IEEE 802.1Q, que estende o conceito de Rede Local Virtual (VLAN), cada porta de um comutador de rede (por exemplo, um switch) pode ser associada a VLANs marcadas (tagged) e/ou não marcadas (untagged). Alguns fabricantes denominam portas tronco (trunk) aquelas que estejam associadas a mais de uma VLAN marcada. Estas portas somente encaminham um quadro Ethernet que possua uma marca de VLAN contida em suas respectivas listas de VLANs marcadas. Para manter compatibilidade com redes legadas, foi também definido o conceito de VLAN nativa que representa uma VLAN não marcada associada a uma porta tronco. Desta forma, um quadro Ethernet que chega ao switch, através de uma porta tronco, não será descartado. Este quadro, na verdade, receberá uma marca equivalente à VLAN Nativa e será encaminhado. Muitos fabricantes, por padrão, usam o valor 1 para VLAN nativa. Este padrão, quando usado por roteadores, permite o roteamento Router-on-a-Stick, onde uma interface física é dividida em subinterfaces lógicas, cada qual associada a uma VLAN diferente, permitindo assim o roteamento de pacotes entre VLANs.\n\nNesse contexto, suponha que haja a necessidade de se administrar uma rede legada, cuja estrutura já esteja montada e que não utilize a segmentação por VLAN. Como forma de melhorar o desempenho e oferecer alguma segurança, realiza-se a implantação de tal segmentação, conforme diagrama de topologia mostrado na figura a seguir.\n\n![O PC1 está ligado a um HUB. O HUB liga-se ao SW_Principal e ao SW1. O SW1 atende uma VLAN 100 e uma VLAN 200. O SW_Principal liga-se ao SW2 (VLAN 100), ao SW3 (VLAN 200) e ao roteador R1, que dá acesso à Internet](img/inep/redes/2021/q16-1.png)\n\nConsidere que:\n\n- não seja possível alterar a estrutura física neste momento.\n- apenas os dispositivos vinculados às VLANs mostradas na figura tem permissão para acessar a Internet.\n- os endereços IP estejam devidamente configurados e todas as portas dos enlaces (links) entre os ativos de rede (switches e roteador) estejam configuradas como troncos.\n- a VLAN nativa não está configurada nos ativos de rede.\n\nAo realizar os testes, percebe-se que tudo funciona como planejado, ou seja, os hosts de VLANs diferentes não se comunicam entre si e todos estão acessando a Internet, exceto o PC1.\n\nCom base no cenário descrito, qual dos ajustes a seguir deve ser feito para que o PC1 tenha acesso à Internet, preservando o funcionamento normal dos demais dispositivos da rede?",
+      "options": [
+        {
+          "text": "Acrescentar uma rota na tabela de roteamento de R1 específica para o PC1.",
+          "explanation": "O problema está na camada 2: os quadros do PC1 saem sem marca de VLAN e são descartados nas portas tronco, que não têm VLAN nativa. Eles nem chegam a R1, então uma rota não resolve."
+        },
+        {
+          "text": "Configurar todas as portas do HUB como não marcadas (untagged) para VLAN 200.",
+          "explanation": "Hub é um repetidor de camada 1: não entende VLAN e não tem portas configuráveis como marcadas ou não marcadas."
+        },
+        {
+          "text": "Remover as configurações de porta tronco da porta que liga o switch SW_Principal ao HUB.",
+          "explanation": "Pelo HUB passam também os quadros marcados das VLANs 100 e 200 que vêm do SW1. Transformar essa porta em acesso quebraria a comunicação dessas VLANs, contrariando a exigência de preservar os demais dispositivos."
+        },
+        {
+          "text": "Configurar a porta do HUB na qual o PC1 está conectado como não marcada (untagged) para VLAN 200.",
+          "explanation": "O hub não tem configuração de VLAN por porta; ele apenas repete os bits para todas as portas. A marcação só pode ser decidida nos switches."
+        },
+        {
+          "text": "Alterar a VLAN nativa nas portas tronco em cada um dos switches SW_Principal e SW1 para valor 200.",
+          "explanation": "Correta. Os quadros do PC1 chegam sem marca às portas tronco dos dois switches ligados ao HUB; com a VLAN nativa 200 nessas portas, eles deixam de ser descartados, entram na VLAN 200 e alcançam a subinterface correspondente de R1, sem afetar o tráfego marcado das demais VLANs."
+        }
+      ],
+      "correct": "E"
+    },
+    {
+      "key": "enade-2021-redes-q17",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 17 (Inep)",
+      "kind": "Objective",
+      "subject": "redes-sem-fio",
+      "statement": "Um dos cenários possíveis de uma LAN sem fio 802.11 engloba uma ou mais estações sem fio e uma estação-base central, conhecida como um ponto de acesso (Access Point – AP). Uma vez associada com um AP, uma estação sem fio pode começar a enviar e receber quadros de e para o ponto. Porém, como várias estações podem querer transmitir quadros de dados ao mesmo tempo sobre o mesmo canal, é preciso um protocolo de acesso múltiplo para coordenar as transmissões.\n\nKUROSE, J. F.; ROSS, K. W. **Redes de Computadores e a Internet:** uma abordagem top-down. 5. ed. São Paulo: Pearson Addison Wesley, 2010. (adaptado).\n\nA respeito das redes sem fio 802.11, avalie as afirmações a seguir.\n\nI. O protocolo da subcamada MAC 802.11 é similar ao da Ethernet; ambos utilizam os protocolos CSMA/CD (CSMA com detecção de colisão) para garantir que nenhuma estação começará a transmitir ao perceber que o canal está ocupado.\n\nII. Quando uma estação em uma LAN sem fio envia um quadro, este pode não chegar intacto à estação de destino por uma variedade de razões; nesse caso, o protocolo da subcamada MAC 802.11 utiliza o reconhecimento de camada de enlace, que consiste em verificar o quadro recebido e enviar um quadro de reconhecimento para a estação transmissora.\n\nIII. No padrão 802.11, em situações em que existam muitas redes co-posicionadas, para diminuir a chance de colisão antes de uma estação transmitir um quadro de dados, ele deve enviar um quadro RTS e receber do AP um quadro CTS correspondente; após um curto período de tempo, conhecido como Espaçamento Curto Interquadro (Short Inter-frame Spacing – SIFS), a estação envia os dados.\n\nIV. No caso de terminais ocultos, o protocolo da subcamada MAC 802.11 utiliza o envio de um quadro de controle RTS para instruir as outras estações a não enviar durante o tempo reservado à estação que enviou o RTS.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e IV.",
+          "explanation": "As duas estão erradas: o 802.11 usa CSMA/CA, pois um rádio não consegue detectar colisão enquanto transmite; e, com terminais ocultos, quem silencia as demais estações é o CTS enviado pelo AP, que todas ouvem, e não o RTS."
+        },
+        {
+          "text": "II e III.",
+          "explanation": "Correta. O 802.11 confirma cada quadro de dados com um ACK de enlace após o SIFS, já que o meio sem fio perde quadros com frequência; e a troca opcional RTS/CTS reserva o canal antes do envio dos dados, também espaçada por SIFS."
+        },
+        {
+          "text": "II e IV.",
+          "explanation": "A II está correta, mas a IV não: o terminal oculto não escuta o RTS da outra estação. É o CTS transmitido pelo AP, com a duração da reserva, que faz as demais estações ajustarem o NAV e ficarem em silêncio."
+        },
+        {
+          "text": "I, II e III.",
+          "explanation": "Inclui a I, que está errada: o Ethernet clássico usa CSMA/CD, mas o 802.11 usa CSMA/CA, evitando colisões com espera aleatória e confirmações, porque não consegue detectá-las durante a transmissão."
+        },
+        {
+          "text": "I, III e IV.",
+          "explanation": "Inclui a I e a IV, erradas (802.11 usa CSMA/CA; o quadro que silencia os terminais ocultos é o CTS), e omite a II, que descreve corretamente o ACK de enlace."
+        }
+      ],
+      "correct": "B"
+    },
+    {
+      "key": "enade-2021-redes-q18",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 18 (Inep)",
+      "kind": "Objective",
+      "subject": "redes-sem-fio",
+      "statement": "O padrão IEEE 802.11 com CSMA/CA (Carrier Sense Multiple Access with Collision Avoidance) guarda muita semelhança com padrão IEEE 802.3 que utiliza CSMA/CD (Carrier Sense Multiple Access with Collision Detection) permitindo acesso ao meio com contenção e sem contenção, respectivamente. Além disso, o mecanismo de contenção do CSMA/CA permite atender requisitos de prioridade e economia de energia, desligando os circuitos de transmissão e recepção de um host que não pode transmitir naquele instante. Contudo, tal abordagem possui um problema conhecido como estação escondida. Este problema ocorre quando uma estação A quer enviar para B, mas não pode ouvir que C também está enviado para B, tendo em vista que A e C estão em áreas de cobertura totalmente sobrepostas, conforme figura a seguir.\n\nFOROUZAN, B. A. **Comunicação de Dados e Redes de Computadores.** 4. ed. São Paulo: McGraw-Hill, 2008 (adaptado).\n\n![Três estações sem fio lado a lado, A, B e C, cada uma com seu círculo de cobertura tracejado: a estação B está na área de cobertura de A e de C, mas A e C estão fora do alcance uma da outra](img/inep/redes/2021/q18-1.png)\n\nConsiderando o problema das estações escondidas (A e C) e o mecanismo utilizado pelo CSMA/CA para evitar colisões, assinale a opção correta.",
+      "options": [
+        {
+          "text": "A estação A envia para a estação B um segmento TCP (Transmission Control Protocol) para estabelecimento de conexão com a flag syn ativada antes de enviar dados.",
+          "explanation": "O SYN do TCP abre uma conexão de transporte fim a fim e é ele próprio transmitido no meio sem fio sujeito a colisão. O problema da estação escondida é de acesso ao meio, resolvido na subcamada MAC."
+        },
+        {
+          "text": "A estação A marca o campo CoS (Classe de Serviço) da camada 2 com prioridade maior do que a estação C, obrigando a Estação B a aceitar os pacotes vindos da Estação A.",
+          "explanation": "A marcação de prioridade (CoS/802.1p, ou as categorias de acesso do 802.11e) só altera a ordem e os tempos de espera; não impede que A e C transmitam ao mesmo tempo e colidam em B."
+        },
+        {
+          "text": "A estação A, após detectar que a estação B está ocupada, espera um período de acordo com o algoritmo de backoff (ou tempo de espera) do CSMA/CD e, após esse período de tempo, torna a transmitir para a estação B.",
+          "explanation": "No cenário, A não consegue perceber a transmissão de C, logo não detecta o meio ocupado; além disso, o backoff descrito é o do CSMA/CD, usado no Ethernet cabeado."
+        },
+        {
+          "text": "A estação A, antes de enviar um pacote para B, deve enviar quadros de controle denominados RTS (Request to Send) para B, que por sua vez, caso esteja livre, envia um quadro de controle CTS (Clear to Send) para A.",
+          "explanation": "Correta. O CTS é emitido por B, que é ouvida por A e por C; ao receber o CTS com a duração da reserva, C adia suas transmissões, eliminando a colisão causada pela estação escondida."
+        },
+        {
+          "text": "A estação A emite quadros denominados signal jam (sinal de congestionamento), indicando a ocorrência de colisão e obrigando todos os nós a escutarem a rede enquanto ela envia o dado.",
+          "explanation": "O sinal de jam é usado no CSMA/CD para avisar de uma colisão já detectada. No 802.11 as estações não detectam colisão durante a transmissão, e o jam não serve para reservar o meio."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2021-redes-q19",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 19 (Inep)",
+      "kind": "Objective",
+      "subject": "cabeamento-estruturado",
+      "statement": "A norma EIA/TIA 568 tem como objetivo estabelecer um padrão para ampla utilização em cabeamento de telecomunicações por diferentes fornecedores. Esta norma classifica o sistema de cabeamento em 10 categorias, levando em consideração aspectos de desempenho, largura de banda, comprimento, atenuação, entre outros.\n\nPINHEIRO, J. **Guia completo de cabeamento de redes**. 2. ed. Rio de Janeiro: Elsevier Brasil, 2015 (adaptado).\n\nEm função das características das categorias de desempenho para cabeamento estruturado, avalie as afirmações a seguir.\n\nI. O cabo da categoria 5e (Cat5e) é uma versão aprimorada do cabo da categoria 5, com menor degradação do sinal, suportando frequências de até 100MHz.\n\nII. O cabo da categoria 6 (Cat6) suporta frequências de até 250 MHz por padrão e apresenta ainda menor suscetibilidade a interferência eletromagnética do que o Cat5e.\n\nIII. O cabo da categoria 6 (Cat6) opera na mesma largura de banda do Cat 6A, diferenciando-se por possuir um separador dos pares trançados para reduzir interferências entre eles (crosstalk).\n\nIV. Os cabos das categorias 7 e 7A utilizam conectores diferentes do RJ-45 usados em outras categorias de cabeamento de par trançado.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e II.",
+          "explanation": "I e II estão corretas, mas a IV também está: categorias 7 e 7A usam conectores blindados próprios, como GG45 e TERA, e não o RJ-45 convencional."
+        },
+        {
+          "text": "II e III.",
+          "explanation": "A III está errada: o Cat6 é especificado até 250 MHz e o Cat6A até 500 MHz. O separador interno (cruzeta) é comum em cabos Cat6, não é o que os diferencia do Cat6A."
+        },
+        {
+          "text": "III e IV.",
+          "explanation": "Inclui a III, que está errada (Cat6A tem o dobro da largura de banda do Cat6, 500 MHz contra 250 MHz), e deixa de fora I e II, que estão corretas."
+        },
+        {
+          "text": "I, II e IV.",
+          "explanation": "Correta. Cat5e mantém 100 MHz com melhor controle de diafonia que o Cat5; Cat6 vai a 250 MHz com mais imunidade a ruído; e Cat7/7A usam conectores próprios (GG45, TERA) em vez do RJ-45."
+        },
+        {
+          "text": "I, III e IV.",
+          "explanation": "Inclui a III, que está errada: Cat6 (250 MHz) e Cat6A (500 MHz) não têm a mesma largura de banda. Também omite a II, que está correta."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2021-redes-q20",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 20 (Inep)",
+      "kind": "Objective",
+      "subject": "sistemas-operacionais",
+      "statement": "Suponha que um provedor de serviços de Internet de uma empresa possui um servidor Linux configurado como servidor de nomes (name server) e que o serviço de atendimento (help desk) tem recebido chamados de clientes reportando falhas intermitentes que indicam problemas na resolução de nomes.\n\nO administrador da rede faz um monitoramento constante dos recursos no servidor e tem verificado um uso contínuo de memória em níveis elevados no equipamento. A hipótese levantada por ele é de uma correlação entre a baixa quantidade de memória disponível e possíveis falhas na resolução de nomes. Nesse sentido, ele decide fazer testes utilizando ferramentas do próprio Linux.\n\nDe acordo com o cenário descrito, assinale a opção que apresenta um teste a ser executado no servidor capaz de ajudar o administrador a corroborar a sua hipótese.",
+      "options": [
+        {
+          "text": "Verificar, por meio do comando nmap -sT, se a porta 53 do protocolo User Datagram Protocol (UDP) está aberta (open state) para receber conexões.",
+          "explanation": "A opção -sT faz varredura TCP connect, não UDP (que seria -sU). E saber se a porta está aberta não diz nada sobre falta de memória, já que as falhas são intermitentes."
+        },
+        {
+          "text": "Visualizar, por meio do comando netstat -s, as estatísticas operacionais do protocolo UDP para verificar a quantidade de pacotes descartados.",
+          "explanation": "Correta. O DNS responde principalmente via UDP; com pouca memória, os buffers de recepção do kernel enchem e as consultas são descartadas. O netstat -s mostra contadores como receive buffer errors e pacotes descartados, que permitem relacionar o uso de memória às falhas."
+        },
+        {
+          "text": "Disparar, por meio do comando dig -f, uma lista de solicitações de consultas de nomes ao servidor Domain Name Server (DNS).",
+          "explanation": "O dig -f só envia consultas em lote, como um cliente faria. Pode reproduzir a falha, mas não dá nenhum indicador que ligue as falhas à falta de memória."
+        },
+        {
+          "text": "Inspecionar, por meio do comando sar -n, a largura de banda real em uso na interface do servidor, informada pelos contadores rxbyt/s e txbyt/s.",
+          "explanation": "Os contadores de bytes por segundo medem o volume de tráfego na interface, que é outra hipótese (saturação de banda). Eles não mostram descarte por falta de memória."
+        },
+        {
+          "text": "Verificar, por meio do comando ifconfig -v, se a interface de rede Ethernet está configurada com valor de Maximum Transmission Unit (MTU) diferente de 1 500.",
+          "explanation": "O MTU é uma configuração fixa da interface; um valor errado causaria falhas constantes de fragmentação, sem relação com o consumo de memória observado."
+        }
+      ],
+      "correct": "B"
+    }
+  ]
+}

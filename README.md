@@ -8,12 +8,13 @@ O código é aberto (MIT) e o conteúdo cresce com quem usa: professores propõe
 
 ## Uma plataforma, várias provas
 
-Cada prova é uma **trilha**. Ao entrar, o estudante escolhe a dele, e a marca passa a mostrar onde ele está: "Rumo ENEM", "Rumo ENADE ADS". Dá para trocar de trilha a qualquer momento, e cada uma tem roadmap, questões, desafios, simulados e datas próprios.
+Cada prova é uma **trilha**. Ao entrar, o estudante escolhe a dele, e a marca passa a mostrar onde ele está: "Rumo ENEM", "Rumo ENADE ADS", "Rumo ENADE Redes". Dá para trocar de trilha a qualquer momento, e cada uma tem roadmap, questões, desafios, simulados e datas próprios.
 
 | Trilha | Para quem | Situação |
 |---|---|---|
 | **ENEM 2026** | Quem está terminando o ensino médio. Provas em 08/11 e 15/11/2026 | No ar: roadmap pela Matriz de Referência (4 áreas e redação), questões de autoria própria e simulado no ritmo do ENEM |
 | **ENADE 2026 · ADS** | Estudantes de Tecnologia em Análise e Desenvolvimento de Sistemas. Prova em 29/11/2026 | No ar: roadmap pela Portaria Inep nº 169/2026, provas reais de 2017 e 2021 e simulado no formato do ENADE |
+| **ENADE 2026 · Redes de Computadores** | Estudantes de Tecnologia em Redes de Computadores. Prova em 29/11/2026 | No ar: roadmap pela Portaria Inep nº 172/2026, provas reais de 2017 e 2021 e simulado no formato do ENADE |
 | **Seletivos de IFs** (como o IFSul) | Quem vai entrar no ensino médio técnico | Próxima trilha |
 
 ## O que tem em cada trilha
@@ -40,10 +41,11 @@ O Rumo coleta o mínimo: nome, e-mail e a faixa de idade, sem data de nascimento
 
 ## De onde vêm as questões
 
-- **ENADE (Inep):** as questões de ADS das provas de 2021 e 2017 estão em `EnadeAds/Data/Seed/inep/*.json`. As figuras ficam em `EnadeAds/wwwroot/img/inep/`.
+- **ENADE (Inep):** as questões das provas de 2021 e 2017 estão em `EnadeAds/Data/Seed/inep/*.json` (ADS e Formação Geral) e `EnadeAds/Data/Seed/redes/*.json` (Redes de Computadores). As figuras ficam em `EnadeAds/wwwroot/img/inep/`.
+  - **Formação Geral:** é a mesma prova para todos os cursos do ano. O arquivo dela lista as outras trilhas em `sharedWith`, e cada trilha recebe a sua cópia.
   - **Fonte:** as provas e os gabaritos definitivos de [download.inep.gov.br](https://download.inep.gov.br/enade/provas_e_gabaritos/).
   - **Licença:** o portal do Inep publica sob [CC BY-ND 3.0](https://creativecommons.org/licenses/by-nd/3.0/deed.pt_BR). Por isso enunciados e alternativas são transcritos sem alteração, e cada questão cita a prova, o ano e o número.
-  - **Anulada:** a questão 15 de 2017 foi anulada pelo Inep e não entra.
+  - **Anuladas:** a questão 15 de ADS 2017 e a 21 de Redes 2017 foram anuladas pelo Inep e não entram.
 - **ENEM:** as questões de `EnadeAds/Data/Seed/enem/` são de autoria própria. As provas oficiais do ENEM vão entrar numa próxima versão.
 - **Comentários e padrões de resposta** são da plataforma e ficam sob [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.pt_BR).
 
