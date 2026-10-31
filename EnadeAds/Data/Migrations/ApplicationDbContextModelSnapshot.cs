@@ -3734,6 +3734,1468 @@ namespace EnadeAds.Data.Migrations
                             Summary = "Faça um simulado completo no horário da prova (início às 13h30). Depois, revise o caderno de erros até o dia do ENEM.",
                             Title = "Checkpoint final: simulado de um dia de prova",
                             TrackId = 2
+                        },
+                        new
+                        {
+                            Id = 200100,
+                            Block = 0,
+                            Kind = 0,
+                            Order = 1,
+                            Slug = "fundamentos-redes",
+                            Summary = "O vocabulário de toda a prova: o que é cada equipamento, como ele se liga aos outros e que tipo de rede isso forma.",
+                            Title = "Fundamentos, componentes e topologias de redes",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200101,
+                            Block = 0,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 200100,
+                            Slug = "classificacao-redes",
+                            Summary = "PAN, LAN, MAN e WAN; redes cliente-servidor e ponto a ponto.",
+                            Title = "Classificação das redes",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200102,
+                            Block = 0,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 200100,
+                            Slug = "topologias",
+                            Summary = "Barramento, anel, estrela, malha e árvore: vantagens, pontos únicos de falha e o que muda entre o físico e o lógico.",
+                            Title = "Topologias física e lógica",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200103,
+                            Block = 0,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 200100,
+                            Slug = "equipamentos",
+                            Summary = "Placa de rede, hub, switch, roteador, access point e firewall: em que camada cada um trabalha.",
+                            Title = "Equipamentos de rede",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200104,
+                            Block = 0,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 200100,
+                            Slug = "dominios-colisao-broadcast",
+                            Summary = "Quantos domínios cada equipamento separa; questão clássica com diagrama.",
+                            Title = "Domínios de colisão e de broadcast",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200105,
+                            Block = 0,
+                            Kind = 1,
+                            Order = 5,
+                            ParentId = 200100,
+                            Slug = "comutacao",
+                            Summary = "Como os dados atravessam a rede e o que isso muda em atraso e aproveitamento.",
+                            Title = "Comutação de circuitos e de pacotes",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200200,
+                            Block = 0,
+                            Kind = 0,
+                            Order = 2,
+                            Slug = "comunicacao-dados",
+                            Summary = "A camada física: sinais, meios e as contas de taxa e atraso que aparecem nas questões.",
+                            Title = "Comunicação e transmissão de dados",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200201,
+                            Block = 0,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 200200,
+                            Slug = "sinais-modulacao",
+                            Summary = "Analógico x digital, codificação de linha (NRZ, Manchester) e modulação (ASK, FSK, PSK, QAM).",
+                            Title = "Sinais, codificação e modulação",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200202,
+                            Block = 0,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 200200,
+                            Slug = "meios-transmissao",
+                            Summary = "Par trançado, coaxial, fibra monomodo e multimodo e rádio: alcance, banda e interferência.",
+                            Title = "Meios de transmissão",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200203,
+                            Block = 0,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 200200,
+                            Slug = "banda-taxa",
+                            Summary = "Nyquist e Shannon, bits x bytes e a diferença entre taxa nominal e vazão real.",
+                            Title = "Largura de banda, taxa e vazão",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200204,
+                            Block = 0,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 200200,
+                            Slug = "atrasos",
+                            Summary = "Atraso de transmissão, propagação, fila e processamento; RTT e jitter.",
+                            Title = "Atrasos e desempenho",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200205,
+                            Block = 0,
+                            Kind = 1,
+                            Order = 5,
+                            ParentId = 200200,
+                            Slug = "multiplexacao-erros",
+                            Summary = "FDM, TDM e WDM; paridade, CRC e checksum.",
+                            Title = "Multiplexação e detecção de erros",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200300,
+                            Block = 0,
+                            Kind = 0,
+                            Order = 3,
+                            Slug = "modelos-referencia",
+                            Summary = "OSI e TCP/IP lado a lado. Quase toda questão de protocolo começa por saber em que camada ele está.",
+                            Title = "Modelos de referência",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200301,
+                            Block = 0,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 200300,
+                            Slug = "modelo-osi",
+                            Summary = "As sete camadas, a função de cada uma e exemplos de protocolos e equipamentos.",
+                            Title = "Modelo OSI",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200302,
+                            Block = 0,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 200300,
+                            Slug = "modelo-tcp-ip",
+                            Summary = "As quatro (ou cinco) camadas e como elas se comparam às do OSI.",
+                            Title = "Modelo TCP/IP",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200303,
+                            Block = 0,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 200300,
+                            Slug = "encapsulamento-pdu",
+                            Summary = "Mensagem, segmento, pacote, quadro e bit: o que cada camada acrescenta.",
+                            Title = "Encapsulamento e PDUs",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200304,
+                            Block = 0,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 200300,
+                            Slug = "servicos-camadas",
+                            Summary = "Orientado e não orientado à conexão, confiável e não confiável.",
+                            Title = "Serviços entre camadas",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200400,
+                            Block = 0,
+                            Kind = 0,
+                            Order = 4,
+                            Slug = "cabeamento-estruturado",
+                            Summary = "Normas, categorias de cabo e limites de distância. Rende pontos com memorização bem feita.",
+                            Title = "Normas e padrões de cabeamento estruturado",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200401,
+                            Block = 0,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 200400,
+                            Slug = "normas-cabeamento",
+                            Summary = "ANSI/TIA-568, ISO/IEC 11801 e NBR 14565: o que cada uma define.",
+                            Title = "Normas",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200402,
+                            Block = 0,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 200400,
+                            Slug = "subsistemas",
+                            Summary = "Entrada do edifício, sala de equipamentos, backbone, cabeamento horizontal e área de trabalho.",
+                            Title = "Subsistemas do cabeamento",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200403,
+                            Block = 0,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 200400,
+                            Slug = "categorias-cabos",
+                            Summary = "Cat5e, Cat6, Cat6A e Cat8; RJ-45, padrões T568A e T568B, cabo direto e cruzado.",
+                            Title = "Categorias e conectores",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200404,
+                            Block = 0,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 200400,
+                            Slug = "limites-certificacao",
+                            Summary = "Os 90 m + 10 m do horizontal, fibra no backbone e os testes de certificação.",
+                            Title = "Limites e certificação",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 210001,
+                            Block = 0,
+                            Kind = 2,
+                            Order = 5,
+                            Slug = "checkpoint-fundamentos-redes",
+                            Summary = "Antes de seguir, resolva questões de topologias, domínios de colisão, camadas do OSI, contas de taxa e atraso e cabeamento. Anote os erros no caderno de erros.",
+                            Title = "Checkpoint: questões de fundamentos",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200500,
+                            Block = 10,
+                            Kind = 0,
+                            Order = 6,
+                            Slug = "tcp-ip",
+                            Summary = "O centro da prova. Sub-redes e o comportamento do TCP aparecem em quase toda edição.",
+                            Title = "Arquitetura TCP/IP e seus protocolos",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200501,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 200500,
+                            Slug = "ipv4-enderecamento",
+                            Summary = "Classes, máscara, notação CIDR, endereços privados e especiais.",
+                            Title = "Endereçamento IPv4",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200502,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 200500,
+                            Slug = "sub-redes",
+                            Summary = "Calcular rede, broadcast, faixa de hosts e quantidade de sub-redes sem calculadora.",
+                            Title = "Sub-redes e VLSM",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200503,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 200500,
+                            Slug = "ipv6",
+                            Summary = "Formato, abreviação, tipos de endereço, autoconfiguração e convivência com o IPv4.",
+                            Title = "IPv6",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200504,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 200500,
+                            Slug = "arp-icmp-nat",
+                            Summary = "Resolução de endereço, ping e traceroute, tradução de endereços e PAT.",
+                            Title = "ARP, ICMP e NAT",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200505,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 5,
+                            ParentId = 200500,
+                            Slug = "tcp-udp",
+                            Summary = "Portas, three-way handshake, janela deslizante, controle de fluxo e de congestionamento.",
+                            Title = "TCP e UDP",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200506,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 6,
+                            ParentId = 200500,
+                            Slug = "protocolos-aplicacao",
+                            Summary = "HTTP/HTTPS, DNS, DHCP, SMTP, POP3, IMAP, FTP e SSH, com as portas de cada um.",
+                            Title = "Protocolos de aplicação",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200600,
+                            Block = 10,
+                            Kind = 0,
+                            Order = 7,
+                            Slug = "roteamento",
+                            Summary = "Como o roteador escolhe o caminho. Cai como tabela de roteamento para interpretar ou rede para completar.",
+                            Title = "Algoritmos e protocolos de roteamento",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200601,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 200600,
+                            Slug = "tabela-roteamento",
+                            Summary = "Rotas diretas, estáticas e padrão; prefixo mais longo e distância administrativa.",
+                            Title = "Tabela de roteamento",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200602,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 200600,
+                            Slug = "vetor-distancia",
+                            Summary = "Bellman-Ford, RIP, contagem ao infinito, split horizon e poison reverse.",
+                            Title = "Vetor de distância",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200603,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 200600,
+                            Slug = "estado-enlace",
+                            Summary = "Dijkstra, OSPF, áreas e custo dos enlaces.",
+                            Title = "Estado de enlace",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200604,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 200600,
+                            Slug = "bgp-sistemas-autonomos",
+                            Summary = "Roteamento interno x externo e como a internet se interliga.",
+                            Title = "BGP e sistemas autônomos",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200700,
+                            Block = 10,
+                            Kind = 0,
+                            Order = 8,
+                            Slug = "ieee-802",
+                            Summary = "As redes locais por dentro: Ethernet, switches e VLANs.",
+                            Title = "Padrões IEEE 802.x",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200701,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 200700,
+                            Slug = "ethernet",
+                            Summary = "Quadro Ethernet, endereço MAC, CSMA/CD e as velocidades do Fast ao 10 Gigabit.",
+                            Title = "Ethernet (802.3)",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200702,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 200700,
+                            Slug = "switching",
+                            Summary = "Aprendizado de MAC, tabela CAM, full duplex e encaminhamento.",
+                            Title = "Comutação na camada 2",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200703,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 200700,
+                            Slug = "vlan-trunk",
+                            Summary = "Segmentar a LAN, marcação de quadros e roteamento entre VLANs.",
+                            Title = "VLANs e trunk (802.1Q)",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200704,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 200700,
+                            Slug = "stp",
+                            Summary = "Por que laços derrubam a rede e como o STP os bloqueia.",
+                            Title = "Spanning Tree (802.1D/802.1w)",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200705,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 5,
+                            ParentId = 200700,
+                            Slug = "agregacao-poe-8021x",
+                            Summary = "LACP (802.3ad), alimentação pelo cabo e controle de acesso por porta.",
+                            Title = "Agregação de enlaces, PoE e 802.1X",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200800,
+                            Block = 10,
+                            Kind = 0,
+                            Order = 9,
+                            Slug = "redes-sem-fio",
+                            Summary = "Wi-Fi e as outras tecnologias sem fio, com foco em padrão, alcance e segurança.",
+                            Title = "Redes sem fio",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200801,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 200800,
+                            Slug = "padroes-80211",
+                            Summary = "802.11a/b/g/n/ac/ax (Wi-Fi 4, 5, 6 e 6E): faixas, canais e taxas.",
+                            Title = "Padrões 802.11",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200802,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 200800,
+                            Slug = "csma-ca",
+                            Summary = "CSMA/CA, RTS/CTS e o problema do terminal oculto.",
+                            Title = "Acesso ao meio no Wi-Fi",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200803,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 200800,
+                            Slug = "seguranca-wifi",
+                            Summary = "WEP, WPA, WPA2 e WPA3; modo pessoal x corporativo.",
+                            Title = "Segurança no Wi-Fi",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200804,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 200800,
+                            Slug = "projeto-wifi",
+                            Summary = "Site survey, interferência, sobreposição de canais e roaming.",
+                            Title = "Projeto de cobertura",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200805,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 5,
+                            ParentId = 200800,
+                            Slug = "outras-sem-fio",
+                            Summary = "Bluetooth, redes celulares (4G e 5G), LoRa e redes de sensores.",
+                            Title = "Outras tecnologias",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200900,
+                            Block = 10,
+                            Kind = 0,
+                            Order = 10,
+                            Slug = "redes-wan",
+                            Summary = "Como ligar sites distantes: enlaces dedicados, MPLS, VPN e acesso à internet.",
+                            Title = "Redes de longa distância e suas tecnologias",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200901,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 200900,
+                            Slug = "enlaces-wan",
+                            Summary = "Linhas dedicadas, PPP e HDLC; Frame Relay e ATM como história.",
+                            Title = "Enlaces WAN",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200902,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 200900,
+                            Slug = "mpls",
+                            Summary = "Rótulos, LSP e por que as operadoras usam.",
+                            Title = "MPLS",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200903,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 200900,
+                            Slug = "vpn",
+                            Summary = "Site a site e de acesso remoto; IPsec, SSL/TLS e túneis.",
+                            Title = "VPNs",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200904,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 200900,
+                            Slug = "acesso-banda-larga",
+                            Summary = "DSL, cabo, fibra (FTTH, GPON), rádio e satélite.",
+                            Title = "Acesso à internet",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 200905,
+                            Block = 10,
+                            Kind = 1,
+                            Order = 5,
+                            ParentId = 200900,
+                            Slug = "sd-wan",
+                            Summary = "Vários links sob uma política central de tráfego.",
+                            Title = "SD-WAN",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 210002,
+                            Block = 10,
+                            Kind = 2,
+                            Order = 11,
+                            Slug = "checkpoint-tecnologias-redes",
+                            Summary = "Resolva questões de sub-redes, TCP, tabelas de roteamento, VLANs e Wi-Fi. Treine sub-redes até fazer sem calculadora.",
+                            Title = "Checkpoint: questões de tecnologias de rede",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201000,
+                            Block = 11,
+                            Kind = 0,
+                            Order = 12,
+                            Slug = "sistemas-operacionais",
+                            Summary = "O servidor por dentro: usuários, permissões, processos e a linha de comando do Linux e do Windows.",
+                            Title = "Administração de sistemas operacionais",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201001,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 201000,
+                            Slug = "linux-comandos",
+                            Summary = "Sistema de arquivos, comandos básicos, pipes e redirecionamento.",
+                            Title = "Linux: comandos e arquivos",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201002,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 201000,
+                            Slug = "usuarios-permissoes",
+                            Summary = "chmod, chown, notação octal e o modelo de permissões do Windows (NTFS).",
+                            Title = "Usuários, grupos e permissões",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201003,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 201000,
+                            Slug = "processos-servicos",
+                            Summary = "systemd, logs, agendamento de tarefas (cron) e inicialização.",
+                            Title = "Processos e serviços",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201004,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 201000,
+                            Slug = "rede-no-so",
+                            Summary = "ip, ifconfig, netstat/ss, ping, traceroute e nslookup/dig.",
+                            Title = "Rede no sistema operacional",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201005,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 5,
+                            ParentId = 201000,
+                            Slug = "windows-server",
+                            Summary = "Domínio, controlador de domínio, GPOs e unidades organizacionais.",
+                            Title = "Windows Server e Active Directory",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201100,
+                            Block = 11,
+                            Kind = 0,
+                            Order = 13,
+                            Slug = "servicos-rede",
+                            Summary = "Os serviços que fazem a rede ser útil. Cai como cenário: qual serviço resolve o problema descrito.",
+                            Title = "Serviços de redes",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201101,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 201100,
+                            Slug = "dns",
+                            Summary = "Hierarquia, tipos de registro (A, AAAA, CNAME, MX, NS), consulta recursiva e iterativa.",
+                            Title = "DNS",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201102,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 201100,
+                            Slug = "dhcp",
+                            Summary = "DORA, escopo, reservas e relay.",
+                            Title = "DHCP",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201103,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 201100,
+                            Slug = "web-proxy",
+                            Summary = "HTTP, proxy direto e reverso, cache e balanceamento de carga.",
+                            Title = "Servidor web e proxy",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201104,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 201100,
+                            Slug = "email",
+                            Summary = "SMTP, POP3 e IMAP, e o caminho de uma mensagem.",
+                            Title = "Correio eletrônico",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201105,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 5,
+                            ParentId = 201100,
+                            Slug = "arquivos-diretorio",
+                            Summary = "NFS, SMB/CIFS, FTP/SFTP e LDAP.",
+                            Title = "Arquivos e diretório",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201200,
+                            Block = 11,
+                            Kind = 0,
+                            Order = 14,
+                            Slug = "configuracao-dispositivos",
+                            Summary = "Ler e completar configurações de switch e roteador. A questão traz os comandos e pergunta o efeito.",
+                            Title = "Configuração de dispositivos de redes",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201201,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 201200,
+                            Slug = "cli-modos",
+                            Summary = "Modos usuário, privilegiado e de configuração; salvar e restaurar a configuração.",
+                            Title = "CLI e modos de configuração",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201202,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 201200,
+                            Slug = "config-switch",
+                            Summary = "VLANs, portas de acesso e trunk, port security.",
+                            Title = "Configuração de switch",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201203,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 201200,
+                            Slug = "config-roteador",
+                            Summary = "Interfaces, rotas estáticas, rota padrão e roteamento dinâmico.",
+                            Title = "Configuração de roteador",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201204,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 201200,
+                            Slug = "acl",
+                            Summary = "ACL padrão e estendida, ordem das regras e o deny implícito.",
+                            Title = "Listas de controle de acesso",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201205,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 5,
+                            ParentId = 201200,
+                            Slug = "nat-dhcp-roteador",
+                            Summary = "Configurar tradução de endereços e servidor DHCP no equipamento.",
+                            Title = "NAT e DHCP no roteador",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201300,
+                            Block = 11,
+                            Kind = 0,
+                            Order = 15,
+                            Slug = "gerenciamento-redes",
+                            Summary = "Saber o que está acontecendo na rede antes que o usuário reclame.",
+                            Title = "Gerenciamento de redes",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201301,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 201300,
+                            Slug = "fcaps",
+                            Summary = "Falhas, configuração, contabilização, desempenho e segurança.",
+                            Title = "Áreas funcionais (FCAPS)",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201302,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 201300,
+                            Slug = "snmp",
+                            Summary = "Gerente, agente, MIB, OID, traps e as versões 1, 2c e 3.",
+                            Title = "SNMP",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201303,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 201300,
+                            Slug = "monitoramento",
+                            Summary = "Zabbix, Nagios e afins; métricas, limites e alertas.",
+                            Title = "Monitoramento",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201304,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 201300,
+                            Slug = "logs-fluxos",
+                            Summary = "Syslog, NetFlow e captura de pacotes com Wireshark.",
+                            Title = "Logs e análise de fluxo",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201305,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 5,
+                            ParentId = 201300,
+                            Slug = "itil-sla",
+                            Summary = "Incidente x problema, SLA e indicadores de disponibilidade.",
+                            Title = "Gestão de serviços",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201400,
+                            Block = 11,
+                            Kind = 0,
+                            Order = 16,
+                            Slug = "virtualizacao",
+                            Summary = "De uma máquina física para muitas: hipervisores, contêineres e nuvem.",
+                            Title = "Virtualização de redes, servidores, aplicativos e desktops",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201401,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 201400,
+                            Slug = "hipervisores",
+                            Summary = "Tipo 1 x tipo 2; VMware, Hyper-V, KVM e Proxmox.",
+                            Title = "Hipervisores",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201402,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 201400,
+                            Slug = "conteineres",
+                            Summary = "Docker, imagens e orquestração; contêiner x máquina virtual.",
+                            Title = "Contêineres",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201403,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 201400,
+                            Slug = "redes-virtuais",
+                            Summary = "Switch virtual, VXLAN, SDN (plano de controle separado) e NFV.",
+                            Title = "Redes virtuais e SDN",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201404,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 201400,
+                            Slug = "vdi-aplicativos",
+                            Summary = "VDI e virtualização de aplicativos.",
+                            Title = "Desktops e aplicativos virtuais",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201405,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 5,
+                            ParentId = 201400,
+                            Slug = "nuvem",
+                            Summary = "IaaS, PaaS e SaaS; nuvem pública, privada e híbrida.",
+                            Title = "Computação em nuvem",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201500,
+                            Block = 11,
+                            Kind = 0,
+                            Order = 17,
+                            Slug = "automacao-redes",
+                            Summary = "Scripts e ferramentas que configuram e verificam a rede sem fazer tudo à mão.",
+                            Title = "Programação e automação de redes",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201501,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 201500,
+                            Slug = "scripts",
+                            Summary = "Python e shell script para tarefas de rede: laços, condições e leitura de arquivos.",
+                            Title = "Scripts",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201502,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 201500,
+                            Slug = "apis-formatos",
+                            Summary = "REST, JSON, YAML e XML; NETCONF e RESTCONF.",
+                            Title = "APIs e formatos de dados",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201503,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 201500,
+                            Slug = "ferramentas-automacao",
+                            Summary = "Ansible, infraestrutura como código e controle de versão.",
+                            Title = "Ferramentas de automação",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201504,
+                            Block = 11,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 201500,
+                            Slug = "programabilidade-sdn",
+                            Summary = "Controladores, APIs northbound e southbound e OpenFlow.",
+                            Title = "Programabilidade e SDN",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 210003,
+                            Block = 11,
+                            Kind = 2,
+                            Order = 18,
+                            Slug = "checkpoint-administracao-redes",
+                            Summary = "Resolva questões de comandos Linux, DNS e DHCP, configurações de switch e roteador, ACL, SNMP e virtualização.",
+                            Title = "Checkpoint: questões de administração e serviços",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201600,
+                            Block = 12,
+                            Kind = 0,
+                            Order = 19,
+                            Slug = "projeto-redes",
+                            Summary = "Juntar tudo num projeto. A discursiva costuma pedir uma proposta de rede justificada.",
+                            Title = "Projeto lógico e físico de redes",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201601,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 201600,
+                            Slug = "requisitos",
+                            Summary = "Usuários, aplicações, tráfego, crescimento e restrições de orçamento.",
+                            Title = "Levantamento de requisitos",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201602,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 201600,
+                            Slug = "projeto-top-down",
+                            Summary = "Das necessidades do negócio para a tecnologia, em fases.",
+                            Title = "Metodologia top-down",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201603,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 201600,
+                            Slug = "hierarquia",
+                            Summary = "Camadas de núcleo, distribuição e acesso; redundância e alta disponibilidade.",
+                            Title = "Modelo hierárquico",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201604,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 201600,
+                            Slug = "plano-enderecamento",
+                            Summary = "Dividir a rede por setor e documentar.",
+                            Title = "Plano de endereçamento e VLANs",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201605,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 5,
+                            ParentId = 201600,
+                            Slug = "projeto-fisico",
+                            Summary = "Racks, salas, cabeamento, diagramas e memorial descritivo.",
+                            Title = "Projeto físico e documentação",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201700,
+                            Block = 12,
+                            Kind = 0,
+                            Order = 20,
+                            Slug = "seguranca-informacao",
+                            Summary = "Proteger dados e serviços. Cai muito como ataque descrito e a defesa adequada.",
+                            Title = "Segurança da informação",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201701,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 201700,
+                            Slug = "pilares",
+                            Summary = "Confidencialidade, integridade, disponibilidade, autenticidade e não repúdio.",
+                            Title = "Pilares e conceitos",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201702,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 201700,
+                            Slug = "criptografia",
+                            Summary = "Simétrica x assimétrica, hash, assinatura digital e certificados (PKI).",
+                            Title = "Criptografia",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201703,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 201700,
+                            Slug = "ataques",
+                            Summary = "Malware, phishing, DoS e DDoS, man-in-the-middle, spoofing e engenharia social.",
+                            Title = "Ataques e ameaças",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201704,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 201700,
+                            Slug = "firewall-ids",
+                            Summary = "Filtragem de pacotes, firewall com estado, detecção e prevenção de intrusão.",
+                            Title = "Firewall, IDS/IPS e DMZ",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201705,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 5,
+                            ParentId = 201700,
+                            Slug = "politicas-normas",
+                            Summary = "ISO/IEC 27001 e 27002, política de segurança, backup e a LGPD.",
+                            Title = "Políticas, normas e LGPD",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201800,
+                            Block = 12,
+                            Kind = 0,
+                            Order = 21,
+                            Slug = "tecnologias-emergentes",
+                            Summary = "O que está mudando as redes agora. Cai com texto de apoio e pede a leitura crítica.",
+                            Title = "Tecnologias emergentes",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201801,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 201800,
+                            Slug = "iot",
+                            Summary = "Dispositivos, protocolos leves (MQTT) e os desafios de segurança.",
+                            Title = "Internet das coisas",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201802,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 201800,
+                            Slug = "5g-edge",
+                            Summary = "Baixa latência, network slicing e processamento perto do usuário.",
+                            Title = "5G e computação de borda",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201803,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 201800,
+                            Slug = "ia-redes",
+                            Summary = "Detecção de anomalias e operação automatizada.",
+                            Title = "Inteligência artificial nas redes",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201804,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 201800,
+                            Slug = "tendencias",
+                            Summary = "Wi-Fi 7, zero trust, SASE e redes definidas por intenção.",
+                            Title = "Outras tendências",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201900,
+                            Block = 12,
+                            Kind = 0,
+                            Order = 22,
+                            Slug = "sustentabilidade",
+                            Summary = "TI verde: consumo de energia, descarte e o impacto ambiental da infraestrutura.",
+                            Title = "Sustentabilidade e meio ambiente",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201901,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 201900,
+                            Slug = "ti-verde",
+                            Summary = "Eficiência energética de data centers (PUE), virtualização e consolidação de servidores.",
+                            Title = "TI verde",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201902,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 201900,
+                            Slug = "residuos-eletronicos",
+                            Summary = "Descarte, logística reversa e a Política Nacional de Resíduos Sólidos.",
+                            Title = "Resíduos eletrônicos",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 201903,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 201900,
+                            Slug = "projeto-sustentavel",
+                            Summary = "Escolher equipamentos e soluções pensando no ciclo de vida.",
+                            Title = "Projeto sustentável",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 202000,
+                            Block = 12,
+                            Kind = 0,
+                            Order = 23,
+                            Slug = "gestao-governanca",
+                            Summary = "Planejar, executar e prestar contas de projetos de TI dentro da organização.",
+                            Title = "Gestão de projetos e governança corporativa",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 202001,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 202000,
+                            Slug = "gestao-projetos",
+                            Summary = "PMBOK: escopo, cronograma, custos, riscos e partes interessadas.",
+                            Title = "Gestão de projetos",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 202002,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 202000,
+                            Slug = "metodos-ageis",
+                            Summary = "Scrum e Kanban em projetos de infraestrutura.",
+                            Title = "Métodos ágeis",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 202003,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 202000,
+                            Slug = "governanca-ti",
+                            Summary = "COBIT e ITIL; alinhar a TI ao negócio.",
+                            Title = "Governança de TI",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 202004,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 202000,
+                            Slug = "riscos-continuidade",
+                            Summary = "Análise de riscos, plano de continuidade e de recuperação de desastres.",
+                            Title = "Riscos e continuidade",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 202005,
+                            Block = 12,
+                            Kind = 1,
+                            Order = 5,
+                            ParentId = 202000,
+                            Slug = "etica-legislacao",
+                            Summary = "Marco Civil da Internet, LGPD e responsabilidade profissional.",
+                            Title = "Ética e legislação",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 210004,
+                            Block = 12,
+                            Kind = 2,
+                            Order = 24,
+                            Slug = "checkpoint-projeto-redes",
+                            Summary = "Resolva questões de projeto, criptografia, ataques e governança. Escreva uma resposta discursiva propondo uma rede para um cenário.",
+                            Title = "Checkpoint: questões de projeto, segurança e gestão",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 202100,
+                            Block = 4,
+                            Kind = 0,
+                            Order = 25,
+                            Slug = "formacao-geral",
+                            Summary = "As 15 questões comuns a todos os cursos: interpretação, dados e temas da atualidade.",
+                            Title = "Formação geral",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 202101,
+                            Block = 4,
+                            Kind = 1,
+                            Order = 1,
+                            ParentId = 202100,
+                            Slug = "interpretacao-texto",
+                            Summary = "Identificar tese, argumentos e a afirmação que o texto sustenta.",
+                            Title = "Interpretação de texto",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 202102,
+                            Block = 4,
+                            Kind = 1,
+                            Order = 2,
+                            ParentId = 202100,
+                            Slug = "graficos-tabelas",
+                            Summary = "Tirar conclusões corretas de dados apresentados visualmente.",
+                            Title = "Gráficos e tabelas",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 202103,
+                            Block = 4,
+                            Kind = 1,
+                            Order = 3,
+                            ParentId = 202100,
+                            Slug = "atualidades",
+                            Summary = "Tecnologia e sociedade, inteligência artificial, meio ambiente, inclusão e direitos humanos.",
+                            Title = "Temas da atualidade",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 202104,
+                            Block = 4,
+                            Kind = 1,
+                            Order = 4,
+                            ParentId = 202100,
+                            Slug = "discursiva",
+                            Summary = "Estrutura problema → proposta → justificativa em cerca de 15 linhas.",
+                            Title = "Escrita da resposta discursiva",
+                            TrackId = 3
+                        },
+                        new
+                        {
+                            Id = 210005,
+                            Block = 4,
+                            Kind = 2,
+                            Order = 26,
+                            Slug = "checkpoint-simulado-redes",
+                            Summary = "Faça um simulado de 4 horas no mesmo horário da prova. Depois, revise só o caderno de erros até o dia do ENADE.",
+                            Title = "Checkpoint final: simulado completo",
+                            TrackId = 3
                         });
                 });
 
@@ -3853,9 +5315,22 @@ namespace EnadeAds.Data.Migrations
                             Level = 1,
                             MockExamStyle = 1,
                             Name = "ENEM 2026",
-                            Order = 2,
+                            Order = 3,
                             SecondExamDate = new DateOnly(2026, 11, 15),
                             Slug = "enem"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Basis = "Os conteúdos de Tecnologia em Redes de Computadores da Portaria Inep nº 172/2026 e a Formação Geral, na ordem sugerida de estudo.",
+                            ExamDate = new DateOnly(2026, 11, 29),
+                            ExamName = "ENADE",
+                            Label = "ENADE Redes",
+                            Level = 2,
+                            MockExamStyle = 0,
+                            Name = "ENADE 2026 · Redes de Computadores",
+                            Order = 2,
+                            Slug = "enade-redes"
                         });
                 });
 

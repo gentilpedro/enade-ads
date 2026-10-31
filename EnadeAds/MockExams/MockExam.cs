@@ -47,7 +47,7 @@ public class MockExamQuestion
 
 /// <summary>
 /// Quantas questões de cada parte o simulado pede, conforme o estilo da trilha.
-/// ENADE (Portaria Inep nº 169/2026): 15 de formação geral + 30 específicas + 1 discursiva em 4 horas.
+/// ENADE (Portarias Inep nº 169 e 172/2026, ADS e Redes): 15 de formação geral + 30 específicas + 1 discursiva em 4 horas.
 /// ENEM: 90 questões objetivas num dia de prova de 5 horas (o segundo dia), equilibradas entre as áreas;
 /// a redação não entra no simulado. No ENEM, <see cref="Specific"/> são as objetivas.
 /// </summary>

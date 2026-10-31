@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace EnadeAds.Study;
 
 /// <summary>
-/// Edição do roadmap por professores e admins. As 21 matérias (Portaria 169/2026 e Formação Geral) não
+/// Edição do roadmap por professores e admins. As matérias (da portaria ou matriz da prova, e a Formação Geral) não
 /// podem ser removidas; assuntos e checkpoints podem ser criados, editados, reordenados e removidos.
 /// Alteração de professor vai para a fila de revisão (<see cref="ReviewQueue"/>) antes de valer.
 /// </summary>

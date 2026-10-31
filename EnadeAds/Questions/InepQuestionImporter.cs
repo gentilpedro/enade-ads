@@ -17,10 +17,11 @@ public sealed class InepQuestionImporter(ApplicationDbContext db, ILogger<InepQu
 
     public static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true, Converters = { new JsonStringEnumConverter() } };
 
-    /// <summary>Pastas lidas na subida: provas do Inep (ENADE) e questões de autoria própria das outras trilhas.</summary>
+    /// <summary>Pastas lidas na subida: provas do Inep (ENADE ADS e Redes) e questões de autoria própria do ENEM.</summary>
     public static IReadOnlyList<string> DefaultFolders { get; } =
     [
         Path.Combine(AppContext.BaseDirectory, "Data", "Seed", "inep"),
+        Path.Combine(AppContext.BaseDirectory, "Data", "Seed", "redes"),
         Path.Combine(AppContext.BaseDirectory, "Data", "Seed", "enem"),
     ];
 
@@ -57,6 +58,20 @@ public sealed class InepQuestionImporter(ApplicationDbContext db, ILogger<InepQu
             }
 
             imported += await ImportAsync(exam?.Questions ?? [], Path.GetFileName(file), trackId.Value, cancellationToken);
+
+            // Formação Geral é a mesma prova para todos os cursos: o arquivo vale também para as outras trilhas do ENADE.
+            foreach (var slug in exam?.SharedWith ?? [])
+            {
+                var sharedTrackId = Tracks.IdOf(slug);
+                if (sharedTrackId is null)
+                {
+                    logger.LogError("Arquivo de questões {File} é compartilhado com a trilha {Track}, que não existe.", Path.GetFileName(file), slug);
+                    continue;
+                }
+
+                var copies = exam!.Questions.Select(q => q with { Key = SharedKey(q.Key, slug) }).ToList();
+                imported += await ImportAsync(copies, Path.GetFileName(file), sharedTrackId.Value, cancellationToken);
+            }
         }
 
         if (imported > 0)
@@ -103,6 +118,9 @@ public sealed class InepQuestionImporter(ApplicationDbContext db, ILogger<InepQu
         await db.SaveChangesAsync(cancellationToken);
         return added;
     }
+
+    /// <summary>Chave da cópia de uma questão compartilhada: cada trilha tem a sua questão, com respostas e correções próprias.</summary>
+    public static string SharedKey(string key, string trackSlug) => $"{key}@{trackSlug}";
 
     public static string? Validate(SeedQuestion seed, IReadOnlyDictionary<string, int> subjects)
     {
@@ -165,7 +183,8 @@ public sealed class InepQuestionImporter(ApplicationDbContext db, ILogger<InepQu
 }
 
 /// <param name="Track">Slug da trilha das questões; sem ele, ENADE ADS (os arquivos do Inep vieram antes das trilhas).</param>
-public sealed record SeedExam(int Year, IReadOnlyList<SeedQuestion> Questions, string? Track = null);
+/// <param name="SharedWith">Outras trilhas que recebem uma cópia das questões, como a Formação Geral do ENADE.</param>
+public sealed record SeedExam(int Year, IReadOnlyList<SeedQuestion> Questions, string? Track = null, IReadOnlyList<string>? SharedWith = null);
 
 public sealed record SeedQuestion(
     string Key,

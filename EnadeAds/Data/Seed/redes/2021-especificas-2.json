@@ -1,0 +1,456 @@
+{
+  "year": 2021,
+  "track": "enade-redes",
+  "questions": [
+    {
+      "key": "enade-2021-redes-q21",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 21 (Inep)",
+      "kind": "Objective",
+      "subject": "virtualizacao",
+      "statement": "Contêineres e VMs (virtual machines, ou máquinas virtuais) são simplesmente maneiras diferentes de criar e usar recursos de computação — geralmente processadores, memória e dispositivos de entrada e saída — que já estão presentes em um computador físico. Embora o objetivo da virtualização por meio de máquinas virtuais seja essencialmente o mesmo que os contêineres, o resultado são duas abordagens notavelmente diferentes que oferecem algumas características e vantagens exclusivas para cargas de trabalho corporativas.\n\nBIGELOW, S. J. B. **Containers vs. VMs**: What is the difference? Disponível em: https://searchservervirtualization.techtarget.com/answer/Containers-vs-VMs-Whats-the-difference. Acesso em: 23 maio 2020 (adaptado).\n\nA respeito das características das duas abordagens citadas no texto, avalie as afirmações a seguir.\n\nI. Os contêineres podem empacotar o código de uma aplicação e todas as suas dependências, o que possibilita maior granularidade, escalabilidade e portabilidade do que as máquinas virtuais.\n\nII. Os contêineres compartilham o kernel do sistema operacional com outros processos, mas não podem ser limitados quanto ao uso de recursos, tais como CPU, RAM ou dispositivos de entrada/saída.\n\nIII. Os contêineres são vantajosos por oferecerem um grau mais alto de isolamento e segurança do que as máquinas virtuais, devido ao fato de que os primeiros executam no mesmo kernel do sistema operacional.\n\nÉ correto o que se afirma em",
+      "options": [
+        {
+          "text": "I, apenas.",
+          "explanation": "Correta. A imagem do contêiner leva a aplicação com bibliotecas e dependências, sem um sistema operacional inteiro, o que a torna leve, portátil e fácil de escalar em pequenas unidades. II e III erram sobre limite de recursos e isolamento."
+        },
+        {
+          "text": "II, apenas.",
+          "explanation": "A II está errada: contêineres podem, sim, ter CPU, memória e E/S limitados, por meio dos cgroups do kernel Linux (por exemplo, docker run --memory e --cpus)."
+        },
+        {
+          "text": "I e III, apenas.",
+          "explanation": "A III está errada: compartilhar o kernel do hospedeiro reduz o isolamento, pois uma falha no kernel afeta todos os contêineres. Máquinas virtuais, com kernel próprio sobre o hipervisor, isolam mais."
+        },
+        {
+          "text": "II e III, apenas.",
+          "explanation": "As duas estão erradas: os cgroups limitam recursos de contêineres, e o kernel compartilhado torna o isolamento do contêiner menor, não maior, que o de uma VM."
+        },
+        {
+          "text": "I, II e III.",
+          "explanation": "Só a I está correta. Contêineres podem ter recursos limitados (cgroups) e isolam menos que VMs justamente por dividir o kernel."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "key": "enade-2021-redes-q22",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 22 (Inep)",
+      "kind": "Objective",
+      "subject": "tcp-ip",
+      "statement": "Em uma arquitetura cliente-servidor, para que uma aplicação ou serviço seja acessado, é necessário que uma comunicação seja estabelecida entre aquele que necessita (cliente) e aquele que disponibiliza o recurso (servidor).\n\nConsiderando o texto apresentado, avalie as asserções a seguir e a relação proposta entre elas.\n\nI. Quando um programador desenvolve uma aplicação ou serviço de rede, é necessário utilizar um socket para unir o endereço IP da interface de rede com uma porta específica.\n\nPORQUE\n\nII. O socket possibilita ao sistema operacional identificar qual porta a aplicação está respondendo, permitindo que o fluxo de dados seja entregue corretamente.\n\nA respeito dessas asserções, assinale a opção correta.",
+      "options": [
+        {
+          "text": "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
+          "explanation": "Correta. O socket é a interface do sistema operacional que associa um endereço IP a uma porta (a chamada bind); e é justamente por essa associação que o sistema sabe para qual processo entregar os segmentos que chegam, o que justifica a I."
+        },
+        {
+          "text": "As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.",
+          "explanation": "A II não é um fato solto: a necessidade de usar socket (I) existe exatamente porque é por ele que o sistema operacional associa a porta à aplicação e demultiplexa os dados recebidos. Portanto a II justifica a I."
+        },
+        {
+          "text": "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.",
+          "explanation": "A II é verdadeira: o par IP e porta registrado no socket é o que o sistema operacional usa para entregar os dados ao processo correto."
+        },
+        {
+          "text": "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.",
+          "explanation": "A I é verdadeira: aplicações de rede usam a API de sockets para vincular um endereço IP a uma porta e enviar ou receber dados."
+        },
+        {
+          "text": "As asserções I e II são proposições falsas.",
+          "explanation": "As duas asserções descrevem corretamente o papel do socket como ponto de comunicação identificado por IP e porta."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "key": "enade-2021-redes-q23",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 23 (Inep)",
+      "kind": "Objective",
+      "subject": "servicos-rede",
+      "statement": "Ambientes computacionais geram informações que precisam de armazenamento e tratamento adequados. Para tal, existem os servidores de banco de dados, que são dedicados ao recebimento, armazenamento e classificação dos dados produzidos durante a execução de atividades cotidianas. No entanto, os SGBD (Sistemas de Gerenciamento de Banco de Dados) precisam interpretar comandos padronizados para fazer buscas a registros já existentes, inserir novos dados, modifica-los ou excluí-los.\n\nConsiderando o texto acima, avalie as afirmações a seguir, acerca dos bancos de dados.\n\nI. São softwares populares e bastante difundidos de banco de dados o oracle, o postgresql, o bind, o mysql e o sql server.\n\nII. Os comandos que manipulam banco de dados relacionais e suas informações fazem parte da linguagem Structured Query Language.\n\nIII. Um comando específico para modificação de um registro localizado em um banco de dados é o update.\n\nIV. Um registro específico pode ser encontrado, desde que o comando select seja utilizado em conjunto com os parâmetros adequados.\n\nV. Os dados ficam guardados dentro de campos com atributos específicos em relação direta com o tipo de dados que irão armazenar.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "II e IV.",
+          "explanation": "II e IV estão corretas, mas III e V também: UPDATE é o comando de alteração de registros e cada coluna tem um tipo de dado definido."
+        },
+        {
+          "text": "I, II e V.",
+          "explanation": "A I está errada: o BIND é um servidor DNS, não um SGBD. Oracle, PostgreSQL, MySQL e SQL Server são bancos de dados."
+        },
+        {
+          "text": "I, III e IV.",
+          "explanation": "Inclui a I, que está errada por citar o BIND (servidor de nomes) como banco de dados, e omite II e V, que estão corretas."
+        },
+        {
+          "text": "I, III e V.",
+          "explanation": "Inclui a I, errada por listar o BIND, que é software de DNS. Também deixa de fora a II e a IV, que estão corretas."
+        },
+        {
+          "text": "II, III, IV e V.",
+          "explanation": "Correta. SQL é a linguagem dos bancos relacionais, UPDATE altera registros, SELECT com WHERE localiza um registro específico e cada campo é declarado com um tipo de dado. Só a I erra ao incluir o BIND, que é servidor DNS."
+        }
+      ],
+      "correct": "E"
+    },
+    {
+      "key": "enade-2021-redes-q24",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 24 (Inep)",
+      "kind": "Objective",
+      "subject": "seguranca-informacao",
+      "statement": "Uma empresa acrescentou, em seu documento intitulado Políticas de Segurança da Informação, uma seção dedicada às políticas de segurança em redes sem fio 802.11. Nesse documento, foram definidos, entre outros, os requisitos a seguir.\n\n1) Todos os usuários da rede sem fio deverão ser autenticados de forma segura e centralizada para obter acesso à rede.\n\n2) Todas as conexões à rede sem fio deverão utilizar protocolo de criptografia com chave mínima de 256 bits.\n\n3) Todas as conexões à rede sem fio deverão utilizar protocolos de autenticação mútua segura entre a estação e a rede.\n\nConsiderando os requisitos 1, 2 e 3, estabelecidos por essa empresa, avalie as afirmações a seguir.\n\nI. Adquirir e habilitar um WIPS (Wireless Intrusion Prevent System, Sistema de Prevenção de Intrusão Sem Fio) é suficiente para a empresa atender o requisito 3.\n\nII. Criar uma segunda identificação de rede (SSID), exclusiva para os dispositivos de uso particular, separada da rede da empresa com firewall, é suficiente para que o requisito 1 seja atendido.\n\nIII. Instalar um servidor RADIUS com o protocolo 802.11i, usando o protocolo EAP-FAST, PEAP ou EAP-TLS como protocolo de autenticação, é suficiente para atender os requisitos 1 e 3.\n\nIV. Configurar, nos pontos de acesso, o protocolo de segurança WPA2-Enterprise com criptografia AES, é suficiente para que o reguisito 2 seja atendido.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e II.",
+          "explanation": "As duas estão erradas: o WIPS monitora o espectro e bloqueia APs e ataques indevidos, mas não autentica estação e rede mutuamente; e separar SSIDs com firewall segmenta o tráfego sem criar autenticação centralizada de usuários."
+        },
+        {
+          "text": "I e III.",
+          "explanation": "A III está correta, mas a I não: WIPS é ferramenta de detecção e contenção de ameaças, não um protocolo de autenticação mútua como os métodos EAP."
+        },
+        {
+          "text": "III e IV.",
+          "explanation": "Correta segundo o gabarito. RADIUS com 802.1X/802.11i e EAP-TLS, PEAP ou EAP-FAST centraliza a autenticação e autentica a rede para o cliente (por certificado do servidor), atendendo 1 e 3; e WPA2-Enterprise com AES foi aceito pela banca para o requisito 2, já que a chave mestra derivada no 802.1X tem 256 bits (a cifra AES-CCMP em si usa chave de 128 bits)."
+        },
+        {
+          "text": "I, II e IV.",
+          "explanation": "Inclui I e II, que estão erradas: WIPS não faz autenticação mútua e um SSID separado por firewall não autentica usuários de forma centralizada. Também omite a III."
+        },
+        {
+          "text": "II, III e IV.",
+          "explanation": "Inclui a II, que está errada: criar outro SSID isolado por firewall apenas separa redes, sem autenticar cada usuário em um servidor central."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2021-redes-q25",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 25 (Inep)",
+      "kind": "Objective",
+      "subject": "seguranca-informacao",
+      "statement": "Uma rede hipotética que usa autenticação de usuários baseada no Windows Active Directory foi configurada de tal forma que existem três perímetros, representados na figura por REDE A, REDE B e REDE C, e que são interligados por um Firewall. Cada perímetro tem como característica isolar logicamente seus componentes com o objetivo de permitir que sejam implementadas medidas protetivas de segurança da informação.\n\n![Internet ligada a um Firewall central que interliga três perímetros: REDE A, com o Servidor Web; REDE B, com o Servidor Proxy, desenhada junto à ligação com a Internet; e REDE C, uma rede local em barramento com um Controlador de Domínio, duas Estações de Trabalho e uma Impressora de Rede](img/inep/redes/2021/q25-1.png)\n\nConsiderando os componentes que formam a topologia de rede descrita, avalie as afirmações a seguir.\n\nI. O Servidor Proxy está atuando como Proxy Reverso, ou seja, ele consulta o Servidor Web em nome dos clientes da Internet.\n\nII. O Servidor Web deveria estar conectado na REDE B em vez da REDE A, pois a REDE B é a única que está conectada na Internet.\n\nIII. Na REDE C existe apenas um Controlador de Domínio, quando o recomendado é no mínimo dois, o que confere alta disponibilidade na autenticação de usuários na rede.\n\nIV. O Firewall que divide a rede em três perímetros pode implementar regras de tráfego diferentes para cada rede.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I e III.",
+          "explanation": "I e III estão corretas, mas falta a IV: um firewall com várias interfaces aplica políticas distintas para cada segmento, que é a razão de dividir a rede em perímetros."
+        },
+        {
+          "text": "II e III.",
+          "explanation": "A II está errada: manter o Servidor Web em um perímetro próprio, alcançado só pelo proxy reverso, é uma boa prática de defesa em camadas. Além disso, todas as redes chegam à Internet através do firewall."
+        },
+        {
+          "text": "II e IV.",
+          "explanation": "Inclui a II, errada, pois isolar o servidor Web atrás do proxy reverso protege o servidor, e omite I e III, que estão corretas."
+        },
+        {
+          "text": "I, II e IV.",
+          "explanation": "Inclui a II, que está errada: não há necessidade de expor o Servidor Web na mesma rede do proxy; o proxy reverso existe justamente para receber as requisições externas e repassá-las ao servidor protegido."
+        },
+        {
+          "text": "I, III e IV.",
+          "explanation": "Correta. O proxy na REDE B recebe as requisições da Internet e as repassa ao Servidor Web (proxy reverso); um único controlador de domínio é ponto único de falha, por isso se recomendam pelo menos dois; e o firewall pode aplicar regras específicas para cada perímetro."
+        }
+      ],
+      "correct": "E"
+    },
+    {
+      "key": "enade-2021-redes-q26",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 26 (Inep)",
+      "kind": "Objective",
+      "subject": "ieee-802",
+      "statement": "O padrão IEEE 802.1D define uma opção de protocolo da família Spanning Tree Protocol (STP), denominada Rapid Spanning Tree Protocol (RSTP), cuja diferença com relação ao STP reside na maior rapidez para a recuperação da conectividade em caso de falhas na rede. O objetivo principal desses protocolos é, com base em um processo dinâmico, eliminar loops em uma rede ethernet bridge contendo loops físicos, com a negociação de caminhos livres através do switch raiz. Esse resultado é obtido pelo bloqueio lógico de uma ou mais portas físicas em um switch, que podem assumir diferentes funções, para evitar que ocorram loops.\n\nENNE, A. J.; FERRAZ, C. H.; WANDERLEY, B. L. **Novas tecnologias de redes ethernet.** São Paulo: GEN LTC, 2017 (adaptado).\n\n![Três switches em triângulo: S1 é o switch raiz. S3 liga-se a S1 (porta D no lado de S3, porta B no lado de S1); S2 liga-se a S1 (porta C no lado de S2) e a S3 (porta A no lado de S2)](img/inep/redes/2021/q26-1.png)\n\nConsiderando as informações apresentadas no texto e a topologia de rede configurada para RSTP apresentada na figura, quais são, respectivamente, as funções possíveis para as portas A, B, C e D?",
+      "options": [
+        {
+          "text": "Alternativa, designada, raiz, raiz.",
+          "explanation": "Correta. C e D são as portas de S2 e S3 voltadas para o switch raiz, portanto portas raiz; B pertence ao switch raiz, cujas portas são sempre designadas; no enlace S2–S3 uma das pontas fica designada e a outra bloqueada, e A pode ser essa porta alternativa, com caminho de reserva até a raiz."
+        },
+        {
+          "text": "Designada, alternativa, raiz, raiz.",
+          "explanation": "B é porta do próprio switch raiz, e todas as portas ativas da raiz são designadas; ela nunca pode ser alternativa."
+        },
+        {
+          "text": "Alternativa, raiz, designada, raiz.",
+          "explanation": "B está no switch raiz, que não possui porta raiz (ele é a referência da árvore). E C, que liga S2 diretamente à raiz, é o melhor caminho de S2, portanto porta raiz, não designada."
+        },
+        {
+          "text": "Designada, raiz, alternativa, raiz.",
+          "explanation": "Erra em B e C: o switch raiz não tem porta raiz, e a porta C, ligação direta de S2 com S1, é a porta raiz de S2. Bloquear C forçaria S2 a usar um caminho mais longo via S3."
+        },
+        {
+          "text": "Raiz, raiz, alternativa, designada.",
+          "explanation": "Erra em B e D: o switch raiz não tem porta raiz, e D é a ligação direta de S3 com a raiz, logo sua porta raiz. Cada switch não raiz tem exatamente uma porta raiz."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "key": "enade-2021-redes-q27",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 27 (Inep)",
+      "kind": "Objective",
+      "subject": "servicos-rede",
+      "statement": "Redes de computadores são conglomerados de equipamentos interligados com a finalidade de compartilhar recursos. No entanto, o acesso a esses recursos deve ser controlado e disponibilizado a usuários específicos, com privilégios bem definidos sobre estes itens, tais quais pastas, arquivos, impressoras, entre outros. Em uma rede grande, com muitos recursos, muitos usuários e regras claras e rígidas de acesso à informação, é necessária a utilização de técnicas de manipulação em massa que otimizem a gestão. A gerência eficiente pressupõe o acompanhamento e a adoção das técnicas atuais, sempre observando as boas práticas de mercado, o que engloba o uso de ferramentas e metodologias que possibilitem menor trabalho e maiores resultados com bom grau de gestão e segurança. Tais definições e recomendações podem ser encontradas nas normas da família ABNT NBR ISO/IEC 2700X.\n\nConsiderando a gestão otimizada e segura de usuários e compartilhamentos, avalie as afirmações a seguir.\n\nI. É boa prática ter o serviço de DNS (Domain Naming System) com definições permissivas de transferência de zona para qualquer host.\n\nII. É aconselhável a utilização de serviço de endereçamento DHCP (Dynamic Host Configuration Protocol) com reserva e filtro permissivo baseado em endereço MAC.\n\nIII. Fazer as definições de privilégios de acesso baseados em grupos, a recursos como pastas, por exemplo, facilitam a gerência.\n\nÉ correto o que se afirma em",
+      "options": [
+        {
+          "text": "I, apenas.",
+          "explanation": "A I está errada: liberar transferência de zona (AXFR) para qualquer host entrega a um atacante o mapa completo de nomes e endereços da rede. Ela deve ser restrita aos servidores secundários autorizados."
+        },
+        {
+          "text": "III, apenas.",
+          "explanation": "A III está correta, mas a II também: reservas de DHCP e filtro de permissão por MAC (lista de dispositivos autorizados, como o filtro Allow do DHCP do Windows Server) centralizam o endereçamento e controlam quais máquinas recebem configuração."
+        },
+        {
+          "text": "I e II, apenas.",
+          "explanation": "Inclui a I, que está errada: transferência de zona aberta a qualquer host vaza toda a estrutura do DNS. Também omite a III, que está correta."
+        },
+        {
+          "text": "II e III, apenas.",
+          "explanation": "Correta. O DHCP com reservas e filtro de permissão por endereço MAC garante endereços previsíveis e só atende dispositivos cadastrados, e conceder privilégios a grupos, e não a usuários isolados, simplifica a gestão. A I contraria a boa prática de restringir a transferência de zona aos servidores secundários."
+        },
+        {
+          "text": "I, II e III.",
+          "explanation": "A I está errada: a transferência de zona deve ser permitida apenas aos servidores DNS secundários autorizados, nunca a qualquer host."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2021-redes-q28",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 28 (Inep)",
+      "kind": "Objective",
+      "subject": "tcp-ip",
+      "statement": "O protocolo RTP (Real Time Protocol, ou Protocolo de Tempo Real) é um dos protocolos usados nas transmissões em tempo real na Internet. Cada pacote RTP contendo um pedaço de uma mensagem multimídia codificada é encapsulado em um datagrama IP na origem e, ao chegar no destino, o conteúdo é reproduzido. Nesse cenário, um pacote íntegro será descartado no receptor se chegar atrasado, caracterizando as aplicações multimídia em tempo real como sensíveis ao atraso de pacotes.\n\nCAMARILLO, G. **SIP Demystified**. New York: Mc-Graw Hill, 2002 (adaptado).\n\nAcerca do funcionamento do protocolo RTP, avalie as asserções a seguir e a relação proposta entre elas.\n\nI. Para lidar com possíveis atrasos de pacotes em trânsito na Internet, o protocolo RTP fornece um mecanismo para garantir a entrega de dados a tempo no destino.\n\nPORQUE\n\nII. Os roteadores conseguem distinguir e tratar datagramas IP que carregam pacotes RTP e assim estabelecer um esquema de QoS (Quality of Services, ou Qualidade de Serviços).\n\nA respeito dessas asserções, assinale a opção correta.",
+      "options": [
+        {
+          "text": "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
+          "explanation": "A I é falsa: o RTP não garante entrega nem prazo. Ele só fornece número de sequência, carimbo de tempo e identificação da mídia para que o receptor reordene e sincronize a reprodução."
+        },
+        {
+          "text": "As asserções I e II são proposições verdadeiras, mas a II não é uma justificativa correta da I.",
+          "explanation": "Nenhuma das duas é verdadeira. O RTP não garante entrega a tempo e os roteadores não reconhecem o RTP, que vai como carga útil de datagramas UDP."
+        },
+        {
+          "text": "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.",
+          "explanation": "A I é falsa: o RTP roda sobre UDP, sem reserva de recursos nem retransmissão, e portanto não garante que os dados cheguem no prazo."
+        },
+        {
+          "text": "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.",
+          "explanation": "A II é falsa: para o roteador, o RTP é só carga útil de UDP. QoS na rede depende de mecanismos próprios, como marcação DSCP (DiffServ) ou reserva com RSVP, e não de o roteador identificar o RTP."
+        },
+        {
+          "text": "As asserções I e II são proposições falsas.",
+          "explanation": "Correta. O RTP apenas identifica o tipo de mídia, numera e carimba os pacotes no tempo, sem garantir entrega ou prazo; e os roteadores tratam o RTP como qualquer carga UDP, pois QoS exige marcação ou reserva de recursos feitas por outros mecanismos."
+        }
+      ],
+      "correct": "E"
+    },
+    {
+      "key": "enade-2021-redes-q29",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 29 (Inep)",
+      "kind": "Objective",
+      "subject": "virtualizacao",
+      "statement": "Redes Definidas por Software (SDN) permitem que administradores de redes gerenciem os serviços da rede de uma maneira mais simples, com uma maior abstração da funcionalidade em baixo nível da rede, isso é feito através da virtualização. O que evita ter que configurar o hardware manualmente. Para fazer essa abstração, a SDN realiza uma separação em dois planos e requer um dispositivo controlador.\n\nConsiderando as informações apresentadas, assinale a alternativa que descreve corretamente a denominação dos dois planos mencionados.",
+      "options": [
+        {
+          "text": "Dados e controle",
+          "explanation": "Correta. A SDN separa o plano de controle, que decide como o tráfego deve ser tratado e fica centralizado no controlador, do plano de dados, que apenas encaminha os pacotes nos switches conforme as regras recebidas (por exemplo, via OpenFlow)."
+        },
+        {
+          "text": "Controle e fluxo",
+          "explanation": "Fluxo é a unidade de tráfego que recebe regras nas tabelas de fluxo do OpenFlow, não um dos planos da arquitetura. O plano que encaminha pacotes é o de dados."
+        },
+        {
+          "text": "Fluxo e gerenciamento",
+          "explanation": "Nenhum dos dois é o par separado pela SDN. A separação essencial é entre o plano de controle (decisão) e o plano de dados (encaminhamento)."
+        },
+        {
+          "text": "Dados e gerenciamento",
+          "explanation": "O plano de gerenciamento existe (configuração e monitoramento), mas a separação que caracteriza a SDN é a do plano de controle, levado ao controlador, em relação ao plano de dados."
+        },
+        {
+          "text": "Gerenciamento e controle",
+          "explanation": "Falta o plano de dados, que é onde os pacotes são efetivamente encaminhados. A SDN retira o controle dos equipamentos e deixa neles só o plano de dados."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "key": "enade-2021-redes-q30",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 30 (Inep)",
+      "kind": "Objective",
+      "subject": "tecnologias-emergentes",
+      "statement": "Considera-se, no perfil dos profissionais da área de comunicação de dados, a busca de conhecimentos técnicos e transversais para avaliar e implementar tecnologias emergentes em redes de computadores. Nesse sentido, associar redes de sensores sem fio aplicadas a Internet das Coisas, Internet of Things (IoT), é uma das questões a serem resolvidas na implementação de tecnologias emergentes em redes de computadores.\n\nConsiderando as informações do texto e a importância das tecnologias emergentes, avalie as afirmações a seguir.\n\nI. O padrão IEEE 802.15.4 é utilizado nas redes de sensores sem fio por atender a requisitos de baixa taxa de transmissão de dados e uso eficiente da energia dos dispositivos.\n\nII. Uma Wireless Sensor Network (WSN), conhecida como Rede de Sensores Sem Fio (RSSF), é composta por dispositivos autônomos e distribuídos que utilizam sensores para monitorar condições físicas e ambientais.\n\nIII. As redes de sensores sem fio fornecem aplicações para IoT, com o uso do padrão IEEE 802.11 sendo utilizado para criar redes que requerem uma baixa taxa de transferência de dados e o uso eficiente de energia.\n\nÉ correto o que se afirma em",
+      "options": [
+        {
+          "text": "I, apenas.",
+          "explanation": "A I está correta, mas a II também: uma RSSF é formada por nós autônomos e distribuídos com sensores que monitoram grandezas físicas e ambientais."
+        },
+        {
+          "text": "III, apenas.",
+          "explanation": "A III está errada: o 802.11 (Wi-Fi) foi feito para altas taxas e consome muita energia. O padrão de baixa taxa e baixo consumo usado em sensores é o 802.15.4."
+        },
+        {
+          "text": "I e II, apenas.",
+          "explanation": "Correta. O 802.15.4 (base de ZigBee, 6LoWPAN e Thread) foi projetado para baixa taxa e baixo consumo, e as RSSF são compostas por nós autônomos com sensores. A III atribui erradamente essas características ao 802.11."
+        },
+        {
+          "text": "II e III, apenas.",
+          "explanation": "Inclui a III, que está errada por associar o Wi-Fi (802.11) a baixa taxa e economia de energia, e omite a I, que está correta."
+        },
+        {
+          "text": "I, II e III.",
+          "explanation": "A III está errada: as características de baixa taxa e eficiência energética são do 802.15.4, não do 802.11."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2021-redes-q31",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 31 (Inep)",
+      "kind": "Objective",
+      "subject": "sustentabilidade",
+      "statement": "Uma das métricas mais utilizadas para medir a eficiência energética em datacenters é denominada PUE (Power Usage Effectiveness), a qual define a eficiência energética como a razão entre o consumo total de energia de um datacenter (Edc) e o consumo dos equipamentos de TI (Eti), ou seja, PUE = Edc / Eti. Quanto mais eficiente é a infraestrutura elétrica menor será esse valor. Valores de PUE próximos a 1,0 indicam alta eficiência energética, sendo que, para o Brasil, este valor está na faixa de 2,0, e dificilmente atingiria PUE abaixo de 1,3. Já em regiões mais frias durante o ano todo a PUE pode chegar até 1,1.\n\nFACCIONI FILHO, M. **Gestão da infraestrutura do datacenter**. 1. ed. Palhoça: UnisulVirtual, 2016 (adaptado).\n\nConsiderando que, atualmente, os equipamentos de TI suportam temperaturas ambientes bastante altas, assinale a opção correta.",
+      "options": [
+        {
+          "text": "Desde que dentro dos limites estabelecidos pelo fabricante, a temperatura de operação mais alta dos equipamentos de TI favorece a redução da PUE.",
+          "explanation": "Correta. Operar com o ar mais quente, dentro do limite do fabricante, reduz o trabalho dos chillers e permite mais horas de resfriamento livre (free cooling). Cai o consumo de refrigeração, que está no numerador, e a PUE se aproxima de 1."
+        },
+        {
+          "text": "Substituir a computação tradicional de um datacenter pela virtualização não favorece a redução dos valores de PUE.",
+          "explanation": "A banca considera falsa: a consolidação por virtualização reduz servidores e calor gerado e permite redimensionar refrigeração e energia, contribuindo para melhorar a eficiência. Note que, se a infraestrutura não for ajustada, a PUE pode até piorar, porque o denominador (TI) diminui."
+        },
+        {
+          "text": "Limites superiores mais altos na operação dos equipamentos de TI resultam em maior uso de refrigeração.",
+          "explanation": "É o contrário: se o equipamento aceita temperatura mais alta, o ar não precisa ser resfriado tanto, e o sistema de refrigeração trabalha menos."
+        },
+        {
+          "text": "Valores de PUE abaixo de 1,0 são possíveis de serem alcançados com a utilização de fontes renováveis.",
+          "explanation": "Como o consumo total sempre inclui o consumo de TI, a razão Edc/Eti é no mínimo 1,0. A origem da energia não muda essa conta."
+        },
+        {
+          "text": "Energia elétrica gerada por meio de fontes renováveis não são consideradas nos cálculos de PUE.",
+          "explanation": "A PUE soma toda a energia consumida pelo datacenter, qualquer que seja a fonte. A origem renovável é avaliada por outras métricas, como CUE (carbono) ou fator de energia renovável."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "key": "enade-2021-redes-q32",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 32 (Inep)",
+      "kind": "Objective",
+      "subject": "gestao-governanca",
+      "statement": "Um auditor de TI deve ter um forte entendimento das técnicas de controle interno para cobrir muitas das tecnologias e processos presentes na empresa, e para tal deve usar os controles gerais de TI que cobrem todos os aspectos das operações de TI, como atividades de processamento, acesso a programas e dados, desenvolvimento e alterações de programas, controles de rede e muitos outros. Estes controles estão organizados em uma hierarquia dividida em três grupos de TI: Controles Gerais de Governança; Controles Gerais de Gerenciamento; e Controles Gerais de Ambiente Técnico.\n\nMOELLER, R. **IT audit, control, and security**. New Jersey: John Wiley & Sons Inc., 2010 (adaptado)\n\nA respeito dos controles gerais de TI, avalie as afirmações a seguir.\n\nI. Fazem parte do grupo de Governança de TI os controles que envolvem a garantia de princípios, políticas e processos eficazes de gerenciamento e segurança.\n\nII. Fazem parte do grupo de Gerenciamento de TI os controles que cobrem áreas como desenvolvimento de sistemas, aquisição de software, documentação e procedimentos de controle.\n\nIII. Fazem parte do grupo de Ambiente Técnico de TI os controles que permitem uma compreensão da organização, seus procedimentos de controle estabelecidos e os deveres e responsabilidades especializados de qualquer operação.\n\nÉ correto o que se afirma em",
+      "options": [
+        {
+          "text": "I, apenas.",
+          "explanation": "A I está correta, mas a II também: desenvolvimento, aquisição de software, documentação e procedimentos são justamente atividades gerenciais de TI."
+        },
+        {
+          "text": "III, apenas.",
+          "explanation": "A III está errada: entender a organização, seus procedimentos e responsabilidades é tema de governança e gestão. O ambiente técnico trata dos controles da infraestrutura, como sistemas operacionais, bancos de dados e rede."
+        },
+        {
+          "text": "I e II, apenas.",
+          "explanation": "Correta. Governança define princípios, políticas e processos; gerenciamento cobre desenvolvimento, aquisição, documentação e procedimentos. A III atribui ao ambiente técnico um conteúdo organizacional que não é dele."
+        },
+        {
+          "text": "II e III, apenas.",
+          "explanation": "Inclui a III, que está errada (o ambiente técnico cobre controles da infraestrutura tecnológica, não a compreensão da organização), e omite a I."
+        },
+        {
+          "text": "I, II e III.",
+          "explanation": "A III descreve aspectos organizacionais, que não pertencem aos controles de ambiente técnico, voltados à infraestrutura (servidores, redes, bancos de dados)."
+        }
+      ],
+      "correct": "C"
+    },
+    {
+      "key": "enade-2021-redes-q33",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 33 (Inep)",
+      "kind": "Objective",
+      "subject": "redes-sem-fio",
+      "statement": "O padrão 802.11, conhecido como tecnologia de rede local sem fio, provê conectividade à rede para dispositivos dos mais diversos e oferece mobilidade. Existe uma tendência mundial de respeito a requisitos como inclusão digital e disponibilidade de conectividade à Internet em todos os locais públicos. Neste cenário, é necessário implementar políticas que definam normas de utilização das redes que permitam serem auditadas com o intuito de controlar e verificar o acesso. Entretanto, ainda existem muitas redes sem fio públicas que não atendem esse tipo de requisito. Uma das dificuldades na implementação é como realizar o cadastramento do elevado número de usuários que utilizam a rede.\n\nAcerca do texto apresentado, avalie as asserções a seguir e a relação proposta entre elas.\n\nI. Uma das soluções possíveis para atender as políticas de segurança e contornar a dificuldade apresentada é a implantação do serviço Web conhecido como Captive Portal.\n\nPORQUE\n\nII. Em um serviço Web, com este propósito, o usuário faz seu cadastro inserindo dados pessoais que serão utilizados para autenticação e uso da rede sem fio, possibilitando que toda sua atividade seja registrada para futuras auditorias.\n\nA respeito dessas asserções, assinale a opção correta.",
+      "options": [
+        {
+          "text": "As asserções I e II são proposições verdadeiras, e a II é uma justificativa correta da I.",
+          "explanation": "Correta. O captive portal intercepta o primeiro acesso Web e exige que o próprio usuário se cadastre e se autentique antes de liberar a rede; isso resolve o cadastramento em massa e associa o tráfego a uma identidade, permitindo auditoria. É exatamente o que a II descreve."
+        },
+        {
+          "text": "As asserções I e II são proposições verdadeiras, mas a II não é justificativa correta da I.",
+          "explanation": "A II explica por que o captive portal resolve o problema do texto: o autocadastro elimina o trabalho de cadastrar usuários e a autenticação vincula o uso a uma pessoa para auditoria. Logo, há justificativa."
+        },
+        {
+          "text": "A asserção I é uma proposição verdadeira, e a II é uma proposição falsa.",
+          "explanation": "A II é verdadeira: o captive portal coleta dados no cadastro, autentica o usuário e permite registrar sessões e acessos para auditoria."
+        },
+        {
+          "text": "A asserção I é uma proposição falsa, e a II é uma proposição verdadeira.",
+          "explanation": "A I é verdadeira: captive portal é uma solução usual em Wi-Fi público justamente para autenticar e identificar usuários sem cadastro prévio feito pelo administrador."
+        },
+        {
+          "text": "As asserções I e II são proposições falsas.",
+          "explanation": "As duas são verdadeiras: o captive portal é solução adequada e funciona por autocadastro e autenticação Web com registro das atividades."
+        }
+      ],
+      "correct": "A"
+    },
+    {
+      "key": "enade-2021-redes-q34",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 34 (Inep)",
+      "kind": "Objective",
+      "subject": "redes-wan",
+      "statement": "As empresas têm revisado suas políticas de segurança da informação de modo a adotar novas tecnologias que aumentem a segurança, principalmente, em situações que envolvam reuniões por webconferência. Considerando este cenário, a tecnologia de redes virtuais privadas (VPN – Virtual Private Network) são bastante utilizadas para aumentar o nível de segurança dos dados que trafegam na rede pública.\n\nNo que se refere a VPN, avalie as afirmações a seguir.\n\nI. As VPNs criam túneis na rede pública que permitem conectar diferentes unidades organizacionais, compartilhar informações e conectar funcionários em atividades remotas às plataformas corporativas, oferecendo criptografia forte para fornecer segurança de dados e autenticação forte para limitar o acesso a aplicativos com base em políticas de segurança definidas.\n\nII. As soluções de implementação VPN atuam em diferentes camadas da arquitetura OSI, por exemplo, o Internet Protocol Security (IPSec) atua na camada de rede, enquanto o Secure Sockets Layer (SSL) atua na camada de aplicação.\n\nIII. A VPN IPsec normalmente permite acesso remoto a todos os dispositivos e serviços oferecidos em uma rede e seu protocolo faz parte do conjunto TCP/IP, sendo implementado como um componente padrão dos sistemas operacionais que suportam o IPv6.\n\nIV. Como na VPN IPSec, a VPN SSL também oferece acesso a todos os recursos da rede privada, sendo que sua principal diferença é a dependência do TLS, que é incorporado por padrão em navegadores da Web.\n\nÉ correto o que se afirma em",
+      "options": [
+        {
+          "text": "I, apenas.",
+          "explanation": "A I está correta, mas II e III também: IPsec e SSL/TLS atuam em camadas diferentes, e o IPsec dá acesso amplo à rede e faz parte da pilha IPv6."
+        },
+        {
+          "text": "II e IV, apenas.",
+          "explanation": "A IV está errada: a principal diferença da VPN SSL é justamente dar acesso granular a aplicações específicas (em geral via portal no navegador), e não a toda a rede como a VPN IPsec."
+        },
+        {
+          "text": "III e IV, apenas",
+          "explanation": "Inclui a IV, que está errada (VPN SSL costuma restringir o acesso a aplicações publicadas), e omite I e II, que estão corretas."
+        },
+        {
+          "text": "I, II e III, apenas.",
+          "explanation": "Correta. VPNs tunelam e cifram o tráfego com autenticação forte; o IPsec opera na camada de rede e o SSL/TLS acima do transporte, junto às aplicações; e a VPN IPsec liga o cliente à rede inteira, sendo parte da especificação do IPv6. A IV erra ao dizer que a VPN SSL também libera todos os recursos."
+        },
+        {
+          "text": "I, II, III e IV.",
+          "explanation": "A IV está errada: VPN SSL, tipicamente acessada pelo navegador, dá acesso a aplicações específicas, enquanto a VPN IPsec dá acesso no nível de rede."
+        }
+      ],
+      "correct": "D"
+    },
+    {
+      "key": "enade-2021-redes-q35",
+      "source": "ENADE 2021 – Tecnologia em Redes de Computadores, questão 35 (Inep)",
+      "kind": "Objective",
+      "subject": "gestao-governanca",
+      "statement": "Segundo o guia PMBOK, um projeto pode ser subdivido em fases/iterações. Cada iteração foca um conjunto de atividades correlacionadas e culmina na conclusão de uma ou mais entregas. As iterações podem ser sequenciais ou com sobreposição segundo a natureza do projeto e a maturidade da equipe. As entregas são normalmente componentes tangíveis realizados para cumprir os objetivos do projeto. Objetos que se destinam a serem entregues a um cliente interno ou externo tais como, diagrama unifilar de rede, especificações das estruturas de cabeamento, especificações técnicas de equipamentos, projeto elétrico entre outros. Uma entrega é diferente de um marco do projeto. Um marco pode ser a conclusão de uma entrega, por exemplo, a finalização dos testes de certificações da instalação do cabeamento horizontal.\n\nPMI. Um guia do conhecimento em gerenciamento de projetos. **Guia PMBOK**, 6. ed. EUA: Project Management Institute, 2017 (adaptado).\n\nConsiderando o guia PMBOK, avalie as afirmações a seguir.\n\nI. A formalização da aceitação das entregas é parte do processo “Validar o escopo”.\n\nII. As entregas de uma iteração são planejadas durante a definição do escopo do projeto.\n\nIII. O Documento Diagrama Unifilar de Rede é uma entrega que representa um marco do projeto.\n\nIV. Especificações técnicas de equipamentos são entregas produzidas por iterações da fase de Implementação.\n\nV. A manutenção e a atualização do As Built é feita continuamente, fazendo parte do ciclo de vida do projeto e sendo considerada uma forma interativa e incremental de desenvolvimento.\n\nÉ correto apenas o que se afirma em",
+      "options": [
+        {
+          "text": "I, II e IV.",
+          "explanation": "Inclui II e IV, que estão erradas: em ciclos iterativos as entregas de cada iteração são detalhadas no planejamento da própria iteração (planejamento em ondas sucessivas), não todas na definição inicial do escopo; e especificações técnicas de equipamentos são produzidas na fase de projeto, antes da implementação."
+        },
+        {
+          "text": "I, II e V.",
+          "explanation": "Inclui a II, que está errada: no desenvolvimento iterativo o detalhamento das entregas de uma iteração ocorre no início dela, à medida que o projeto avança, e não de uma vez na definição do escopo. Também omite a III."
+        },
+        {
+          "text": "I, III e V.",
+          "explanation": "Correta segundo o gabarito. Validar o escopo é o processo que formaliza a aceitação das entregas; a conclusão do diagrama unifilar, uma entrega, pode ser registrada como marco do projeto; e o As Built, atualizado a cada mudança executada, evolui de forma iterativa e incremental ao longo do ciclo de vida. II e IV erram sobre quando as entregas são planejadas e em que fase as especificações são produzidas."
+        },
+        {
+          "text": "II, III e IV.",
+          "explanation": "Inclui II e IV, erradas (entregas da iteração são planejadas na própria iteração; especificações técnicas saem da fase de projeto, não da implementação), e omite a I, que está correta."
+        },
+        {
+          "text": "III, IV e V.",
+          "explanation": "Inclui a IV, que está errada: especificações técnicas de equipamentos são insumo para a implementação, produzidas antes, na fase de projeto. Também deixa de fora a I, que define corretamente o processo Validar o escopo."
+        }
+      ],
+      "correct": "C"
+    }
+  ]
+}
